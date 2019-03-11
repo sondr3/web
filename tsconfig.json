@@ -20,5 +20,6 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react"
-  }
+  },
+  "include": ["packages/**/*", "home/**/*", "writing/**/*", "notes/**/*"]
 }
