@@ -1,4 +1,0 @@
-{
-  "packages": ["packages/*", "writing"],
-  "version": "0.1.0"
-}
