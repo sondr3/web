@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "@sondre-web/sondre-web",
   "private": true,
   "devDependencies": {
     "@types/jest": "^24.0.11",
