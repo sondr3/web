@@ -11,8 +11,8 @@ const Wrapper = styled.div`
 
 export default function Layout({ children }: Props) {
   return (
-    <Wrapper>
-      <div>{children}</div>
-    </Wrapper>
+    <React.StrictMode>
+      <Wrapper>{children}</Wrapper>
+    </React.StrictMode>
   );
 }
