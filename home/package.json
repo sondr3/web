@@ -1,0 +1,16 @@
+{
+  "name": "home",
+  "version": "0.1.0",
+  "main": "index.js",
+  "author": "Sondre Nilsen",
+  "license": "MIT",
+  "scripts": {
+    "develop": "gatsby develop"
+  },
+  "dependencies": {
+    "theme": "*",
+    "gatsby": "^2.1.31",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4"
+  }
+}
