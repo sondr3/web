@@ -1,0 +1,29 @@
+{
+  "name": "theme",
+  "version": "0.1.0",
+  "main": "index.js",
+  "author": "Sondre Nilsen",
+  "license": "MIT",
+  "scripts": {
+    "develop": "gatsby develop"
+  },
+  "devDependencies": {
+    "@types/react": "^16.8.8",
+    "@types/react-dom": "^16.8.2",
+    "gatsby": "^2.1.31",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4"
+  },
+  "peerDependencies": {
+    "gatsby": "^2.1.31",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4"
+  },
+  "dependencies": {
+    "@mdx-js/mdx": "^0.20.3",
+    "@mdx-js/tag": "^0.20.3",
+    "gatsby-mdx": "^0.4.3",
+    "gatsby-plugin-page-creator": "^2.0.10",
+    "gatsby-plugin-typescript": "^2.0.11"
+  }
+}
