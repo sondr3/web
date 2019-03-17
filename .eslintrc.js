@@ -16,7 +16,7 @@ module.exports = {
     jest: true,
     es6: true
   },
-  plugins: ["@typescript-eslint", "prettier", "react-hooks", "jest"],
+  plugins: ["@typescript-eslint", "prettier", "react-hooks", "jest", "import"],
   extends: [
     "airbnb",
     "eslint:recommended",
