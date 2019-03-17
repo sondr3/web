@@ -10,6 +10,7 @@
   "devDependencies": {
     "@types/react": "^16.8.8",
     "@types/react-dom": "^16.8.2",
+    "@types/styled-components": "^4.1.12",
     "gatsby": "^2.1.31",
     "react": "^16.8.4",
     "react-dom": "^16.8.4"
@@ -22,8 +23,11 @@
   "dependencies": {
     "@mdx-js/mdx": "^0.20.3",
     "@mdx-js/tag": "^0.20.3",
+    "babel-plugin-styled-components": "^1.10.0",
     "gatsby-mdx": "^0.4.3",
     "gatsby-plugin-page-creator": "^2.0.10",
-    "gatsby-plugin-typescript": "^2.0.11"
+    "gatsby-plugin-styled-components": "^3.0.7",
+    "gatsby-plugin-typescript": "^2.0.11",
+    "styled-components": "^4.1.3"
   }
 }
