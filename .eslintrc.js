@@ -1,4 +1,5 @@
 module.exports = {
+  root: true,
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaVersion: 2018,
@@ -17,7 +18,7 @@ module.exports = {
   },
   plugins: ["@typescript-eslint", "prettier", "react-hooks", "jest"],
   extends: [
-    "airbnb-base",
+    "airbnb",
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
@@ -27,12 +28,17 @@ module.exports = {
     "plugin:jest/recommended"
   ],
   rules: {
-    "react/prop-types": "off",
+    "react/jsx-filename-extension": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "prettier/prettier": "error",
-    "react-hooks/rules-of-hooks": "error"
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "import/no-unresolved": "error"
   },
   settings: {
+    "import/resolver": {
+      typescript: {}
+    },
     react: {
       version: "detect"
     }
