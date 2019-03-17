@@ -1,4 +1,5 @@
 import React from "react";
+import { Normalize } from "styled-normalize";
 import styled from "styled-components";
 
 interface Props {
@@ -12,6 +13,7 @@ const Wrapper = styled.div`
 export default function Layout({ children }: Props) {
   return (
     <React.StrictMode>
+      <Normalize />
       <Wrapper>{children}</Wrapper>
     </React.StrictMode>
   );
