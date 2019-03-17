@@ -5,7 +5,9 @@
   "author": "Sondre Nilsen",
   "license": "MIT",
   "scripts": {
-    "develop": "gatsby develop"
+    "develop": "gatsby develop",
+    "build": "gatsby build",
+    "serve": "gatsby serve"
   },
   "devDependencies": {
     "@types/react": "^16.8.8",
@@ -26,8 +28,10 @@
     "babel-plugin-styled-components": "^1.10.0",
     "gatsby-mdx": "^0.4.3",
     "gatsby-plugin-page-creator": "^2.0.10",
+    "gatsby-plugin-react-helmet": "^3.0.10",
     "gatsby-plugin-styled-components": "^3.0.7",
     "gatsby-plugin-typescript": "^2.0.11",
+    "react-helmet": "^5.2.0",
     "styled-components": "^4.1.3"
   }
 }
