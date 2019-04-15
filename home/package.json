@@ -5,7 +5,9 @@
   "author": "Sondre Nilsen",
   "license": "MIT",
   "scripts": {
-    "develop": "gatsby develop"
+    "develop": "gatsby develop",
+    "build": "gatsby build",
+    "serve": "gatsby serve"
   },
   "dependencies": {
     "portfolio": "*",
