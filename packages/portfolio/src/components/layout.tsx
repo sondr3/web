@@ -1,20 +1,14 @@
 import React from "react";
-import { Normalize } from "styled-normalize";
-import styled from "styled-components";
+import "../styles/global.css";
 
 interface Props {
   children: React.ReactNode;
 }
 
-const Wrapper = styled.div`
-  margin: 0 auto;
-`;
-
 export default function Layout({ children }: Props) {
   return (
     <React.StrictMode>
-      <Normalize />
-      <Wrapper>{children}</Wrapper>
+      <main>{children}</main>
     </React.StrictMode>
   );
 }

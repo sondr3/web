@@ -10,8 +10,8 @@
     "serve": "gatsby serve"
   },
   "dependencies": {
-    "portfolio": "*",
     "gatsby": "^2.1.31",
+    "portfolio": "*",
     "react": "^16.8.4",
     "react-dom": "^16.8.4"
   }
