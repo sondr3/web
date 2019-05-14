@@ -3,9 +3,7 @@
   "private": true,
   "workspaces": [
     "packages/*",
-    "home",
-    "writings",
-    "notes"
+    "sites/*"
   ],
   "scripts": {
     "bootstrap": "lerna bootstrap"
