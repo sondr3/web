@@ -7,6 +7,7 @@
   "scripts": {
     "develop": "gatsby develop",
     "build": "gatsby build",
+    "postbuild": "mv public ../../public",
     "serve": "gatsby serve"
   },
   "dependencies": {

@@ -5,7 +5,10 @@
     "packages/*",
     "sites/*"
   ],
-  "scripts": {},
+  "scripts": {
+    "build": "node ./scripts/build.js",
+    "serve": "serve --no-clipboard public"
+  },
   "devDependencies": {
     "@types/jest": "^24.0.12",
     "@types/node": "^12.0.0",
@@ -26,6 +29,7 @@
     "jest": "^24.8.0",
     "lint-staged": "^8.1.6",
     "prettier": "^1.17.0",
+    "serve": "^11.0.0",
     "stylelint": "^10.0.1",
     "stylelint-config-recommended": "^2.2.0",
     "stylelint-config-styled-components": "^0.1.1",
