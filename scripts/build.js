@@ -4,10 +4,10 @@ const execSync = require("child_process").execSync;
 
 execSync("rm -rf public", { stdio: "inherit" });
 
-const { SITE_ID } = process.env;
+const { URL } = process.env;
 
-switch (SITE_ID) {
-  case "portfolio":
+switch (URL) {
+  case "https://www.eons.io":
     execSync("yarn workspace www build", { stdio: "inherit" });
     break;
   default:
