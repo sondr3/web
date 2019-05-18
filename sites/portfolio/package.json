@@ -1,5 +1,5 @@
 {
-  "name": "www",
+  "name": "portfolio",
   "version": "0.1.0",
   "main": "index.js",
   "author": "Sondre Nilsen",
@@ -7,7 +7,8 @@
   "scripts": {
     "develop": "gatsby develop",
     "build": "gatsby build",
-    "postbuild": "mv public ../../public",
+    "deploy": "gatsby build",
+    "postdeploy": "mv public ../../public",
     "serve": "gatsby serve"
   },
   "dependencies": {
@@ -17,7 +18,7 @@
     "@typescript-eslint/parser": "^1.9.0",
     "gatsby": "^2.1.31",
     "husky": "^2.3.0",
-    "portfolio": "*",
+    "base": "*",
     "prettier": "^1.17.1",
     "react": "^16.8.4",
     "react-dom": "^16.8.4"

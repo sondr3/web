@@ -8,7 +8,7 @@ const { URL } = process.env;
 
 switch (URL) {
   case "https://www.eons.io":
-    execSync("yarn workspace www build", { stdio: "inherit" });
+    execSync("yarn workspace portfolio deploy", { stdio: "inherit" });
     break;
   default:
     console.error("No SITE_ID specified, exiting...");
