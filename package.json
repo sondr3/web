@@ -10,9 +10,11 @@
     "serve": "serve --no-clipboard public"
   },
   "devDependencies": {
+    "@types/css-modules": "^1.0.0",
     "@types/node": "^12.0.2",
     "@types/react": "^16.8.17",
     "@types/react-dom": "^16.8.4",
+    "@types/react-helmet": "^5.0.8",
     "@typescript-eslint/eslint-plugin": "^1.8.0",
     "@typescript-eslint/parser": "^1.8.0",
     "eslint": "^5.16.0",
