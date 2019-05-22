@@ -1,4 +1,16 @@
 module.exports = {
+  siteMetadata: {
+    siteUrl: "https://www.example.com",
+    title: "Base template for my stuff",
+    description: "This is what you're going to use for everything",
+    author: {
+      name: "Sondre Nilsen",
+      bio: "I am groot"
+    },
+    social: {
+      github: "https://github.com"
+    }
+  },
   plugins: [
     {
       resolve: `gatsby-plugin-netlify`,
