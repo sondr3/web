@@ -2,12 +2,12 @@ import React from "react";
 import { useStaticQuery, graphql } from "gatsby";
 import Helmet from "react-helmet";
 
-interface Props {
+export interface Props {
   description?: string;
-  title: string;
+  title?: string;
 }
 
-const SEO = ({ description, title }: Props) => {
+const SEO: React.FC<Props> = ({ description, title }) => {
   const { site } = useStaticQuery(graphql`
     query {
       site {
