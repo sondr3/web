@@ -1,5 +1,4 @@
 import React from "react";
-import { SEO } from "base/components";
 import { useStaticQuery, graphql } from "gatsby";
 
 export default function About() {
@@ -20,7 +19,6 @@ export default function About() {
 
   return (
     <>
-      <SEO />
       <h1>Hello!</h1>
       <h2>I&apos;m Sondre.</h2>
       <p>
