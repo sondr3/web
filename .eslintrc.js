@@ -25,6 +25,7 @@ module.exports = {
   ],
   rules: {
     "react/jsx-filename-extension": "off",
+    "react/prop-types": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
