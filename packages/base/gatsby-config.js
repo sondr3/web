@@ -14,6 +14,13 @@ module.exports = {
   },
   plugins: [
     {
+      resolve: `gatsby-plugin-typescript`,
+      options: {
+        isTSX: true,
+        allExtensions: true
+      }
+    },
+    {
       resolve: `gatsby-plugin-netlify`,
       options: {
         headers: {
@@ -31,7 +38,6 @@ module.exports = {
       }
     },
     `gatsby-plugin-netlify-cache`,
-    `gatsby-plugin-typescript`,
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-mdx`,
