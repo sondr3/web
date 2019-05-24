@@ -2,6 +2,7 @@ module.exports = {
   siteMetadata: {
     siteUrl: "https://www.example.com",
     title: "Base template for my stuff",
+    titleTemplate: "%s | BASE",
     description: "This is what you're going to use for everything",
     author: {
       name: "Sondre Nilsen",

@@ -14,6 +14,7 @@ const SEO: React.FC<Props> = ({ description, title }) => {
         siteMetadata {
           siteUrl
           title
+          titleTemplate
           description
           author {
             name
@@ -30,7 +31,7 @@ const SEO: React.FC<Props> = ({ description, title }) => {
     <Helmet
       htmlAttributes={{ lang: "en" }}
       title={title}
-      titleTemplate={`%s | ${site.siteMetadata.title}`}
+      titleTemplate={site.siteMetadata.titleTemplate}
       meta={[
         {
           name: `description`,
