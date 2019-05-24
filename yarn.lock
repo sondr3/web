@@ -740,6 +740,13 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
+"@babel/runtime@^7.3.1":
+  version "7.4.5"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.4.5.tgz#582bb531f5f9dc67d2fcb682979894f75e253f12"
+  integrity sha512-TuI4qpWZP6lGOGIuGWtp9sPluqYICmbk8T/1vpSysqJxRPkudh/ofFWyqdcMsDf2s7KvDL4/YHgKyvcS3g9CJQ==
+  dependencies:
+    regenerator-runtime "^0.13.2"
+
 "@babel/template@^7.1.0", "@babel/template@^7.4.4":
   version "7.4.4"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.4.4.tgz#f4b88d1225689a08f5bc3a17483545be9e4ed237"
@@ -4653,6 +4660,24 @@ gatsby-plugin-react-helmet@^3.0.10:
   dependencies:
     "@babel/runtime" "^7.0.0"
 
+gatsby-plugin-robots-txt@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-robots-txt/-/gatsby-plugin-robots-txt-1.4.0.tgz#2da3fb60a307f83b34a9fbdd85fdb4e6a53e431a"
+  integrity sha512-9wFH7bl90jpBEUo2rkXeXHtQy3CqZD/85F9rW6JeyJhbtTFOdnjdx9/Up3zJkxeLblwR1I5+VxHAzp/3jEyb7g==
+  dependencies:
+    "@babel/runtime" "^7.3.1"
+    generate-robotstxt "^6.0.0"
+
+gatsby-plugin-sitemap@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-sitemap/-/gatsby-plugin-sitemap-2.1.0.tgz#b21e64a3ef82f4203cffa1728cfab71451b3e050"
+  integrity sha512-9YJUx2UyeYKC8GcLZ4ZsnPAmXi6I9dxu0UDDi85HydTWhV5yC+wgbhNGZH+KlzSTlFGfyAV25cSOyoEO8dXjWg==
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    minimatch "^3.0.4"
+    pify "^3.0.0"
+    sitemap "^1.12.0"
+
 gatsby-plugin-typescript@^2.0.11:
   version "2.0.14"
   resolved "https://registry.yarnpkg.com/gatsby-plugin-typescript/-/gatsby-plugin-typescript-2.0.14.tgz#405d0991858cef5e923bce03f1b944ee11ba1cd4"
@@ -4836,6 +4861,18 @@ gauge@~2.7.3:
     string-width "^1.0.1"
     strip-ansi "^3.0.1"
     wide-align "^1.1.0"
+
+generate-robotstxt@^6.0.0:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/generate-robotstxt/-/generate-robotstxt-6.0.1.tgz#526231e7d8e89addfa3a78d18642128313ff51e0"
+  integrity sha512-qSFNXROMLHjEbl6yPo9WQv0onfOqq3x28lFHUWERNgGGApk0XlHrZmnxaeLzCILGaj+PesBHwzqR14+bHvHLVw==
+  dependencies:
+    cosmiconfig "^5.0.0"
+    fs-extra "^7.0.1"
+    ip-regex "^4.0.0"
+    is-absolute-url "^2.1.0"
+    meow "^5.0.0"
+    resolve-from "^4.0.0"
 
 get-caller-file@^1.0.1:
   version "1.0.3"
@@ -5696,6 +5733,11 @@ ip-regex@^2.1.0:
   resolved "https://registry.yarnpkg.com/ip-regex/-/ip-regex-2.1.0.tgz#fa78bf5d2e6913c911ce9f819ee5146bb6d844e9"
   integrity sha1-+ni/XS5pE8kRzp+BnuUUa7bYROk=
 
+ip-regex@^4.0.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/ip-regex/-/ip-regex-4.1.0.tgz#5ad62f685a14edb421abebc2fff8db94df67b455"
+  integrity sha512-pKnZpbgCTfH/1NLIlOduP/V+WRXzC2MOz3Qo8xmxk8C5GudJLgK5QyLVXOSWy3ParAH7Eemurl3xjv/WXYFvMA==
+
 ip@^1.1.0, ip@^1.1.5:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/ip/-/ip-1.1.5.tgz#bdded70114290828c0a039e72ef25f5aaec4354a"
@@ -5706,7 +5748,7 @@ ipaddr.js@1.9.0, ipaddr.js@^1.9.0:
   resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.9.0.tgz#37df74e430a0e47550fe54a2defe30d8acd95f65"
   integrity sha512-M4Sjn6N/+O6/IXSJseKqHoFc+5FdGJ22sXqnjTpdZweHK64MzEPAyQZyEU3R/KRv2GLoa7nNtg/C2Ev6m7z+eA==
 
-is-absolute-url@^2.0.0:
+is-absolute-url@^2.0.0, is-absolute-url@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/is-absolute-url/-/is-absolute-url-2.1.0.tgz#50530dfb84fcc9aa7dbe7852e83a37b93b9f2aa6"
   integrity sha1-UFMN+4T8yap9vnhS6Do3uTufKqY=
@@ -9761,6 +9803,14 @@ sisteransi@^1.0.0:
   resolved "https://registry.yarnpkg.com/sisteransi/-/sisteransi-1.0.0.tgz#77d9622ff909080f1c19e5f4a1df0c1b0a27b88c"
   integrity sha512-N+z4pHB4AmUv0SjveWRd6q1Nj5w62m5jodv+GD8lvmbY/83T/rpbJGZOnK5T149OldDj4Db07BSv9xY4K6NTPQ==
 
+sitemap@^1.12.0:
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/sitemap/-/sitemap-1.13.0.tgz#569cbe2180202926a62a266cd3de09c9ceb43f83"
+  integrity sha1-Vpy+IYAgKSamKiZs094Jyc60P4M=
+  dependencies:
+    underscore "^1.7.0"
+    url-join "^1.1.0"
+
 slash@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-1.0.0.tgz#c41f2f6c39fc16d1cd17ad4b5d896114ae470d55"
@@ -10747,6 +10797,11 @@ underscore.string@^3.3.4:
     sprintf-js "^1.0.3"
     util-deprecate "^1.0.2"
 
+underscore@^1.7.0:
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.9.1.tgz#06dce34a0e68a7babc29b365b8e74b8925203961"
+  integrity sha512-5/4etnCkd9c8gwgowi5/om/mYO5ajCaOgdzj/oW+0eQV9WxKBDZw5+ycmKmeaTXjInS/W0BzpGLo2xR2aBwZdg==
+
 unherit@^1.0.4:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/unherit/-/unherit-1.1.2.tgz#14f1f397253ee4ec95cec167762e77df83678449"
@@ -10994,6 +11049,11 @@ urix@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/urix/-/urix-0.1.0.tgz#da937f7a62e21fec1fd18d49b35c2935067a6c72"
   integrity sha1-2pN/emLiH+wf0Y1Js1wpNQZ6bHI=
+
+url-join@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/url-join/-/url-join-1.1.0.tgz#741c6c2f4596c4830d6718460920d0c92202dc78"
+  integrity sha1-dBxsL0WWxIMNZxhGCSDQySIC3Hg=
 
 url-loader@^1.0.1:
   version "1.1.2"

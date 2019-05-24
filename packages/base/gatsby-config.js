@@ -20,6 +20,8 @@ module.exports = {
         allExtensions: true
       }
     },
+    `gatsby-plugin-sitemap`,
+    `gatsby-plugin-robots-txt`,
     {
       resolve: `gatsby-plugin-netlify`,
       options: {
