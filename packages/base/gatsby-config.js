@@ -20,8 +20,22 @@ module.exports = {
         allExtensions: true
       }
     },
+    {
+      resolve: `gatsby-plugin-manifest`,
+      options: {
+        name: "Eons.IO",
+        lang: "en",
+        short_name: "Eons.IO", // eslint-disable-line
+        start_url: ".", // eslint-disable-line
+        background_color: "#6b37bf", // eslint-disable-line
+        theme_color: "#6b37bf", // eslint-disable-line
+        display: "standalone"
+        // icon: "src/images/icon.png"
+      }
+    },
     `gatsby-plugin-sitemap`,
     `gatsby-plugin-robots-txt`,
+    `gatsby-plugin-offline`,
     {
       resolve: `gatsby-plugin-netlify`,
       options: {
