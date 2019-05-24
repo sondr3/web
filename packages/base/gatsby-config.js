@@ -23,14 +23,14 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: "Eons.IO",
+        name: "Base template",
         lang: "en",
-        short_name: "Eons.IO", // eslint-disable-line
+        short_name: "BASE", // eslint-disable-line
         start_url: ".", // eslint-disable-line
         background_color: "#6b37bf", // eslint-disable-line
         theme_color: "#6b37bf", // eslint-disable-line
-        display: "standalone"
-        // icon: "src/images/icon.png"
+        display: "standalone",
+        icon: "src/icon.png"
       }
     },
     `gatsby-plugin-sitemap`,
