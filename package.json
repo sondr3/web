@@ -2,8 +2,9 @@
   "name": "sondr3-web",
   "private": true,
   "workspaces": [
-    "packages/*",
-    "sites/*"
+    "plugins/*",
+    "sites/*",
+    "themes/*"
   ],
   "scripts": {
     "build": "node ./scripts/build.js",
