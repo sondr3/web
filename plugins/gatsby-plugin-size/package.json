@@ -1,0 +1,18 @@
+{
+  "name": "gatsby-plugin-size",
+  "version": "0.1.0",
+  "description": "Print production bundle sizes",
+  "main": "index.js",
+  "repository": "https://github.com/sondr3/websites",
+  "author": "Sondre Nilsen",
+  "license": "MIT",
+  "private": true,
+  "peerDependencies": {
+    "gatsby": "^2.0.0"
+  },
+  "dependencies": {
+    "@types/react": "^16.8.18",
+    "eslint-plugin-import": "^2.17.3",
+    "size-plugin": "^1.2.0"
+  }
+}
