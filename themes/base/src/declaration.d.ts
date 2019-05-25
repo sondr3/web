@@ -1,4 +1,4 @@
 declare module "base" {
-  export function SEO();
-  export function Layout();
+  export function SEO(): React.ReactElement;
+  export function Layout(): React.ReactElement;
 }
