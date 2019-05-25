@@ -68,6 +68,7 @@ module.exports = {
       options: {
         path: `${__dirname}/src/pages`
       }
-    }
+    },
+    `gatsby-plugin-size`
   ]
 };
