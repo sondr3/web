@@ -31,9 +31,11 @@
     "prettier": "^1.17.0",
     "serve": "^11.0.0",
     "stylelint": "^10.0.1",
+    "stylelint-a11y": "^1.2.0",
+    "stylelint-config-prettier": "^5.2.0",
     "stylelint-config-recommended": "^2.2.0",
-    "stylelint-config-styled-components": "^0.1.1",
-    "stylelint-processor-styled-components": "^1.7.0",
+    "stylelint-order": "^3.0.0",
+    "stylelint-prettier": "^1.1.0",
     "typescript": "^3.4.5"
   },
   "husky": {
@@ -45,7 +47,7 @@
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix",
       "prettier --write",
-      "stylelint",
+      "stylelint --fix",
       "git add"
     ],
     "*.{json,css,md}": [
