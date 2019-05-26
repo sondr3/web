@@ -47,8 +47,7 @@ module.exports = {
         background_color: "#6b37bf", // eslint-disable-line
         theme_color: "#6b37bf", // eslint-disable-line
         display: "standalone",
-        icon: "src/icon.png",
-        cache_busting_mode: "name" // eslint-disable-line
+        icon: "src/icon.png"
       }
     },
     `gatsby-plugin-sitemap`,
