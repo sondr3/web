@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+const autoprefixer = require("autoprefixer");
+const browserslist = require("browserslist");
+const cssnano = require("cssnano");
+
 module.exports = {
   siteMetadata: {
     siteUrl: "https://www.example.com",
@@ -18,6 +23,18 @@ module.exports = {
       options: {
         isTSX: true,
         allExtensions: true
+      }
+    },
+    {
+      resolve: `gatsby-plugin-sass`,
+      options: {
+        cssLoaderOptions: { localIdentName: "[local]--[hash:base64:5]" },
+        postCssPlugins: [
+          autoprefixer({
+            browsers: browserslist(["> 1% in NO", "not ie >= 8"])
+          }),
+          cssnano({ preset: "default" })
+        ]
       }
     },
     {
