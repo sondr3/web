@@ -37,5 +37,9 @@
     "gatsby-plugin-size": "*",
     "gatsby-plugin-typescript": "^2.0.11",
     "react-helmet": "^5.2.0"
-  }
+  },
+  "browserslist": [
+    "> 1% in NO",
+    "not ie >= 8"
+  ]
 }
