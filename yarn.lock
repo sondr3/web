@@ -872,6 +872,37 @@
   dependencies:
     any-observable "^0.3.0"
 
+"@sondr3/eslint-config-me@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@sondr3/eslint-config-me/-/eslint-config-me-0.2.1.tgz#fca80cc0eaa03d0ee38a17ee89e62d320128f949"
+  integrity sha512-R+i5Aj4xwTG1+3QHIThuDf6x+AMZRVIwvp0HA5l2rgH3m6hnEsjKKyaV9K8JcANSWeTCvYYFuN/fbFeWDvl15A==
+  dependencies:
+    "@typescript-eslint/eslint-plugin" "^1.8.0"
+    "@typescript-eslint/parser" "^1.8.0"
+    eslint-config-airbnb "^17.1.0"
+    eslint-config-prettier "^4.3.0"
+    eslint-plugin-import "^2.17.2"
+    eslint-plugin-jsx-a11y "^6.2.1"
+    eslint-plugin-prettier "^3.1.0"
+    eslint-plugin-react "^7.13.0"
+    eslint-plugin-react-hooks "^1.6.0"
+
+"@sondr3/stylelint@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@sondr3/stylelint/-/stylelint-0.2.1.tgz#d49af67851a620714d6f30fdcd17d1d45db8a66f"
+  integrity sha512-FP9DvUyfRoX6FgvoE/hf5bnEOPuf/U2V9JoI3avHIQVfxamHXDfc5lRhv3jxXT/hAzpy2mMrvlZrc5GNIVnfpA==
+  dependencies:
+    stylelint-a11y "^1.2.0"
+    stylelint-config-prettier "^5.2.0"
+    stylelint-config-recommended "^2.2.0"
+    stylelint-order "^3.0.0"
+    stylelint-prettier "^1.1.0"
+
+"@sondr3/tsconfig@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@sondr3/tsconfig/-/tsconfig-0.2.0.tgz#aa26da7dba7a76771efc05f310b52a0746cdc32a"
+  integrity sha512-IP6oq71XumHHUXkrdcD1RbYk5JC8Xh89uUUKkyokOQ3ss/6naOSiY9VkkNb7PP8DjT7FIi/O7zTPan5L/10DrQ==
+
 "@stefanprobst/lokijs@^1.5.6-b":
   version "1.5.6-b"
   resolved "https://registry.yarnpkg.com/@stefanprobst/lokijs/-/lokijs-1.5.6-b.tgz#6a36a86dbe132e702e6b15ffd3ce4139aebfe942"
