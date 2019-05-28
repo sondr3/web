@@ -1,7 +1,10 @@
 import React from "react";
+import styled from "styled-components";
 import SEO from "./seo";
 
-import styles from "./layout.module.scss";
+const Main = styled.main`
+  margin: 0 auto;
+`;
 
 interface Props {
   children: React.ReactNode;
@@ -11,7 +14,7 @@ export default function Layout({ children }: Props) {
   return (
     <React.StrictMode>
       <SEO />
-      <main className={styles.main}>{children}</main>
+      <Main>{children}</Main>
     </React.StrictMode>
   );
 }
