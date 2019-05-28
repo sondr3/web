@@ -22,7 +22,8 @@
     "prettier": "^1.17.1",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
-    "react-helmet": "^5.2.1"
+    "react-helmet": "^5.2.1",
+    "styled-components": "^4.2.0"
   },
   "browserslist": [
     "> 1% in NO",

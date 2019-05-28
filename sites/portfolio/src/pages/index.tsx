@@ -1,15 +1,20 @@
 import React from "react";
 import { SEO } from "base";
-import styles from "./index.module.css";
+import styled from "styled-components";
 import Intro from "../components/intro";
+
+const Wrapper = styled.div`
+  margin: 3rem auto;
+  max-width: 600px;
+`;
 
 export default function Layout() {
   return (
     <React.StrictMode>
       <SEO />
-      <div className={styles.wrapper}>
+      <Wrapper>
         <Intro />
-      </div>
+      </Wrapper>
     </React.StrictMode>
   );
 }
