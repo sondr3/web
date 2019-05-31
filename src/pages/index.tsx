@@ -1,6 +1,6 @@
 import React from "react";
-import { SEO } from "base";
 import styled from "styled-components";
+import SEO from "../components/seo";
 import Intro from "../components/intro";
 
 const Wrapper = styled.div`

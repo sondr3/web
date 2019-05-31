@@ -1,15 +1,15 @@
 module.exports = {
   siteMetadata: {
-    siteUrl: "https://www.example.com",
-    title: "Base template for my stuff",
-    titleTemplate: "%s | BASE",
-    description: "This is what you're going to use for everything",
+    siteUrl: "https://www.eons.io",
+    title: "Sondre Nilsen",
+    titleTemplate: "%s | Sondre Nilsen",
+    description: `Sondre is a computer security student with a passion for safe and reliable software, open source and programming. Firm believer in applying the KISS principle and the worse is better philosophy. Enjoyer of strongly typed languages, Linux and mechanical keyboards. `,
     author: {
       name: "Sondre Nilsen",
-      bio: "I am groot"
+      bio: "I make things"
     },
     social: {
-      github: "https://github.com"
+      github: "https://github.com/sondr3"
     }
   },
   plugins: [
@@ -30,9 +30,9 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: "Base template",
+        name: "Eons.io",
         lang: "en",
-        short_name: "BASE", // eslint-disable-line
+        short_name: "Eons", // eslint-disable-line
         start_url: ".", // eslint-disable-line
         background_color: "#6b37bf", // eslint-disable-line
         theme_color: "#6b37bf", // eslint-disable-line
@@ -75,7 +75,6 @@ module.exports = {
       options: {
         path: `${__dirname}/src/pages`
       }
-    },
-    `gatsby-plugin-size`
+    }
   ]
 };

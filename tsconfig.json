@@ -3,6 +3,5 @@
   "compilerOptions": {
     "noEmit": true,
     "jsx": "react"
-  },
-  "include": ["plugins/**/*", "sites/**/*", "themes/**/*"]
+  }
 }
