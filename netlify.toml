@@ -1,3 +1,6 @@
 [build]
 publish = "public"
 command = "yarn build"
+
+[build.environment]
+YARN_FLAGS = "--frozen-lockfile"
