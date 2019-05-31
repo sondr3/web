@@ -21,13 +21,6 @@ module.exports = {
       }
     },
     {
-      resolve: `gatsby-plugin-styled-components`,
-      options: {
-        displayName: false,
-        pure: true // no idea if this actually helps
-      }
-    },
-    {
       resolve: `gatsby-plugin-manifest`,
       options: {
         name: "Eons.io",
