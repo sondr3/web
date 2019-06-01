@@ -1,9 +1,9 @@
-.intro {
+.wrapper {
   padding: 1rem;
 }
 
 @media (min-width: 500px) {
-  .intro {
+  .wrapper {
     grid-column: col-start 4 / span 6;
     padding: 0;
   }
