@@ -30,7 +30,7 @@ module.exports = {
         background_color: "#6b37bf", // eslint-disable-line
         theme_color: "#6b37bf", // eslint-disable-line
         display: "standalone",
-        icon: "static/icon.png"
+        icon: "assets/icon.png"
       }
     },
     `gatsby-plugin-sitemap`,
@@ -41,7 +41,7 @@ module.exports = {
       options: {
         headers: {
           "/*": [
-            "Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; object-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; media-src 'self'; font-src 'self'; connect-src 'self'",
+            "Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; object-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self' data:; font-src 'self' data:; connect-src 'self'",
             "Feature-Policy: autoplay 'none'; camera 'none'; encrypted-media 'none'; fullscreen 'none'; geolocation 'none'; microphone 'none'; midi 'none'; payment 'none'; vr 'none'",
             "Referrer-Policy: strict-origin-when-cross-origin",
             "Strict-Transport-Security: max-age=63072000; includeSubDomains; preload",

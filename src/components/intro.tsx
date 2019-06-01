@@ -2,7 +2,7 @@ import React from "react";
 import { useStaticQuery, graphql } from "gatsby";
 import Wrapper from "./wrapper";
 
-import dev from "../../static/developer.svg";
+import dev from "../../assets/developer.svg";
 import styles from "./intro.module.css";
 
 export default function About() {
