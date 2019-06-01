@@ -2,6 +2,9 @@ import React from "react";
 import { useStaticQuery, graphql } from "gatsby";
 import Wrapper from "./wrapper";
 
+import dev from "../../static/developer.svg";
+import styles from "./intro.module.css";
+
 export default function About() {
   const { site } = useStaticQuery(graphql`
     query {
@@ -20,6 +23,7 @@ export default function About() {
 
   return (
     <Wrapper>
+      <img src={dev} alt="Hello! I'm Sondre." className={styles.img} />
       <h1>Hello!</h1>
       <h2>I&apos;m Sondre.</h2>
       <p>
