@@ -30,7 +30,7 @@ module.exports = {
         background_color: "#6b37bf", // eslint-disable-line
         theme_color: "#6b37bf", // eslint-disable-line
         display: "standalone",
-        icon: "src/icon.png"
+        icon: "static/icon.png"
       }
     },
     `gatsby-plugin-sitemap`,

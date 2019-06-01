@@ -1,7 +1,7 @@
 import React from "react";
 import { useStaticQuery, graphql } from "gatsby";
 import ProjectCard from "./project-card";
-import projectList from "../projects";
+import projectList from "../../content/projects";
 
 export default function About() {
   const { site } = useStaticQuery(graphql`
