@@ -1,6 +1,7 @@
 {
-  "name": "sondr3-web",
+  "name": "web",
   "private": true,
+  "license": "MIT",
   "scripts": {
     "develop": "gatsby develop",
     "build": "gatsby build",
