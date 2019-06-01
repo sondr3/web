@@ -1,0 +1,5 @@
+.footer {
+  display: grid;
+  grid-column: col-start / span 12;
+  place-items: center center;
+}
