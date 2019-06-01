@@ -3,6 +3,8 @@ import { useStaticQuery, graphql } from "gatsby";
 import ProjectCard from "./project-card";
 import projectList from "../../content/projects";
 
+import styles from "./intro.module.css";
+
 export default function About() {
   const { site } = useStaticQuery(graphql`
     query {
@@ -20,7 +22,7 @@ export default function About() {
   `);
 
   return (
-    <>
+    <div className={styles.intro}>
       <h1>Hello!</h1>
       <h2>I&apos;m Sondre.</h2>
       <p>
@@ -30,6 +32,6 @@ export default function About() {
       {projectList.map(project => (
         <ProjectCard key={project.id} {...project} />
       ))}
-    </>
+    </div>
   );
 }

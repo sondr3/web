@@ -10,8 +10,10 @@ interface Props {
 export default function Layout({ children }: Props) {
   return (
     <React.StrictMode>
-      <SEO />
-      <div className={styles.main}>{children}</div>
+      <div className={styles.container}>
+        <SEO />
+        {children}
+      </div>
     </React.StrictMode>
   );
 }
