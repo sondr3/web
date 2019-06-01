@@ -53,7 +53,6 @@ module.exports = {
         mergeSecurityHeaders: false
       }
     },
-    `gatsby-plugin-netlify-cache`,
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-mdx`,
