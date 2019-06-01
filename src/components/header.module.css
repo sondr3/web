@@ -1,0 +1,25 @@
+.nav {
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+  padding-top: 1rem;
+}
+
+.logo {
+  align-self: center;
+  grid-column: 1;
+  justify-self: center;
+}
+
+.nav-links {
+  display: flex;
+  grid-column: 2;
+  justify-content: space-around;
+}
+
+.link {
+  color: black;
+  font-size: 18px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
