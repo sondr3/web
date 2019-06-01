@@ -26,6 +26,8 @@
     "react-dom": "^16.8.4",
     "react-helmet": "^5.2.0",
     "sanitize.css": "^9.0.0",
+    "typeface-bitter": "^0.0.71",
+    "typeface-cambo": "^0.0.72",
     "typescript": "3.4"
   },
   "devDependencies": {
