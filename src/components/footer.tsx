@@ -1,10 +1,14 @@
 import React from "react";
+import styled from "styled-components";
 
-import styles from "./footer.module.css";
+const Wrapper = styled.footer`
+  display: grid;
+  place-items: center center;
+`;
 
 export default function Footer() {
   return (
-    <footer className={styles.footer}>
+    <Wrapper>
       <p>
         License{" "}
         <a href="https://creativecommons.org/licenses/by-sa/4.0/">
@@ -13,6 +17,6 @@ export default function Footer() {
         &mdash;
         <a href="https://www.eons.io">Sondre Nilsen</a>
       </p>
-    </footer>
+    </Wrapper>
   );
 }

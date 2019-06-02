@@ -1,25 +1,46 @@
 import React from "react";
 import { Link } from "gatsby";
+import styled from "styled-components";
 
-import styles from "./header.module.css";
+const Nav = styled.nav`
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+  padding-top: 1rem;
+`;
+
+const Logo = styled.div`
+  align-self: center;
+  grid-column: 1;
+  justify-self: center;
+`;
+
+const NavLink = styled.ul`
+  display: flex;
+  grid-column: 2;
+  justify-content: space-around;
+`;
+
+const StyledLink = styled(Link)`
+  color: black;
+  font-size: 18px;
+  text-decoration: none;
+  text-transform: uppercase;
+`;
 
 export default function Header() {
   return (
     <header>
-      <nav className={styles.nav}>
-        <div className={styles.logo}>
-          <Link to="/" className={styles.link}>
-            Eons
-          </Link>
-        </div>
-        <ul className={styles.navLinks}>
+      <Nav>
+        <Logo>
+          <StyledLink to="/">Eons</StyledLink>
+        </Logo>
+        <NavLink>
           <li>
-            <Link to="/about/" className={styles.link}>
-              About
-            </Link>
+            <StyledLink to="/about/">About</StyledLink>
           </li>
-        </ul>
-      </nav>
+        </NavLink>
+      </Nav>
     </header>
   );
 }

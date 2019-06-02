@@ -1,3 +1,6 @@
+import { createGlobalStyle } from "styled-components";
+
+const GlobalStyle = createGlobalStyle`
 body {
   font-family: "Bitter", serif;
   font-feature-settings: "kern", "liga", "clig", "calt";
@@ -14,3 +17,6 @@ h5,
 h6 {
   font-family: "Cambo", sans-serif;
 }
+`;
+
+export default GlobalStyle;
