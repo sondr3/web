@@ -1,6 +1,3 @@
 module.exports = {
-  parserOptions: {
-    project: "./tsconfig.json"
-  },
-  extends: ["@sondr3/me", "@sondr3/me/react"]
+  extends: ["@sondr3/javascript", "@sondr3/react"]
 };
