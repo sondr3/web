@@ -64,7 +64,7 @@
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix",
       "prettier --write",
-      "stylelint --fix",
+      "stylelint",
       "git add"
     ],
     "*.{json,css,md}": [
