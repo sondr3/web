@@ -36,7 +36,7 @@
   "devDependencies": {
     "@sondr3/eslint-config-react": "^0.2.0",
     "@sondr3/eslint-config-typescript": "^0.1.0",
-    "@sondr3/stylelint": "^0.2.1",
+    "@sondr3/stylelint": "^0.3.0",
     "@sondr3/tsconfig": "^0.2.0",
     "@types/css-modules": "^1.0.0",
     "@types/node": "^12.0.4",

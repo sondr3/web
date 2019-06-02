@@ -911,16 +911,18 @@
     eslint-plugin-import "^2.17.2"
     eslint-plugin-prettier "^3.1.0"
 
-"@sondr3/stylelint@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@sondr3/stylelint/-/stylelint-0.2.1.tgz#d49af67851a620714d6f30fdcd17d1d45db8a66f"
-  integrity sha512-FP9DvUyfRoX6FgvoE/hf5bnEOPuf/U2V9JoI3avHIQVfxamHXDfc5lRhv3jxXT/hAzpy2mMrvlZrc5GNIVnfpA==
+"@sondr3/stylelint@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@sondr3/stylelint/-/stylelint-0.3.0.tgz#d2313c7b79410c93096918021d022c2b1f0e95ca"
+  integrity sha512-wwfLo77TRfohoriKkmajmPCcoGR+j9Erjdc8f9GPnl19D3Vj2euYFXzfMhzRj/bJwQAPJEIgdPV+2tEThIfDuQ==
   dependencies:
     stylelint-a11y "^1.2.0"
     stylelint-config-prettier "^5.2.0"
     stylelint-config-recommended "^2.2.0"
+    stylelint-config-styled-components "^0.1.1"
     stylelint-order "^3.0.0"
     stylelint-prettier "^1.1.0"
+    stylelint-processor-styled-components "^1.8.0"
 
 "@sondr3/tsconfig@^0.2.0":
   version "0.2.0"
@@ -7423,7 +7425,7 @@ micromatch@^3.1.10, micromatch@^3.1.4, micromatch@^3.1.8:
     snapdragon "^0.8.1"
     to-regex "^3.0.2"
 
-micromatch@^4.0.0:
+micromatch@^4.0.0, micromatch@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/micromatch/-/micromatch-4.0.2.tgz#4fcb0999bf9fbc2fcbdd212f6d629b9a56c39259"
   integrity sha512-y7FpHSbMUMoyPbYUSzO6PaZ6FyRnQOpHuKwbo1G+Knck95XVU4QAiKdGEnj5wwoS7PlOgthX/09u5iFJ+aYf5Q==
@@ -10895,6 +10897,11 @@ stylelint-config-recommended@^2.2.0:
   resolved "https://registry.yarnpkg.com/stylelint-config-recommended/-/stylelint-config-recommended-2.2.0.tgz#46ab139db4a0e7151fd5f94af155512886c96d3f"
   integrity sha512-bZ+d4RiNEfmoR74KZtCKmsABdBJr4iXRiCso+6LtMJPw5rd/KnxUWTxht7TbafrTJK1YRjNgnN0iVZaJfc3xJA==
 
+stylelint-config-styled-components@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/stylelint-config-styled-components/-/stylelint-config-styled-components-0.1.1.tgz#b408388d7c687833ab4be4c4e6522d97d2827ede"
+  integrity sha512-z5Xz/9GmvxO6e/DLzBMwkB85zHxEEjN6K7Cj80Bi+o/9vR9eS3GX3E9VuMnX9WLFYulqbqLtTapGGY28JBiy9Q==
+
 stylelint-order@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/stylelint-order/-/stylelint-order-3.0.0.tgz#ec44afb93a3183dcf8c91540d4486de776250506"
@@ -10910,6 +10917,16 @@ stylelint-prettier@^1.1.0:
   integrity sha512-H7Zjb+9ufF0dTjjJ4qSbN/yeAV14BNUK5rl267lvYfmmW4Swlz4a2rfwqqgiN/YlntHXXzM6Nh/UXHFIvLI8zA==
   dependencies:
     prettier-linter-helpers "^1.0.0"
+
+stylelint-processor-styled-components@^1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/stylelint-processor-styled-components/-/stylelint-processor-styled-components-1.8.0.tgz#7dc48c6c95f9c3c9daa49efa5f3d1be49e7296e2"
+  integrity sha512-sADydhLPwtR9YJBydlO6X209sjT3rG9nr7sn/cEFZtoeZF3tI60HtxIOFC12vVVMvpKFS+E0smMiKA6FcVZO9A==
+  dependencies:
+    "@babel/parser" "^7.0.0"
+    "@babel/traverse" "^7.0.0"
+    micromatch "^4.0.2"
+    postcss "^7.0.0"
 
 stylelint@^10.0.1:
   version "10.0.1"
