@@ -10,7 +10,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-const Container = styled.div`
+const Container = styled.main`
   display: grid;
   grid-gap: 20px;
   grid-template-columns: repeat(12, [col-start] 1fr);
