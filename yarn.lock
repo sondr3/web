@@ -872,20 +872,27 @@
   dependencies:
     any-observable "^0.3.0"
 
-"@sondr3/eslint-config-me@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@sondr3/eslint-config-me/-/eslint-config-me-0.2.1.tgz#fca80cc0eaa03d0ee38a17ee89e62d320128f949"
-  integrity sha512-R+i5Aj4xwTG1+3QHIThuDf6x+AMZRVIwvp0HA5l2rgH3m6hnEsjKKyaV9K8JcANSWeTCvYYFuN/fbFeWDvl15A==
+"@sondr3/eslint-config-react@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@sondr3/eslint-config-react/-/eslint-config-react-0.1.0.tgz#b375d3c8910a4e1fef2b329fba7d9955db100cfc"
+  integrity sha512-egH2H5fACGFMWY4bAW2fFHQUSDZtcM0I1mpsSZlvkywgjKRLHHgS0W4btgIm64KBS9RgCFv0TtpBwqnZjJVUag==
+  dependencies:
+    eslint-config-prettier "^4.3.0"
+    eslint-plugin-jsx-a11y "^6.2.1"
+    eslint-plugin-react "^7.13.0"
+    eslint-plugin-react-hooks "^1.6.0"
+
+"@sondr3/eslint-config-typescript@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@sondr3/eslint-config-typescript/-/eslint-config-typescript-0.1.0.tgz#f3915bc8d177a163457137586af1e594232dae93"
+  integrity sha512-ks5pMeVlkKUgbBfwlGrzSKCcsiWK7vEOpPS6VURA9OGurPPUdHd/D6IT7c7cDPxFvflop5EPFdYJKAh728ibug==
   dependencies:
     "@typescript-eslint/eslint-plugin" "^1.8.0"
     "@typescript-eslint/parser" "^1.8.0"
     eslint-config-airbnb "^17.1.0"
     eslint-config-prettier "^4.3.0"
     eslint-plugin-import "^2.17.2"
-    eslint-plugin-jsx-a11y "^6.2.1"
     eslint-plugin-prettier "^3.1.0"
-    eslint-plugin-react "^7.13.0"
-    eslint-plugin-react-hooks "^1.6.0"
 
 "@sondr3/stylelint@^0.2.1":
   version "0.2.1"
@@ -11216,9 +11223,9 @@ tslib@^1.6.0, tslib@^1.8.1, tslib@^1.9.0:
   integrity sha512-4krF8scpejhaOgqzBEcGM7yDIEfi0/8+8zDRZhNZZ2kjmHJ4hv3zCbQWxoJGz1iw5U0Jl0nma13xzHXcncMavQ==
 
 tsutils@^3.7.0:
-  version "3.12.0"
-  resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-3.12.0.tgz#2d236b98dc07bff9e49c7355a48a78d20e15e58a"
-  integrity sha512-64KxDOb3+5ZVbz6NDZlCtOHstLk9+W96Y7d5Z/s5ge92gLaunxDeXYahvB7Rhl1dbaa3ifyq/W53o4mshIV1Tw==
+  version "3.13.0"
+  resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-3.13.0.tgz#904ae58d0d81a1d5c16112da7bca059f9283b0e2"
+  integrity sha512-wRtEjVU8Su72sDIDoqno5Scwt8x4eaF0teKO3m4hu8K1QFPnIZMM88CLafs2tapUeWnY9SwwO3bWeOt2uauBcg==
   dependencies:
     tslib "^1.8.1"
 
