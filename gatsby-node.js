@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-var-requires */
 const kebabCase = require("lodash/kebabCase");
 const { createFilePath } = require("gatsby-source-filesystem");
 

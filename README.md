@@ -1,9 +1,8 @@
-# websites
+# web
 
-This repository contains the source for my websites as well as the themes that
+This repository contains the source for my website as well as the themes that
 powers them. I've built the whole lot of them in
-[Gatsby](https://www.gatsbyjs.org/) with
-[TypeScript](https://www.typescriptlang.org/) and a whole host of
+[Gatsby](https://www.gatsbyjs.org/) with JavaScript and a whole host of
 [ESLint](https://eslint.org/) plugins, [Prettier](https://prettier.io/) for
 styling and [stylelint](https://stylelint.io/) for linting my CSS, which is
 written as CSS Modules.
