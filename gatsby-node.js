@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const kebabCase = require("lodash/kebabCase");
 const { createFilePath } = require("gatsby-source-filesystem");
 
@@ -41,7 +42,7 @@ exports.createPages = ({ graphql, actions }) => {
         result.data.allMdx.edges.forEach(({ node }) => {
           createPage({
             path: node.fields.slug,
-            component: require.resolve("./src/templates/page.tsx"),
+            component: require.resolve("./src/templates/page.jsx"),
             context: { id: node.id }
           });
         });

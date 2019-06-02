@@ -1,12 +1,12 @@
 import React from "react";
-import { Project } from "../../content/projects";
+import PropTypes from "prop-types";
 
 export default function ProjectCard({
   name,
   description,
   technologies,
   github
-}: Project) {
+}) {
   return (
     <>
       <h2>{name}</h2>
@@ -20,3 +20,10 @@ export default function ProjectCard({
     </>
   );
 }
+
+ProjectCard.propTypes = {
+  name: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  technologies: PropTypes.arrayOf(PropTypes.string).isRequired,
+  github: PropTypes.string.isRequired
+};

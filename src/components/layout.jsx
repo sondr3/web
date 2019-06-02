@@ -1,15 +1,12 @@
 import React from "react";
+import PropTypes from "prop-types";
 import SEO from "./seo";
 import Footer from "./footer";
 
 import styles from "./layout.module.css";
 import Header from "./header";
 
-interface Props {
-  children: React.ReactNode;
-}
-
-export default function Layout({ children }: Props) {
+export default function Layout({ children }) {
   return (
     <React.StrictMode>
       <div className={styles.container}>
@@ -21,3 +18,7 @@ export default function Layout({ children }: Props) {
     </React.StrictMode>
   );
 }
+
+Layout.propTypes = {
+  children: PropTypes.element.isRequired
+};

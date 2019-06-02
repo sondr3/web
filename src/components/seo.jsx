@@ -1,13 +1,9 @@
 import React from "react";
 import Helmet from "react-helmet";
+import PropTypes from "prop-types";
 import useSiteMetadata from "../hooks/useSiteMetadata";
 
-export interface Props {
-  description?: string;
-  title?: string;
-}
-
-const SEO: React.FC<Props> = ({ description, title }) => {
+const SEO = ({ description, title }) => {
   const meta = useSiteMetadata();
 
   title = title || meta.title;
@@ -54,6 +50,16 @@ const SEO: React.FC<Props> = ({ description, title }) => {
       ]}
     />
   );
+};
+
+SEO.propTypes = {
+  description: PropTypes.string,
+  title: PropTypes.string
+};
+
+SEO.defaultProps = {
+  description: null,
+  title: null
 };
 
 export default SEO;
