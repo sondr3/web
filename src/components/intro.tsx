@@ -1,9 +1,13 @@
 import React from "react";
 import { useStaticQuery, graphql } from "gatsby";
+import styled from "styled-components";
 import Wrapper from "./wrapper";
 
 import dev from "../../assets/developer.svg";
-import styles from "./intro.module.css";
+
+const Img = styled.img`
+  width: 100%;
+`;
 
 export default function About() {
   const { site } = useStaticQuery(graphql`
@@ -23,7 +27,7 @@ export default function About() {
 
   return (
     <Wrapper>
-      <img src={dev} alt="Hello! I'm Sondre." className={styles.img} />
+      <Img src={dev} alt="Hello! I'm Sondre." />
       <h1>Hello!</h1>
       <h2>I&apos;m Sondre.</h2>
       <p>
