@@ -1,6 +1,6 @@
 import React from "react";
-import Layout from "../components/layout";
-import Wrapper from "../components/wrapper";
+import Layout from "../components/common/layout";
+import Wrapper from "../components/common/wrapper";
 
 export default function Index() {
   return (

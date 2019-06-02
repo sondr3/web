@@ -1,9 +1,9 @@
 import React from "react";
 import { useStaticQuery, graphql } from "gatsby";
 import MDXRenderer from "gatsby-mdx/mdx-renderer";
-import Layout from "../components/layout";
-import Wrapper from "../components/wrapper";
-import SEO from "../components/seo";
+import Layout from "../components/common/layout";
+import Wrapper from "../components/common/wrapper";
+import SEO from "../components/common/seo";
 
 export default function PageTemplate() {
   const { mdx: page } = useStaticQuery(graphql`

@@ -1,9 +1,9 @@
 import React from "react";
 import { useStaticQuery, graphql } from "gatsby";
 import styled from "styled-components";
-import Wrapper from "./wrapper";
+import Wrapper from "../common/wrapper";
 
-import dev from "../../assets/developer.svg";
+import dev from "../../../assets/developer.svg";
 
 const Img = styled.img`
   width: 100%;
