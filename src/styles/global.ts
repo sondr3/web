@@ -17,6 +17,12 @@ h5,
 h6 {
   font-family: "Cambo", sans-serif;
 }
+
+p {
+  hyphens: auto;
+  text-align: justify;
+  text-justify: inter-word;
+}
 `;
 
 export default GlobalStyle;
