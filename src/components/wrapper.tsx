@@ -5,7 +5,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-const Wrap = styled.div`
+const Wrap = styled.section`
   padding: 1rem;
 
   @media (min-width: 500px) {
