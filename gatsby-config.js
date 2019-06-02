@@ -6,7 +6,8 @@ module.exports = {
     description: `Sondre is a computer security student with a passion for safe and reliable software, open source and programming. Firm believer in applying the KISS principle and the worse is better philosophy. Enjoyer of strongly typed languages, Linux and mechanical keyboards. `,
     author: {
       name: "Sondre Nilsen",
-      bio: "I make things"
+      intro: "I make things",
+      bio: ""
     },
     social: {
       github: "https://github.com/sondr3"
@@ -59,7 +60,7 @@ module.exports = {
       resolve: `gatsby-mdx`,
       options: {
         defaultLayouts: {
-          default: require.resolve("./src/components/layout.tsx")
+          default: require.resolve("./src/components/common/layout.tsx")
         }
       }
     },
