@@ -2,23 +2,21 @@ import React from "react";
 import { Link } from "gatsby";
 import styled from "styled-components";
 
+import logo from "../../../assets/logo.svg";
+
 const Nav = styled.nav`
+  align-items: center;
   display: grid;
+  grid-auto-rows: auto;
   grid-gap: 1rem;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(5, 1fr);
+  margin: 0 auto;
   padding-top: 1rem;
-`;
+  text-align: center;
 
-const Logo = styled.div`
-  align-self: center;
-  grid-column: 1;
-  justify-self: center;
-`;
-
-const NavLink = styled.ul`
-  display: flex;
-  grid-column: 2;
-  justify-content: space-around;
+  @media screen and (max-width: 700px) {
+    grid-template-columns: 100%;
+  }
 `;
 
 const StyledLink = styled(Link)`
@@ -28,18 +26,24 @@ const StyledLink = styled(Link)`
   text-transform: uppercase;
 `;
 
+const Img = styled.img`
+  justify-self: center;
+  max-height: 10vh;
+
+  @media screen and (max-width: 700px) {
+    display: none;
+  }
+`;
+
 export default function Header() {
   return (
     <header>
       <Nav>
-        <Logo>
-          <StyledLink to="/">Eons</StyledLink>
-        </Logo>
-        <NavLink>
-          <li>
-            <StyledLink to="/about/">About</StyledLink>
-          </li>
-        </NavLink>
+        <StyledLink to="/">Home</StyledLink>
+        <StyledLink to="/about/">About</StyledLink>
+        <Img src={logo} alt="Logo" />
+        <StyledLink to="/projects/">Projects</StyledLink>
+        <StyledLink to="/blog/">Blog</StyledLink>
       </Nav>
     </header>
   );
