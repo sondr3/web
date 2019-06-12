@@ -25,8 +25,7 @@ const Nav = styled.nav`
 `;
 
 const StyledLink = styled(Link)`
-  color: black;
-  font-size: 18px;
+  color: hsla(0, 0%, 0%, 0.8);
   text-decoration: none;
   text-transform: uppercase;
 `;

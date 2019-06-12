@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import SEO from "./seo";
 import Footer from "./footer";
-import GlobalStyle from "../../styles/global";
 import Header from "./header";
 
 interface Props {
@@ -31,7 +30,6 @@ const Wrapper = styled.section`
 export default function Layout({ children }: Props) {
   return (
     <React.StrictMode>
-      <GlobalStyle />
       <SEO />
       <Container>
         <Header />
