@@ -3,6 +3,8 @@ import styled from "styled-components";
 
 const Wrapper = styled.footer`
   display: grid;
+  grid-column: col-start / span 12;
+  grid-row: 3;
   place-items: center center;
 `;
 
