@@ -4,6 +4,11 @@ import styled from "styled-components";
 
 import logo from "../../../assets/logo.svg";
 
+const Head = styled.header`
+  grid-column: col-start / span 12;
+  grid-row: 1;
+`;
+
 const Nav = styled.nav`
   align-items: center;
   display: grid;
@@ -37,7 +42,7 @@ const Img = styled.img`
 
 export default function Header() {
   return (
-    <header>
+    <Head>
       <Nav>
         <StyledLink to="/">Home</StyledLink>
         <StyledLink to="/about/">About</StyledLink>
@@ -45,6 +50,6 @@ export default function Header() {
         <StyledLink to="/projects/">Projects</StyledLink>
         <StyledLink to="/blog/">Blog</StyledLink>
       </Nav>
-    </header>
+    </Head>
   );
 }
