@@ -28,7 +28,7 @@ const StyledLink = styled(Link)`
 
 const Img = styled.img`
   justify-self: center;
-  max-height: 10vh;
+  max-height: 80px;
 
   @media screen and (max-width: 700px) {
     display: none;
