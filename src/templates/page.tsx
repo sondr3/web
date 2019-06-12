@@ -2,7 +2,6 @@ import React from "react";
 import { useStaticQuery, graphql } from "gatsby";
 import MDXRenderer from "gatsby-mdx/mdx-renderer";
 import Layout from "../components/common/layout";
-import Wrapper from "../components/common/wrapper";
 import SEO from "../components/common/seo";
 
 export default function PageTemplate() {
@@ -27,9 +26,7 @@ export default function PageTemplate() {
         title={page.frontmatter.title}
         description={page.frontmatter.description}
       />
-      <Wrapper>
-        <MDXRenderer>{page.code.body}</MDXRenderer>
-      </Wrapper>
+      <MDXRenderer>{page.code.body}</MDXRenderer>
     </Layout>
   );
 }

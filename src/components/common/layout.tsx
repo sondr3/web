@@ -3,9 +3,7 @@ import styled from "styled-components";
 import SEO from "./seo";
 import Footer from "./footer";
 import GlobalStyle from "../../styles/global";
-
 import Header from "./header";
-import Wrapper from "./wrapper";
 
 interface Props {
   children: React.ReactNode;
@@ -19,6 +17,15 @@ const Container = styled.main`
   margin: 0 auto;
   max-width: 1024px;
   min-height: 100vh;
+`;
+
+const Wrapper = styled.section`
+  padding: 1rem;
+
+  @media (min-width: 500px) {
+    grid-column: col-start 4 / span 6;
+    padding: 0;
+  }
 `;
 
 export default function Layout({ children }: Props) {
