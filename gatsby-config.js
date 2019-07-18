@@ -64,7 +64,7 @@ module.exports = {
     },
     `gatsby-plugin-react-helmet`,
     {
-      resolve: `gatsby-mdx`,
+      resolve: `gatsby-plugin-mdx`,
       options: {
         defaultLayouts: {
           default: require.resolve("./src/components/common/layout.tsx")
