@@ -1046,10 +1046,10 @@
     stylelint-prettier "^1.1.0"
     stylelint-processor-styled-components "^1.8.0"
 
-"@sondr3/tsconfig@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@sondr3/tsconfig/-/tsconfig-0.2.0.tgz#aa26da7dba7a76771efc05f310b52a0746cdc32a"
-  integrity sha512-IP6oq71XumHHUXkrdcD1RbYk5JC8Xh89uUUKkyokOQ3ss/6naOSiY9VkkNb7PP8DjT7FIi/O7zTPan5L/10DrQ==
+"@sondr3/tsconfig@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@sondr3/tsconfig/-/tsconfig-0.3.0.tgz#877d2cf08d8d8f3d6db8678c467c3d84ee14b87f"
+  integrity sha512-9qbDmVTzpipMS/SlZK5iLeiXKndVOjYvGg+7d1qKKOnBjL4X0rZcymzHD2jpLhQud63iqTyYn/vjY4y2hct4+A==
 
 "@stefanprobst/lokijs@^1.5.6-b":
   version "1.5.6-b"
