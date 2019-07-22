@@ -5,7 +5,8 @@
   "scripts": {
     "develop": "gatsby develop",
     "build": "gatsby build",
-    "serve": "gatsby serve"
+    "serve": "gatsby serve",
+    "release": "standard-version"
   },
   "dependencies": {
     "@mdx-js/mdx": "^1.1.0",
@@ -36,6 +37,8 @@
     "typography": "^0.16.19"
   },
   "devDependencies": {
+    "@commitlint/cli": "^8.1.0",
+    "@commitlint/config-conventional": "^8.1.0",
     "@sondr3/eslint-config-react": "^0.3.1",
     "@sondr3/eslint-config-typescript": "^0.2.1",
     "@sondr3/stylelint": "^0.3.1",
@@ -52,6 +55,7 @@
     "lint-staged": "^9.2.0",
     "prettier": "^1.18.2",
     "serve": "^11.1.0",
+    "standard-version": "^6.0.1",
     "stylelint": "^10.1.0"
   },
   "browserslist": [
@@ -60,7 +64,8 @@
   ],
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "lint-staged": {
@@ -70,7 +75,7 @@
       "stylelint",
       "git add"
     ],
-    "*.{json,css,md}": [
+    "*.{json,css,md,mdx}": [
       "prettier --write",
       "git add"
     ]
