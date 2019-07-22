@@ -7,11 +7,11 @@ export interface Props {
   title?: string;
 }
 
-const SEO: React.FC<Props> = ({ description, title }) => {
+const SEO: React.FC<Props> = ({ description: desc, title: t }) => {
   const meta = useSiteMetadata();
 
-  title = title || meta.title;
-  description = description || meta.description;
+  const title = t || meta.title;
+  const description = desc || meta.description;
 
   return (
     <Helmet

@@ -39,7 +39,7 @@ const Img = styled.img`
   }
 `;
 
-export default function Header() {
+const Header: React.FC = () => {
   return (
     <Head>
       <Nav>
@@ -51,4 +51,6 @@ export default function Header() {
       </Nav>
     </Head>
   );
-}
+};
+
+export default Header;

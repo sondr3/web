@@ -1,6 +1,17 @@
 import { useStaticQuery, graphql } from "gatsby";
 
-export default function useAuthorMetadata() {
+interface AuthorMetadata {
+  author: {
+    name: string;
+    intro: string;
+    bio: string;
+  };
+  social: {
+    github: string;
+  };
+}
+
+const useAuthorMetadata = (): AuthorMetadata => {
   const { site } = useStaticQuery(graphql`
     query AuthorMetadata {
       site {
@@ -19,4 +30,6 @@ export default function useAuthorMetadata() {
   `);
 
   return site.siteMetadata;
-}
+};
+
+export default useAuthorMetadata;

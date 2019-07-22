@@ -8,7 +8,7 @@ const Img = styled.img`
   width: 100%;
 `;
 
-export default function Intro() {
+const Intro: React.FC = () => {
   const meta = useAuthorMetadata();
 
   return (
@@ -17,9 +17,10 @@ export default function Intro() {
       <h1>Hello!</h1>
       <h2>I&apos;m Sondre.</h2>
       <p>
-        {meta.author.intro}. You can see them on my{" "}
-        <a href={meta.social.github}>GitHub</a>.
+        {meta.author.intro}. You can see them on my <a href={meta.social.github}>GitHub</a>.
       </p>
     </>
   );
-}
+};
+
+export default Intro;

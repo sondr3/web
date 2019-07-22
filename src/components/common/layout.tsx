@@ -27,7 +27,7 @@ const Wrapper = styled.section`
   }
 `;
 
-export default function Layout({ children }: Props) {
+const Layout: React.FC<Props> = ({ children }) => {
   return (
     <React.StrictMode>
       <SEO />
@@ -38,4 +38,6 @@ export default function Layout({ children }: Props) {
       </Container>
     </React.StrictMode>
   );
-}
+};
+
+export default Layout;

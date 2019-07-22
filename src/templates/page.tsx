@@ -17,17 +17,14 @@ interface PageQueryData {
   };
 }
 
-export default function PageTemplate({ data: { mdx } }: PageQueryData) {
+const PageTemplate: React.FC<PageQueryData> = ({ data: { mdx } }) => {
   return (
     <Layout>
-      <SEO
-        title={mdx.frontmatter.title}
-        description={mdx.frontmatter.description}
-      />
+      <SEO title={mdx.frontmatter.title} description={mdx.frontmatter.description} />
       <MDXRenderer>{mdx.body}</MDXRenderer>
     </Layout>
   );
-}
+};
 
 export const pageQuery = graphql`
   query PageQuery($id: String) {
@@ -41,3 +38,5 @@ export const pageQuery = graphql`
     }
   }
 `;
+
+export default PageTemplate;

@@ -3,11 +3,13 @@ import Layout from "../components/common/layout";
 import Intro from "../components/intro/intro";
 import About from "../components/intro/about";
 
-export default function Index() {
+const Index: React.FC = () => {
   return (
     <Layout>
       <Intro />
       <About />
     </Layout>
   );
-}
+};
+
+export default Index;

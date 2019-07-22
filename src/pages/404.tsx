@@ -2,7 +2,7 @@ import React from "react";
 import Layout from "../components/common/layout";
 import SEO from "../components/common/seo";
 
-export default function Index() {
+const Index: React.FC = () => {
   return (
     <Layout>
       <SEO title="404" />
@@ -10,4 +10,6 @@ export default function Index() {
       <p>Oh no :(</p>
     </Layout>
   );
-}
+};
+
+export default Index;
