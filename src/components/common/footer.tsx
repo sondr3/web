@@ -8,17 +8,16 @@ const Wrapper = styled.footer`
   place-items: center center;
 `;
 
-export default function Footer() {
+const Footer: React.FC = () => {
   return (
     <Wrapper>
       <p>
-        License{" "}
-        <a href="https://creativecommons.org/licenses/by-sa/4.0/">
-          CC BY-SA 4.0
-        </a>
+        License <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>
         &mdash;
         <a href="https://www.eons.io">Sondre Nilsen</a>
       </p>
     </Wrapper>
   );
-}
+};
+
+export default Footer;

@@ -1,22 +1,19 @@
 import React from "react";
 import { Project } from "../../../content/projects";
 
-export default function ProjectCard({
-  name,
-  description,
-  technologies,
-  github
-}: Project) {
+const ProjectCard: React.FC<Project> = ({ name, description, technologies, github }) => {
   return (
     <>
       <h2>{name}</h2>
       <p>{description}</p>
       <ul>
-        {technologies.map(tech => {
-          <li>{tech}</li>;
-        })}
+        {technologies.map(tech => (
+          <li key={tech}>{tech}</li>
+        ))}
       </ul>
       <a href={github}>See it on github</a>
     </>
   );
-}
+};
+
+export default ProjectCard;
