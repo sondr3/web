@@ -15,7 +15,7 @@ const Title = styled(Link)`
 
   &,
   &:visited {
-    color: ${c.greyDark};
+    color: darken(${c.grey}, 20%);
   }
 `;
 
@@ -32,11 +32,6 @@ const NavLink = styled(Link)`
 
   &:not(:last-child) {
     margin-right: ${c.spacingUnit}px;
-  }
-
-  &:hover,
-  &:focus {
-    text-decoration: underline;
   }
 
   @media screen and (max-width: ${c.smallWidth}) {
