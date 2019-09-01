@@ -1,11 +1,12 @@
 import React from "react";
 import styled from "styled-components";
+import c from "../../styles/constants";
 
 const Wrapper = styled.footer`
-  display: grid;
-  grid-column: col-start / span 12;
-  grid-row: 3;
-  place-items: center center;
+  grid-row-end: 3;
+  grid-row-start: 2;
+  padding: ${c.spacingUnit}px 0;
+  text-align: center;
 `;
 
 const Footer: React.FC = () => {
