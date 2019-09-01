@@ -1,5 +1,6 @@
-/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-require-imports */
 /* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable no-console */
 const kebabCase = require("lodash/kebabCase");
 const { createFilePath } = require("gatsby-source-filesystem");
 
@@ -16,7 +17,7 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
   }
 };
 
-exports.createPages = ({ graphql, actions }) => {
+exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
   return new Promise((resolve, reject) => {
     resolve(
@@ -36,7 +37,7 @@ exports.createPages = ({ graphql, actions }) => {
           }
         `
       ).then(result => {
-        if (result.errors) {
+        if (result.errors !== "undefined") {
           console.error(result.errors);
           reject(result.errors);
         }

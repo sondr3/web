@@ -4,6 +4,7 @@ interface SiteMetadata {
   siteUrl: string;
   title: string;
   titleTemplate: string;
+  description: string;
   author: {
     name: string;
   };

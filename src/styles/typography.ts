@@ -5,8 +5,7 @@ const typography = new Typography({
   baseLineHeight: 1.45,
   headerFontFamily: ["Cambo", "Helvetica Neue", "Segoe UI", "Helvetica", "Arial", "sans-serif"],
   bodyFontFamily: ["Bitter", "Georgia", "serif"],
-  overrideStyles: () => ({
-    //eslint-disable-line
+  overrideStyles: (): Record<symbol, string> => ({
     p: {
       hypens: "auto",
       textAlign: "justify",
