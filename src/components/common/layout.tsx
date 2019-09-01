@@ -3,6 +3,7 @@ import styled from "styled-components";
 import SEO from "./seo";
 import Footer from "./footer";
 import Header from "./header";
+import GlobalStyle from "../../styles/global";
 import c from "../../styles/constants";
 
 interface Props {
@@ -23,6 +24,7 @@ const Container = styled.div`
 const Layout: React.FC<Props> = ({ children }) => {
   return (
     <React.StrictMode>
+      <GlobalStyle />
       <SEO />
       <Container>
         <Header />
