@@ -2,52 +2,60 @@ import React from "react";
 import { Link } from "gatsby";
 import styled from "styled-components";
 
-import logo from "../../../assets/logo.svg";
+import c from "../../styles/constants";
 
 const Head = styled.header`
-  grid-column: col-start / span 12;
-  grid-row: 1;
+  min-height: 56px;
+  position: relative;
 `;
 
-const Nav = styled.nav`
-  align-items: center;
-  display: grid;
-  grid-auto-rows: auto;
-  grid-gap: 1rem;
-  grid-template-columns: repeat(5, 1fr);
-  margin: 0 auto;
-  padding-top: 1rem;
-  text-align: center;
+const Title = styled(Link)`
+  line-height: 56px;
+  text-decoration: none;
 
-  @media screen and (max-width: 700px) {
-    grid-template-columns: 100%;
+  &,
+  &:visited {
+    color: ${c.greyDark};
   }
 `;
 
-const StyledLink = styled(Link)`
-  color: hsla(0, 0%, 0%, 0.8);
-  text-decoration: none;
-  text-transform: uppercase;
+const Nav = styled.nav`
+  float: right;
+  line-height: 56px;
 `;
 
-const Img = styled.img`
-  justify-self: center;
-  max-height: 80px;
+const NavLink = styled(Link)`
+  color: ${c.textColor};
+  line-height: 1.5;
+  text-decoration: none;
+  text-transform: uppercase;
 
-  @media screen and (max-width: 700px) {
-    display: none;
+  &:not(:last-child) {
+    margin-right: ${c.spacingUnit}px;
+  }
+
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+  }
+
+  @media screen and (max-width: ${c.smallWidth}) {
+    margin-left: ${c.spacingUnit}px;
+    padding: ${c.spacingUnit}px 0;
+    &:not(:last-child) {
+      margin-right: 0;
+    }
   }
 `;
 
 const Header: React.FC = () => {
   return (
     <Head>
+      <Title to="/">Eons</Title>
       <Nav>
-        <StyledLink to="/">Home</StyledLink>
-        <StyledLink to="/about/">About</StyledLink>
-        <Img src={logo} alt="Logo" />
-        <StyledLink to="/projects/">Projects</StyledLink>
-        <StyledLink to="/blog/">Blog</StyledLink>
+        <NavLink to="/about/">About</NavLink>
+        <NavLink to="/projects/">Projects</NavLink>
+        <NavLink to="/blog/">Blog</NavLink>
       </Nav>
     </Head>
   );

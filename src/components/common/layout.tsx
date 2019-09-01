@@ -3,27 +3,20 @@ import styled from "styled-components";
 import SEO from "./seo";
 import Footer from "./footer";
 import Header from "./header";
+import c from "../../styles/constants";
 
 interface Props {
   children: React.ReactNode;
 }
 
-const Container = styled.main`
-  display: grid;
-  grid-gap: 20px;
-  grid-template-columns: repeat(12, [col-start] 1fr);
-  grid-template-rows: 100px auto 100px;
+const Container = styled.div`
   margin: 0 auto;
-  max-width: 1024px;
-  min-height: 100vh;
-`;
+  max-width: calc(${c.contentWidth}px - ${c.spacingUnit * 2}px);
+  padding: 0 ${c.spacingUnit}px;
 
-const Wrapper = styled.section`
-  padding: 1rem;
-
-  @media (min-width: 500px) {
-    grid-column: col-start 4 / span 6;
-    padding: 0;
+  @media screen and (max-width: ${c.largeWidth}px) {
+    max-width: calc(${c.contentWidth}px - ${c.spacingUnit}px);
+    padding: 0 ${c.spacingUnit / 2}px;
   }
 `;
 
@@ -33,7 +26,7 @@ const Layout: React.FC<Props> = ({ children }) => {
       <SEO />
       <Container>
         <Header />
-        <Wrapper>{children}</Wrapper>
+        {children}
         <Footer />
       </Container>
     </React.StrictMode>

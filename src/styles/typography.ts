@@ -6,8 +6,8 @@ const typography = new Typography({
   headerFontFamily: ["Cambo", "Helvetica Neue", "Segoe UI", "Helvetica", "Arial", "sans-serif"],
   bodyFontFamily: ["Bitter", "Georgia", "serif"],
   overrideStyles: (): Record<symbol, string> => ({
-    html: {
-      backgroundColor: "hsla(0, 0%, 99.2%, 1);"
+    body: {
+      backgroundColor: "hsla(0, 0%, 99.2%, 1)"
     },
     p: {
       hypens: "auto",
