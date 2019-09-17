@@ -9,7 +9,12 @@ const Projects: React.FC = () => {
     <Layout>
       <SEO title="Projects" />
       <h1>Projects</h1>
-      {projects.map(project => (
+      <h2>Personal projects</h2>
+      {projects.personal.map(project => (
+        <ProjectCard key={project.id} {...project} />
+      ))}
+      <h2>Projects I contribute to</h2>
+      {projects.contributor.map(project => (
         <ProjectCard key={project.id} {...project} />
       ))}
     </Layout>
