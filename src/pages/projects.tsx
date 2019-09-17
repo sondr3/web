@@ -1,7 +1,7 @@
 import React from "react";
 import Layout from "../components/common/layout";
 import SEO from "../components/common/seo";
-import ProjectCard from "../components/intro/project-card";
+import ProjectCard from "../components/projects/project-card";
 import projects from "../../content/projects";
 
 const Projects: React.FC = () => {

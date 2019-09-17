@@ -16,7 +16,10 @@ const StyledUl = styled.ul`
 `;
 
 const StyledLi = styled.li`
+  background-color: #6cc0e5;
+  border-radius: ${c.spacingUnit / 4}px;
   margin-right: ${c.spacingUnit / 2}px;
+  padding: 0 ${c.spacingUnit / 3}px;
 `;
 
 const ProjectCard: React.FC<Project> = ({ name, description, technologies, github }) => {
@@ -31,7 +34,7 @@ const ProjectCard: React.FC<Project> = ({ name, description, technologies, githu
           ))}
         </StyledUl>
       </div>
-      <a href={github}>See it on github</a>
+      <a href={github}>See it on GitHub</a>
     </CardWrapper>
   );
 };
