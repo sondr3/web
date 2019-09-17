@@ -21,6 +21,7 @@ const PageTemplate: React.FC<PageQueryData> = ({ data: { mdx } }) => {
   return (
     <Layout>
       <SEO title={mdx.frontmatter.title} description={mdx.frontmatter.description} />
+      <h1>{mdx.frontmatter.title}</h1>
       <MDXRenderer>{mdx.body}</MDXRenderer>
     </Layout>
   );
