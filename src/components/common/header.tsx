@@ -5,30 +5,23 @@ import styled from "styled-components";
 import c from "../../styles/constants";
 
 const Head = styled.header`
-  min-height: 56px;
+  line-height: 56px;
   position: relative;
 `;
 
 const Title = styled(Link)`
-  line-height: 56px;
-  text-decoration: none;
-
-  &,
-  &:visited {
-    color: darken(${c.grey}, 20%);
-  }
+  color: ${c.textColor};
+  font-size: 1.31951rem;
+  text-transform: uppercase;
 `;
 
 const Nav = styled.nav`
   float: right;
-  line-height: 56px;
 `;
 
 const NavLink = styled(Link)`
   color: ${c.textColor};
-  line-height: 1.5;
   text-decoration: none;
-  text-transform: uppercase;
 
   &:not(:last-child) {
     margin-right: ${c.spacingUnit}px;
