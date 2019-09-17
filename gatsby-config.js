@@ -3,7 +3,7 @@ module.exports = {
     siteUrl: "https://www.eons.io",
     title: "Sondre Nilsen",
     titleTemplate: "%s | Sondre Nilsen",
-    description: `Sondre is a computer security student with a passion for safe and reliable software, open source and programming. Firm believer in applying the KISS principle and the worse is better philosophy. Enjoyer of strongly typed languages, Linux and mechanical keyboards. `,
+    description: `Sondre is a computer technology student with a passion for safe and reliable software, open source and programming. Firm believer in applying the KISS principle and the worse is better philosophy. Enjoyer of strongly typed languages, Linux and mechanical keyboards. `,
     author: {
       name: "Sondre Nilsen",
       intro: "I make things",
