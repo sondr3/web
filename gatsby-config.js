@@ -29,6 +29,7 @@ module.exports = {
         omitGoogleFont: true
       }
     },
+    `gatsby-plugin-preact`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
