@@ -22,7 +22,7 @@ figcaption {
 }
 
 ul, ol {
-  margin-left: ${c.spacingUnit}px;
+  margin-left: ${c.size.spacingUnit}px;
 }
 
 li {
@@ -33,7 +33,7 @@ li {
 }
 
 a {
-  color: ${c.brandColor};
+  color: ${c.color.brandColor};
   text-decoration: none;
 
   &:visited {
@@ -46,27 +46,27 @@ a {
 }
 
 blockquote {
-  border-left: 4px solid lighten(${c.grey}, 45%);
-  color: ${c.grey};
+  border-left: 4px solid lighten(${c.color.grey}, 45%);
+  color: ${c.color.grey};
   font-size: 18px;
   font-style: italic;
   letter-spacing: -1px;
-  padding-left: ${c.spacingUnit / 2}px;
+  padding-left: ${c.size.spacingUnit / 2}px;
 
   > :last-child {
     margin-bottom: 0;
   }
 
   pre, code {
-    color: ${c.textColor};
+    color: ${c.color.textColor};
   }
 }
 
 hr {
-  background-color: lighten(${c.grey}, 45%);
+  background-color: lighten(${c.color.grey}, 45%);
   border: 0;
   height: 4px;
-  margin: ${c.spacingUnit / 2} 0;
+  margin: ${c.size.spacingUnit / 2} 0;
 }
 `;
 

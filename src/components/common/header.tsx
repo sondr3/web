@@ -10,7 +10,7 @@ const Head = styled.header`
 `;
 
 const Title = styled(Link)`
-  color: ${c.textColor};
+  color: ${c.color.textColor};
   font-size: 1.31951rem;
   text-transform: uppercase;
 `;
@@ -20,16 +20,16 @@ const Nav = styled.nav`
 `;
 
 const NavLink = styled(Link)`
-  color: ${c.textColor};
+  color: ${c.color.textColor};
   text-decoration: none;
 
   &:not(:last-child) {
-    margin-right: ${c.spacingUnit}px;
+    margin-right: ${c.size.spacingUnit}px;
   }
 
-  @media screen and (max-width: ${c.smallWidth}) {
-    margin-left: ${c.spacingUnit}px;
-    padding: ${c.spacingUnit}px 0;
+  @media screen and (max-width: ${c.size.smallWidth}) {
+    margin-left: ${c.size.spacingUnit}px;
+    padding: ${c.size.spacingUnit}px 0;
     &:not(:last-child) {
       margin-right: 0;
     }
