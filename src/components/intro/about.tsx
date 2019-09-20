@@ -16,10 +16,10 @@ const About: React.FC = () => {
   `);
 
   return (
-    <>
+    <section>
       <h2>{about.frontmatter.description}</h2>
       <MDXRenderer>{about.body}</MDXRenderer>
-    </>
+    </section>
   );
 };
 

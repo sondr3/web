@@ -10,7 +10,7 @@ const Portrait = styled.img`
   width: 100%;
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.section`
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -19,7 +19,7 @@ const Wrapper = styled.div`
   width: 100%;
 `;
 
-const About = styled.section`
+const About = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: end;
