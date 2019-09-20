@@ -12,7 +12,8 @@ export const projects: { [type: string]: Project[] } = {
     {
       id: 0,
       name: "git ignore",
-      description: "A small and simple .gitignore generator",
+      description:
+        "Quickly and easily list and fetch .gitignore templates from gitignore.io. Works offline by caching the templates as well.",
       featured: true,
       technologies: ["Rust"],
       github: "https://github.com/sondr3/git-ignore/"
@@ -20,7 +21,8 @@ export const projects: { [type: string]: Project[] } = {
     {
       id: 1,
       name: "git anger management",
-      description: "Ever wanted to know just how angry your commits are?",
+      description:
+        "Ever wanted to know just how angry your commits are? This small utility checks all the commits in a repository for naughty words and their authors.",
       featured: true,
       technologies: ["Rust", "Git"],
       github: "https://github.com/sondr3/git-anger-management/"
@@ -28,7 +30,8 @@ export const projects: { [type: string]: Project[] } = {
     {
       id: 2,
       name: "MOCCA: MOCCA Operational Controller for Coffee Availability",
-      description: "How much coffee is left?",
+      description:
+        "As a student, one of the most important questions while studying is whether there is coffee left in our brewer. As any reasonable student would, me and a friend built a system that automatically detects when and for how long coffee has been brewing, how hot it is and how much is left.",
       featured: true,
       technologies: ["React", "Python", "Django", "Docker", "Arduino", "C++"],
       github: "https://github.com/inf219-mocca/"
