@@ -5,7 +5,7 @@ import c from "../../styles/constants";
 const Wrapper = styled.footer`
   grid-row-end: 3;
   grid-row-start: 2;
-  padding: ${c.spacingUnit}px 0;
+  padding: ${c.size.spacingUnit}px 0;
   text-align: center;
 `;
 

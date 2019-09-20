@@ -12,12 +12,12 @@ interface Props {
 
 const Container = styled.div`
   margin: 0 auto;
-  max-width: calc(${c.contentWidth}px - ${c.spacingUnit * 2}px);
-  padding: 0 ${c.spacingUnit}px;
+  max-width: calc(${c.size.contentWidth}px - ${c.size.spacingUnit * 2}px);
+  padding: 0 ${c.size.spacingUnit}px;
 
-  @media screen and (max-width: ${c.largeWidth}px) {
-    max-width: calc(${c.contentWidth}px - ${c.spacingUnit}px);
-    padding: 0 ${c.spacingUnit / 2}px;
+  @media screen and (max-width: ${c.size.largeWidth}px) {
+    max-width: calc(${c.size.contentWidth}px - ${c.size.spacingUnit}px);
+    padding: 0 ${c.size.spacingUnit / 2}px;
   }
 `;
 

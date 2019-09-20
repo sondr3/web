@@ -5,7 +5,7 @@ import { Project } from "../../../content/projects";
 import c from "../../styles/constants";
 
 const CardWrapper = styled.div`
-  padding-bottom: ${c.spacingUnit}px;
+  padding-bottom: ${c.size.spacingUnit}px;
 `;
 
 const StyledUl = styled.ul`
@@ -13,13 +13,15 @@ const StyledUl = styled.ul`
   flex-wrap: wrap;
   justify-content: flex-start;
   list-style: none;
+  margin-left: ${c.size.spacingUnit / 2}px;
 `;
 
-const StyledLi = styled.li`
-  background-color: #6cc0e5;
-  border-radius: ${c.spacingUnit / 4}px;
-  margin-right: ${c.spacingUnit / 2}px;
-  padding: 0 ${c.spacingUnit / 3}px;
+const Technology = styled.li`
+  border: 1px solid ${c.color.blue};
+  border-radius: ${c.size.spacingUnit / 4}px;
+  color: ${c.color.blue};
+  margin-right: ${c.size.spacingUnit / 2}px;
+  padding: 0 ${c.size.spacingUnit / 3}px;
 `;
 
 const ProjectCard: React.FC<Project> = ({ name, description, technologies, github }) => {
@@ -30,7 +32,7 @@ const ProjectCard: React.FC<Project> = ({ name, description, technologies, githu
       <div>
         <StyledUl>
           {technologies.map(tech => (
-            <StyledLi key={tech}>{tech}</StyledLi>
+            <Technology key={tech}>{tech}</Technology>
           ))}
         </StyledUl>
       </div>
