@@ -13,7 +13,7 @@ const StyledUl = styled.ul`
   flex-wrap: wrap;
   justify-content: flex-start;
   list-style: none;
-  margin-left: ${c.size.spacingUnit / 2}px;
+  margin: 0 0;
 `;
 
 const Technology = styled.li`
@@ -24,19 +24,27 @@ const Technology = styled.li`
   padding: 0 ${c.size.spacingUnit / 3}px;
 `;
 
-const ProjectCard: React.FC<Project> = ({ name, description, technologies, github }) => {
+const Title = styled.h3`
+  margin-bottom: ${c.size.spacingUnit / 4}px;
+`;
+
+const ProjectCard: React.FC<Project> = ({ name, description, featured, technologies, github }) => {
   return (
     <CardWrapper>
-      <h3>{name}</h3>
+      <Title>{name}</Title>
       <p>{description}</p>
-      <div>
-        <StyledUl>
-          {technologies.map(tech => (
-            <Technology key={tech}>{tech}</Technology>
-          ))}
-        </StyledUl>
-      </div>
-      <a href={github}>See it on GitHub</a>
+      {featured ? null : (
+        <>
+          <div>
+            <StyledUl>
+              {technologies.map(tech => (
+                <Technology key={tech}>{tech}</Technology>
+              ))}
+            </StyledUl>
+          </div>
+          <a href={github}>See it on GitHub</a>
+        </>
+      )}
     </CardWrapper>
   );
 };

@@ -11,11 +11,27 @@ const Projects: React.FC = () => {
       <h1>Projects</h1>
       <h2>Personal projects</h2>
       {projects.personal.map(project => (
-        <ProjectCard key={project.id} {...project} />
+        <ProjectCard
+          key={project.id}
+          id={project.id}
+          featured={false}
+          name={project.name}
+          description={project.description}
+          technologies={project.technologies}
+          github={project.github}
+        />
       ))}
       <h2>Projects I contribute to</h2>
       {projects.contributor.map(project => (
-        <ProjectCard key={project.id} {...project} />
+        <ProjectCard
+          key={project.id}
+          id={project.id}
+          featured={false}
+          name={project.name}
+          description={project.description}
+          technologies={project.technologies}
+          github={project.github}
+        />
       ))}
     </Layout>
   );
