@@ -2,9 +2,9 @@
 
 :root,
 [data-theme='default'] {
-  --color-brand: $color-brand;
-  --color-blue: $color-blue;
-  --color-text: $color-text;
-  --color-background: $color-background;
-  --color-grey: $color-grey;
+  --color-brand: #{$color-brand};
+  --color-blue: #{$color-blue};
+  --color-text: #{$color-text};
+  --color-background: #{$color-background};
+  --color-grey: #{$color-grey};
 }
