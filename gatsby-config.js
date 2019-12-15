@@ -55,18 +55,25 @@ module.exports = {
     },
     `gatsby-plugin-react-helmet`,
     {
-      resolve: `gatsby-plugin-mdx`,
+      resolve: `gatsby-source-filesystem`,
       options: {
-        defaultLayouts: {
-          default: require.resolve("./src/components/common/layout.tsx")
-        }
+        name: "pages",
+        path: `${__dirname}/content/pages`
       }
     },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        name: "pages",
-        path: `${__dirname}/content/pages`
+        name: "projects",
+        path: `${__dirname}/content/projects`
+      }
+    },
+    {
+      resolve: `gatsby-plugin-mdx`,
+      options: {
+        defaultLayouts: {
+          default: require.resolve("./src/components/common/layout.tsx")
+        }
       }
     }
   ]
