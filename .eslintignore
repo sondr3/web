@@ -4,3 +4,4 @@ assets/
 .netlify/
 .cache/
 public/
+*.js

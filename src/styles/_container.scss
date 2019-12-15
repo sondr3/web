@@ -1,0 +1,10 @@
+.container {
+  margin: 0 auto;
+  max-width: calc(var(--content-width) - calc(var(--spacing) * 2));
+  padding: 0 var(--spacing);
+
+  @media screen and (max-width: var(--large-width)) {
+    max-width: calc(var(--content-width) - var(--spacing));
+    padding: 0 var(--spacing);
+  }
+}

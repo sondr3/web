@@ -21,7 +21,12 @@ module.exports = {
         allExtensions: true
       }
     },
-    `gatsby-plugin-styled-components`,
+    {
+      resolve: `gatsby-plugin-sass`,
+      options: {
+        implementation: require("sass")
+      }
+    },
     {
       resolve: `gatsby-plugin-typography`,
       options: {
