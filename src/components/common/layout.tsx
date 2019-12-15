@@ -3,8 +3,6 @@ import SEO from "./seo";
 import Footer from "./footer";
 import Header from "./header";
 
-import "../../styles/index.scss";
-
 interface Props {
   children: React.ReactNode;
 }
