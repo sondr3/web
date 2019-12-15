@@ -1,3 +1,5 @@
+@use 'variables/sizes' as *;
+
 table {
   margin: 0 0 20px;
   text-align: left;
@@ -19,7 +21,7 @@ figcaption {
 
 ul,
 ol {
-  margin-left: var(--spacing);
+  margin-left: $spacing;
 }
 
 li {
@@ -45,7 +47,7 @@ blockquote {
   font-size: 18px;
   font-style: italic;
   letter-spacing: -1px;
-  padding-left: calc(var(--spacing) / 2);
+  padding-left: $spacing / 2;
 
   > :last-child {
     margin-bottom: 0;

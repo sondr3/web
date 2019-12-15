@@ -1,3 +1,5 @@
+@use 'variables/sizes' as *;
+
 .portrait {
   max-width: 100%;
   width: 100%;
@@ -17,7 +19,7 @@
   flex-direction: column;
   justify-content: end;
 
-  @media screen and (min-width: var(--small-width)) {
+  @media screen and (min-width: $small-width) {
     flex-direction: row;
   }
 }
@@ -28,7 +30,7 @@
   flex-direction: column;
   justify-content: end;
 
-  @media screen and (min-width: var(--small-width)) {
+  @media screen and (min-width: $small-width) {
     width: 100%;
   }
 }

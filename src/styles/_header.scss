@@ -1,14 +1,16 @@
+@use 'variables/sizes' as *;
+
 .nav-link {
   color: var(--color-text);
   text-decoration: none;
 
   &:not(:last-child) {
-    margin-right: var(--spacing);
+    margin-right: $spacing;
   }
 
-  @media screen and (max-width: var(--small-width)) {
-    margin-left: var(spacing);
-    padding: var(spacing) 0;
+  @media screen and (max-width: $small-width) {
+    margin-left: $spacing;
+    padding: $spacing 0;
 
     &:not(:last-child) {
       margin-right: 0;
