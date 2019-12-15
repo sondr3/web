@@ -7,14 +7,21 @@ const { createFilePath } = require("gatsby-source-filesystem");
 exports.onCreateNode = ({ node, getNode, actions }) => {
   const { createNodeField } = actions;
 
-  if (node.internal.type === `Mdx`) {
-    const value = createFilePath({ node, getNode });
-    createNodeField({
-      name: "slug",
-      node,
-      value: `/${kebabCase(value)}/`
-    });
-  }
+  if (node.internal.type !== `Mdx`) return;
+
+  const parent = getNode(node.parent);
+  createNodeField({
+    name: `name`,
+    node,
+    value: parent.sourceInstanceName
+  });
+
+  const value = createFilePath({ node, getNode });
+  createNodeField({
+    name: "slug",
+    node,
+    value: `/${kebabCase(value)}/`
+  });
 };
 
 exports.createPages = async ({ graphql, actions }) => {
