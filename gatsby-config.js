@@ -75,6 +75,7 @@ module.exports = {
           default: require.resolve("./src/components/common/layout.tsx")
         }
       }
-    }`gatsby-plugin-webpack-bundle-analyser-v2`
+    },
+    `gatsby-plugin-webpack-bundle-analyser-v2`
   ]
 };
