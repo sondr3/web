@@ -1,6 +1,6 @@
 import React from "react";
 import Helmet from "react-helmet";
-import useSiteMetadata from "../../hooks/useSiteMetadata";
+import useSiteMetadata from "../../queries/useSiteMetadata";
 
 export interface Props {
   description?: string;
