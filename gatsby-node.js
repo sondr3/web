@@ -26,36 +26,47 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
 
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
-  return new Promise((resolve, reject) => {
-    resolve(
-      graphql(
-        `
-          {
-            allMdx {
-              edges {
-                node {
-                  id
-                  fields {
-                    slug
-                  }
-                }
-              }
-            }
-          }
-        `
-      ).then(result => {
-        if (result.errors !== "undefined") {
-          console.error(result.errors);
-          reject(result.errors);
+  const content = await graphql(
+    `
+      fragment Content on Mdx {
+        id
+        fields {
+          slug
         }
-        result.data.allMdx.edges.forEach(({ node }) => {
-          createPage({
-            path: node.fields.slug,
-            component: require.resolve("./src/templates/page.tsx"),
-            context: { id: node.id }
-          });
-        });
-      })
-    );
+      }
+
+      query {
+        pages: allMdx(filter: { fields: { name: { eq: "pages" } } }) {
+          nodes {
+            ...Content
+          }
+        }
+        projects: allMdx(filter: { fields: { name: { eq: "projects" } } }) {
+          nodes {
+            ...Content
+          }
+        }
+      }
+    `
+  );
+
+  if (content.errors) throw content.errors;
+
+  // [INFO]: Create pages
+  content.data.pages.nodes.forEach(node => {
+    createPage({
+      path: node.fields.slug,
+      component: require.resolve("./src/templates/page.tsx"),
+      context: { id: node.id }
+    });
+  });
+
+  // [INFO]: Create projecte pages
+  content.data.projects.nodes.forEach(node => {
+    createPage({
+      path: `/project${node.fields.slug}`,
+      component: require.resolve("./src/templates/page.tsx"),
+      context: { id: node.id }
+    });
   });
 };
