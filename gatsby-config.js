@@ -36,23 +36,7 @@ module.exports = {
     },
     `gatsby-plugin-sitemap`,
     `gatsby-plugin-robots-txt`,
-    {
-      resolve: `gatsby-plugin-netlify`,
-      options: {
-        headers: {
-          "/*": [
-            "Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; object-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self' data:; font-src 'self' data:; connect-src 'self'",
-            "Feature-Policy: autoplay 'none'; camera 'none'; encrypted-media 'none'; fullscreen 'none'; geolocation 'none'; microphone 'none'; midi 'none'; payment 'none'; vr 'none'",
-            "Referrer-Policy: strict-origin-when-cross-origin",
-            "Strict-Transport-Security: max-age=63072000; includeSubDomains; preload",
-            "X-Content-Type-Options: nosniff",
-            "X-Frame-Options: DENY",
-            "X-XSS-Protection: 1; mode=block"
-          ]
-        },
-        mergeSecurityHeaders: false
-      }
-    },
+
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-filesystem`,
@@ -76,6 +60,23 @@ module.exports = {
         }
       }
     },
-    `gatsby-plugin-webpack-bundle-analyser-v2`
+    `gatsby-plugin-webpack-bundle-analyser-v2`,
+    {
+      resolve: `gatsby-plugin-netlify`,
+      options: {
+        headers: {
+          "/*": [
+            "Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; object-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self' data:; font-src 'self' data:; connect-src 'self'",
+            "Feature-Policy: autoplay 'none'; camera 'none'; encrypted-media 'none'; fullscreen 'none'; geolocation 'none'; microphone 'none'; midi 'none'; payment 'none'; vr 'none'",
+            "Referrer-Policy: strict-origin-when-cross-origin",
+            "Strict-Transport-Security: max-age=63072000; includeSubDomains; preload",
+            "X-Content-Type-Options: nosniff",
+            "X-Frame-Options: DENY",
+            "X-XSS-Protection: 1; mode=block"
+          ]
+        },
+        mergeSecurityHeaders: false
+      }
+    }
   ]
 };
