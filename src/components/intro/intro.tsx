@@ -1,5 +1,5 @@
 import React from "react";
-import useAuthorMetadata from "../../hooks/useAuthorMetadata";
+import useAuthorMetadata from "../../queries/useAuthorMetadata";
 
 import dev from "../../../assets/developer.svg";
 
