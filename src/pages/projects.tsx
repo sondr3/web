@@ -44,7 +44,6 @@ const Projects: React.FC = () => {
       {personal.nodes.map((project: Project) => (
         <ProjectCard
           key={project.id}
-          id={project.id}
           name={project.name}
           description={project.description}
           technologies={project.technologies}
@@ -55,7 +54,6 @@ const Projects: React.FC = () => {
       {contributor.nodes.map((project: Project) => (
         <ProjectCard
           key={project.id}
-          id={project.id}
           name={project.name}
           description={project.description}
           technologies={project.technologies}
