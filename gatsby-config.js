@@ -38,6 +38,7 @@ module.exports = {
     `gatsby-plugin-robots-txt`,
 
     `gatsby-plugin-react-helmet`,
+    `gatsby-transformer-json`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -50,6 +51,13 @@ module.exports = {
       options: {
         name: "projects",
         path: `${__dirname}/content/projects`
+      }
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: "data",
+        path: `${__dirname}/content/data`
       }
     },
     {

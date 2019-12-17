@@ -1,0 +1,73 @@
+[
+  {
+    "name": "git ignore",
+    "description": "Quickly and easily list and fetch .gitignore templates from gitignore.io. Works offline by caching the templates as well.",
+    "featured": true,
+    "contributor": false,
+    "technologies": ["Rust"],
+    "github": "https://github.com/sondr3/git-ignore/"
+  },
+  {
+    "name": "git anger management",
+    "description": "Ever wanted to know just how angry your commits are? This small utility checks all the commits in a repository for naughty words and their authors.",
+    "featured": true,
+    "contributor": false,
+    "technologies": ["Rust", "Git"],
+    "github": "https://github.com/sondr3/git-anger-management/"
+  },
+  {
+    "name": "MOCCA: MOCCA Operational Controller for Coffee Availability",
+    "description": "As a student, one of the most important questions while studying is whether there is coffee left in our brewer. As any reasonable student would, me and a friend built a system that automatically detects when and for how long coffee has been brewing, how hot it is and how much is left.",
+    "featured": true,
+    "contributor": false,
+    "technologies": ["React", "Python", "Django", "Docker", "Arduino", "C++"],
+    "github": "https://github.com/inf219-mocca/"
+  },
+  {
+    "name": "dotfiles",
+    "description": "These are my dotfiles, there are many like them but these ones are mine...",
+    "featured": false,
+    "contributor": false,
+    "technologies": ["Nix", "NixOS"],
+    "github": "https://github.com/sondr3/dotfiles/"
+  },
+  {
+    "name": "web",
+    "description": "My personal webpage",
+    "featured": false,
+    "contributor": false,
+    "technologies": ["Gatsby", "React", "Styled Components"],
+    "github": "https://github.com/sondr3/web/"
+  },
+  {
+    "name": "frontend-config",
+    "description": "Because I hate configuration",
+    "featured": false,
+    "contributor": false,
+    "technologies": ["Lerna", "CI/CD", "JavaScript"],
+    "github": "https://github.com/sondr3/frontend-config/"
+  },
+  {
+    "name": "replieswithtime",
+    "description": "A silly little Twitter bot that replies with the current time... useful for those times when you have Twitter available but no clock.",
+    "featured": false,
+    "contributor": false,
+    "technologies": ["Python", "Docker"],
+    "github": "https://github.com/sondr3/replieswithtime/"
+  },
+  {
+    "name": "Nixpkgs (NixOS)",
+    "description": "Nix package manager repository.",
+    "featured": false,
+    "contributor": true,
+    "technologies": ["Nix", "NixOS", "Rust"],
+    "github": "https://github.com/NixOS/nixpkgs"
+  },
+  {
+    "name": "Fagkveld.it",
+    "featured": false,
+    "contributor": true,
+    "technologies": ["React", "Styled Components", "GitHub Pages"],
+    "github": "https://github.com/echo-uib/Fagkveld"
+  }
+]

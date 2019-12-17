@@ -1,24 +1,26 @@
 import React from "react";
-
-import projs from "../../../content/projects";
+import { useStaticQuery, graphql } from "gatsby";
 import ProjectCard from "../projects/project-card";
+import Project from "../../types/project";
 
 const FeaturedProjects: React.FC = () => {
-  const projects = projs.personal.filter(p => p.featured);
+  const { projects } = useStaticQuery(graphql`
+    {
+      projects: allProjectsJson(filter: { featured: { eq: true } }) {
+        nodes {
+          id
+          name
+          description
+        }
+      }
+    }
+  `);
 
   return (
     <section>
       <h2>Featured projects</h2>
-      {projects.map(project => (
-        <ProjectCard
-          key={project.id}
-          id={project.id}
-          featured={project.featured}
-          name={project.name}
-          description={project.description}
-          technologies={project.technologies}
-          github={project.github}
-        />
+      {projects.nodes.map((project: Project) => (
+        <ProjectCard name={project.name} description={project.description} key={project.id} />
       ))}
     </section>
   );
