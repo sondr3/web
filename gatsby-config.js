@@ -7,32 +7,32 @@ module.exports = {
     author: {
       name: "Sondre Nilsen",
       intro: "I make things",
-      bio: ""
+      bio: "",
     },
     social: {
-      github: "https://github.com/sondr3"
-    }
+      github: "https://github.com/sondr3",
+    },
   },
   plugins: [
     {
       resolve: `gatsby-plugin-typescript`,
       options: {
         isTSX: true,
-        allExtensions: true
-      }
+        allExtensions: true,
+      },
     },
     {
       resolve: `gatsby-plugin-sass`,
       options: {
-        implementation: require("sass")
-      }
+        implementation: require("sass"),
+      },
     },
     {
       resolve: `gatsby-plugin-typography`,
       options: {
         pathToConfigModule: "src/styles/typography",
-        omitGoogleFont: true
-      }
+        omitGoogleFont: true,
+      },
     },
     `gatsby-plugin-sitemap`,
     `gatsby-plugin-robots-txt`,
@@ -43,30 +43,30 @@ module.exports = {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: "pages",
-        path: `${__dirname}/content/pages`
-      }
+        path: `${__dirname}/content/pages`,
+      },
     },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: "projects",
-        path: `${__dirname}/content/projects`
-      }
+        path: `${__dirname}/content/projects`,
+      },
     },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: "data",
-        path: `${__dirname}/content/data`
-      }
+        path: `${__dirname}/content/data`,
+      },
     },
     {
       resolve: `gatsby-plugin-mdx`,
       options: {
         defaultLayouts: {
-          default: require.resolve("./src/components/common/layout.tsx")
-        }
-      }
+          default: require.resolve("./src/components/common/layout.tsx"),
+        },
+      },
     },
     `gatsby-plugin-webpack-bundle-analyser-v2`,
     {
@@ -80,11 +80,11 @@ module.exports = {
             "Strict-Transport-Security: max-age=63072000; includeSubDomains; preload",
             "X-Content-Type-Options: nosniff",
             "X-Frame-Options: DENY",
-            "X-XSS-Protection: 1; mode=block"
-          ]
+            "X-XSS-Protection: 1; mode=block",
+          ],
         },
-        mergeSecurityHeaders: false
-      }
-    }
-  ]
+        mergeSecurityHeaders: false,
+      },
+    },
+  ],
 };

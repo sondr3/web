@@ -13,14 +13,14 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
   createNodeField({
     name: `name`,
     node,
-    value: parent.sourceInstanceName
+    value: parent.sourceInstanceName,
   });
 
   const value = createFilePath({ node, getNode });
   createNodeField({
     name: "slug",
     node,
-    value: `/${kebabCase(value)}/`
+    value: `/${kebabCase(value)}/`,
   });
 };
 
@@ -47,26 +47,26 @@ exports.createPages = async ({ graphql, actions }) => {
           }
         }
       }
-    `
+    `,
   );
 
   if (content.errors) throw content.errors;
 
   // [INFO]: Create pages
-  content.data.pages.nodes.forEach(node => {
+  content.data.pages.nodes.forEach((node) => {
     createPage({
       path: node.fields.slug,
       component: require.resolve("./src/templates/page.tsx"),
-      context: { id: node.id }
+      context: { id: node.id },
     });
   });
 
   // [INFO]: Create projecte pages
-  content.data.projects.nodes.forEach(node => {
+  content.data.projects.nodes.forEach((node) => {
     createPage({
       path: `/project${node.fields.slug}`,
       component: require.resolve("./src/templates/page.tsx"),
-      context: { id: node.id }
+      context: { id: node.id },
     });
   });
 };

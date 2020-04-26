@@ -7,14 +7,14 @@ const typography = new Typography({
   bodyFontFamily: ["Bitter", "Georgia", "serif"],
   overrideStyles: (): Record<symbol, string> => ({
     body: {
-      backgroundColor: "hsla(0, 0%, 99.2%, 1)"
+      backgroundColor: "hsla(0, 0%, 99.2%, 1)",
     },
     p: {
       hypens: "auto",
       textAlign: "justify",
-      textJustify: "inter-word"
-    }
-  })
+      textJustify: "inter-word",
+    },
+  }),
 });
 
 if (process.env.NODE_ENV !== "production") {

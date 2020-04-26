@@ -9,7 +9,7 @@ const ProjectCard: React.FC<Project> = ({ name, description, technologies, githu
       {technologies && (
         <div>
           <ul className="technologies">
-            {technologies.map(tech => (
+            {technologies.map((tech) => (
               <li className="technology" key={tech}>
                 {tech}
               </li>

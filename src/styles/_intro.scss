@@ -17,7 +17,7 @@
 .about {
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: flex-end;
 
   @media screen and (min-width: $small-width) {
     flex-direction: row;
@@ -28,7 +28,7 @@
   align-items: center;
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: flex-end;
 
   @media screen and (min-width: $small-width) {
     width: 100%;

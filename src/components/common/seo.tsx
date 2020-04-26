@@ -1,5 +1,5 @@
 import React from "react";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 import useSiteMetadata from "../../queries/useSiteMetadata";
 
 export interface Props {
@@ -21,36 +21,36 @@ const SEO: React.FC<Props> = ({ description: desc, title: t }) => {
       meta={[
         {
           name: `description`,
-          content: description
+          content: description,
         },
         {
           property: `og:title`,
-          content: title
+          content: title,
         },
         {
           property: `og:description`,
-          content: description
+          content: description,
         },
         {
           property: `og:type`,
-          content: `website`
+          content: `website`,
         },
         {
           name: `twitter:card`,
-          content: `summary`
+          content: `summary`,
         },
         {
           name: `twitter:creator`,
-          content: meta.author.name
+          content: meta.author.name,
         },
         {
           name: `twitter:title`,
-          content: title
+          content: title,
         },
         {
           name: `twitter:description`,
-          content: description
-        }
+          content: description,
+        },
       ]}
     />
   );

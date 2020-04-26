@@ -1,3 +1,3 @@
 module.exports = {
-  extends: ["@sondr3/stylelint", "stylelint-config-sass-guidelines"]
+  extends: ["@sondr3/stylelint", "stylelint-config-sass-guidelines"],
 };
