@@ -1,0 +1,5 @@
+{
+  "extends": "@sondr3/tsconfig",
+  "include": ["lib"],
+  "exclude": ["../src"]
+}

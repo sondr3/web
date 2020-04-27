@@ -1,5 +1,6 @@
 [build]
+command = "yarn prod"
 publish = "public"
-command = "npm run build"
+functions = "lambda"
 [build.environment]
   NODE_VERSION = "12.13.0"

@@ -97,3 +97,7 @@ typings/
 
 # End of https://www.gitignore.io/api/node,visualstudiocode
 .env*
+
+# Local Netlify folder
+.netlify
+lambda/
