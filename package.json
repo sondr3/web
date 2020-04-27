@@ -9,7 +9,7 @@
     "dev:lambda": "netlify-lambda serve functions/lib/",
     "netlify": "netlify dev",
     "build": "run-p build:*",
-    "build:site": "gatsby build",
+    "build:site": "GATSBY_EXPERIMENTAL_PAGE_BUILD_ON_DATA_CHANGES=true gatsby build",
     "build:lambda": "netlify-lambda build functions/lib/",
     "serve": "gatsby serve",
     "release": "standard-version"
