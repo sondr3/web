@@ -101,3 +101,4 @@ typings/
 # Local Netlify folder
 .netlify
 lambda/
+.idea/
