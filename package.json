@@ -57,7 +57,7 @@
     "lint-staged": "^10.1.7",
     "prettier": "^2.0.5",
     "serve": "^11.2.0",
-    "standard-version": "^7.0.1",
+    "standard-version": "^8.0.1",
     "stylelint": "^13.3.3"
   },
   "prettier": "@sondr3/prettier",
