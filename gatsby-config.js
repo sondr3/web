@@ -61,6 +61,14 @@ module.exports = {
       },
     },
     {
+      resolve: `gatsby-source-graphql`,
+      options: {
+        typeName: "CV",
+        fieldName: "cv",
+        url: "http://localhost:8080/graphql",
+      },
+    },
+    {
       resolve: `gatsby-plugin-mdx`,
       options: {
         defaultLayouts: {
