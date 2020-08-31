@@ -65,7 +65,7 @@ module.exports = {
       options: {
         typeName: "CV",
         fieldName: "cv",
-        url: "http://localhost:8080/graphql",
+        url: "https://cv.eons.io/graphql",
       },
     },
     {
