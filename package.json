@@ -47,7 +47,7 @@
     "@commitlint/cli": "9.1.2",
     "@commitlint/config-conventional": "9.1.2",
     "@sondr3/eslint-config-react": "0.5.7",
-    "@sondr3/eslint-config-typescript": "0.7.8",
+    "@sondr3/eslint-config-typescript": "0.8.1",
     "@sondr3/prettier": "0.2.1",
     "@sondr3/stylelint": "0.5.7",
     "@sondr3/tsconfig": "0.4.1",
