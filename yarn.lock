@@ -2191,15 +2191,15 @@
     escape-string-regexp "^2.0.0"
     lodash.deburr "^4.1.0"
 
-"@sondr3/eslint-config-react@0.5.7":
-  version "0.5.7"
-  resolved "https://registry.yarnpkg.com/@sondr3/eslint-config-react/-/eslint-config-react-0.5.7.tgz#173dd221df92a155f55a23a30f3d3224cd5deb1c"
-  integrity sha512-LaUE7U+7S9nIZb8TCKskjM6sV2f6VK15BqEtexsmoQElZsnyPBHFlcXXu85Tiv4N4CVESW7ufUoprDReCKngWA==
+"@sondr3/eslint-config-react@0.5.8":
+  version "0.5.8"
+  resolved "https://registry.yarnpkg.com/@sondr3/eslint-config-react/-/eslint-config-react-0.5.8.tgz#474df894953b8d49c1e21d970ca0ea5f47c9a311"
+  integrity sha512-jl5kvdu2xk6+9nn0CHZNIcAsBwmUzsA+V9pRAwp7TItmUy53Sh2xI+AsgahjjLBhSigZAz1LZkY5efdrc/gEHQ==
   dependencies:
     eslint-config-prettier "6.11.0"
     eslint-plugin-jsx-a11y "6.3.1"
     eslint-plugin-react "7.20.6"
-    eslint-plugin-react-hooks "4.1.0"
+    eslint-plugin-react-hooks "4.1.2"
 
 "@sondr3/eslint-config-typescript@0.8.3":
   version "0.8.3"
@@ -6963,10 +6963,10 @@ eslint-plugin-prettier@3.1.4:
   dependencies:
     prettier-linter-helpers "^1.0.0"
 
-eslint-plugin-react-hooks@4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-4.1.0.tgz#6323fbd5e650e84b2987ba76370523a60f4e7925"
-  integrity sha512-36zilUcDwDReiORXmcmTc6rRumu9JIM3WjSvV0nclHoUQ0CNrX866EwONvLR/UqaeqFutbAnVu8PEmctdo2SRQ==
+eslint-plugin-react-hooks@4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-4.1.2.tgz#2eb53731d11c95826ef7a7272303eabb5c9a271e"
+  integrity sha512-ykUeqkGyUGgwTtk78C0o8UG2fzwmgJ0qxBGPp2WqRKsTwcLuVf01kTDRAtOsd4u6whX2XOC8749n2vPydP82fg==
 
 eslint-plugin-react-hooks@^1.7.0:
   version "1.7.0"
