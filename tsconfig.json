@@ -1,9 +1,7 @@
 {
   "extends": "@sondr3/tsconfig",
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "noEmit": true,
-    "jsx": "react"
+    "lib": ["esnext"]
   },
-  "include": ["src/**/*", "content/**/*"]
+  "include": ["lib/**/*"]
 }
