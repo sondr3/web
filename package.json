@@ -6,7 +6,9 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch --incremental",
-    "test": "jest"
+    "test": "jest",
+    "lint:style": "prettier --check lib",
+    "lint:code": "eslint lib"
   },
   "dependencies": {},
   "devDependencies": {

@@ -23,5 +23,13 @@ jobs:
       - name: Install and build
         run: yarn install --frozen-lockfile
 
+      - name: Check formatting and lints
+        run: |
+          yarn lint:style
+          yarn lint:code
+
+      - name: Tests
+        run: yarn test
+
       - name: Build
         run: yarn build
