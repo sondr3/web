@@ -1,7 +1,9 @@
 {
   "extends": "@sondr3/tsconfig",
   "compilerOptions": {
-    "lib": ["esnext"]
+    "lib": ["esnext"],
+    "module": "CommonJS",
+    "outDir": "dist"
   },
   "include": ["lib/**/*"]
 }

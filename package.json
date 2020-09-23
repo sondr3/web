@@ -3,7 +3,10 @@
   "version": "0.3.0",
   "private": true,
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch --incremental"
+  },
   "dependencies": {},
   "devDependencies": {
     "@sondr3/eslint-config-typescript": "0.8.4",
