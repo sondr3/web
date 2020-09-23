@@ -6,6 +6,5 @@
     "target": "ES2019",
     "outDir": "dist"
   },
-  "include": ["lib/**/*"],
-  "exclude": ["lib/**/*.spec.ts"]
+  "include": ["lib/**/*"]
 }
