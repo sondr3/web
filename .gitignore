@@ -104,3 +104,19 @@ typings/
 .netlify
 lambda/
 .idea/
+
+
+### Created by https://www.gitignore.io
+### PureScript ###
+# Dependencies
+.psci_modules
+bower_components
+node_modules
+
+# Generated files
+.psci
+output
+
+.psc-ide-port
+.purs-repl
+.spago
