@@ -10,7 +10,9 @@
     "lint:style": "prettier --check lib",
     "lint:code": "eslint lib"
   },
-  "dependencies": {},
+  "dependencies": {
+    "purify-ts": "^0.16.0-beta.5"
+  },
   "devDependencies": {
     "@sondr3/eslint-config-typescript": "0.10.1",
     "@sondr3/prettier": "0.2.1",

@@ -1,5 +1,6 @@
 import { promises as fs } from "fs";
 import path from "path";
+import { Either, EitherAsync } from "purify-ts";
 
 /**
  * Recursively walk directories finding all files matching the extension.
@@ -30,3 +31,18 @@ export async function dirWalk(
 
   return filepaths;
 }
+
+export const createDirectory = async (filepath: string): Promise<Either<Error, void>> =>
+  EitherAsync(async ({ throwE }) => {
+    try {
+      await fs.mkdir(filepath, { recursive: true });
+    } catch (e) {
+      const err = e as NodeJS.ErrnoException;
+
+      throwE(Error(`Could not create directory: ${err.message}`));
+    }
+  });
+
+createDirectory("/test")
+  .then((res) => console.log(res))
+  .catch((err) => console.error(err));
