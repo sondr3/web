@@ -5,6 +5,7 @@ You can edit this file as you like.
 { name = "web"
 , dependencies =
   [ "aff"
+  , "aff-promise"
   , "console"
   , "effect"
   , "node-fs-aff"
