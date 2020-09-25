@@ -21,7 +21,7 @@
     "gatsby-plugin-mdx": "1.2.40",
     "gatsby-plugin-netlify": "2.3.15",
     "gatsby-plugin-react-helmet": "3.3.11",
-    "gatsby-plugin-robots-txt": "1.5.2",
+    "gatsby-plugin-robots-txt": "1.5.3",
     "gatsby-plugin-sass": "2.3.13",
     "gatsby-plugin-sitemap": "2.4.13",
     "gatsby-plugin-typescript": "2.4.20",
