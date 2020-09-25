@@ -3,8 +3,13 @@ module Test.Main where
 import Prelude
 
 import Effect (Effect)
+import Effect.Aff (launchAff_)
 import Test.Colors (colorSpec)
+import Test.FS (fsSpec)
+import Test.Spec.Reporter.Console (consoleReporter)
+import Test.Spec.Runner (runSpec)
 
 main :: Effect Unit
-main = do
+main = launchAff_ $ runSpec [ consoleReporter ] do
+  fsSpec
   colorSpec
