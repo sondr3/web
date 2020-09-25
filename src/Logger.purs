@@ -10,13 +10,13 @@ logMessage :: String -> Effect Unit
 logMessage message = log $ format message Log
 
 logError :: String -> Effect Unit
-logError message = log $ format message Error
+logError message = log $ format "[ERROR] " Error <> message
 
 logDebug :: String -> Effect Unit
-logDebug message = log $ format message Debug
+logDebug message = log $ format "[DEBUG] " Debug <> message
 
 logInfo :: String -> Effect Unit
-logInfo message = log $ format message Info
+logInfo message = log $ format "[INFO] " Info <> message
 
 logSuccess :: String -> Effect Unit
-logSuccess message = log $ format message Success
+logSuccess message = log $ format "[SUCCESS] " Success <> message
