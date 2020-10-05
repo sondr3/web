@@ -1,4 +1,4 @@
-import { createDirectory, dirWalk } from "./fs";
+import { cacheBustFile, createDirectory, dirWalk } from "./fs";
 
 describe("dirWalk", () => {
   it("JSON files without recursing", async () => {
@@ -26,5 +26,12 @@ describe("createDirectory", () => {
     expect(res.isLeft()).toBeTruthy();
     expect(res.isRight()).toBeFalsy();
     expect(res.map((r) => r.includes("Could not create directory"))).toBeTruthy();
+  });
+});
+
+describe("cacheBustFile", () => {
+  it("can add a hash to a file", () => {
+    const actual = cacheBustFile("hello, world", "hello.css");
+    expect(actual).toMatch("hello.e4d7f1b4.css");
   });
 });
