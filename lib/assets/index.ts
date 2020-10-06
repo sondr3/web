@@ -1,1 +1,1 @@
-export * from "./sass";
+export * from "./Styles";
