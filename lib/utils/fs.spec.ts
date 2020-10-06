@@ -49,4 +49,11 @@ describe("createFile", () => {
     expect(stat.isFile()).toBeTruthy();
     expect(stat.size).toBe(0);
   });
+
+  it("cannot create a file in an illegal directory", async () => {
+    const filename = "/usr/local/bin/bruh";
+    const res = await createFile(filename).run();
+
+    expect(res.isLeft()).toBeTruthy();
+  });
 });

@@ -25,8 +25,8 @@ const writeStyles = (file: string, res: Result, prod: boolean): EitherAsync<Erro
     .chain(() => liftPromise(async () => (!prod ? fs.writeFile(styleName(file, "map"), res.map ?? "") : void {})))
     .mapLeft(({ message }) => Error(`Could not create styles: ${message}`));
 
-const styleName = (file: string, ext?: string): string => {
+export const styleName = (file: string, ext?: string): string => {
   const { name } = path.parse(file);
   const ending = ext ? `.${ext}` : "";
-  return `./assets/style/${name}${ending}`;
+  return `./public/assets/style/${name}${ending}`;
 };
