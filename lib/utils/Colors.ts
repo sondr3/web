@@ -71,10 +71,6 @@ export abstract class Colorize {
     return this.format(input, colors.info, bright);
   }
 
-  public static success(input: string, bright = false): string {
-    return this.format(input, colors.success, bright);
-  }
-
   private static getFormatting(start: number, end: number): { start: string; end: string } {
     return {
       start: `\x1b[${start}m`,

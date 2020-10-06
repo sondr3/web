@@ -3,10 +3,10 @@ import { html } from "./HTML";
 describe("HTML", () => {
   it("can render som HTML", () => {
     const things = [
-      { name: "Test1", bool: false },
-      { name: "Test2", bool: true },
-      { name: "Test3", bool: true },
-      { name: "Test4", bool: true },
+      { name: "Test1", bool: false, val: 1 },
+      { name: "Test2", bool: true, val: 2 },
+      { name: "Test3", bool: true, val: 3 },
+      { name: "Test4", bool: true, val: 4 },
     ];
 
     const document = (body: string, head: string): string =>
@@ -28,7 +28,7 @@ describe("HTML", () => {
     const output = document(
       html`<div>
         <p>Hello, world!</p>
-        <div>${things.map(({ name, bool }) => html`<span>${name} - ${bool.valueOf()}</span>`)}</div>
+        <div>${things.map(({ name, bool, val }) => html`<span>${name} - ${bool.valueOf()}: ${val}</span>`)}</div>
       </div>`,
       header,
     );

@@ -12,7 +12,7 @@ exports[`HTML can render som HTML 1`] = `
         <body>
           <div>
         <p>Hello, world!</p>
-        <div><span>Test1 - </span><span>Test2 - </span><span>Test3 - </span><span>Test4 - </span></div>
+        <div><span>Test1 - : 1</span><span>Test2 - : 2</span><span>Test3 - : 3</span><span>Test4 - : 4</span></div>
       </div>
         </body>
       </html>"
