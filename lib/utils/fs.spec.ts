@@ -1,4 +1,7 @@
-import { cacheBustFile, createDirectory, dirWalk } from "./fs";
+import { promises as fs } from "fs";
+import { cacheBustFile, createDirectory, createFile, dirWalk } from "./fs";
+import path from "path";
+import * as os from "os";
 
 describe("dirWalk", () => {
   it("JSON files without recursing", async () => {
@@ -33,5 +36,17 @@ describe("cacheBustFile", () => {
   it("can add a hash to a file", () => {
     const actual = cacheBustFile("hello, world", "hello.css");
     expect(actual).toMatch("hello.e4d7f1b4.css");
+  });
+});
+
+describe("createFile", () => {
+  it("creates a new empty file in a new folder", async () => {
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "test-"));
+    const filename = `${dir}/test.txt`;
+    await createFile(filename).run();
+    const stat = await fs.stat(filename);
+
+    expect(stat.isFile()).toBeTruthy();
+    expect(stat.size).toBe(0);
   });
 });

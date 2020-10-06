@@ -1,7 +1,8 @@
 import { promises as fs } from "fs";
+import { FileHandle } from "fs/promises";
 import path from "path";
 import crypto from "crypto";
-import { EitherAsync, liftPromise } from "purify-ts/EitherAsync";
+import { EitherAsync, fromPromise, liftPromise } from "purify-ts/EitherAsync";
 
 /**
  * Recursively walk directories finding all files matching the extension.
@@ -37,6 +38,11 @@ export const createDirectory = (filepath: string): EitherAsync<Error, string> =>
   liftPromise(() => fs.mkdir(filepath, { recursive: true })).mapLeft(({ message }) =>
     Error(`Could not create directory: ${message}`),
   );
+
+export const createFile = (filepath: string): EitherAsync<Error, FileHandle> =>
+  fromPromise(() => createDirectory(path.parse(filepath).dir).run())
+    .chain(() => liftPromise(() => fs.open(filepath, "w")))
+    .mapLeft(({ message }) => Error(`Could not create ${filepath}: ${message}`));
 
 export const cacheBustFile = (contents: string | Buffer, filename: string): string => {
   const md5 = crypto.createHash("md5");
