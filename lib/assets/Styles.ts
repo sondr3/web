@@ -4,6 +4,7 @@ import { promises as fs } from "fs";
 import { EitherAsync, fromPromise, liftPromise } from "purify-ts/EitherAsync";
 import path from "path";
 import { createDirectory } from "../utils/fs";
+import { getConfig } from "../config";
 
 const logger = logging.getLogger("sass");
 
@@ -26,7 +27,8 @@ const writeStyles = (file: string, res: Result, prod: boolean): EitherAsync<Erro
     .mapLeft(({ message }) => Error(`Could not create styles: ${message}`));
 
 export const styleName = (file: string, ext?: string): string => {
+  const config = getConfig();
   const { name } = path.parse(file);
   const ending = ext ? `.${ext}` : "";
-  return `./public/assets/style/${name}${ending}`;
+  return `${config.out}/public/assets/style/${name}${ending}`;
 };

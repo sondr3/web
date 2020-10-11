@@ -11,7 +11,7 @@ export interface Config {
 }
 
 const devConfig: Config = {
-  out: "./dist/",
+  out: "./dist",
   content: {
     posts: "",
     pages: "",
@@ -23,7 +23,7 @@ const devConfig: Config = {
 };
 
 const testConfig: Config = {
-  out: "./dist/test/",
+  out: "./dist/test",
   content: {
     posts: "",
     pages: "",

@@ -7,7 +7,7 @@ describe("config", () => {
     it("gets the correct configuration", () => {
       const config = getConfig();
 
-      expect(config.out).toBe("./dist/test/");
+      expect(config.out).toBe("./dist/test");
     });
   });
 
@@ -17,7 +17,7 @@ describe("config", () => {
     it("gets the correct configuration", () => {
       const config = getConfig();
 
-      expect(config.out).toBe("./dist/");
+      expect(config.out).toBe("./dist");
     });
   });
 
@@ -27,7 +27,7 @@ describe("config", () => {
     it("gets the correct configuration", () => {
       const config = getConfig();
 
-      expect(config.out).toBe("./dist/");
+      expect(config.out).toBe("./dist");
     });
   });
 });

@@ -104,3 +104,4 @@ typings/
 .netlify
 lambda/
 .idea/
+test.scss
