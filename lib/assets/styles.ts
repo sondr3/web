@@ -25,7 +25,7 @@ const writeStyles = async (file: string, res: SassResult): Promise<void | Error>
   const parsed = path.parse(file);
   const dir = await createDirectory(parsed.dir);
   const css = await writeFile(styleName(file), res.css);
-  const map = await writeFile(styleName(file, "map"), res.map ?? "");
+  const map = await writeFile(styleName(file, "css.map"), res.map ?? "");
 
   if (!allOk(...[dir, css, map])) return new Error("Could not create styles");
   state.styles.set(`${parsed.name}.css`, styleName(file, "css"));

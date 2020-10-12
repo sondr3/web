@@ -1,4 +1,4 @@
-import { renderStyles, styleName } from "./Styles";
+import { renderStyles, styleName } from "./styles";
 import path from "path";
 import assert from "assert";
 import { getConfig } from "../config";
