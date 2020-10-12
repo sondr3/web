@@ -1,16 +1,19 @@
-import { createDirectory, dirWalk, writeFile } from "./utils/fs";
-import { Liquid } from "liquidjs";
+import { dirWalk } from "./utils/fs";
 import { getConfig } from "./config";
 import path from "path";
 import { logging } from "./utils/logging";
+import { TemplateEngine } from "./template";
+import { renderStyles } from "./assets";
 
 const logger = logging.getLogger("build");
 const config = getConfig();
 
-const engine = new Liquid({
-  root: [config.content.pages, config.content.layouts, config.content.partials],
-  extname: ".liquid",
-});
+const engine = new TemplateEngine();
+
+export const buildSite = async (): Promise<void> => {
+  await renderStyles(path.join(getConfig().assets.style, "style.scss"), false);
+  await renderPages();
+};
 
 export const renderPages = async (): Promise<void> => {
   const pages = await dirWalk(path.join(process.cwd(), "/content/pages"), "liquid", false);
@@ -20,19 +23,12 @@ export const renderPages = async (): Promise<void> => {
     const file = path.parse(page);
 
     if (file.name === "index") {
-      await renderPage(page, config.out);
+      await engine.render(page, config.out);
     } else {
       const dir = path.join(config.out, file.name);
-      await renderPage(page, dir);
+      await engine.render(page, dir);
     }
   }
 
   return;
-};
-
-export const renderPage = async (page: string, directory: string): Promise<void> => {
-  const file = path.parse(page);
-  const output = await engine.renderFile(file.name);
-  await createDirectory(directory);
-  await writeFile(path.join(directory, "index.html"), output);
 };
