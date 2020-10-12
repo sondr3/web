@@ -1,22 +1,25 @@
 import { renderStyles, styleName } from "./Styles";
 import path from "path";
 import assert from "assert";
+import { getConfig } from "../config";
 
 describe("styleName", () => {
-  it("gives correct name without extension", () => {
-    const file = styleName("test.html");
-    expect(file).toBe("./test/public/assets/style/test");
+  it("defaults to css", () => {
+    const file = styleName("test.blah");
+    expect(file).toBe("./test/test.css");
   });
 
   it("gives correct name with extension", () => {
     const file = styleName("test.html", "css");
-    expect(file).toBe("./test/public/assets/style/test.css");
+    expect(file).toBe("./test/test.css");
   });
 });
 
 describe("renderStyles", () => {
   it("renders and creates files", async () => {
-    const spec = path.resolve(process.cwd(), "lib/assets/Styles.spec.scss");
+    process.env.NODE_ENV = "test";
+    const config = getConfig();
+    const spec = path.resolve(config.assets.style, "index.scss");
     const res = await renderStyles(spec, false);
 
     expect(res === undefined).toBeTruthy();
