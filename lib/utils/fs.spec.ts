@@ -1,5 +1,6 @@
+import { cacheBustFile, createDirectory, dirWalk, writeFile } from "./fs";
+import assert from "assert";
 import { promises as fs } from "fs";
-import { cacheBustFile, createDirectory, createFile, dirWalk } from "./fs";
 import path from "path";
 import * as os from "os";
 
@@ -20,15 +21,31 @@ describe("dirWalk", () => {
 
 describe("createDirectory", () => {
   it("can create a test directory", async () => {
-    const res = await createDirectory("/tmp/testing").run();
-    expect(res.isRight()).toBeTruthy();
+    const res = await createDirectory("/tmp/testing");
+    expect(res).toBeUndefined();
   });
 
   it("cannot create a root directory", async () => {
-    const res = await createDirectory("/test").run();
-    expect(res.isLeft()).toBeTruthy();
-    expect(res.isRight()).toBeFalsy();
-    expect(res.map((r) => r.includes("Could not create directory"))).toBeTruthy();
+    const res = await createDirectory("/test");
+    expect(res).not.toBeUndefined();
+    assert(res !== undefined);
+    expect(res.constructor.name).toBe("Error");
+  });
+});
+
+describe("writeFile", () => {
+  it("can create a test file", async () => {
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "test-"));
+    const filename = `${dir}/test.txt`;
+    const res = await writeFile(filename, "hello");
+    expect(res).toBeUndefined();
+  });
+
+  it("cannot write to /", async () => {
+    const res = await writeFile("/test", "hello");
+    expect(res).not.toBeUndefined();
+    assert(res !== undefined);
+    expect(res.constructor.name).toBe("Error");
   });
 });
 
@@ -36,24 +53,5 @@ describe("cacheBustFile", () => {
   it("can add a hash to a file", () => {
     const actual = cacheBustFile("hello, world", "hello.css");
     expect(actual).toMatch("hello.e4d7f1b4.css");
-  });
-});
-
-describe("createFile", () => {
-  it("creates a new empty file in a new folder", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "test-"));
-    const filename = `${dir}/test.txt`;
-    await createFile(filename).run();
-    const stat = await fs.stat(filename);
-
-    expect(stat.isFile()).toBeTruthy();
-    expect(stat.size).toBe(0);
-  });
-
-  it("cannot create a file in an illegal directory", async () => {
-    const filename = "/usr/local/bin/bruh";
-    const res = await createFile(filename).run();
-
-    expect(res.isLeft()).toBeTruthy();
   });
 });

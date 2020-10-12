@@ -1,8 +1,9 @@
 import { promises as fs } from "fs";
-import { FileHandle } from "fs/promises";
 import path from "path";
 import crypto from "crypto";
-import { EitherAsync, fromPromise, liftPromise } from "purify-ts/EitherAsync";
+import { logging } from "./logging";
+
+const logger = logging.getLogger("fs");
 
 /**
  * Recursively walk directories finding all files matching the extension.
@@ -34,15 +35,25 @@ export async function dirWalk(
   return filepaths;
 }
 
-export const createDirectory = (filepath: string): EitherAsync<Error, string> =>
-  liftPromise(() => fs.mkdir(filepath, { recursive: true })).mapLeft(({ message }) =>
-    Error(`Could not create directory: ${message}`),
-  );
+export const createDirectory = async (filepath: string): Promise<void | Error> => {
+  try {
+    await fs.mkdir(filepath, { recursive: true });
+    return;
+  } catch (e) {
+    logger.error(e);
+    return e as Error;
+  }
+};
 
-export const createFile = (filepath: string): EitherAsync<Error, FileHandle> =>
-  fromPromise(() => createDirectory(path.parse(filepath).dir).run())
-    .chain(() => liftPromise(() => fs.open(filepath, "w")))
-    .mapLeft(({ message }) => Error(`Could not create ${filepath}: ${message}`));
+export const writeFile = async (filepath: string, content: string | Buffer): Promise<void | Error> => {
+  try {
+    await fs.writeFile(filepath, content);
+    return;
+  } catch (e) {
+    logger.error(e);
+    return e as Error;
+  }
+};
 
 export const cacheBustFile = (contents: string | Buffer, filename: string): string => {
   const md5 = crypto.createHash("md5");
