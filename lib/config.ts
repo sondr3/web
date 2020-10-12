@@ -2,6 +2,11 @@ import path from "path";
 
 export interface Config {
   out: string;
+  meta: {
+    title: string;
+    url: string;
+    author: string;
+  };
   content: {
     posts: string;
     pages: string;
@@ -14,39 +19,59 @@ export interface Config {
   };
 }
 
+const partialConfig = <T extends Partial<Config>>(t: T) => t;
+
 const root = path.resolve(process.cwd());
 
-const content: Partial<Config> = {
+const sharedConfig = partialConfig({
+  meta: {
+    author: "Sondre Nilsen",
+    url: "http://localhost",
+    title: "EONS",
+  },
   content: {
     posts: path.join(root, "posts"),
     pages: path.join(root, "content/pages/"),
     partials: path.join(root, "content/partials/"),
     layouts: path.join(root, "content/layouts/"),
   },
-};
+  assets: {
+    js: path.join(root, "assets/js"),
+    style: path.join(root, "assets/scss"),
+  },
+});
 
-const devConfig: Partial<Config> = {
+const devConfig = partialConfig({
   out: "./public",
-  assets: {
-    js: "",
-    style: "",
+  meta: {
+    author: "Sondre Nilsen",
+    url: "http://www.eons.io",
+    title: "EONS",
   },
-};
+});
 
-const testConfig: Partial<Config> = {
+const testConfig = partialConfig({
   out: "./test",
-  assets: {
-    js: "",
-    style: "",
+  meta: {
+    author: "Sondre Nilsen",
+    url: "http://localhost",
+    title: "EONS",
   },
+});
+
+const mergeConfig = (
+  left: Pick<Config, "content" | "meta" | "assets">,
+  right: Pick<Config, "out" | "meta">,
+): Config => {
+  return { ...left, ...right };
 };
 
 export const getConfig = (): Config => {
   if (process.env.NODE_ENV === "test") {
-    return <Config>{ ...content, ...testConfig };
+    return mergeConfig(sharedConfig, testConfig);
   } else if (process.env.NODE_ENV === "production") {
-    return <Config>{ ...content, ...devConfig };
+    return mergeConfig(sharedConfig, devConfig);
   }
 
-  return <Config>{ ...content, ...devConfig };
+  return mergeConfig(sharedConfig, devConfig);
 };
