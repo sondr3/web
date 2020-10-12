@@ -11,6 +11,7 @@
     "lint:code": "eslint lib"
   },
   "dependencies": {
+    "liquidjs": "^9.16.1",
     "sass": "^1.26.12"
   },
   "devDependencies": {
