@@ -1,8 +1,9 @@
-import { cacheBustFile, createDirectory, dirWalk, writeFile } from "./fs";
+import { cacheBustFile, copyFiles, createDirectory, dirWalk, writeFile } from "./fs";
 import assert from "assert";
 import { promises as fs } from "fs";
 import path from "path";
 import * as os from "os";
+import { getConfig } from "../config";
 
 describe("dirWalk", () => {
   it("JSON files without recursing", async () => {
@@ -53,5 +54,29 @@ describe("cacheBustFile", () => {
   it("can add a hash to a file", () => {
     const actual = cacheBustFile("hello, world", "hello.css");
     expect(actual).toMatch("hello.e4d7f1b4.css");
+  });
+});
+
+describe("copyFiles", () => {
+  it("copies files without recursing", async () => {
+    process.env.NODE_ENV = "test";
+    const config = getConfig();
+
+    await fs.rmdir(path.join(config.out, "static"), { recursive: true });
+    const res = await copyFiles(config.assets.static, path.join(config.out, "static"), false);
+    expect(res).toBeUndefined();
+  });
+
+  it("copies files recursively", async () => {
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "test-"));
+    await expect(copyFiles(path.resolve(process.cwd(), "lib"), dir, true)).resolves.toBeUndefined();
+  });
+
+  it("crashes on illegal directory", async () => {
+    await expect(copyFiles("/asdasd", "./")).rejects.toThrow();
+  });
+
+  it("cannot copy wrong files", async () => {
+    await expect(copyFiles(path.resolve(process.cwd()), "/")).rejects.toThrow();
   });
 });

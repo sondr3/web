@@ -35,6 +35,28 @@ export async function dirWalk(
   return filepaths;
 }
 
+export const copyFiles = async (source: string, destination: string, recurse = true): Promise<void | Error> => {
+  const entries = await fs.readdir(source, { withFileTypes: true });
+  const dir = await createDirectory(destination);
+  if (dir) return dir;
+
+  for (const entry of entries) {
+    const src = path.join(source, entry.name);
+    const dest = path.join(destination, entry.name);
+
+    if (entry.isDirectory() && recurse) {
+      await copyFiles(src, dest, recurse);
+    } else {
+      try {
+        await fs.copyFile(src, dest, 1);
+      } catch (e) {
+        logger.error(e);
+        throw e;
+      }
+    }
+  }
+};
+
 export const createDirectory = async (filepath: string): Promise<void | Error> => {
   try {
     await fs.mkdir(filepath, { recursive: true });
@@ -51,7 +73,7 @@ export const writeFile = async (filepath: string, content: string | Buffer): Pro
     return;
   } catch (e) {
     logger.error(e);
-    return e as Error;
+    throw e;
   }
 };
 
