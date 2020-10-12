@@ -43,10 +43,7 @@ describe("writeFile", () => {
   });
 
   it("cannot write to /", async () => {
-    const res = await writeFile("/test", "hello");
-    expect(res).not.toBeUndefined();
-    assert(res !== undefined);
-    expect(res.constructor.name).toBe("Error");
+    await expect(writeFile("/test", "hello")).rejects.toThrow();
   });
 });
 
