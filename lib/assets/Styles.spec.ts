@@ -19,7 +19,7 @@ describe("renderStyles", () => {
   it("renders and creates files", async () => {
     process.env.NODE_ENV = "test";
     const config = getConfig();
-    const spec = path.resolve(config.assets.style, "index.scss");
+    const spec = path.resolve(config.assets.style, "style.scss");
     const res = await renderStyles(spec, false);
 
     expect(res === undefined).toBeTruthy();

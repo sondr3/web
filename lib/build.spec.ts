@@ -1,7 +1,15 @@
 import { getConfig } from "./config";
-import { renderPages } from "./build";
+import { buildSite, renderPages } from "./build";
 import path from "path";
 import { promises as fs } from "fs";
+
+describe("buildSite", () => {
+  it("builds", async () => {
+    process.env.NODE_ENV = "test";
+    const res = await buildSite();
+    expect(res).toBeUndefined();
+  });
+});
 
 describe("renderPages", () => {
   beforeEach(() => {
