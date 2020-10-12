@@ -16,6 +16,7 @@ export interface Config {
   assets: {
     style: string;
     js: string;
+    static: string;
   };
 }
 
@@ -38,6 +39,7 @@ const sharedConfig = partialConfig({
   assets: {
     js: path.join(root, "assets/js"),
     style: path.join(root, "assets/scss"),
+    static: path.join(root, "assets/static"),
   },
 });
 
@@ -67,11 +69,12 @@ const mergeConfig = (
 };
 
 export const getConfig = (): Config => {
-  if (process.env.NODE_ENV === "test") {
-    return mergeConfig(sharedConfig, testConfig);
-  } else if (process.env.NODE_ENV === "production") {
-    return mergeConfig(sharedConfig, devConfig);
+  switch (process.env.NODE_ENV) {
+    case "test":
+      return mergeConfig(sharedConfig, testConfig);
+    case "production":
+      return mergeConfig(sharedConfig, devConfig);
+    default:
+      return mergeConfig(sharedConfig, devConfig);
   }
-
-  return mergeConfig(sharedConfig, devConfig);
 };

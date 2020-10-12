@@ -3,16 +3,20 @@ import { getConfig } from "./config";
 import path from "path";
 import { logging } from "./utils/logging";
 import { TemplateEngine } from "./template";
-import { renderStyles } from "./assets";
+import { copyAssets, renderStyles } from "./assets";
+import { siteState } from "./state";
 
+const state = siteState;
 const logger = logging.getLogger("build");
 const config = getConfig();
 
 const engine = new TemplateEngine();
 
 export const buildSite = async (): Promise<void> => {
+  await copyAssets();
   await renderStyles(path.join(getConfig().assets.style, "style.scss"), false);
   await renderPages();
+  logger.log(state.styles[Symbol.toStringTag]);
 };
 
 export const renderPages = async (): Promise<void> => {
