@@ -5,12 +5,12 @@ import assert from "assert";
 describe("styleName", () => {
   it("gives correct name without extension", () => {
     const file = styleName("test.html");
-    expect(file).toBe("./dist/test/public/assets/style/test");
+    expect(file).toBe("./test/public/assets/style/test");
   });
 
   it("gives correct name with extension", () => {
     const file = styleName("test.html", "css");
-    expect(file).toBe("./dist/test/public/assets/style/test.css");
+    expect(file).toBe("./test/public/assets/style/test.css");
   });
 });
 

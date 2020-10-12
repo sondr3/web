@@ -1,4 +1,5 @@
 import { getConfig } from "./config";
+import path from "path";
 
 describe("config", () => {
   describe("test", () => {
@@ -7,7 +8,8 @@ describe("config", () => {
     it("gets the correct configuration", () => {
       const config = getConfig();
 
-      expect(config.out).toBe("./dist/test");
+      expect(config.out).toBe("./test");
+      expect(config.content.pages).toBe(path.join(path.resolve(process.cwd()), "content/pages/"));
     });
   });
 
@@ -17,7 +19,8 @@ describe("config", () => {
     it("gets the correct configuration", () => {
       const config = getConfig();
 
-      expect(config.out).toBe("./dist");
+      expect(config.out).toBe("./public");
+      expect(config.content.pages).toBe(path.join(path.resolve(process.cwd()), "content/pages/"));
     });
   });
 
@@ -27,7 +30,8 @@ describe("config", () => {
     it("gets the correct configuration", () => {
       const config = getConfig();
 
-      expect(config.out).toBe("./dist");
+      expect(config.out).toBe("./public");
+      expect(config.content.pages).toBe(path.join(path.resolve(process.cwd()), "content/pages/"));
     });
   });
 });
