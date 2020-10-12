@@ -20,16 +20,19 @@ export const renderPages = async (): Promise<void> => {
     const file = path.parse(page);
 
     if (file.name === "index") {
-      const output = await engine.renderFile(file.name);
-      await createDirectory(config.out);
-      await writeFile(path.join(config.out, "index.html"), output);
+      await renderPage(page, config.out);
     } else {
-      const output = await engine.renderFile(file.name);
       const dir = path.join(config.out, file.name);
-      await createDirectory(dir);
-      await writeFile(path.join(dir, "index.html"), output);
+      await renderPage(page, dir);
     }
   }
 
   return;
+};
+
+export const renderPage = async (page: string, directory: string): Promise<void> => {
+  const file = path.parse(page);
+  const output = await engine.renderFile(file.name);
+  await createDirectory(directory);
+  await writeFile(path.join(directory, "index.html"), output);
 };
