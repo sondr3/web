@@ -5,12 +5,14 @@ import { logging } from "./utils/logging";
 import { TemplateEngine } from "./template";
 import { copyAssets, renderStyles } from "./assets";
 import { siteState } from "./state";
+import { AsciidocConverter } from "./AsciidocConverter";
 
 const state = siteState;
 const logger = logging.getLogger("build");
 const config = getConfig();
 
 const engine = new TemplateEngine();
+const asciidoc = new AsciidocConverter();
 
 export const buildSite = async (): Promise<void> => {
   await copyAssets();
@@ -35,4 +37,8 @@ export const renderPages = async (): Promise<void> => {
   }
 
   return;
+};
+
+export const renderAsciidoc = async (filepath: string): Promise<string | Error> => {
+  return await asciidoc.renderAsciidoc(filepath);
 };
