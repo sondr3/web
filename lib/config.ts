@@ -15,6 +15,7 @@ export interface Config {
     pages: string;
     layouts: string;
     partials: string;
+    asciidoc: string;
   };
   assets: {
     style: string;
@@ -41,6 +42,7 @@ const sharedConfig = partialConfig({
     pages: path.join(root, "templates/pages/"),
     partials: path.join(root, "templates/partials/"),
     layouts: path.join(root, "templates/layouts/"),
+    asciidoc: path.join(root, "templates/asciidoc/"),
   },
   assets: {
     js: path.join(root, "assets/js"),
