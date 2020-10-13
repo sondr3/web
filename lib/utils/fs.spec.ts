@@ -1,4 +1,4 @@
-import { cacheBustFile, copyFiles, createDirectory, dirWalk, writeFile } from "./fs";
+import { cacheBustFile, copyFiles, createDirectory, dirWalk, readFile, writeFile } from "./fs";
 import assert from "assert";
 import { promises as fs } from "fs";
 import path from "path";
@@ -75,5 +75,15 @@ describe("copyFiles", () => {
 
   it("cannot copy wrong files", async () => {
     await expect(copyFiles(path.resolve(process.cwd()), "/")).rejects.toThrow();
+  });
+});
+
+describe("readFile", () => {
+  it("read files", async () => {
+    await expect(readFile(path.resolve(process.cwd(), "package.json"))).resolves.toBeDefined();
+  });
+
+  it("throws when reading unknown file", async () => {
+    await expect(readFile(path.resolve(process.cwd(), "poop.json"))).rejects.toThrow();
   });
 });

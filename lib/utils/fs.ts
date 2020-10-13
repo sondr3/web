@@ -77,6 +77,15 @@ export const writeFile = async (filepath: string, content: string | Buffer): Pro
   }
 };
 
+export const readFile = async (filepath: string): Promise<string | Error> => {
+  try {
+    return fs.readFile(filepath, { encoding: "utf-8" });
+  } catch (e) {
+    logger.error(e);
+    throw e;
+  }
+};
+
 export const cacheBustFile = (contents: string | Buffer, filename: string): string => {
   const md5 = crypto.createHash("md5");
   md5.update(contents);
