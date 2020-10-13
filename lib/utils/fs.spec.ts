@@ -1,5 +1,4 @@
 import { cacheBustFile, copyFiles, createDirectory, dirWalk, readFile, writeFile } from "./fs";
-import assert from "assert";
 import { promises as fs } from "fs";
 import path from "path";
 import * as os from "os";
@@ -22,15 +21,11 @@ describe("dirWalk", () => {
 
 describe("createDirectory", () => {
   it("can create a test directory", async () => {
-    const res = await createDirectory("/tmp/testing");
-    expect(res).toBeUndefined();
+    await expect(createDirectory("/tmp/testing")).resolves.toBeUndefined();
   });
 
   it("cannot create a root directory", async () => {
-    const res = await createDirectory("/test");
-    expect(res).not.toBeUndefined();
-    assert(res !== undefined);
-    expect(res.constructor.name).toBe("Error");
+    await expect(createDirectory("/test")).rejects.toThrow();
   });
 });
 

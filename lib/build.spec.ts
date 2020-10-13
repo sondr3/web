@@ -1,5 +1,5 @@
 import { getConfig } from "./config";
-import { buildSite, renderPages } from "./build";
+import { buildSite, renderAsciidoc, renderPages } from "./build";
 import path from "path";
 import { promises as fs } from "fs";
 
@@ -26,5 +26,11 @@ describe("renderPages", () => {
     await renderPages();
 
     expect(await fs.stat(path.join(config.out, "index.html"))).toBeDefined();
+  });
+});
+
+describe("renderAsciidoc", () => {
+  it("renders", async () => {
+    await expect(renderAsciidoc(path.resolve(process.cwd(), "content/pages/about.adoc"))).resolves.toBeDefined();
   });
 });

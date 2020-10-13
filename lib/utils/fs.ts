@@ -2,6 +2,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import crypto from "crypto";
 import { logging } from "./logging";
+import { asyncTryCatch } from "./utils";
 
 const logger = logging.getLogger("fs");
 
@@ -58,32 +59,18 @@ export const copyFiles = async (source: string, destination: string, recurse = t
 };
 
 export const createDirectory = async (filepath: string): Promise<void | Error> => {
-  try {
-    await fs.mkdir(filepath, { recursive: true });
-    return;
-  } catch (e) {
-    logger.error(e);
-    return e as Error;
-  }
+  const res = await asyncTryCatch(async () => fs.mkdir(filepath, { recursive: true }), logger);
+  if (res instanceof Error) return res;
+
+  return;
 };
 
 export const writeFile = async (filepath: string, content: string | Buffer): Promise<void | Error> => {
-  try {
-    await fs.writeFile(filepath, content);
-    return;
-  } catch (e) {
-    logger.error(e);
-    throw e;
-  }
+  return await asyncTryCatch(async () => fs.writeFile(filepath, content), logger);
 };
 
 export const readFile = async (filepath: string): Promise<string | Error> => {
-  try {
-    return fs.readFile(filepath, { encoding: "utf-8" });
-  } catch (e) {
-    logger.error(e);
-    throw e;
-  }
+  return await asyncTryCatch(async () => fs.readFile(filepath, { encoding: "utf-8" }), logger);
 };
 
 export const cacheBustFile = (contents: string | Buffer, filename: string): string => {

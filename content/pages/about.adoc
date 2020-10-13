@@ -1,0 +1,8 @@
+= About me
+Sondre Nilsen
+
+Hello, I'm Sondre!
+
+== More stuff
+
+I write code and stuff, you can find it on https://github.com/sondr3[GitHub].
