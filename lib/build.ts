@@ -20,7 +20,7 @@ export const buildSite = async (): Promise<void> => {
 };
 
 export const renderPages = async (): Promise<void> => {
-  const pages = await dirWalk(path.join(process.cwd(), "/content/pages"), "liquid", false);
+  const pages = await dirWalk(path.resolve(process.cwd(), config.content.pages), "liquid", false);
 
   for (const page of pages) {
     logger.debug(`Building page: ${path.resolve(page)}`);

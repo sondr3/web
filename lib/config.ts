@@ -10,6 +10,9 @@ export interface Config {
   content: {
     posts: string;
     pages: string;
+  };
+  templates: {
+    pages: string;
     layouts: string;
     partials: string;
   };
@@ -31,10 +34,13 @@ const sharedConfig = partialConfig({
     title: "EONS",
   },
   content: {
-    posts: path.join(root, "posts"),
+    posts: path.join(root, "content/posts/"),
     pages: path.join(root, "content/pages/"),
-    partials: path.join(root, "content/partials/"),
-    layouts: path.join(root, "content/layouts/"),
+  },
+  templates: {
+    pages: path.join(root, "templates/pages/"),
+    partials: path.join(root, "templates/partials/"),
+    layouts: path.join(root, "templates/layouts/"),
   },
   assets: {
     js: path.join(root, "assets/js"),
@@ -62,7 +68,7 @@ const testConfig = partialConfig({
 });
 
 const mergeConfig = (
-  left: Pick<Config, "content" | "meta" | "assets">,
+  left: Pick<Config, "content" | "meta" | "assets" | "templates">,
   right: Pick<Config, "out" | "meta">,
 ): Config => {
   return { ...left, ...right };

@@ -13,7 +13,7 @@ export class TemplateEngine {
 
   constructor() {
     this.engine = new Liquid({
-      root: [config.content.pages, config.content.layouts, config.content.partials],
+      root: [config.templates.layouts, config.templates.partials, config.content.pages, config.templates.pages],
       extname: ".liquid",
     });
 
