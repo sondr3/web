@@ -1,5 +1,5 @@
 import { getConfig } from "./config";
-import { buildSite, renderAsciidoc, renderPages } from "./build";
+import { buildSite, renderAsciidoc, renderSpecialPages } from "./build";
 import path from "path";
 import { promises as fs } from "fs";
 
@@ -23,7 +23,7 @@ describe("renderPages", () => {
   it("renders all pages", async () => {
     process.env.NODE_ENV = "test";
     const config = getConfig();
-    await renderPages();
+    await renderSpecialPages();
 
     expect(await fs.stat(path.join(config.out, "index.html"))).toBeDefined();
   });
