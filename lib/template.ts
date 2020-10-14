@@ -13,13 +13,7 @@ export class TemplateEngine {
 
   constructor() {
     this.engine = new Liquid({
-      root: [
-        config.templates.layouts,
-        config.templates.partials,
-        config.content.pages,
-        config.templates.pages,
-        config.templates.asciidoc,
-      ],
+      root: [config.templates.layouts, config.templates.partials, config.content.pages, config.templates.pages],
       extname: ".liquid",
     });
 
@@ -34,10 +28,6 @@ export class TemplateEngine {
     });
     await createDirectory(directory);
     await writeFile(path.join(directory, "index.html"), output);
-  }
-
-  renderAsciidocTemplate(template: string, data: Record<string, string>): string {
-    return this.engine.renderFileSync(template, data);
   }
 }
 
