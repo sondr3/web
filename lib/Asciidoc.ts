@@ -1,9 +1,10 @@
 import { readFile } from "./utils/fs";
 import Processor, { Asciidoctor } from "asciidoctor";
+import * as templates from "./templates/asciidoc";
 import AbstractNode = Asciidoctor.AbstractNode;
 import AbstractBlock = Asciidoctor.AbstractBlock;
 import Html5Converter = Asciidoctor.Html5Converter;
-import * as templates from "./templates/asciidoc";
+import Document = Asciidoctor.Document;
 
 export class Asciidoc {
   private baseConverter: Html5Converter;
@@ -15,12 +16,10 @@ export class Asciidoc {
     this.asciidoc.ConverterFactory.register(this, ["html5"]);
   }
 
-  async render(filepath: string): Promise<string | Error> {
+  async load(filepath: string): Promise<Document | Error> {
     const content = await readFile(filepath);
     if (content instanceof Error) throw content;
-    const rendered = this.asciidoc.load(content);
-
-    return rendered.getContent();
+    return this.asciidoc.load(content);
   }
 
   protected convert<T extends AbstractNode & AbstractBlock>(node: T, transform?: string): string {
