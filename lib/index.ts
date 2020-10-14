@@ -5,12 +5,14 @@ const run = async (): Promise<void> => {
   const mode = process.env.NODE_ENV ?? "development";
   logging.configure().registerConsoleLogger();
 
+  const prod = mode === "production";
+
   if (mode === "prod") {
-    await buildSite()
+    await buildSite(prod)
       .then(() => void {})
       .catch((err) => console.error(err));
   } else {
-    await buildSite()
+    await buildSite(prod)
       .then(() => void {})
       .catch((err) => console.error(err));
   }

@@ -29,6 +29,7 @@ const partialConfig = <T extends Partial<Config>>(t: T) => t;
 const root = path.resolve(process.cwd());
 
 const sharedConfig = partialConfig({
+  production: process.env.NODE_ENV === "production",
   meta: {
     author: "Sondre Nilsen",
     url: "http://localhost",
@@ -52,7 +53,6 @@ const sharedConfig = partialConfig({
 
 const devConfig = partialConfig({
   out: path.resolve(root, "./public/"),
-  production: process.env.NODE_ENV === "production",
   meta: {
     author: "Sondre Nilsen",
     url: "http://www.eons.io",
@@ -62,7 +62,6 @@ const devConfig = partialConfig({
 
 const testConfig = partialConfig({
   out: path.resolve(root, "./test/"),
-  production: process.env.NODE_ENV === "production",
   meta: {
     author: "Sondre Nilsen",
     url: "http://localhost",
@@ -71,8 +70,8 @@ const testConfig = partialConfig({
 });
 
 const mergeConfig = (
-  left: Pick<Config, "content" | "meta" | "assets" | "templates">,
-  right: Pick<Config, "out" | "production" | "meta">,
+  left: Pick<Config, "production" | "content" | "meta" | "assets" | "templates">,
+  right: Pick<Config, "out" | "meta">,
 ): Config => {
   return { ...left, ...right };
 };
