@@ -6,16 +6,12 @@ import { promises as fs } from "fs";
 describe("buildSite", () => {
   it("builds", async () => {
     process.env.NODE_ENV = "test";
-    const res = await buildSite();
+    const res = await buildSite(false);
     expect(res).toBeUndefined();
   });
 });
 
 describe("renderPages", () => {
-  beforeEach(() => {
-    process.env.NODE_ENV = "test";
-  });
-
   afterAll(async () => {
     await fs.rmdir(getConfig().out);
   });
@@ -31,6 +27,10 @@ describe("renderPages", () => {
 
 describe("renderAsciidoc", () => {
   it("renders", async () => {
-    await expect(renderAsciidoc(path.resolve(process.cwd(), "content/pages/about.adoc"))).resolves.toBeDefined();
+    await expect(renderAsciidoc(path.resolve(process.cwd(), "content/pages/about.adoc"), false)).resolves.toBeDefined();
+  });
+
+  it("returns unformatted when production", async () => {
+    await expect(renderAsciidoc(path.resolve(process.cwd(), "content/pages/about.adoc"), true)).resolves.toBeDefined();
   });
 });
