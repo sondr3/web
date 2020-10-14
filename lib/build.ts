@@ -4,22 +4,24 @@ import path from "path";
 import { logging } from "./utils/logging";
 import { Layout, renderTemplate } from "./templating";
 import { copyAssets, renderStyles } from "./assets";
-import { siteState } from "./state";
 import { Asciidoc } from "./Asciidoc";
 import * as pages from "./templates/pages";
 import { formatHtml } from "./utils/formatting";
+import { Duration } from "./utils/Duration";
 
-const state = siteState;
 const logger = logging.getLogger("build");
 const config = getConfig();
 
 const asciidoc = new Asciidoc();
 
 export const buildSite = async (): Promise<void> => {
+  logger.log(`Building site ${config.meta.title} (${config.meta.url})`);
+  const duration = new Duration();
   await copyAssets();
   await renderStyles(path.join(getConfig().assets.style, "style.scss"), false);
   await renderSpecialPages();
-  logger.log(state.styles[Symbol.toStringTag]);
+  duration.end();
+  logger.log(`Took ${duration.result()} to build site`);
 };
 
 export const renderPages = async (): Promise<void | Error> => {

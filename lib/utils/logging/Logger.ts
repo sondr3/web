@@ -1,9 +1,9 @@
 import { Colorize as C } from "../Colors";
-import { Level, LogManager } from "./LogManager";
+import { LogLevel, LogManager } from "./LogManager";
 import { EventEmitter } from "events";
 
 export interface LogEntry {
-  level: Level;
+  level: LogLevel;
   message: string;
   module?: string;
 }
@@ -21,17 +21,17 @@ export class Logger {
     error: 5,
   };
 
-  constructor(logManager: LogManager, minLevel: Level, module?: string) {
+  constructor(logManager: LogManager, minLevel: LogLevel, module?: string) {
     this.logManager = logManager;
     this.module = module;
     this.minLevel = this.levelToInt(minLevel);
   }
 
-  private levelToInt(minLevel: Level): number {
+  private levelToInt(minLevel: LogLevel): number {
     return this.levels[minLevel.toLowerCase()];
   }
 
-  private emit(logLevel: Level, message: string): void {
+  private emit(logLevel: LogLevel, message: string): void {
     if (this.levelToInt(logLevel) > this.minLevel) return;
 
     const entry: LogEntry = {

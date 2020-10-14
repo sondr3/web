@@ -2,16 +2,16 @@ import { EventEmitter } from "events";
 import { LogEntry, Logger } from "./Logger";
 import { Colorize as C } from "../Colors";
 
-export type Level = "none" | "trace" | "debug" | "info" | "warn" | "error";
+export type LogLevel = "none" | "trace" | "debug" | "info" | "warn" | "error";
 
 interface LogOptions {
-  minLevel: Level;
+  minLevel: LogLevel;
 }
 
 export class LogManager extends EventEmitter {
   private registered = false;
   private options: LogOptions = {
-    minLevel: "none",
+    minLevel: (process.env.NOISINESS ?? "none") as LogLevel,
   };
 
   public configure(options?: LogOptions): LogManager {
@@ -64,17 +64,17 @@ export class LogManager extends EventEmitter {
     const message = `[${new Date().toISOString()}] ${module}`;
     switch (entry.level) {
       case "none":
-        return `${message} ${C.log(`[LOG]`)} ${entry.message}`;
+        return `${C.log(`[LOG]`)}\t${message}\t${entry.message}`;
       case "error":
-        return `${message} ${C.error(`[ERROR]`)} ${entry.message}`;
+        return `${C.error(`[ERROR]`)}\t${message}\t${entry.message}`;
       case "warn":
-        return `${message} ${C.error(`[WARN]`)} ${entry.message}`;
+        return `${C.error(`[WARN]`)}\t${message}\t${entry.message}`;
       case "info":
-        return `${message} ${C.info(`[INFO]`)} ${entry.message}`;
+        return `${C.info(`[INFO]`)}\t${message}\t${entry.message}`;
       case "debug":
-        return `${message} ${C.debug(`[DEBUG]`)} ${entry.message}`;
+        return `${C.debug(`[DEBUG]`)}\t${message}\t${entry.message}`;
       case "trace":
-        return `${message} ${C.debug(`[TRACE]`)} ${entry.message}`;
+        return `${C.debug(`[TRACE]`)}\t${message}\t${entry.message}`;
     }
   }
 }

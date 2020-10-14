@@ -21,7 +21,6 @@ describe("Logger", () => {
     });
 
     it("no output when no log level", () => {
-      logging.configure({ minLevel: "none" }).registerConsoleLogger();
       const logger = logging.getLogger("test");
 
       logger.trace("Hello, world!");
@@ -48,6 +47,7 @@ describe("Logger", () => {
       expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining("Hello, world!"));
     });
   });
+
   describe("debug", () => {
     const consoleLogSpy = jest.spyOn(console, "debug").mockImplementation(() => void {});
 
