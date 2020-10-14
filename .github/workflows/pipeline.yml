@@ -21,6 +21,7 @@ jobs:
 
       - name: Check formatting and lints
         run: |
+          yarn lint:css
           yarn lint:style
           yarn lint:code
 
@@ -28,7 +29,7 @@ jobs:
         run: yarn test --coverage
 
       - name: Build
-        run: yarn build
+        run: yarn compile
 
       - uses: codecov/codecov-action@v1
         with:
