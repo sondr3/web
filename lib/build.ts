@@ -1,4 +1,4 @@
-import { createDirectory, writeFile } from "./utils/fs";
+import { createDirectory, dirWalk, writeFile } from "./utils/fs";
 import { getConfig } from "./config";
 import path from "path";
 import { logging } from "./utils/logging";
@@ -7,6 +7,7 @@ import { copyAssets, renderStyles } from "./assets";
 import { siteState } from "./state";
 import { Asciidoc } from "./Asciidoc";
 import * as pages from "./templates/pages";
+import { formatHtml } from "./utils/formatting";
 
 const state = siteState;
 const logger = logging.getLogger("build");
@@ -21,9 +22,20 @@ export const buildSite = async (): Promise<void> => {
   logger.log(state.styles[Symbol.toStringTag]);
 };
 
+export const renderPages = async (): Promise<void | Error> => {
+  const pages = await dirWalk(path.resolve(process.cwd(), config.content.pages), "adoc", false);
+
+  for (const page of pages) {
+    const rendered = await renderAsciidoc(page);
+    if (rendered instanceof Error) return rendered;
+    const file = path.parse(page);
+    await writeContent(path.resolve(config.out, file.name), formatHtml(rendered));
+  }
+};
+
 export const renderSpecialPages = async (): Promise<void> => {
-  await writeContent(config.out, pages.landing());
-  await writeContent(path.resolve(config.out, "404/"), pages.notFound());
+  await writeContent(config.out, formatHtml(pages.landing()));
+  await writeContent(path.resolve(config.out, "404/"), formatHtml(pages.notFound()));
 };
 
 export const renderAsciidoc = async (filepath: string): Promise<string | Error> => {
@@ -31,7 +43,10 @@ export const renderAsciidoc = async (filepath: string): Promise<string | Error> 
   if (content instanceof Error) return content;
 
   const layout = content.getAttribute("layout", "default") as Layout;
-  return renderTemplate(layout, { title: content.getTitle(), content: content.getContent() });
+  const rendered = renderTemplate(layout, { title: content.getTitle(), content: content.getContent() });
+  if (!config.production) return formatHtml(rendered);
+
+  return rendered;
 };
 
 export const writeContent = async (directory: string, content: string): Promise<void> => {
