@@ -30,7 +30,7 @@ export const renderAsciidoc = async (filepath: string): Promise<string | Error> 
   const content = await asciidoc.load(filepath);
   if (content instanceof Error) return content;
 
-  const layout = content.getAttribute("layout", "Default") as Layout;
+  const layout = content.getAttribute("layout", "default") as Layout;
   return renderTemplate(layout, { title: content.getTitle(), content: content.getContent() });
 };
 

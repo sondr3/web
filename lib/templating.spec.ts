@@ -8,7 +8,7 @@ describe("renderTemplate", () => {
   });
 
   it("renders default layout", () => {
-    expect(renderTemplate("Default", { title: "", content: "hello, world!" })).toBeDefined();
+    expect(renderTemplate("default", { title: "", content: "hello, world!" })).toBeDefined();
   });
 });
 

@@ -1,4 +1,5 @@
 = About me
+:layout: default
 Sondre Nilsen
 
 Hello, I'm Sondre!

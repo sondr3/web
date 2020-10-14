@@ -5,7 +5,7 @@ import * as templates from "./templates/layouts";
 const config = getConfig();
 const logger = logging.getLogger("template");
 
-export type Layout = "Default";
+export type Layout = "default";
 
 export interface Content {
   title: string;
@@ -16,7 +16,7 @@ export const renderTemplate = (layout: Layout, content: Content): string => {
   logger.debug(`Rendering ${String(layout)}`);
 
   switch (layout) {
-    case "Default":
+    case "default":
       return templates.layout(createTitle(content.title), content.content);
   }
 };
