@@ -8,7 +8,7 @@ describe("config", () => {
     it("gets the correct configuration", () => {
       const config = getConfig();
 
-      expect(config.out).toBe("./test");
+      expect(config.out.includes("/test")).toBeTruthy();
       expect(config.content.pages).toBe(path.join(path.resolve(process.cwd()), "content/pages/"));
     });
   });
@@ -19,7 +19,7 @@ describe("config", () => {
     it("gets the correct configuration", () => {
       const config = getConfig();
 
-      expect(config.out).toBe("./public");
+      expect(config.out.includes("/public")).toBeTruthy();
       expect(config.content.pages).toBe(path.join(path.resolve(process.cwd()), "content/pages/"));
     });
   });
@@ -30,7 +30,7 @@ describe("config", () => {
     it("gets the correct configuration", () => {
       const config = getConfig();
 
-      expect(config.out).toBe("./public");
+      expect(config.out.includes("/public")).toBeTruthy();
       expect(config.content.pages).toBe(path.join(path.resolve(process.cwd()), "content/pages/"));
     });
   });

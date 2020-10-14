@@ -2,6 +2,7 @@ import path from "path";
 
 export interface Config {
   out: string;
+  production: boolean;
   meta: {
     title: string;
     url: string;
@@ -43,14 +44,15 @@ const sharedConfig = partialConfig({
     layouts: path.join(root, "templates/layouts/"),
   },
   assets: {
-    js: path.join(root, "assets/js"),
-    style: path.join(root, "assets/scss"),
-    static: path.join(root, "assets/static"),
+    js: path.join(root, "assets/js/"),
+    style: path.join(root, "assets/scss/"),
+    static: path.join(root, "assets/static/"),
   },
 });
 
 const devConfig = partialConfig({
-  out: "./public",
+  out: path.resolve(root, "./public/"),
+  production: process.env.NODE_ENV === "production",
   meta: {
     author: "Sondre Nilsen",
     url: "http://www.eons.io",
@@ -59,7 +61,8 @@ const devConfig = partialConfig({
 });
 
 const testConfig = partialConfig({
-  out: "./test",
+  out: path.resolve(root, "./test/"),
+  production: process.env.NODE_ENV === "production",
   meta: {
     author: "Sondre Nilsen",
     url: "http://localhost",
@@ -69,7 +72,7 @@ const testConfig = partialConfig({
 
 const mergeConfig = (
   left: Pick<Config, "content" | "meta" | "assets" | "templates">,
-  right: Pick<Config, "out" | "meta">,
+  right: Pick<Config, "out" | "production" | "meta">,
 ): Config => {
   return { ...left, ...right };
 };
