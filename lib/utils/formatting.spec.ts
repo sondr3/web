@@ -1,4 +1,5 @@
 import { formatCSS, formatHTML } from "./formatting"
+import { Result } from "sass"
 
 describe("formatHTML", () => {
   it("formats HTML", () => {
@@ -9,7 +10,7 @@ describe("formatHTML", () => {
 
 describe("formatCSS", () => {
   it("formats css", () => {
-    const css = "div { border  : 1px   solid blue;    }"
-    expect(formatCSS(css)).toBe("div {\n  border: 1px solid blue;\n}\n")
+    const css = { css: Buffer.from("div { border  : 1px   solid blue;    }", "utf-8") } as Result
+    expect(formatCSS(css).css).toBe("div {\n  border: 1px solid blue;\n}\n")
   })
 })
