@@ -1,4 +1,4 @@
-import { html } from "../../html";
+import { html } from "../../html"
 
 export const nav = (): string => html`
   <header>
@@ -7,4 +7,4 @@ export const nav = (): string => html`
       <a href="/about/" class="nav-link">About</a>
     </nav>
   </header>
-`;
+`

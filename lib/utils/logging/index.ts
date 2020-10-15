@@ -1,3 +1,3 @@
-import { LogManager } from "./LogManager";
+import { LogManager } from "./LogManager"
 
-export const logging = new LogManager();
+export const logging = new LogManager()

@@ -1,3 +1,3 @@
-export * from "./paragraph";
-export * from "./preamble";
-export * from "./section";
+export * from "./paragraph"
+export * from "./preamble"
+export * from "./section"

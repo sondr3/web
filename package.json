@@ -41,7 +41,6 @@
   "engines": {
     "node": ">=12.18.0"
   },
-  "prettier": "@sondr3/prettier",
   "browserslist": [
     "> 1% in NO",
     "not ie >= 8"

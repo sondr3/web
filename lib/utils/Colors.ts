@@ -1,14 +1,14 @@
 interface Color {
-  normal: number;
-  bright: number;
+  normal: number
+  bright: number
 }
 
 interface Format {
-  start: number;
-  end: number;
+  start: number
+  end: number
 }
 
-type FormatType = "reset" | "bold" | "underline" | "strike";
+type FormatType = "reset" | "bold" | "underline" | "strike"
 
 const format: Record<FormatType, Format> = {
   reset: {
@@ -27,9 +27,9 @@ const format: Record<FormatType, Format> = {
     start: 9,
     end: 29,
   },
-};
+}
 
-type ColorType = "log" | "error" | "debug" | "info" | "success";
+type ColorType = "log" | "error" | "debug" | "info" | "success"
 
 const colors: Record<ColorType, Color> = {
   log: {
@@ -52,34 +52,34 @@ const colors: Record<ColorType, Color> = {
     normal: 32,
     bright: 92,
   },
-};
+}
 
 export abstract class Colorize {
   public static log(input: string, bright = false): string {
-    return this.format(input, colors.log, bright);
+    return this.format(input, colors.log, bright)
   }
 
   public static error(input: string, bright = false): string {
-    return this.format(input, colors.error, bright);
+    return this.format(input, colors.error, bright)
   }
 
   public static debug(input: string, bright = false): string {
-    return this.format(input, colors.debug, bright);
+    return this.format(input, colors.debug, bright)
   }
 
   public static info(input: string, bright = false): string {
-    return this.format(input, colors.info, bright);
+    return this.format(input, colors.info, bright)
   }
 
   private static getFormatting(start: number, end: number): { start: string; end: string } {
     return {
       start: `\x1b[${start}m`,
       end: `\x1b[${end}m`,
-    };
+    }
   }
 
   private static format(input: string, color: Color, bright: boolean): string {
-    const { start, end } = Colorize.getFormatting(bright ? color.bright : color.normal, format.reset.end);
-    return `${start}${input}${end}`;
+    const { start, end } = Colorize.getFormatting(bright ? color.bright : color.normal, format.reset.end)
+    return `${start}${input}${end}`
   }
 }

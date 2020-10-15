@@ -1,3 +1,3 @@
-import { html } from "../../html";
+import { html } from "../../html"
 
-export const paragraph = (content: string): string => html`<p>${content}</p>`;
+export const paragraph = (content: string): string => html`<p>${content}</p>`

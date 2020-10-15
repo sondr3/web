@@ -1,2 +1,2 @@
-export * from "./404";
-export * from "./landing";
+export * from "./404"
+export * from "./landing"

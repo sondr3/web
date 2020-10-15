@@ -1,3 +1,3 @@
-export * from "./footer";
-export * from "./head";
-export * from "./nav";
+export * from "./footer"
+export * from "./head"
+export * from "./nav"

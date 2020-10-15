@@ -1,4 +1,4 @@
-import { html } from "../../html";
+import { html } from "../../html"
 
 export const head = (title: string): string => html`
   <head>
@@ -10,4 +10,4 @@ export const head = (title: string): string => html`
 
     <link rel="stylesheet" href="/style.css" />
   </head>
-`;
+`

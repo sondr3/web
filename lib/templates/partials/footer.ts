@@ -1,4 +1,4 @@
-import { html } from "../../html";
+import { html } from "../../html"
 
 export const footer = (): string => html`
   <footer>
@@ -8,4 +8,4 @@ export const footer = (): string => html`
       <a href="https://www.eons.io">Sondre Nilsen</a>
     </p>
   </footer>
-`;
+`

@@ -5,4 +5,4 @@ module.exports = {
     sourceType: "module",
   },
   extends: ["@sondr3/typescript", "plugin:node/recommended-module", "plugin:jest/recommended", "plugin:jest/style"],
-};
+}
