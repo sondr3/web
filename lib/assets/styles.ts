@@ -15,7 +15,7 @@ const logger = logging.getLogger("sass")
 export const renderStyles = async (file: string, prod: boolean): Promise<void | Error> => {
   const style = sass.renderSync({
     file: file,
-    sourceMap: !prod,
+    sourceMap: true,
     outFile: await styleName(file),
   })
 
@@ -28,7 +28,7 @@ const writeStyles = async (file: string, res: SassResult, prod: boolean): Promis
   const parsed = path.parse(file)
 
   const hash = prod ? `${await createFileHash(file)}.` : ""
-  const out = await (prod ? optimize(res.css, parsed.name, hash) : formatCSS(res))
+  const out = await (prod ? optimize(res, parsed.name, hash) : formatCSS(res))
 
   const dir = await createDirectory(parsed.dir)
   const css = await writeFile(await styleName(file, `${hash}css`), out.css)
@@ -40,10 +40,10 @@ const writeStyles = async (file: string, res: SassResult, prod: boolean): Promis
   return
 }
 
-const optimize = async (source: string | Buffer, file: string, hash: string): Promise<{ css: string; map: string }> => {
-  const res = await postcss([cssnano({ preset: "advanced" })]).process(source, {
+const optimize = async (source: SassResult, file: string, hash: string): Promise<{ css: string; map: string }> => {
+  const res = await postcss([cssnano({ preset: "advanced" })]).process(source.css, {
     from: `${file}.${hash}css`,
-    map: { inline: false },
+    map: { inline: false, prev: source.map?.toString() },
   })
   res.warnings().forEach((warn) => logger.warn(warn.toString()))
   return { css: res.css, map: res.map.toString() }

@@ -9,7 +9,13 @@ const config = getConfig()
 
 export const copyAssets = async (): Promise<void> => {
   logger.debug("Copying assets")
+
+  // Copying static assets
   await fs.rmdir(path.join(config.out, "static"), { recursive: true })
   await copyFiles(config.assets.static, path.join(config.out, "static"))
+
+  // Copying SCSS files to sourcemaps work
+  await fs.rmdir(path.join(config.out, "assets/scss"), { recursive: true })
+  await copyFiles(config.assets.style, path.join(config.out, "assets/scss"))
   logger.debug("Copying assets finished")
 }
