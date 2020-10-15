@@ -8,18 +8,20 @@ import { siteState } from "../state"
 import { formatCSS } from "../utils/formatting"
 import postcss from "postcss"
 import cssnano from "cssnano"
+import { prettyPrintDuration } from "../utils/Duration"
 
 const state = siteState
 const logger = logging.getLogger("sass")
 
 export const renderStyles = async (file: string, prod: boolean): Promise<void | Error> => {
+  logger.debug(`Rendering ${file}`)
   const style = sass.renderSync({
     file: file,
     sourceMap: true,
     outFile: await styleName(file),
   })
 
-  logger.debug(`Rendered ${file}: took ${style.stats.duration}`)
+  logger.debug(`Rendered ${file}: took ${prettyPrintDuration(style.stats.duration)}`)
 
   return writeStyles(file, style, prod)
 }
