@@ -9,7 +9,7 @@ const run = async (): Promise<void> => {
   const logger = logging.getLogger("index")
   const prod = mode === "production"
 
-  if (mode === "prod") {
+  if (prod) {
     await buildSite(prod)
       .then(() => void {})
       .catch((err) => console.error(err))

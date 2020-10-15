@@ -11,7 +11,8 @@
     "lint:code": "eslint lib",
     "lint:css": "stylelint assets/scss/",
     "start": "NODE_ENV=development NOISINESS=debug nodemon --watch lib --ext ts --delay 1 dist/index.js",
-    "build": "NODE_ENV=production NOISINESS=none node dist/index.js"
+    "build": "NODE_ENV=production NOISINESS=none node dist/index.js",
+    "serve": "serve public"
   },
   "dependencies": {
     "asciidoctor": "^2.2.0",
