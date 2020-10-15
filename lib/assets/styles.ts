@@ -6,6 +6,8 @@ import { getConfig } from "../config"
 import { allOk } from "../utils/utils"
 import { siteState } from "../state"
 import { formatCSS } from "../utils/formatting"
+import postcss from "postcss"
+import cssnano from "cssnano"
 
 const state = siteState
 const logger = logging.getLogger("sass")
@@ -34,7 +36,16 @@ const writeStyles = async (file: string, res: SassResult): Promise<void | Error>
   return
 }
 
-export const styleName = (file: string, ext: string = "css"): string => {
+const optimize = async (source: string | Buffer, file: string, hash: string): Promise<{ css: string; map: string }> => {
+  const res = await postcss([cssnano({ preset: "advanced" })]).process(source, {
+    from: `${file}.${hash}css`,
+    map: { inline: false },
+  })
+  res.warnings().forEach((warn) => logger.warn(warn.toString()))
+  return { css: res.css, map: res.map.toString() }
+}
+
+export const styleName = async (file: string, ext: string = "css"): Promise<string> => {
   const config = getConfig()
   const { name } = path.parse(file)
   return `${config.out}/${name}.${ext}`
