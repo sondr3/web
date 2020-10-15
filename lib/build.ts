@@ -6,7 +6,7 @@ import { Layout, renderTemplate } from "./templating"
 import { copyAssets, renderStyles } from "./assets"
 import { Asciidoc } from "./Asciidoc"
 import * as pages from "./templates/pages"
-import { formatHtml } from "./utils/formatting"
+import { formatHTML } from "./utils/formatting"
 import { Duration } from "./utils/Duration"
 
 const logger = logging.getLogger("build")
@@ -32,14 +32,14 @@ export const renderPages = async (prod: boolean): Promise<void | Error> => {
     const rendered = await renderAsciidoc(page, prod)
     if (rendered instanceof Error) return rendered
     const file = path.parse(page)
-    await writeContent(path.resolve(config.out, file.name), formatHtml(rendered))
+    await writeContent(path.resolve(config.out, file.name), formatHTML(rendered))
   }
 }
 
 export const renderSpecialPages = async (): Promise<void> => {
-  await writeContent(config.out, formatHtml(pages.landing()))
-  await writeFile(path.join(config.out, "404.html"), formatHtml(pages.notFound()))
-  await writeContent(path.resolve(config.out, "404/"), formatHtml(pages.notFound()))
+  await writeContent(config.out, formatHTML(pages.landing()))
+  await writeFile(path.join(config.out, "404.html"), formatHTML(pages.notFound()))
+  await writeContent(path.resolve(config.out, "404/"), formatHTML(pages.notFound()))
 }
 
 export const renderAsciidoc = async (filepath: string, prod: boolean): Promise<string | Error> => {
@@ -48,7 +48,7 @@ export const renderAsciidoc = async (filepath: string, prod: boolean): Promise<s
 
   const layout = content.getAttribute("layout", "default") as Layout
   const rendered = renderTemplate(layout, { title: content.getTitle(), content: content.getContent() })
-  if (!prod) return formatHtml(rendered)
+  if (!prod) return formatHTML(rendered)
 
   return rendered
 }

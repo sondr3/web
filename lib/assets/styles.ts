@@ -5,6 +5,7 @@ import { createDirectory, writeFile } from "../utils/fs"
 import { getConfig } from "../config"
 import { allOk } from "../utils/utils"
 import { siteState } from "../state"
+import { formatCSS } from "../utils/formatting"
 
 const state = siteState
 const logger = logging.getLogger("sass")
@@ -24,7 +25,7 @@ export const renderStyles = (file: string, prod: boolean): Promise<void | Error>
 const writeStyles = async (file: string, res: SassResult): Promise<void | Error> => {
   const parsed = path.parse(file)
   const dir = await createDirectory(parsed.dir)
-  const css = await writeFile(styleName(file), res.css)
+  const css = await writeFile(styleName(file), formatCSS(res.css.toString("utf-8")))
   const map = await writeFile(styleName(file, "css.map"), res.map ?? "")
 
   if (!allOk(...[dir, css, map])) return new Error("Could not create styles")
