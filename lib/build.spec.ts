@@ -1,5 +1,5 @@
 import { getConfig } from "./config"
-import { buildSite, renderAsciidoc, renderSpecialPages } from "./build"
+import { buildSite, minifyHTML, renderAsciidoc, renderSpecialPages } from "./build"
 import path from "path"
 import { promises as fs } from "fs"
 
@@ -19,7 +19,7 @@ describe("renderPages", () => {
   it("renders all pages", async () => {
     process.env.NODE_ENV = "test"
     const config = getConfig()
-    await renderSpecialPages()
+    await renderSpecialPages(false)
 
     expect(await fs.stat(path.join(config.out, "index.html"))).toBeDefined()
   })
@@ -32,5 +32,12 @@ describe("renderAsciidoc", () => {
 
   it("returns unformatted when production", async () => {
     await expect(renderAsciidoc(path.resolve(process.cwd(), "content/pages/about.adoc"), true)).resolves.toBeDefined()
+  })
+})
+
+describe("minifyHTML", () => {
+  it("minifies", () => {
+    const html = "<div  class='hello'><p class=''>Hello!</p></div>"
+    expect(minifyHTML(html)).toBe("<div class=hello><p>Hello!</div>")
   })
 })

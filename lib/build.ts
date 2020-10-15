@@ -8,6 +8,7 @@ import { Asciidoc } from "./Asciidoc"
 import * as pages from "./templates/pages"
 import { formatHTML } from "./utils/formatting"
 import { Duration } from "./utils/Duration"
+import { minify } from "html-minifier-terser"
 
 const logger = logging.getLogger("build")
 const config = getConfig()
@@ -19,7 +20,7 @@ export const buildSite = async (prod: boolean): Promise<void> => {
   const duration = new Duration()
   await copyAssets()
   await renderStyles(path.join(getConfig().assets.style, "style.scss"), prod)
-  await renderSpecialPages()
+  await renderSpecialPages(prod)
   await renderPages(prod)
   duration.end()
   logger.log(`Took ${duration.result()} to build site`)
@@ -32,14 +33,17 @@ export const renderPages = async (prod: boolean): Promise<void | Error> => {
     const rendered = await renderAsciidoc(page, prod)
     if (rendered instanceof Error) return rendered
     const file = path.parse(page)
-    await writeContent(path.resolve(config.out, file.name), formatHTML(rendered))
+    await writeContent(path.resolve(config.out, file.name), prod ? minifyHTML(rendered) : formatHTML(rendered))
   }
 }
 
-export const renderSpecialPages = async (): Promise<void> => {
-  await writeContent(config.out, formatHTML(pages.landing()))
-  await writeFile(path.join(config.out, "404.html"), formatHTML(pages.notFound()))
-  await writeContent(path.resolve(config.out, "404/"), formatHTML(pages.notFound()))
+export const renderSpecialPages = async (prod: boolean): Promise<void> => {
+  await writeContent(config.out, prod ? minifyHTML(pages.landing()) : formatHTML(pages.landing()))
+  await writeFile(path.join(config.out, "404.html"), prod ? minifyHTML(pages.notFound()) : formatHTML(pages.notFound()))
+  await writeContent(
+    path.resolve(config.out, "404/"),
+    prod ? minifyHTML(pages.notFound()) : formatHTML(pages.notFound()),
+  )
 }
 
 export const renderAsciidoc = async (filepath: string, prod: boolean): Promise<string | Error> => {
@@ -56,4 +60,21 @@ export const renderAsciidoc = async (filepath: string, prod: boolean): Promise<s
 export const writeContent = async (directory: string, content: string): Promise<void> => {
   await createDirectory(directory)
   await writeFile(path.join(directory, "index.html"), content)
+}
+
+export const minifyHTML = (source: string): string => {
+  return minify(source, {
+    collapseBooleanAttributes: true,
+    collapseWhitespace: true,
+    collapseInlineTagWhitespace: true,
+    removeAttributeQuotes: true,
+    removeComments: true,
+    removeEmptyAttributes: true,
+    removeEmptyElements: true,
+    removeOptionalTags: true,
+    removeRedundantAttributes: true,
+    removeScriptTypeAttributes: true,
+    removeTagWhitespace: true,
+    useShortDoctype: true,
+  })
 }
