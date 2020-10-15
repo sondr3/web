@@ -84,42 +84,6 @@ describe("Logger", () => {
     })
   })
 
-  describe("info", () => {
-    const consoleLogSpy = jest.spyOn(console, "info").mockImplementation(() => void {})
-
-    beforeEach(() => {
-      consoleLogSpy.mockReset()
-    })
-
-    it("no output when no log level", () => {
-      logging.configure({ minLevel: "none" }).registerConsoleLogger()
-      const logger = logging.getLogger("test")
-
-      logger.info("Hello, world!")
-      expect(consoleLogSpy).toHaveBeenCalledTimes(0)
-    })
-
-    it("outputs when info level", () => {
-      logging.configure({ minLevel: "info" }).registerConsoleLogger()
-      const logger = logging.getLogger("test")
-
-      logger.info("Hello, world!")
-      expect(consoleLogSpy).toHaveBeenCalledTimes(1)
-      expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining("[INFO]"))
-      expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining("Hello, world!"))
-    })
-
-    it("outputs when above info level", () => {
-      logging.configure({ minLevel: "error" }).registerConsoleLogger()
-      const logger = logging.getLogger("test")
-
-      logger.info("Hello, world!")
-      expect(consoleLogSpy).toHaveBeenCalledTimes(1)
-      expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining("[INFO]"))
-      expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining("Hello, world!"))
-    })
-  })
-
   describe("warn", () => {
     const consoleLogSpy = jest.spyOn(console, "warn").mockImplementation(() => void {})
 

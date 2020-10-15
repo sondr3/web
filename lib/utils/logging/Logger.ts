@@ -51,10 +51,6 @@ export class Logger {
     this.emit("debug", message)
   }
 
-  public info(message: string): void {
-    this.emit("info", message)
-  }
-
   public error(message: string): void {
     this.emit("error", message)
   }

@@ -29,13 +29,9 @@ const format: Record<FormatType, Format> = {
   },
 }
 
-type ColorType = "log" | "error" | "debug" | "info" | "success"
+type ColorType = "error" | "debug" | "info" | "success"
 
 const colors: Record<ColorType, Color> = {
-  log: {
-    normal: 39,
-    bright: 97,
-  },
   error: {
     normal: 31,
     bright: 91,
@@ -56,7 +52,7 @@ const colors: Record<ColorType, Color> = {
 
 export abstract class Colorize {
   public static log(input: string, bright = false): string {
-    return this.format(input, colors.log, bright)
+    return this.format(input, colors.info, bright)
   }
 
   public static error(input: string, bright = false): string {
@@ -65,10 +61,6 @@ export abstract class Colorize {
 
   public static debug(input: string, bright = false): string {
     return this.format(input, colors.debug, bright)
-  }
-
-  public static info(input: string, bright = false): string {
-    return this.format(input, colors.info, bright)
   }
 
   private static getFormatting(start: number, end: number): { start: string; end: string } {

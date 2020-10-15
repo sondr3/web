@@ -2,7 +2,7 @@ import { EventEmitter } from "events"
 import { LogEntry, Logger } from "./Logger"
 import { Colorize as C } from "../Colors"
 
-export type LogLevel = "none" | "trace" | "debug" | "info" | "warn" | "error"
+export type LogLevel = "none" | "trace" | "debug" | "warn" | "error"
 
 interface LogOptions {
   minLevel: LogLevel
@@ -43,9 +43,6 @@ export class LogManager extends EventEmitter {
         case "warn":
           console.warn(output)
           break
-        case "info":
-          console.info(output)
-          break
         case "debug":
           console.debug(output)
           break
@@ -64,13 +61,11 @@ export class LogManager extends EventEmitter {
     const message = `[${new Date().toISOString()}] ${module}`
     switch (entry.level) {
       case "none":
-        return `${C.log(`[LOG]`)}\t${message}\t${entry.message}`
+        return `${C.log(`[INFO]`)}\t${message}\t${entry.message}`
       case "error":
         return `${C.error(`[ERROR]`)}\t${message}\t${entry.message}`
       case "warn":
         return `${C.error(`[WARN]`)}\t${message}\t${entry.message}`
-      case "info":
-        return `${C.info(`[INFO]`)}\t${message}\t${entry.message}`
       case "debug":
         return `${C.debug(`[DEBUG]`)}\t${message}\t${entry.message}`
       case "trace":
