@@ -1,4 +1,5 @@
 import { html } from "../../html"
+import { getStyle } from "../../state"
 
 export const head = (title: string): string => html`
   <head>
@@ -8,6 +9,6 @@ export const head = (title: string): string => html`
     <meta name="description" content="{{ description }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="${getStyle("style.css")}" />
   </head>
 `
