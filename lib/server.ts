@@ -91,8 +91,6 @@ export class Server {
         ".wasm": "application/wasm",
       }
 
-      console.log("test")
-
       const contentType = findMimetype(mimetypes, extension) ?? "application/octet-stream"
 
       fs.readFile(path.join(getConfig().out, filePath), (error, content) => {

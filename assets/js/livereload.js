@@ -16,7 +16,7 @@
           break
         case "shutdown":
           socket.close(1000, "Waiting for server to restart")
-          console.log("it ded")
+          setTimeout(connect, 2000)
           break
         default:
           console.error(`Unknown websocket message: ${message}`)
