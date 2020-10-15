@@ -1,7 +1,7 @@
 import sass, { Result as SassResult } from "sass"
 import { logging } from "../utils/logging"
 import path from "path"
-import { createDirectory, writeFile } from "../utils/fs"
+import { createFileHash, createDirectory, writeFile } from "../utils/fs"
 import { getConfig } from "../config"
 import { allOk } from "../utils/utils"
 import { siteState } from "../state"
@@ -12,26 +12,30 @@ import cssnano from "cssnano"
 const state = siteState
 const logger = logging.getLogger("sass")
 
-export const renderStyles = (file: string, prod: boolean): Promise<void | Error> => {
+export const renderStyles = async (file: string, prod: boolean): Promise<void | Error> => {
   const style = sass.renderSync({
     file: file,
     sourceMap: !prod,
-    outFile: styleName(file),
+    outFile: await styleName(file),
   })
 
   logger.debug(`Rendered ${file}: took ${style.stats.duration}`)
 
-  return writeStyles(file, style)
+  return writeStyles(file, style, prod)
 }
 
-const writeStyles = async (file: string, res: SassResult): Promise<void | Error> => {
+const writeStyles = async (file: string, res: SassResult, prod: boolean): Promise<void | Error> => {
   const parsed = path.parse(file)
+
+  const hash = prod ? `${await createFileHash(file)}.` : ""
+  const out = await (prod ? optimize(res.css, parsed.name, hash) : formatCSS(res))
+
   const dir = await createDirectory(parsed.dir)
-  const css = await writeFile(styleName(file), formatCSS(res.css.toString("utf-8")))
-  const map = await writeFile(styleName(file, "css.map"), res.map ?? "")
+  const css = await writeFile(await styleName(file, `${hash}css`), out.css)
+  const map = await writeFile(await styleName(file, `${hash}css.map`), out.map)
 
   if (!allOk(...[dir, css, map])) return new Error("Could not create styles")
-  state.styles.set(`${parsed.name}.css`, styleName(file, "css"))
+  state.styles.set(`${parsed.name}.css`, await styleName(file, `${hash}css`))
 
   return
 }
