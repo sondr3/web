@@ -38,6 +38,7 @@ export const renderPages = async (prod: boolean): Promise<void | Error> => {
 
 export const renderSpecialPages = async (): Promise<void> => {
   await writeContent(config.out, formatHtml(pages.landing()))
+  await writeFile(path.join(config.out, "404.html"), formatHtml(pages.notFound()))
   await writeContent(path.resolve(config.out, "404/"), formatHtml(pages.notFound()))
 }
 
