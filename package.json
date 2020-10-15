@@ -46,7 +46,7 @@
     "@babel/preset-typescript": "7.10.4",
     "@commitlint/cli": "11.0.0",
     "@commitlint/config-conventional": "11.0.0",
-    "@sondr3/eslint-config-react": "0.5.11",
+    "@sondr3/eslint-config-react": "0.5.12",
     "@sondr3/eslint-config-typescript": "0.10.6",
     "@sondr3/prettier": "0.2.1",
     "@sondr3/stylelint": "0.5.7",
