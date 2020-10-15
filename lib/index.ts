@@ -6,6 +6,7 @@ const run = async (): Promise<void> => {
   const mode = process.env.NODE_ENV ?? "development"
   logging.configure().registerConsoleLogger()
 
+  const logger = logging.getLogger("index")
   const prod = mode === "production"
 
   if (mode === "prod") {
@@ -16,7 +17,15 @@ const run = async (): Promise<void> => {
     await buildSite(prod)
       .then(() => void {})
       .catch((err) => console.error(err))
-    new Server().run()
+    const server = new Server()
+    server.run()
+
+    process.on("SIGINT", () => {
+      logger.log(`Shutting down...`)
+      server.broadcastShutdown()
+      // eslint-disable-next-line no-process-exit
+      process.exit()
+    })
   }
 }
 
