@@ -31,6 +31,9 @@ jobs:
       - name: Build
         run: yarn compile
 
+      - name: Build site
+        run: yarn build
+
       - uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
