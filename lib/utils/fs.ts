@@ -73,11 +73,10 @@ export const readFile = async (filepath: string): Promise<string | Error> => {
   return await asyncTryCatch(async () => fs.readFile(filepath, { encoding: "utf-8" }), logger)
 }
 
-export const cacheBustFile = (contents: string | Buffer, filename: string): string => {
+export const createFileHash = async (filepath: string): Promise<string> => {
+  const contents = await readFile(filepath)
+  if (contents instanceof Error) throw contents
   const md5 = crypto.createHash("md5")
   md5.update(contents)
-  const hash = md5.digest("hex").slice(0, 8)
-  const { name, ext } = path.parse(filename)
-
-  return `${name}.${hash}${ext}`
+  return md5.digest("hex").slice(0, 8)
 }

@@ -1,4 +1,4 @@
-import { cacheBustFile, copyFiles, createDirectory, dirWalk, readFile, writeFile } from "./fs"
+import { createFileHash, copyFiles, createDirectory, dirWalk, readFile, writeFile } from "./fs"
 import { promises as fs } from "fs"
 import path from "path"
 import * as os from "os"
@@ -43,9 +43,9 @@ describe("writeFile", () => {
 })
 
 describe("cacheBustFile", () => {
-  it("can add a hash to a file", () => {
-    const actual = cacheBustFile("hello, world", "hello.css")
-    expect(actual).toMatch("hello.e4d7f1b4.css")
+  it("can add a hash to a file", async () => {
+    const actual = await createFileHash(path.resolve(process.cwd(), ".eslintignore"))
+    expect(actual).toMatch("e94b497a")
   })
 })
 
