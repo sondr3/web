@@ -33,6 +33,10 @@ export class Server {
 
   run(): void {
     this.watch()
+    this.serve()
+  }
+
+  serve(): void {
     this.server.listen(3000)
     logger.log(`Started server on http://localhost:3000/`)
   }
