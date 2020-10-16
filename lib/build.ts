@@ -66,7 +66,8 @@ export const minifyHTML = (source: string): string => {
   return minify(source, {
     collapseBooleanAttributes: true,
     collapseWhitespace: true,
-    collapseInlineTagWhitespace: true,
+    decodeEntities: true,
+    html5: true,
     removeAttributeQuotes: true,
     removeComments: true,
     removeEmptyAttributes: true,
@@ -74,7 +75,8 @@ export const minifyHTML = (source: string): string => {
     removeOptionalTags: true,
     removeRedundantAttributes: true,
     removeScriptTypeAttributes: true,
-    removeTagWhitespace: true,
+    removeStyleLinkTypeAttributes: true,
+    trimCustomFragments: true,
     useShortDoctype: true,
   })
 }
