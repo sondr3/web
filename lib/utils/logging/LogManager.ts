@@ -10,8 +10,8 @@ interface LogOptions {
 
 export class LogManager extends EventEmitter {
   private registered = false
-  private options: LogOptions = {
-    minLevel: (process.env.NOISINESS ?? "none") as LogLevel,
+  options: LogOptions = {
+    minLevel: "none",
   }
 
   public configure(options?: LogOptions): LogManager {
@@ -20,7 +20,7 @@ export class LogManager extends EventEmitter {
   }
 
   public getLogger(module?: string): Logger {
-    return new Logger(this, this.options.minLevel, module)
+    return new Logger(this, module)
   }
 
   public onLogEntry(listener: (logEntry: LogEntry) => void): LogManager {
