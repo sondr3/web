@@ -1,4 +1,4 @@
-import { getConfig } from "./config"
+import { getConfig, setConfig } from "./config"
 import path from "path"
 
 describe("config", () => {
@@ -11,25 +11,15 @@ describe("config", () => {
     })
   })
 
-  describe("dev", () => {
-    beforeEach(() => (process.env.NODE_ENV = "development"))
+  describe("production", () => {
+    beforeEach(() => setConfig(true, "./public", "http://test.com"))
 
     it("gets the correct configuration", () => {
       const config = getConfig()
 
       expect(config.out.includes("/public")).toBeTruthy()
-      expect(config.content.pages).toBe(path.join(path.resolve(process.cwd()), "content/pages/"))
-    })
-  })
-
-  describe("prod", () => {
-    beforeEach(() => (process.env.NODE_ENV = "production"))
-
-    it("gets the correct configuration", () => {
-      const config = getConfig()
-
-      expect(config.out.includes("/public")).toBeTruthy()
-      expect(config.content.pages).toBe(path.join(path.resolve(process.cwd()), "content/pages/"))
+      expect(config.production).toBeTruthy()
+      expect(config.meta.url).toBe("http://test.com")
     })
   })
 })

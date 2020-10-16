@@ -24,12 +24,11 @@ export interface Config {
   }
 }
 
-const partialConfig = <T extends Partial<Config>>(t: T) => t
-
 const root = path.resolve(process.cwd())
 
-const sharedConfig = partialConfig({
-  production: process.env.NODE_ENV === "production",
+const defaultConfig: Config = {
+  out: "./test",
+  production: false,
   meta: {
     author: "Sondre Nilsen",
     url: "http://localhost",
@@ -49,40 +48,14 @@ const sharedConfig = partialConfig({
     style: path.join(root, "assets/scss/"),
     static: path.join(root, "assets/static/"),
   },
-})
-
-const devConfig = partialConfig({
-  out: path.resolve(root, "./public/"),
-  meta: {
-    author: "Sondre Nilsen",
-    url: "http://www.eons.io",
-    title: "EONS",
-  },
-})
-
-const testConfig = partialConfig({
-  out: path.resolve(root, "./test/"),
-  meta: {
-    author: "Sondre Nilsen",
-    url: "http://localhost",
-    title: "EONS",
-  },
-})
-
-const mergeConfig = (
-  left: Pick<Config, "production" | "content" | "meta" | "assets" | "templates">,
-  right: Pick<Config, "out" | "meta">,
-): Config => {
-  return { ...left, ...right }
 }
 
-export const getConfig = (): Config => {
-  switch (process.env.NODE_ENV) {
-    case "test":
-      return mergeConfig(sharedConfig, testConfig)
-    case "production":
-      return mergeConfig(sharedConfig, devConfig)
-    default:
-      return mergeConfig(sharedConfig, devConfig)
-  }
+export const setConfig = (prod = false, out = "./test/", url = "http://localhost"): void => {
+  config.out = out
+  config.production = prod
+  config.meta.url = url
 }
+
+export const getConfig = (): Config => config
+
+const config: Config = defaultConfig
