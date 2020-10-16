@@ -10,8 +10,8 @@
     "lint:style": "prettier --check lib",
     "lint:code": "eslint lib",
     "lint:css": "stylelint assets/scss/",
-    "start": "NODE_ENV=development NOISINESS=debug nodemon --watch lib --ext ts --delay 1 dist/index.js",
-    "build": "NODE_ENV=production NOISINESS=none node dist/index.js",
+    "start": "nodemon --watch lib --ext ts --delay 1 dist/index.js -n=debug",
+    "build": "node dist/index.js -p -n=none",
     "serve": "serve public"
   },
   "dependencies": {
