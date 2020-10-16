@@ -3,8 +3,6 @@ import path from "path"
 
 describe("config", () => {
   describe("test", () => {
-    beforeEach(() => (process.env.NODE_ENV = "test"))
-
     it("gets the correct configuration", () => {
       const config = getConfig()
 

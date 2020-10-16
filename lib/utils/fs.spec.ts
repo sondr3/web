@@ -51,7 +51,6 @@ describe("cacheBustFile", () => {
 
 describe("copyFiles", () => {
   it("copies files without recursing", async () => {
-    process.env.NODE_ENV = "test"
     const config = getConfig()
 
     await fs.rmdir(path.join(config.out, "static"), { recursive: true })

@@ -5,7 +5,6 @@ import { promises as fs } from "fs"
 
 describe("buildSite", () => {
   it("builds", async () => {
-    process.env.NODE_ENV = "test"
     const res = await buildSite(false)
     expect(res).toBeUndefined()
   })
@@ -17,7 +16,6 @@ describe("renderPages", () => {
   })
 
   it("renders all pages", async () => {
-    process.env.NODE_ENV = "test"
     const config = getConfig()
     await renderSpecialPages(false)
 

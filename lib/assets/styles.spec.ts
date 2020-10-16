@@ -17,7 +17,6 @@ describe("styleName", () => {
 
 describe("renderStyles", () => {
   it("renders and creates files", async () => {
-    process.env.NODE_ENV = "test"
     const config = getConfig()
     const spec = path.resolve(config.assets.style, "style.scss")
     const res = await renderStyles(spec, false)
