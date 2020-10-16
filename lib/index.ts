@@ -2,6 +2,7 @@ import { buildSite } from "./build"
 import { logging } from "./utils/logging"
 import { Server } from "./server"
 import { CLI } from "./utils/CLI"
+import { setConfig } from "./config"
 
 const run = async (): Promise<void> => {
   const cli = new CLI(process.argv)
@@ -13,9 +14,11 @@ const run = async (): Promise<void> => {
 
   switch (cli.command) {
     case "build":
+      setConfig(cli.production, "./public", "https://www.eons.io")
       await buildSite(cli.production)
       break
     case "develop": {
+      setConfig(cli.production, "./public", "https://localhost")
       await buildSite(cli.production)
       server.run()
       break
