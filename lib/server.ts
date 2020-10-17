@@ -10,16 +10,10 @@ import WebSocket from "ws"
 const logger = logging.getLogger("server")
 const config = getConfig()
 
-const findMimetype = (mimetypes: Record<string, string>, extension: string): string | undefined => {
-  for (const [key, val] of Object.entries(mimetypes)) {
-    if (key === extension) {
-      return val
-    }
-  }
-
-  return
-}
-
+/**
+ * A very simple HTTP server wrapping the builtin Node {@link https://nodejs.org/dist/latest/docs/api/http.html | HTTP server}
+ * with a file watcher to automatically reload the website using websockets during development.
+ */
 export class Server {
   private wss: WebSocket.Server
   private server: http.Server
@@ -31,20 +25,32 @@ export class Server {
     this.server = this.buildServer()
   }
 
+  /**
+   * Runs the server with both the file watcher and the HTTP server.
+   */
   run(): void {
     this.watch()
     this.serve()
   }
 
+  /**
+   * Serves the configured output directory on port 3000.
+   */
   serve(): void {
     this.server.listen(3000)
     logger.log(`Started server on http://localhost:3000/`)
   }
 
+  /**
+   * When Ctrl-C is invoked on the command line, broadcast to clients that server is shutting down.
+   */
   broadcastShutdown(): void {
     this.wss.clients.forEach((c) => c.send("shutdown"))
   }
 
+  /**
+   * Watch content and assets directories and rebuild required content if needed.
+   */
   private watch(): void {
     fs.watch(config.assets.style, async (type, name) => {
       if (name.endsWith("~")) return
@@ -65,10 +71,16 @@ export class Server {
     })
   }
 
+  /**
+   * Used when content changes, tells connected websocket clients to reload the webpage.
+   */
   private broadcastReload(): void {
     this.wss.clients.forEach((c) => c.send("reload"))
   }
 
+  /**
+   * Configures the Node HTTP server.
+   */
   private buildServer(): http.Server {
     return http.createServer((request, response) => {
       let filePath = `.${request.url ?? ""}`
@@ -95,7 +107,7 @@ export class Server {
         ".wasm": "application/wasm",
       }
 
-      const contentType = findMimetype(mimetypes, extension) ?? "application/octet-stream"
+      const contentType = Server.findMimetype(mimetypes, extension) ?? "application/octet-stream"
 
       fs.readFile(path.join(getConfig().out, filePath), (error, content) => {
         if (error) {
@@ -119,5 +131,18 @@ export class Server {
         }
       })
     })
+  }
+
+  /**
+   * Try to find a mimetype for a file extension to use in HTTP server.
+   *
+   * @param mimetypes - Object with known mimetypes
+   * @param extension - File extension to look up
+   * @returns If extensions is not found, undefined
+   */
+  private static findMimetype(mimetypes: Record<string, string>, extension: string): string | undefined {
+    if (!mimetypes[extension]) return
+
+    return mimetypes[extension]
   }
 }

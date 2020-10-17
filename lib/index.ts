@@ -4,6 +4,10 @@ import { Server } from "./server"
 import { CLI } from "./utils/CLI"
 import { setConfig } from "./config"
 
+/**
+ * Entrypoint for static site generator, parses command line input and run
+ * the given command.
+ */
 const run = async (): Promise<void> => {
   const cli = new CLI(process.argv)
 

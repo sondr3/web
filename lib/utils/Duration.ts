@@ -1,13 +1,22 @@
 const MS_PER_SEC = 1000000n
 
+/**
+ * A wrapper class around the builtin high resolution time in Node, used to calculate
+ * how much time has passed between creation and invoking {@link Duration.end}.
+ */
 export class Duration {
-  private _startTime = 0n
-  private _finishTime = 0n
+  private startTime = 0n
+  private finishTime = 0n
 
   constructor() {
     this.startTime = process.hrtime.bigint()
   }
 
+  /**
+   * Returns the prettified runtime of the duration.
+   *
+   * @returns - Formatted duration
+   */
   public result(): string {
     const time = Math.trunc(Number((this.finishTime - this.startTime) / MS_PER_SEC))
     return prettyPrintDuration(time)
@@ -16,24 +25,14 @@ export class Duration {
   public end(): void {
     this.finishTime = process.hrtime.bigint()
   }
-
-  private set startTime(value: bigint) {
-    this._startTime = value
-  }
-
-  private get startTime(): bigint {
-    return this._startTime
-  }
-
-  private get finishTime(): bigint {
-    return this._finishTime
-  }
-
-  private set finishTime(value: bigint) {
-    this._finishTime = value
-  }
 }
 
+/**
+ * Pretty prints a duration, turning `1635` into `1s 635ms`.
+ *
+ * @param duration - A number representing a duration
+ * @returns The pretty formatted duration
+ */
 export function prettyPrintDuration(duration: number): string {
   const output: string[] = []
 

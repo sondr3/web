@@ -3,6 +3,7 @@
  *
  * @param input - Some HTML
  * @param values - Values that are coerced to strings
+ * @returns The converted HTML
  */
 export const html = (input: TemplateStringsArray, ...values: unknown[]): string => {
   let output = ""

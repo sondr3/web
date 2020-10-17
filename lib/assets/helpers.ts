@@ -7,6 +7,9 @@ import { logging } from "../utils/logging"
 const logger = logging.getLogger("assets")
 const config = getConfig()
 
+/**
+ * Copies static assets to the output directory
+ */
 export const copyAssets = async (): Promise<void> => {
   logger.debug("Copying assets")
 

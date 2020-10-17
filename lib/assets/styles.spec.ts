@@ -4,13 +4,13 @@ import assert from "assert"
 import { getConfig } from "../config"
 
 describe("styleName", () => {
-  it("defaults to css", async () => {
-    const file = await styleName("test.blah")
+  it("defaults to css", () => {
+    const file = styleName("test.blah")
     expect(file.endsWith("/test/test.css")).toBeTruthy()
   })
 
-  it("gives correct name with extension", async () => {
-    const file = await styleName("test.html", "css")
+  it("gives correct name with extension", () => {
+    const file = styleName("test.html", "css")
     expect(file.endsWith("/test/test.css")).toBeTruthy()
   })
 })

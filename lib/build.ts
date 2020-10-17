@@ -15,6 +15,11 @@ const config = getConfig()
 
 const asciidoc = new Asciidoc()
 
+/**
+ * Build the whole site by copying assets, building styles and all pages, posts etc.
+ *
+ * @param prod - Whether to optimize output
+ */
 export const buildSite = async (prod: boolean): Promise<void> => {
   logger.log(`Building site ${config.meta.title} (${config.meta.url})`)
   const duration = new Duration()
@@ -26,6 +31,11 @@ export const buildSite = async (prod: boolean): Promise<void> => {
   logger.log(`Took ${duration.result()} to build site`)
 }
 
+/**
+ * Render all pages in the `pages` directory in {@link config}.
+ *
+ * @param prod - Whether to optimize output
+ */
 export const renderPages = async (prod: boolean): Promise<void | Error> => {
   const pages = await dirWalk(path.resolve(process.cwd(), config.content.pages), "adoc", false)
 
@@ -37,6 +47,11 @@ export const renderPages = async (prod: boolean): Promise<void | Error> => {
   }
 }
 
+/**
+ * Renders "special" pages, e.g. landing page, 404 and such.
+ *
+ * @param prod - Whether to optimize output
+ */
 export const renderSpecialPages = async (prod: boolean): Promise<void> => {
   await writeContent(config.out, prod ? minifyHTML(pages.landing()) : formatHTML(pages.landing()))
   await writeFile(path.join(config.out, "404.html"), prod ? minifyHTML(pages.notFound()) : formatHTML(pages.notFound()))
@@ -46,6 +61,13 @@ export const renderSpecialPages = async (prod: boolean): Promise<void> => {
   )
 }
 
+/**
+ * Renders a Asciidoctor file to HTML.
+ *
+ * @param filepath - Path to convert
+ * @param prod - Formats output if not in prod
+ * @returns The converted file
+ */
 export const renderAsciidoc = async (filepath: string, prod: boolean): Promise<string | Error> => {
   const content = await asciidoc.load(filepath)
   if (content instanceof Error) return content
@@ -57,11 +79,23 @@ export const renderAsciidoc = async (filepath: string, prod: boolean): Promise<s
   return rendered
 }
 
+/**
+ * Write some content to a directory. Will create a directory and add a `index.html`
+ * to it.
+ *
+ * @param directory - Directory it belongs to
+ * @param content - HTML to write
+ */
 export const writeContent = async (directory: string, content: string): Promise<void> => {
   await createDirectory(directory)
   await writeFile(path.join(directory, "index.html"), content)
 }
 
+/**
+ * Minifies HTML with {@link https://github.com/terser/html-minifier-terser}.
+ *
+ * @param source - HTML to minify
+ */
 export const minifyHTML = (source: string): string => {
   return minify(source, {
     collapseBooleanAttributes: true,

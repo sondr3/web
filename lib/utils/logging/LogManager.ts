@@ -2,32 +2,62 @@ import { EventEmitter } from "events"
 import { LogEntry, Logger } from "./Logger"
 import { Colorize as C } from "../Colors"
 
+/**
+ * Logging levels, e.g. which events are logged to the loggers output.
+ */
 export type LogLevel = "none" | "trace" | "debug" | "warn" | "error"
 
+/**
+ * Configuration options to the log manager.
+ */
 interface LogOptions {
   minLevel: LogLevel
 }
 
+/**
+ * A wrapper around the builtin {@link https://nodejs.org/dist/latest/docs/api/events.html | EventEmitter}
+ * in Node. Once configured this managers options are global and used by all loggers
+ * using this manager.
+ */
 export class LogManager extends EventEmitter {
   private registered = false
   options: LogOptions = {
     minLevel: "none",
   }
 
+  /**
+   * Configure the manager, overriding the default settings.
+   *
+   * @param options - Options to set
+   */
   public configure(options?: LogOptions): LogManager {
     this.options = Object.assign({}, this.options, options)
     return this
   }
 
+  /**
+   * Gets a new logger in a module by creating a new {@link Logger} with this
+   * as the manager.
+   *
+   * @param module - Module that the logger is instantiated in
+   */
   public getLogger(module?: string): Logger {
     return new Logger(this, module)
   }
 
+  /**
+   * Emitter used when getting a new log entry.
+   *
+   * @param listener - Entry that was pushed to the listener.
+   */
   public onLogEntry(listener: (logEntry: LogEntry) => void): LogManager {
     this.on("log", listener)
     return this
   }
 
+  /**
+   * Registers a console logger so that all logging occurs to `STDOUT` and `STDERR`.
+   */
   public registerConsoleLogger(): LogManager {
     if (this.registered) return this
 
@@ -56,6 +86,12 @@ export class LogManager extends EventEmitter {
     return this
   }
 
+  /**
+   * Utility function to format the output used in the {@link registerConsoleLogger} function.
+   *
+   * @param entry - Log entry to format
+   * @returns A pretty formatted entry
+   */
   private static formatConsoleOutput(entry: LogEntry): string {
     const module = entry.module ? `[${entry.module}]` : ``
     const message = `[${new Date().toISOString()}] ${module}`

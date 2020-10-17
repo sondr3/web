@@ -1,13 +1,13 @@
 import { readFile } from "./utils/fs"
 import Processor, { Asciidoctor } from "asciidoctor"
 import * as templates from "./templates/asciidoc"
-import AbstractNode = Asciidoctor.AbstractNode
-import AbstractBlock = Asciidoctor.AbstractBlock
-import Html5Converter = Asciidoctor.Html5Converter
-import Document = Asciidoctor.Document
 
+/**
+ * A wrapper class around {@link https://github.com/asciidoctor/asciidoctor.js} with its
+ * own HTML5 exporter.
+ */
 export class Asciidoc {
-  private baseConverter: Html5Converter
+  private baseConverter: Asciidoctor.Html5Converter
   private asciidoc: Asciidoctor
 
   constructor() {
@@ -16,13 +16,30 @@ export class Asciidoc {
     this.asciidoc.ConverterFactory.register(this, ["html5"])
   }
 
-  async load(filepath: string): Promise<Document | Error> {
+  /**
+   * Reads and converts a file to an {@link Asciidoctor.Document}.
+   *
+   * @param filepath - File to open and parse
+   * @returns Either a converted document or an error
+   */
+  async load(filepath: string): Promise<Asciidoctor.Document | Error> {
     const content = await readFile(filepath)
     if (content instanceof Error) throw content
     return this.asciidoc.load(content)
   }
 
-  protected convert<T extends AbstractNode & AbstractBlock>(node: T, transform?: string): string {
+  /**
+   * Custom converter to override the default HTML5 templates used by Asciidoctor
+   * to render HTML.
+   *
+   * @param node - AST node to render
+   * @param transform - Only defined when node is a Document
+   * @returns The converted node
+   */
+  protected convert<T extends Asciidoctor.AbstractNode & Asciidoctor.AbstractBlock>(
+    node: T,
+    transform?: string,
+  ): string {
     const nodeName = transform ?? node.getNodeName()
 
     switch (nodeName) {
