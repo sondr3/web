@@ -1,17 +1,15 @@
 import { Duration, prettyPrintDuration } from "./Duration"
 
-describe("Duration", () => {
+test("Duration", () => {
   const spy = jest.spyOn(process.hrtime, "bigint")
-  it("Returns a formatted duration", () => {
-    spy.mockReturnValue(191051479007711n)
+  spy.mockReturnValue(191051479007711n)
 
-    const duration = new Duration()
+  const duration = new Duration()
 
-    spy.mockReturnValue(191052633396993n)
-    duration.end()
+  spy.mockReturnValue(191052633396993n)
+  duration.end()
 
-    expect(duration.result()).toBe("1s 154ms")
-  })
+  expect(duration.result()).toBe("1s 154ms")
 })
 
 describe("PrettyPrintDuration", () => {

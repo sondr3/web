@@ -1,7 +1,5 @@
 import { copyAssets } from "./helpers"
 
-describe("copyAssets", () => {
-  it("works", async () => {
-    expect(await copyAssets()).toBeUndefined()
-  })
+test("copyAssets", async () => {
+  expect(await copyAssets()).toBeUndefined()
 })

@@ -1,10 +1,8 @@
 import { Asciidoc } from "./Asciidoc"
 import path from "path"
 
-describe("Asciidoc", () => {
+test("Asciidoc", async () => {
   const engine = new Asciidoc()
 
-  it("renders a file", async () => {
-    await expect(engine.load(path.resolve(process.cwd(), "content/pages/about.adoc"))).resolves.toBeDefined()
-  })
+  await expect(engine.load(path.resolve(process.cwd(), "content/pages/about.adoc"))).resolves.toBeDefined()
 })

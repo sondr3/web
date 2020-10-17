@@ -3,11 +3,9 @@ import { buildSite, minifyHTML, renderAsciidoc, renderSpecialPages } from "./bui
 import path from "path"
 import { promises as fs } from "fs"
 
-describe("buildSite", () => {
-  it("builds", async () => {
-    const res = await buildSite(false)
-    expect(res).toBeUndefined()
-  })
+test("buildSite", async () => {
+  const res = await buildSite(false)
+  expect(res).toBeUndefined()
 })
 
 describe("renderPages", () => {
@@ -33,9 +31,7 @@ describe("renderAsciidoc", () => {
   })
 })
 
-describe("minifyHTML", () => {
-  it("minifies", () => {
-    const html = "<div  class='hello'><p class=''>Hello!</p></div>"
-    expect(minifyHTML(html)).toBe("<div class=hello><p>Hello!</div>")
-  })
+test("minifyHTML", () => {
+  const html = "<div  class='hello'><p class=''>Hello!</p></div>"
+  expect(minifyHTML(html)).toBe("<div class=hello><p>Hello!</div>")
 })
