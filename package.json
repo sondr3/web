@@ -12,7 +12,8 @@
     "lint:css": "stylelint assets/scss/",
     "start": "nodemon --watch lib --ext ts --delay 1 dist/index.js -n=debug",
     "build": "node dist/index.js -p -n=none",
-    "serve": "serve public"
+    "serve": "serve public",
+    "docs": "typedoc"
   },
   "dependencies": {
     "asciidoctor": "^2.2.0",
@@ -38,6 +39,7 @@
     "eslint": "7.11.0",
     "eslint-plugin-jest": "24.1.0",
     "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-tsdoc": "^0.2.7",
     "husky": "4.3.0",
     "jest": "26.5.3",
     "lint-staged": "10.4.0",
@@ -46,6 +48,7 @@
     "stylelint": "13.7.2",
     "stylelint-config-sass-guidelines": "^7.1.0",
     "ts-jest": "26.4.1",
+    "typedoc": "^0.19.2",
     "typescript": "4.0.3"
   },
   "engines": {
