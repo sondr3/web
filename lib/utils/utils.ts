@@ -10,3 +10,13 @@ export const asyncTryCatch = async <T>(f: () => Promise<T>, logger: Logger): Pro
     throw e
   }
 }
+
+export const slugify = (url: string): string => {
+  return url
+    .trim()
+    .toLowerCase()
+    .split(" ")
+    .map((w) => w.replace(/[^a-z0-9+]+/gi, ""))
+    .join("-")
+    .replace(/--+/g, "-")
+}
