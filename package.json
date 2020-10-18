@@ -49,7 +49,7 @@
     "@sondr3/eslint-config-react": "0.5.12",
     "@sondr3/eslint-config-typescript": "0.10.6",
     "@sondr3/prettier": "0.2.1",
-    "@sondr3/stylelint": "0.5.7",
+    "@sondr3/stylelint": "0.6.0",
     "@sondr3/tsconfig": "0.4.1",
     "@types/aws-lambda": "8.10.64",
     "@types/css-modules": "1.0.0",
