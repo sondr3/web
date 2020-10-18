@@ -42,6 +42,14 @@ export class Server {
   }
 
   /**
+   * Closes the websocket and HTTP server.
+   */
+  close(): void {
+    this.server.close()
+    this.wss.close()
+  }
+
+  /**
    * When Ctrl-C is invoked on the command line, broadcast to clients that server is shutting down.
    */
   broadcastShutdown(): void {
