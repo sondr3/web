@@ -10,9 +10,9 @@
     "lint:style": "prettier --check lib",
     "lint:code": "eslint lib",
     "lint:css": "stylelint assets/scss/",
-    "start": "nodemon --watch lib --ext ts --delay 1 dist/index.js -n=debug",
-    "build": "node dist/index.js -p -n=none",
-    "serve": "serve public",
+    "start": "nodemon --watch lib --ext ts --delay 1 dist/index.js develop -n=debug",
+    "build": "node dist/index.js build -p -n=none",
+    "serve": "node dist/index.js serve",
     "docs": "typedoc"
   },
   "dependencies": {
