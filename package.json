@@ -15,8 +15,8 @@
     "release": "standard-version"
   },
   "dependencies": {
-    "@mdx-js/mdx": "1.6.18",
-    "@mdx-js/react": "1.6.18",
+    "@mdx-js/mdx": "1.6.19",
+    "@mdx-js/react": "1.6.19",
     "gatsby": "2.24.73",
     "gatsby-plugin-mdx": "1.2.46",
     "gatsby-plugin-netlify": "2.3.17",
