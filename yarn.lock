@@ -2344,10 +2344,10 @@
     eslint-plugin-import "2.22.1"
     eslint-plugin-prettier "3.1.4"
 
-"@sondr3/prettier@0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@sondr3/prettier/-/prettier-0.2.1.tgz#ff1b7844cf88860b995a6909d68d6bca8022ba8a"
-  integrity sha512-ffwqrNV/k2m8Iuho9/6BmxtuDaBf5eSx13NtqKwhTx06oS16KkSo8Vi3FBUjWkYAmUG3RBhfXLw3U5hgOk4FRw==
+"@sondr3/prettier@0.2.22":
+  version "0.2.22"
+  resolved "https://registry.yarnpkg.com/@sondr3/prettier/-/prettier-0.2.22.tgz#f7960687ec07f0663d9e7431a4331d28e906c20d"
+  integrity sha512-5VJfgxsgbkEmHhrm3tAZKmAUHGl63ccGJ8FSHccIe0/N2zhtGfb3H/reDuShkkSBe03qMFKk/juKqkq1sJ2e9A==
 
 "@sondr3/stylelint@0.6.0":
   version "0.6.0"
