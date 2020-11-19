@@ -2323,10 +2323,10 @@
     escape-string-regexp "^2.0.0"
     lodash.deburr "^4.1.0"
 
-"@sondr3/eslint-config-react@0.5.34":
-  version "0.5.34"
-  resolved "https://registry.yarnpkg.com/@sondr3/eslint-config-react/-/eslint-config-react-0.5.34.tgz#bd7e38a6b1bd6168f542adb9d5bb8dd83fc0cb7c"
-  integrity sha512-H9zjIKEBLVIFZhH5Zkl//1y6x8K6LC8agWiDz/RSFk5dOELQ3oFFoBPljHVHQQw9rPj7GiTFKzQkQ9/vqqmgmg==
+"@sondr3/eslint-config-react@0.5.35":
+  version "0.5.35"
+  resolved "https://registry.yarnpkg.com/@sondr3/eslint-config-react/-/eslint-config-react-0.5.35.tgz#e14ce8fe16f9336f854505a369020aea07122378"
+  integrity sha512-7eF0oCI/5XsDS3iCERoUuS4ri6j0Qyxm0U4auhRBTMYkqvo+++udj2fz5qHrN9NumdjpSmkr1B5f/3RLv8n6yA==
   dependencies:
     eslint-config-prettier "6.15.0"
     eslint-plugin-jsx-a11y "6.4.1"
