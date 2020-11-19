@@ -2360,10 +2360,10 @@
     stylelint-order "4.1.0"
     stylelint-prettier "1.1.2"
 
-"@sondr3/tsconfig@0.4.22":
-  version "0.4.22"
-  resolved "https://registry.yarnpkg.com/@sondr3/tsconfig/-/tsconfig-0.4.22.tgz#683774cf1935c23631dcc77b7af24f1a779b72e6"
-  integrity sha512-xykD20OBlA5DbI6Fj84HM/kxZn2pUEZgf7pWQoQyni0Ti7U+jjBFs+17Snd+tJ9ZLciqWzf2+3Zdf/uNzJOmwg==
+"@sondr3/tsconfig@0.4.23":
+  version "0.4.23"
+  resolved "https://registry.yarnpkg.com/@sondr3/tsconfig/-/tsconfig-0.4.23.tgz#0ab22d82e231dd7741cafa6b3e7a819438b3e1ee"
+  integrity sha512-D728VCrUpAabVIxkxWtyEwgPoKt5sAEofcQChQx9+fCTTCc4r45QuDj2fXo0Q3wBtSk2eFc7nMAJt+o/9LeaVw==
 
 "@styled-system/background@^5.1.2":
   version "5.1.2"
