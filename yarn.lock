@@ -2333,10 +2333,10 @@
     eslint-plugin-react "7.21.5"
     eslint-plugin-react-hooks "4.2.0"
 
-"@sondr3/eslint-config-typescript@0.10.29":
-  version "0.10.29"
-  resolved "https://registry.yarnpkg.com/@sondr3/eslint-config-typescript/-/eslint-config-typescript-0.10.29.tgz#b02123652c24c77af515945eed6573452af70689"
-  integrity sha512-f2DgrMV3esmiYf5dgujwztjfPM87SwRnzECtCkCqyo7yKflMZcs7sfCnkvjjC/SKdrQGaH026/SzE787IQMsRA==
+"@sondr3/eslint-config-typescript@0.10.30":
+  version "0.10.30"
+  resolved "https://registry.yarnpkg.com/@sondr3/eslint-config-typescript/-/eslint-config-typescript-0.10.30.tgz#4cdbc7411bd3c569c473c4eef0fcc893e50278ab"
+  integrity sha512-C16CpU3Ht5iJ86BD9KW7IDgiEg2/zI/EPgaC+gwzrcJXKU5h0ckydF+e0OUFBzUTO6PakSNgNxuSUJq3bZ/jhg==
   dependencies:
     "@typescript-eslint/eslint-plugin" "4.7.0"
     "@typescript-eslint/parser" "4.7.0"
