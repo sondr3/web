@@ -69,7 +69,7 @@
     "prettier": "2.1.2",
     "serve": "11.3.2",
     "standard-version": "9.0.0",
-    "stylelint": "13.7.2"
+    "stylelint": "13.8.0"
   },
   "prettier": "@sondr3/prettier",
   "browserslist": [
