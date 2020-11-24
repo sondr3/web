@@ -58,7 +58,7 @@
     "@types/react-dom": "16.9.10",
     "@types/react-helmet": "6.1.0",
     "@types/typography": "0.16.3",
-    "eslint": "7.13.0",
+    "eslint": "7.14.0",
     "eslint-plugin-mdx": "1.8.2",
     "gatsby-plugin-webpack-bundle-analyser-v2": "1.1.16",
     "husky": "4.3.0",
