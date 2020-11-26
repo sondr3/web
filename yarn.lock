@@ -6893,10 +6893,10 @@ gatsby-plugin-utils@^0.3.0:
   dependencies:
     joi "^17.2.1"
 
-gatsby-plugin-webpack-bundle-analyser-v2@1.1.16:
-  version "1.1.16"
-  resolved "https://registry.yarnpkg.com/gatsby-plugin-webpack-bundle-analyser-v2/-/gatsby-plugin-webpack-bundle-analyser-v2-1.1.16.tgz#1e65d2ee45534ee67dcfd2dd0872ff499d533f07"
-  integrity sha512-1SOIFJM69l3GwhustvbSC726Ac28JEmXiLujQ1XJsxKSTKM/eHMGfPYZ3blrrGKrfrz9l+mRMJi6rfyWoUxgeg==
+gatsby-plugin-webpack-bundle-analyser-v2@1.1.17:
+  version "1.1.17"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-webpack-bundle-analyser-v2/-/gatsby-plugin-webpack-bundle-analyser-v2-1.1.17.tgz#e132374e60b3fb42f27bf2f8eb209e4dff636d45"
+  integrity sha512-s5vGBNI9Jzv8Pjef2ikUMdR8MT+cOTbbeQnfECYocLfFsuc8G03jlv0K0EdToEhglPqbgabL1pQtEd6PsoKCog==
   dependencies:
     "@babel/runtime" "^7.12.5"
     webpack-bundle-analyzer "^4.1.0"
