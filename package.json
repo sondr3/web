@@ -55,7 +55,7 @@
     "eslint": "7.15.0",
     "eslint-plugin-mdx": "1.8.2",
     "gatsby-plugin-webpack-bundle-analyser-v2": "1.1.17",
-    "husky": "4.3.0",
+    "husky": "4.3.5",
     "lint-staged": "10.5.3",
     "prettier": "2.2.1",
     "serve": "11.3.2",
