@@ -6830,13 +6830,13 @@ gatsby-plugin-utils@^0.5.0:
   dependencies:
     joi "^17.2.1"
 
-gatsby-plugin-webpack-bundle-analyser-v2@1.1.17:
-  version "1.1.17"
-  resolved "https://registry.yarnpkg.com/gatsby-plugin-webpack-bundle-analyser-v2/-/gatsby-plugin-webpack-bundle-analyser-v2-1.1.17.tgz#e132374e60b3fb42f27bf2f8eb209e4dff636d45"
-  integrity sha512-s5vGBNI9Jzv8Pjef2ikUMdR8MT+cOTbbeQnfECYocLfFsuc8G03jlv0K0EdToEhglPqbgabL1pQtEd6PsoKCog==
+gatsby-plugin-webpack-bundle-analyser-v2@1.1.18:
+  version "1.1.18"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-webpack-bundle-analyser-v2/-/gatsby-plugin-webpack-bundle-analyser-v2-1.1.18.tgz#d3b9cf2f8228ca36c781489af22117834927e368"
+  integrity sha512-dtFZy4O4Fh6HV1WeeVbHkHUVgP3bsiGhSZIKfmWxZvvmfGZV+UQxh7+tpfCsZWjqkHxcm18ttcgQ3Ln+DGCbIg==
   dependencies:
     "@babel/runtime" "^7.12.5"
-    webpack-bundle-analyzer "^4.1.0"
+    webpack-bundle-analyzer "^4.2.0"
 
 gatsby-react-router-scroll@^3.3.0:
   version "3.3.0"
@@ -15027,7 +15027,7 @@ web-namespaces@^1.0.0:
   resolved "https://registry.yarnpkg.com/web-namespaces/-/web-namespaces-1.1.4.tgz#bc98a3de60dadd7faefc403d1076d529f5e030ec"
   integrity sha512-wYxSGajtmoP4WxfejAPIr4l0fVh+jeMXZb08wNc0tMg6xsfZXj3cECqIK0G7ZAqUq0PP8WlMDtaOGVBTAWztNw==
 
-webpack-bundle-analyzer@^4.1.0:
+webpack-bundle-analyzer@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/webpack-bundle-analyzer/-/webpack-bundle-analyzer-4.2.0.tgz#f19ed40e1767ab35cad78c517529596e885bf64a"
   integrity sha512-gmjpdL/AJeGAftSzA+bjIPiChUffjBelcH2+3woCUiRpQfuwrTJuWRyZuqegiwBAroMJp7gIwcJaGeol039zbQ==
