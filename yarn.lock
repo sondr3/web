@@ -1629,12 +1629,12 @@
     escape-string-regexp "^2.0.0"
     lodash.deburr "^4.1.0"
 
-"@sondr3/eslint-config-react@0.5.35":
-  version "0.5.35"
-  resolved "https://registry.yarnpkg.com/@sondr3/eslint-config-react/-/eslint-config-react-0.5.35.tgz#e14ce8fe16f9336f854505a369020aea07122378"
-  integrity sha512-7eF0oCI/5XsDS3iCERoUuS4ri6j0Qyxm0U4auhRBTMYkqvo+++udj2fz5qHrN9NumdjpSmkr1B5f/3RLv8n6yA==
+"@sondr3/eslint-config-react@0.5.51":
+  version "0.5.51"
+  resolved "https://registry.yarnpkg.com/@sondr3/eslint-config-react/-/eslint-config-react-0.5.51.tgz#9e1f9e944ad6547abb55081ce82e04f5138296eb"
+  integrity sha512-h2EBKxuYcCdO2V/9ZwXnCtVXXU1L4ckHTs8qGv4daJPtzL0+HTf1euxfK0/ATzn4spkVdh/385LF6F/iURDPMg==
   dependencies:
-    eslint-config-prettier "6.15.0"
+    eslint-config-prettier "7.0.0"
     eslint-plugin-jsx-a11y "6.4.1"
     eslint-plugin-react "7.21.5"
     eslint-plugin-react-hooks "4.2.0"
@@ -5609,6 +5609,11 @@ eslint-config-prettier@6.15.0:
   integrity sha512-a1+kOYLR8wMGustcgAjdydMsQ2A/2ipRPwRKUmfYaSxc9ZPcrku080Ctl6zrZzZNs/U82MjSv+qKREkoq3bJaw==
   dependencies:
     get-stdin "^6.0.0"
+
+eslint-config-prettier@7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-7.0.0.tgz#c1ae4106f74e6c0357f44adb076771d032ac0e97"
+  integrity sha512-8Y8lGLVPPZdaNA7JXqnvETVC7IiVRgAP6afQu9gOQRn90YY3otMNh+x7Vr2vMePQntF+5erdSUBqSzCmU/AxaQ==
 
 eslint-config-react-app@^5.2.1:
   version "5.2.1"
