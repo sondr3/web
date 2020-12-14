@@ -42,7 +42,7 @@
     "@commitlint/config-conventional": "11.0.0",
     "@sondr3/eslint-config-react": "0.5.51",
     "@sondr3/eslint-config-typescript": "0.10.46",
-    "@sondr3/prettier": "0.2.23",
+    "@sondr3/prettier": "0.2.39",
     "@sondr3/stylelint": "0.6.22",
     "@sondr3/tsconfig": "0.4.23",
     "@types/aws-lambda": "8.10.66",
