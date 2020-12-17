@@ -6,9 +6,9 @@ import { getConfig } from "../config"
 import { allOk } from "../utils/utils"
 import { siteState } from "../state"
 import { formatCSS } from "../utils/formatting"
-import postcss from "postcss"
-import cssnano from "cssnano"
 import { prettyPrintDuration } from "../utils/Duration"
+import csso from "csso"
+import { SourceMapGenerator, SourceMapConsumer } from "source-map"
 
 const state = siteState
 const logger = logging.getLogger("sass")
@@ -46,7 +46,7 @@ const writeStyles = async (file: string, res: SassResult, prod: boolean): Promis
   const parsed = path.parse(file)
 
   const hash = prod ? `${await createFileHash(file)}.` : ""
-  const out = await (prod ? optimize(res, parsed.name, hash) : formatCSS(res))
+  const out = await (prod ? optimize(res, file, hash) : formatCSS(res))
 
   const dir = await createDirectory(parsed.dir)
   const css = await writeFile(styleName(file, `${hash}css`), out.css)
@@ -67,12 +67,16 @@ const writeStyles = async (file: string, res: SassResult, prod: boolean): Promis
  * @returns The optimized CSS and its source map
  */
 const optimize = async (source: SassResult, file: string, hash: string): Promise<{ css: string; map: string }> => {
-  const res = await postcss([cssnano({ preset: "advanced" })]).process(source.css, {
-    from: `${file}.${hash}css`,
-    map: { inline: false, prev: source.map?.toString() },
+  const res = csso.minify(source.css.toString(), {
+    filename: file,
+    sourceMap: true,
   })
-  res.warnings().forEach((warn) => logger.warn(warn.toString()))
-  return { css: res.css, map: res.map.toString() }
+
+  const map = res.map as SourceMapGenerator
+  map.applySourceMap(await new SourceMapConsumer(source.map?.toString() ?? ""), file)
+  const css = res.css + `/*# sourceMappingURL=style.${hash}css.map */`
+
+  return { css, map: map.toString() }
 }
 
 /**
