@@ -1,12 +1,20 @@
 import path from "path"
 
+export interface About {
+  intro: string
+  name: string
+  socials: {
+    github: string
+  }
+}
+
 export interface Config {
   out: string
   production: boolean
   meta: {
     title: string
     url: string
-    author: string
+    author: About
   }
   content: {
     posts: string
@@ -31,7 +39,13 @@ const defaultConfig: Config = {
   out: "./test",
   production: false,
   meta: {
-    author: "Sondre Nilsen",
+    author: {
+      intro: `I make things`,
+      name: "Sondre Nilsen",
+      socials: {
+        github: "https://github.com/sondr3/",
+      },
+    },
     url: "http://localhost",
     title: "EONS",
   },
