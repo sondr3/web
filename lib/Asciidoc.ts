@@ -46,7 +46,7 @@ export class Asciidoc {
       case "paragraph":
         return templates.paragraph(node.getContent())
       case "section":
-        return templates.section(node.getId(), node.getTitle(), node.getContent())
+        return templates.section(node.getId(), node.getTitle() ?? "", node.getContent())
       case "preamble":
         return templates.preamble(node.getContent())
       default:
