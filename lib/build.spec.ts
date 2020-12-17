@@ -33,5 +33,5 @@ describe("renderAsciidoc", () => {
 
 test("minifyHTML", () => {
   const html = "<div  class='hello'><p class=''>Hello!</p></div>"
-  expect(minifyHTML(html)).toBe("<div class=hello><p>Hello!</div>")
+  expect(minifyHTML(html).toString()).toBe("<div class=hello><p>Hello!</div>")
 })

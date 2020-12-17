@@ -23,7 +23,7 @@ declare module "@minify-html/js" {
    * @param cfg - Configuration created by {@link createConfiguration}
    * @returns Minified HTML code
    */
-  export function minify(src: string, cfg: Cfg): string
+  export function minify(src: string, cfg: Cfg): Buffer
 
   /**
    * Minifies a {@link Buffer} containing UTF-8 HTML code in place.

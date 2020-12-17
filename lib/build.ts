@@ -86,7 +86,7 @@ export const renderAsciidoc = async (filepath: string, prod: boolean): Promise<s
  * @param directory - Directory it belongs to
  * @param content - HTML to write
  */
-export const writeContent = async (directory: string, content: string): Promise<void> => {
+export const writeContent = async (directory: string, content: string | Buffer): Promise<void> => {
   await createDirectory(directory)
   await writeFile(path.join(directory, "index.html"), content)
 }
@@ -96,6 +96,6 @@ export const writeContent = async (directory: string, content: string): Promise<
  *
  * @param source - HTML to minify
  */
-export const minifyHTML = (source: string): string => {
+export const minifyHTML = (source: string): Buffer => {
   return minify(source, createConfiguration({ minifyJs: false }))
 }
