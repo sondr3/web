@@ -1,4 +1,4 @@
-# [`eons.io`](https://www.eons.io/) [![Netlify Status](https://api.netlify.com/api/v1/badges/93a52e57-6728-49d3-bbde-4c9c9dfe7241/deploy-status)](https://app.netlify.com/sites/eonsio/deploys) [![codecov](https://codecov.io/gh/sondr3/web/branch/master/graph/badge.svg)](https://codecov.io/gh/sondr3/web)
+# [`eons.io`](https://www.eons.io/) [![codecov](https://codecov.io/gh/sondr3/web/branch/master/graph/badge.svg)](https://codecov.io/gh/sondr3/web)
 
 This is my website, held together by tears, glue and a healthy dose of `eh, good enough`. It's essentially a super personal static site generator with no magic.
 
