@@ -1,7 +1,0 @@
-node_modules/
-assets/
-.vscode/
-.netlify/
-.cache/
-public/
-*.js
