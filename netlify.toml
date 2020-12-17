@@ -1,0 +1,6 @@
+[build]
+command = "yarn compile && yarn build"
+publish = "public"
+
+[context.simplify.environment]
+NODE_VERSION = "14"

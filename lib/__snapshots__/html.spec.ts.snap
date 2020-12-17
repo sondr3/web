@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HTML 1`] = `
+"<html lang=\\"en\\">
+      
+    <head>
+      <title>Hello!</title>
+      <meta charset=\\"UTF-8\\" />
+      <meta content=\\"width=device-width, initial-scale=1\\" name=\\"viewport\\" />
+    </head>
+  
+      <body>
+        <div>
+      <p>Hello, world!</p>
+      <div><span>Test1 - : 1</span><span>Test2 - : 2</span><span>Test3 - : 3</span><span>Test4 - : 4</span></div>
+    </div>
+      </body>
+    </html>"
+`;

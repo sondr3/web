@@ -1,12 +1,9 @@
-.idea/
 public/
 .netlify/
 .cache/
 old/
-oldlib/
 dist/
 docs/
-test.scss
 
 # Created by https://www.gitignore.io/api/node,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=node,visualstudiocode
@@ -104,17 +101,9 @@ typings/
 # End of https://www.gitignore.io/api/node,visualstudiocode
 .env*
 
-### Created by https://www.gitignore.io
-### PureScript ###
-# Dependencies
-.psci_modules
-.spago
-bower_components
-node_modules
-generated-docs
-
-# Generated files
-.psci
-output
-.psc*
-.purs*
+# Local Netlify folder
+.netlify
+lambda/
+.idea/
+test.scss
+test/
