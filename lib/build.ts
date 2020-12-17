@@ -8,7 +8,7 @@ import { Asciidoc } from "./Asciidoc"
 import * as pages from "./templates/pages"
 import { formatHTML } from "./utils/formatting"
 import { Duration } from "./utils/Duration"
-import { minify } from "html-minifier-terser"
+import { minify, createConfiguration } from "@minify-html/js"
 
 const logger = logging.getLogger("build")
 const config = getConfig()
@@ -97,20 +97,5 @@ export const writeContent = async (directory: string, content: string): Promise<
  * @param source - HTML to minify
  */
 export const minifyHTML = (source: string): string => {
-  return minify(source, {
-    collapseBooleanAttributes: true,
-    collapseWhitespace: true,
-    decodeEntities: true,
-    html5: true,
-    removeAttributeQuotes: true,
-    removeComments: true,
-    removeEmptyAttributes: true,
-    removeEmptyElements: true,
-    removeOptionalTags: true,
-    removeRedundantAttributes: true,
-    removeScriptTypeAttributes: true,
-    removeStyleLinkTypeAttributes: true,
-    trimCustomFragments: true,
-    useShortDoctype: true,
-  })
+  return minify(source, createConfiguration({ minifyJs: false }))
 }
