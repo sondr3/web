@@ -92,7 +92,7 @@ export const writeContent = async (directory: string, content: string | Buffer):
 }
 
 /**
- * Minifies HTML with {@link https://github.com/terser/html-minifier-terser}.
+ * Minifies HTML with {@link https://github.com/wilsonzlin/minify-html}.
  *
  * @param source - HTML to minify
  */

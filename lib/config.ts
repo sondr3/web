@@ -27,7 +27,8 @@ export interface Config {
 const root = path.resolve(process.cwd())
 
 const defaultConfig: Config = {
-  out: "./public",
+  // Defaults to `./test` for... testing, shocking.
+  out: "./test",
   production: false,
   meta: {
     author: "Sondre Nilsen",
@@ -50,7 +51,7 @@ const defaultConfig: Config = {
   },
 }
 
-export const setConfig = (prod = false, out = "./public/", url = "http://localhost"): void => {
+export const setConfig = (prod = false, out = "./test/", url = "http://localhost"): void => {
   config.out = out
   config.production = prod
   config.meta.url = url
