@@ -111,6 +111,7 @@ typings/
 .spago
 bower_components
 node_modules
+generated-docs
 
 # Generated files
 .psci
