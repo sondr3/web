@@ -1,9 +1,9 @@
 = About me
-:layout: default
+:layout: page
 Sondre Nilsen
 
-Hello, I'm Sondre!
-
-== More stuff
-
-I write code and stuff, you can find it on https://github.com/sondr3[GitHub].
+Hello, I'm Sondre! I'm a master student on my first year studying algorithms at the 
+https://www.uib.no/[University of Bergen] with a passion for safe and reliable software, open
+source and programming. I'm also a firm believer in applying the KISS principle
+and the worse is better philosophy to my projects. I enjoy and use strongly
+typed languages, Linux and mechanical keyboards.
