@@ -2,7 +2,7 @@ import fs from "fs"
 import { getConfig } from "./config"
 import { renderStyles } from "./assets"
 import path from "path"
-import { renderPages } from "./build"
+import { buildSite, renderPages } from "./build"
 import * as http from "http"
 import { logging } from "./utils/logging"
 import WebSocket from "ws"
@@ -74,6 +74,15 @@ export class Server {
       if (type === "change" || type === "rename") {
         logger.log(`Rendering ${name}`)
         await renderPages(false)
+        this.broadcastReload()
+      }
+    })
+
+    fs.watch(path.join(__dirname), async (type, name) => {
+      if (name.endsWith("~")) return
+      if (type === "change" || type === "rename") {
+        logger.log(`Refreshing due to updates in ${name}`)
+        await buildSite(false)
         this.broadcastReload()
       }
     })
