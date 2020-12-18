@@ -2,7 +2,7 @@ import { createDirectory, dirWalk, writeFile, formatHTML, Duration } from "../ut
 import { getConfig } from "../config"
 import path from "path"
 import { logging } from "../logging"
-import { Layout, renderTemplate, Asciidoc } from "./"
+import { Layout, renderTemplate, Asciidoc, compress } from "./"
 import { copyAssets, renderStyles } from "../assets"
 import * as pages from "../templates/pages"
 import { minify, createConfiguration } from "@minify-html/js"
@@ -25,6 +25,7 @@ export const buildSite = async (prod: boolean): Promise<void> => {
   await renderSpecialPages(prod)
   await renderPages(prod)
   await createRootFiles()
+  await compress(prod)
   duration.end()
   logger.log(`Took ${duration.result()} to build site`)
 }

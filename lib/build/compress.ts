@@ -1,10 +1,18 @@
-import { Config } from "../config"
+import { Config, getConfig } from "../config"
 import stream from "stream/promises"
 import { createBrotliCompress, createGzip } from "zlib"
 import { readdirRecursive } from "../utils"
 import { createReadStream, createWriteStream } from "fs"
 
 const INVALID_EXT = [".map", ".txt", ".scss", ".gz", ".br", ""]
+
+export async function compress(prod: boolean): Promise<void> {
+  const config = getConfig()
+  if (prod) {
+    await gzip(config)
+    await brotli(config)
+  }
+}
 
 /**
  * Compress a directory and all its files with Gzip.
