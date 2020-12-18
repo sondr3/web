@@ -27,6 +27,7 @@ export const buildSite = async (prod: boolean): Promise<void> => {
   await renderStyles(path.join(getConfig().assets.style, "style.scss"), prod)
   await renderSpecialPages(prod)
   await renderPages(prod)
+  await createRootFiles()
   duration.end()
   logger.log(`Took ${duration.result()} to build site`)
 }
@@ -59,6 +60,14 @@ export const renderSpecialPages = async (prod: boolean): Promise<void> => {
     path.resolve(config.out, "404/"),
     prod ? minifyHTML(pages.notFound()) : formatHTML(pages.notFound()),
   )
+}
+
+/**
+ * Create assorted files that are often found in the root of webpages, e.g.
+ * `robots.txt` and so on.
+ */
+export const createRootFiles = async (): Promise<void> => {
+  await writeFile(path.join(config.out, "CNAME"), "www.eons.io")
 }
 
 /**
