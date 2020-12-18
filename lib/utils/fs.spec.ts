@@ -1,4 +1,4 @@
-import { createFileHash, copyFiles, createDirectory, dirWalk, readFile, writeFile } from "./fs"
+import { createFileHash, copyFiles, createDirectory, dirWalk, readFile, writeFile, readdirRecursive } from "./fs"
 import { promises as fs } from "fs"
 import path from "path"
 import * as os from "os"
@@ -16,6 +16,16 @@ describe("dirWalk", () => {
 
     expect(files).toContain("lib/utils/fs.ts")
     expect(files).toContain("lib/utils/fs.spec.ts")
+  })
+})
+
+describe("readdirRecursive", () => {
+  it("finds all files in directory", async () => {
+    const files = await readdirRecursive("./assets")
+
+    expect(files).toContain("assets/scss/style.scss")
+    expect(files).toContain("assets/js/livereload.js")
+    expect(files).toContain("assets/static/developer.svg")
   })
 })
 

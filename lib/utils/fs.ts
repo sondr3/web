@@ -38,6 +38,31 @@ export async function dirWalk(
 }
 
 /**
+ * A very similar function to {@link dirWalk}, the major difference being that
+ * this lists all the content of a directory and its children.
+ *
+ * @param directory - Directory to find contents of
+ * @param filepaths - Array of found files
+ * @returns An array of all found files
+ */
+export async function readdirRecursive(directory: string, filepaths: Array<string> = []): Promise<Array<string>> {
+  const files = await fs.readdir(directory)
+
+  for (const filename of files) {
+    const filepath = path.join(directory, filename)
+    const stat = await fs.stat(filepath)
+
+    if (stat.isDirectory()) {
+      await readdirRecursive(filepath, filepaths)
+    } else {
+      filepaths.push(filepath)
+    }
+  }
+
+  return filepaths
+}
+
+/**
  * Copies all files from a source directory to a destination, optionally recursively
  * copying the subdirectories as well.
  *
