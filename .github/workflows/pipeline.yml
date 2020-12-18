@@ -40,11 +40,20 @@ jobs:
       - name: Tests
         run: yarn test --coverage
 
-      - name: Build
+      - name: Compile
         run: yarn compile
+
+      - name: Build generator
+        run: yarn build
 
       - name: Build site
         run: yarn build
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
 
       - uses: codecov/codecov-action@v1
         with:

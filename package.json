@@ -4,7 +4,6 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "deploy": "yarn compile && yarn build",
     "compile": "tsc",
     "dev": "tsc --watch --incremental",
     "test": "jest",
