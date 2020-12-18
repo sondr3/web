@@ -1,7 +1,7 @@
-import { buildSite } from "./build/build"
+import { buildSite } from "./build"
 import { logging, Logger } from "./logging"
 import { Server } from "./server"
-import { CLI } from "./utils/CLI"
+import { CLI } from "./utils"
 import { setConfig } from "./config"
 
 /**

@@ -1,14 +1,11 @@
 import sass, { Result as SassResult } from "sass"
 import { logging } from "../logging"
 import path from "path"
-import { createFileHash, createDirectory, writeFile } from "../utils/fs"
 import { getConfig } from "../config"
-import { allOk } from "../utils/utils"
 import { siteState } from "../state"
-import { formatCSS } from "../utils/formatting"
-import { prettyPrintDuration } from "../utils/Duration"
 import csso from "csso"
 import { SourceMapGenerator, SourceMapConsumer } from "source-map"
+import { writeFile, prettyPrintDuration, createFileHash, formatCSS, createDirectory, allOk } from "../utils"
 
 const state = siteState
 const logger = logging.getLogger("sass")

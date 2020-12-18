@@ -1,5 +1,5 @@
 import { getConfig } from "../../config"
-import { html } from "../../build/html"
+import { html } from "../html"
 import { layout } from "../layouts"
 
 const {

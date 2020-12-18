@@ -1,4 +1,4 @@
-import { html } from "../../build/html"
+import { html } from "../"
 
 export const footer = (): string => html`
   <footer>

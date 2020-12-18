@@ -1,13 +1,10 @@
-import { createDirectory, dirWalk, writeFile } from "../utils/fs"
+import { createDirectory, dirWalk, writeFile, formatHTML, Duration } from "../utils/"
 import { getConfig } from "../config"
 import path from "path"
 import { logging } from "../logging"
-import { Layout, renderTemplate } from "./templating"
+import { Layout, renderTemplate, Asciidoc } from "./"
 import { copyAssets, renderStyles } from "../assets"
-import { Asciidoc } from "./Asciidoc"
 import * as pages from "../templates/pages"
-import { formatHTML } from "../utils/formatting"
-import { Duration } from "../utils/Duration"
 import { minify, createConfiguration } from "@minify-html/js"
 
 const logger = logging.getLogger("build")

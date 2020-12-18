@@ -1,5 +1,5 @@
 import { getConfig } from "../config"
-import { copyFiles } from "../utils/fs"
+import { copyFiles } from "../utils/"
 import path from "path"
 import { promises as fs } from "fs"
 import { logging } from "../logging"

@@ -1,4 +1,4 @@
-import { html } from "../../build/html"
+import { html } from "../"
 
 export const section = (titleId: string, title: string, content: string): string => html`
   <section>

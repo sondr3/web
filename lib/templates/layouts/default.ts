@@ -1,4 +1,4 @@
-import { html } from "../../build/html"
+import { html } from "../"
 import { head, nav, footer } from "../partials"
 
 export const layout = (title: string, content: string): string => html`

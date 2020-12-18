@@ -1,6 +1,6 @@
-import { readFile } from "../utils/fs"
+import { readFile } from "../utils/"
 import Processor, { Asciidoctor } from "asciidoctor"
-import * as templates from "../templates/asciidoc"
+import * as templates from "../templates/"
 
 /**
  * A wrapper class around {@link https://github.com/asciidoctor/asciidoctor.js} with its
