@@ -1,5 +1,5 @@
 import { promises as fs } from "fs"
-import path from "path"
+import path, { extname } from "path"
 import crypto from "crypto"
 import { logging } from "../logging"
 import { asyncTryCatch } from "./"
@@ -39,21 +39,27 @@ export async function dirWalk(
 
 /**
  * A very similar function to {@link dirWalk}, the major difference being that
- * this lists all the content of a directory and its children.
+ * this lists all files not matching the ignored extensions.
  *
  * @param directory - Directory to find contents of
+ * @param ignored_ext - File extensions to ignore, e.g. [".txt"]
  * @param filepaths - Array of found files
  * @returns An array of all found files
  */
-export async function readdirRecursive(directory: string, filepaths: Array<string> = []): Promise<Array<string>> {
+export async function readdirRecursive(
+  directory: string,
+  ignored_ext: Array<string>,
+  filepaths: Array<string> = [],
+): Promise<Array<string>> {
   const files = await fs.readdir(directory)
 
   for (const filename of files) {
+    if (ignored_ext.includes(extname(filename))) continue
     const filepath = path.join(directory, filename)
     const stat = await fs.stat(filepath)
 
     if (stat.isDirectory()) {
-      await readdirRecursive(filepath, filepaths)
+      await readdirRecursive(filepath, ignored_ext, filepaths)
     } else {
       filepaths.push(filepath)
     }

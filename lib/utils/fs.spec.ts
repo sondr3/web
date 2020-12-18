@@ -20,10 +20,18 @@ describe("dirWalk", () => {
 })
 
 describe("readdirRecursive", () => {
-  it("finds all files in directory", async () => {
-    const files = await readdirRecursive("./assets")
+  it("finds all files in directory, ignoring nothing", async () => {
+    const files = await readdirRecursive("./assets", [])
 
     expect(files).toContain("assets/scss/style.scss")
+    expect(files).toContain("assets/js/livereload.js")
+    expect(files).toContain("assets/static/developer.svg")
+  })
+
+  it("finds all files in directory, ignoring scss", async () => {
+    const files = await readdirRecursive("./assets", [".scss"])
+
+    expect(files).not.toContain("assets/scss/style.scss")
     expect(files).toContain("assets/js/livereload.js")
     expect(files).toContain("assets/static/developer.svg")
   })
