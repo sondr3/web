@@ -1,5 +1,5 @@
 import { getConfig } from "../config"
-import { logging } from "../utils/logging"
+import { logging } from "../logging"
 import * as templates from "../templates/layouts"
 
 const config = getConfig()

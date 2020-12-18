@@ -1,4 +1,4 @@
-import { LogLevel } from "./logging/LogManager"
+import { LogLevel } from "../logging"
 
 /**
  * Commands that the CLI allows.

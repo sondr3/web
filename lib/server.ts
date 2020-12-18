@@ -4,7 +4,7 @@ import { renderStyles } from "./assets"
 import path from "path"
 import { buildSite, renderPages } from "./build/build"
 import * as http from "http"
-import { logging } from "./utils/logging"
+import { logging } from "./logging"
 import WebSocket from "ws"
 
 const logger = logging.getLogger("server")

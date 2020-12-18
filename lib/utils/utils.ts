@@ -1,4 +1,4 @@
-import { Logger } from "./logging/Logger"
+import { Logger } from "../logging"
 
 /**
  * Checks if all the supplied results did not error.

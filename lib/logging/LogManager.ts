@@ -1,6 +1,6 @@
 import { EventEmitter } from "events"
 import { LogEntry, Logger } from "./Logger"
-import { Colorize as C } from "../Colors"
+import { Colorize as C } from "../utils/Colors"
 
 /**
  * Logging levels, e.g. which events are logged to the loggers output.

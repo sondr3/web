@@ -1,7 +1,7 @@
 import { promises as fs } from "fs"
 import path from "path"
 import crypto from "crypto"
-import { logging } from "./logging"
+import { logging } from "../logging"
 import { asyncTryCatch } from "./utils"
 
 const logger = logging.getLogger("fs")

@@ -1,4 +1,4 @@
-import { Colorize as C } from "../Colors"
+import { Colorize as C } from "../utils/Colors"
 import { LogLevel, LogManager } from "./LogManager"
 
 /**

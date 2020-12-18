@@ -1,7 +1,7 @@
 import { createDirectory, dirWalk, writeFile } from "../utils/fs"
 import { getConfig } from "../config"
 import path from "path"
-import { logging } from "../utils/logging"
+import { logging } from "../logging"
 import { Layout, renderTemplate } from "./templating"
 import { copyAssets, renderStyles } from "../assets"
 import { Asciidoc } from "./Asciidoc"

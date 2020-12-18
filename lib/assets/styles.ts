@@ -1,5 +1,5 @@
 import sass, { Result as SassResult } from "sass"
-import { logging } from "../utils/logging"
+import { logging } from "../logging"
 import path from "path"
 import { createFileHash, createDirectory, writeFile } from "../utils/fs"
 import { getConfig } from "../config"
