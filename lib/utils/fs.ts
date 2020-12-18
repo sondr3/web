@@ -54,13 +54,13 @@ export async function readdirRecursive(
   const files = await fs.readdir(directory)
 
   for (const filename of files) {
-    if (ignored_ext.includes(extname(filename))) continue
     const filepath = path.join(directory, filename)
     const stat = await fs.stat(filepath)
 
     if (stat.isDirectory()) {
       await readdirRecursive(filepath, ignored_ext, filepaths)
     } else {
+      if (ignored_ext.includes(extname(filename))) continue
       filepaths.push(filepath)
     }
   }
