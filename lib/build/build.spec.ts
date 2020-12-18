@@ -1,4 +1,4 @@
-import { getConfig } from "./config"
+import { getConfig } from "../config"
 import { buildSite, minifyHTML, renderAsciidoc, renderSpecialPages } from "./build"
 import path from "path"
 import { promises as fs } from "fs"

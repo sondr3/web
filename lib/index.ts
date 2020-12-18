@@ -1,4 +1,4 @@
-import { buildSite } from "./build"
+import { buildSite } from "./build/build"
 import { logging } from "./utils/logging"
 import { Server } from "./server"
 import { CLI } from "./utils/CLI"

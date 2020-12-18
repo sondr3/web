@@ -1,4 +1,4 @@
-import { html } from "../../html"
+import { html } from "../../build/html"
 import { layout } from "../layouts"
 
 const fourOhFour = html`

@@ -1,4 +1,4 @@
-import { html } from "../../html"
+import { html } from "../../build/html"
 import { layout } from "./default"
 
 const _page = (title: string, content: string) => html`

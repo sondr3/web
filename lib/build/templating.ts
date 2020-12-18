@@ -1,6 +1,6 @@
-import { getConfig } from "./config"
-import { logging } from "./utils/logging"
-import * as templates from "./templates/layouts"
+import { getConfig } from "../config"
+import { logging } from "../utils/logging"
+import * as templates from "../templates/layouts"
 
 const config = getConfig()
 const logger = logging.getLogger("template")

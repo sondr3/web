@@ -1,4 +1,4 @@
-import { html } from "../../html"
+import { html } from "../../build/html"
 import { getStyle } from "../../state"
 
 export const head = (title: string): string => html`
