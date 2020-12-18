@@ -1,4 +1,4 @@
-import { buildSite } from "./build"
+import { buildSite, clean } from "./build"
 import { logging, Logger } from "./logging"
 import { Server } from "./server"
 import { CLI } from "./utils"
@@ -73,7 +73,7 @@ const run = async (): Promise<void> => {
     case "serve":
       return serve(logger)
     case "clean":
-      break
+      return await clean()
   }
 }
 

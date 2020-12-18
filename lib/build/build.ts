@@ -6,6 +6,7 @@ import { Layout, renderTemplate, Asciidoc, compress } from "./"
 import { copyAssets, renderStyles } from "../assets"
 import * as pages from "../templates/pages"
 import { minify, createConfiguration } from "@minify-html/js"
+import { promises as fs } from "fs"
 
 const logger = logging.getLogger("build")
 const config = getConfig()
@@ -105,4 +106,11 @@ export const writeContent = async (directory: string, content: string | Buffer):
  */
 export const minifyHTML = (source: string): Buffer => {
   return minify(source, createConfiguration({ minifyJs: false }))
+}
+
+/**
+ * Clean out the build directory.
+ */
+export const clean = async (): Promise<void> => {
+  await fs.rm(config.out, { recursive: true, force: true })
 }
