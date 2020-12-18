@@ -20,15 +20,14 @@ export async function compress(prod: boolean): Promise<void> {
  * @param config - Sitewide configuration
  */
 export async function gzip(config: Config): Promise<void> {
-  const files = await readdirRecursive(config.out, INVALID_EXT)
-
-  for (const file of files) {
+  const files = (await readdirRecursive(config.out, INVALID_EXT)).map((file) => {
     const source = createReadStream(file)
     const dest = createWriteStream(`${file}.gz`)
     const gzip = createGzip({ level: 9 })
+    return stream.pipeline(source, gzip, dest)
+  })
 
-    await stream.pipeline(source, gzip, dest)
-  }
+  await Promise.allSettled(files)
 }
 
 /**
@@ -37,13 +36,13 @@ export async function gzip(config: Config): Promise<void> {
  * @param config - Sitewide configuration
  */
 export async function brotli(config: Config): Promise<void> {
-  const files = await readdirRecursive(config.out, INVALID_EXT)
-
-  for (const file of files) {
+  const files = (await readdirRecursive(config.out, INVALID_EXT)).map((file) => {
     const source = createReadStream(file)
     const dest = createWriteStream(`${file}.br`)
     const brotli = createBrotliCompress()
 
-    await stream.pipeline(source, brotli, dest)
-  }
+    return stream.pipeline(source, brotli, dest)
+  })
+
+  await Promise.allSettled(files)
 }
