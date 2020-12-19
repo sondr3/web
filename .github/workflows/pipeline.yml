@@ -49,11 +49,14 @@ jobs:
       - name: Build site
         run: yarn build
 
-      - name: Deploy
+      - name: Build documentation
+        run: yarn docs
+
+      - name: Deploy documentation
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+          publish_dir: ./docs
 
       - uses: codecov/codecov-action@v1
         with:
