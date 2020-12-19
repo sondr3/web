@@ -59,3 +59,21 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage/coverage-final.json
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: pipeline
+    if: github.ref == 'refs/heads/master'
+
+    steps:
+      - name: Deploy website
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: |
+            cd /srv/www/eons/source
+            git pull
+            ./deploy.sh
