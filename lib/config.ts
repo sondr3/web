@@ -26,6 +26,7 @@ export interface Config {
     partials: string
   }
   assets: {
+    root: string
     style: string
     js: string
     images: string
@@ -59,6 +60,7 @@ const defaultConfig: Config = {
     layouts: path.join(root, "templates/layouts/"),
   },
   assets: {
+    root: path.join(root, "assets/"),
     js: path.join(root, "assets/js/"),
     style: path.join(root, "assets/scss/"),
     images: path.join(root, "assets/images/"),

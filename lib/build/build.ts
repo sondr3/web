@@ -1,4 +1,4 @@
-import { createDirectory, dirWalk, Duration, formatHTML, writeFile } from "../utils/"
+import { copyFile, createDirectory, dirWalk, Duration, formatHTML, writeFile } from "../utils/"
 import { getConfig } from "../config"
 import path from "path"
 import { logging } from "../logging"
@@ -63,7 +63,8 @@ export const renderSpecialPages = async (prod: boolean): Promise<void> => {
  * `robots.txt` and so on.
  */
 export const createRootFiles = async (): Promise<void> => {
-  await writeFile(path.join(config.out, "CNAME"), "www.eons.io")
+  await copyFile(path.join(config.assets.root, "robots.txt"), path.join(config.out, "robots.txt"))
+  await copyFile(path.join(config.assets.root, "humans.txt"), path.join(config.out, "humans.txt"))
 }
 
 /**

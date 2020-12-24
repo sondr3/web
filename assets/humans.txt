@@ -1,0 +1,16 @@
+/* TEAM */
+Everything Man: Sondre Nilsen
+Site: eons.io
+Twitter: @sondr3
+Location: Norway
+
+/* THANKS */
+You
+
+/* SITE */
+Last Update: 20xx
+Doctype: HTML5
+Language: English
+Standards: HTML5, CSS3, ES2020
+Components: TypeScript, SASS, template literals
+Software: WebStorm
