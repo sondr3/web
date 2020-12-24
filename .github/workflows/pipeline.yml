@@ -77,6 +77,6 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           script: |
-            cd /srv/www/eons/source
+            cd /var/www/eons.io/source
             git pull
             ./deploy.sh
