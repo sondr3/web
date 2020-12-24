@@ -1,4 +1,13 @@
-import { createFileHash, copyFiles, createDirectory, dirWalk, readFile, writeFile, readdirRecursive } from "./fs"
+import {
+  createFileHash,
+  copyFiles,
+  createDirectory,
+  dirWalk,
+  readFile,
+  writeFile,
+  readdirRecursive,
+  copyFile,
+} from "./fs"
 import { promises as fs } from "fs"
 import path from "path"
 import * as os from "os"
@@ -87,6 +96,29 @@ describe("copyFiles", () => {
 
   it("cannot copy wrong files", async () => {
     await expect(copyFiles(path.resolve(process.cwd()), "/")).rejects.toThrow()
+  })
+})
+
+describe("copyFile", () => {
+  const config = getConfig()
+
+  it("copies and overwrites files by default", async () => {
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "test-copy"))
+    await copyFile(path.join(config.assets.root, "robots.txt"), path.join(dir, "robots.txt"))
+    expect((await fs.readFile(path.join(dir, "robots.txt"))).toString()).toContain("# www.robotstxt.org/")
+
+    await copyFile(path.join(config.assets.root, "humans.txt"), path.join(dir, "robots.txt"))
+    expect((await fs.readFile(path.join(dir, "robots.txt"))).toString()).toContain("/* TEAM */")
+  })
+
+  it("copies and does not overwrite", async () => {
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "test-copy2"))
+    await copyFile(path.join(config.assets.root, "robots.txt"), path.join(dir, "robots.txt"))
+
+    await expect(
+      copyFile(path.join(config.assets.root, "humans.txt"), path.join(dir, "robots.txt"), false),
+    ).rejects.toThrow()
+    expect((await fs.readFile(path.join(dir, "robots.txt"))).toString()).toContain("# www.robotstxt.org/")
   })
 })
 

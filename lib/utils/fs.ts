@@ -96,6 +96,19 @@ export const copyFiles = async (source: string, destination: string, recurse = t
 }
 
 /**
+ * A simple wrapper around {@link fs.copyFile}, mostly for error handling purposes.
+ *
+ * @param source - File to copy
+ * @param destination - Destination to copy to
+ * @param overwrite - Overwrite the destination? (true by default)
+ * @returns Error if something went wrong
+ */
+export const copyFile = async (source: string, destination: string, overwrite = true): Promise<void | Error> => {
+  const res = await asyncTryCatch(async () => fs.copyFile(source, destination, overwrite ? 0 : 1), logger)
+  if (res instanceof Error) return res
+}
+
+/**
  * Create a directory for the file whose path is supplied, recursively creating the directories
  * required.
  *
