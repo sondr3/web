@@ -13,3 +13,4 @@ docker run -itd --name web web
 echo "Copying built files"
 rm -rf ../public
 docker cp web:/usr/src/web/public ../
+docker stop web
