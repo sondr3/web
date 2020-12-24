@@ -1,5 +1,5 @@
 import { getConfig } from "../config"
-import { buildSite, minifyHTML, renderAsciidoc, renderSpecialPages } from "./build"
+import { buildSite, minifyHTML, renderAsciidoc, renderSpecialPages, writeHTML } from "./build"
 import path from "path"
 import { promises as fs } from "fs"
 
@@ -21,17 +21,25 @@ describe("renderPages", () => {
   })
 })
 
-describe("renderAsciidoc", () => {
-  it("renders", async () => {
-    await expect(renderAsciidoc(path.resolve(process.cwd(), "content/pages/about.adoc"), false)).resolves.toBeDefined()
-  })
-
-  it("returns unformatted when production", async () => {
-    await expect(renderAsciidoc(path.resolve(process.cwd(), "content/pages/about.adoc"), true)).resolves.toBeDefined()
-  })
+test("renderAsciidoc", async () => {
+  await expect(renderAsciidoc(path.resolve(process.cwd(), "content/pages/about.adoc"))).resolves.toBeDefined()
 })
 
 test("minifyHTML", () => {
   const html = "<div  class='hello'><p class=''>Hello!</p></div>"
   expect(minifyHTML(html).toString()).toBe("<div class=hello><p>Hello!</div>")
+})
+
+describe("writeHTML", () => {
+  it("formats HTML in dev mode", () => {
+    expect(writeHTML(`<div   class="hello">\n<p class=""   >Hello</p></div>`, false)).toBe(
+      `<div class="hello">\n  <p class="">Hello</p>\n</div>\n`,
+    )
+  })
+
+  it("minifies HTML in dev mode", () => {
+    expect(writeHTML(`<div   class="hello">\n<p class=""   >Hello</p></div>`, true).toString()).toBe(
+      `<div class=hello><p>Hello</div>`,
+    )
+  })
 })

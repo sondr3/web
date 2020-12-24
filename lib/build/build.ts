@@ -1,11 +1,11 @@
-import { createDirectory, dirWalk, writeFile, formatHTML, Duration } from "../utils/"
+import { createDirectory, dirWalk, Duration, formatHTML, writeFile } from "../utils/"
 import { getConfig } from "../config"
 import path from "path"
 import { logging } from "../logging"
-import { Layout, renderTemplate, Asciidoc, compress } from "./"
+import { Asciidoc, compress, Layout, renderTemplate } from "./"
 import { copyAssets, renderStyles } from "../assets"
 import * as pages from "../templates/pages"
-import { minify, createConfiguration } from "@minify-html/js"
+import { createConfiguration, minify } from "@minify-html/js"
 import { promises as fs } from "fs"
 
 const logger = logging.getLogger("build")
@@ -40,10 +40,10 @@ export const renderPages = async (prod: boolean): Promise<void | Error> => {
   const pages = await dirWalk(path.resolve(process.cwd(), config.content.pages), "adoc", false)
 
   for (const page of pages) {
-    const rendered = await renderAsciidoc(page, prod)
+    const rendered = await renderAsciidoc(page)
     if (rendered instanceof Error) return rendered
     const file = path.parse(page)
-    await writeContent(path.resolve(config.out, file.name), prod ? minifyHTML(rendered) : formatHTML(rendered))
+    await writeContent(path.resolve(config.out, file.name), writeHTML(rendered, prod))
   }
 }
 
@@ -53,12 +53,9 @@ export const renderPages = async (prod: boolean): Promise<void | Error> => {
  * @param prod - Whether to optimize output
  */
 export const renderSpecialPages = async (prod: boolean): Promise<void> => {
-  await writeContent(config.out, prod ? minifyHTML(pages.landing()) : formatHTML(pages.landing()))
-  await writeFile(path.join(config.out, "404.html"), prod ? minifyHTML(pages.notFound()) : formatHTML(pages.notFound()))
-  await writeContent(
-    path.resolve(config.out, "404/"),
-    prod ? minifyHTML(pages.notFound()) : formatHTML(pages.notFound()),
-  )
+  await writeContent(config.out, writeHTML(pages.landing(), prod))
+  await writeFile(path.join(config.out, "404.html"), writeHTML(pages.notFound(), prod))
+  await writeContent(path.resolve(config.out, "404/"), writeHTML(pages.notFound(), prod))
 }
 
 /**
@@ -73,18 +70,14 @@ export const createRootFiles = async (): Promise<void> => {
  * Renders a Asciidoctor file to HTML.
  *
  * @param filepath - Path to convert
- * @param prod - Formats output if not in prod
  * @returns The converted file
  */
-export const renderAsciidoc = async (filepath: string, prod: boolean): Promise<string | Error> => {
+export const renderAsciidoc = async (filepath: string): Promise<string | Error> => {
   const content = await asciidoc.load(filepath)
   if (content instanceof Error) return content
 
   const layout = content.getAttribute("layout", "default") as Layout
-  const rendered = renderTemplate(layout, { title: content.getTitle(), content: content.getContent() })
-  if (!prod) return formatHTML(rendered)
-
-  return rendered
+  return renderTemplate(layout, { title: content.getTitle(), content: content.getContent() })
 }
 
 /**
@@ -113,4 +106,8 @@ export const minifyHTML = (source: string): Buffer => {
  */
 export const clean = async (): Promise<void> => {
   await fs.rm(config.out, { recursive: true, force: true })
+}
+
+export const writeHTML = (source: string, prod: boolean): Buffer | string => {
+  return prod ? minifyHTML(source) : formatHTML(source)
 }
