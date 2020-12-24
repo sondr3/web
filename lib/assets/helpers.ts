@@ -14,8 +14,8 @@ export const copyAssets = async (): Promise<void> => {
   logger.debug("Copying assets")
 
   // Copying static assets
-  await fs.rmdir(path.join(config.out, "static"), { recursive: true })
-  await copyFiles(config.assets.static, path.join(config.out, "static"))
+  await fs.rmdir(path.join(config.out, "images"), { recursive: true })
+  await copyFiles(config.assets.images, path.join(config.out, "images"))
 
   // Copying SCSS files to sourcemaps work
   await fs.rmdir(path.join(config.out, "assets/scss"), { recursive: true })

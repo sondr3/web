@@ -25,7 +25,7 @@ describe("readdirRecursive", () => {
 
     expect(files).toContain("assets/scss/style.scss")
     expect(files).toContain("assets/js/livereload.js")
-    expect(files).toContain("assets/static/developer.svg")
+    expect(files).toContain("assets/images/developer.svg")
   })
 
   it("finds all files in directory, ignoring scss", async () => {
@@ -33,7 +33,7 @@ describe("readdirRecursive", () => {
 
     expect(files).not.toContain("assets/scss/style.scss")
     expect(files).toContain("assets/js/livereload.js")
-    expect(files).toContain("assets/static/developer.svg")
+    expect(files).toContain("assets/images/developer.svg")
   })
 })
 
@@ -71,8 +71,8 @@ describe("copyFiles", () => {
   it("copies files without recursing", async () => {
     const config = getConfig()
 
-    await fs.rmdir(path.join(config.out, "static"), { recursive: true })
-    const res = await copyFiles(config.assets.static, path.join(config.out, "static"), false)
+    await fs.rmdir(path.join(config.out, "images"), { recursive: true })
+    const res = await copyFiles(config.assets.images, path.join(config.out, "images"), false)
     expect(res).toBeUndefined()
   })
 

@@ -28,7 +28,7 @@ export interface Config {
   assets: {
     style: string
     js: string
-    static: string
+    images: string
   }
 }
 
@@ -61,7 +61,7 @@ const defaultConfig: Config = {
   assets: {
     js: path.join(root, "assets/js/"),
     style: path.join(root, "assets/scss/"),
-    static: path.join(root, "assets/static/"),
+    images: path.join(root, "assets/images/"),
   },
 }
 

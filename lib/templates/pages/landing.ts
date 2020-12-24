@@ -14,7 +14,7 @@ const landingPage = html`
         <h2>I&apos;m Sondre.</h2>
       </div>
       <div>
-        <img class="portrait" src="/static/developer.svg" alt="${author.intro}" />
+        <img class="portrait" src="/images/developer.svg" alt="${author.intro}" />
       </div>
     </div>
     <section>
