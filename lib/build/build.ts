@@ -108,6 +108,14 @@ export const clean = async (): Promise<void> => {
   await fs.rm(config.out, { recursive: true, force: true })
 }
 
+/**
+ * Either prettifies the HTML or minifies it, it's essentially a small utility
+ * function around {@link minifyHTML} and {@link formatHTML}.
+ *
+ * @param source - HTML to format/minify
+ * @param prod - Whether we are in production mode
+ * @returns The modified HTML
+ */
 export const writeHTML = (source: string, prod: boolean): Buffer | string => {
   return prod ? minifyHTML(source) : formatHTML(source)
 }
