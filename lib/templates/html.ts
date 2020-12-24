@@ -6,20 +6,19 @@
  * @returns The converted HTML
  */
 export const html = (input: TemplateStringsArray, ...values: unknown[]): string => {
-  let output = ""
-  input.forEach((string, i) => {
-    const value = values[i]
+  return input
+    .map((string, i) => {
+      const value = values[i]
 
-    if (Array.isArray(value)) {
-      output += string.toString() + value.join("")
-    } else if (typeof value === "string") {
-      output += string.toString() + value
-    } else if (typeof value === "number") {
-      output += string.toString() + value.toString()
-    } else {
-      output += string
-    }
-  })
-
-  return output
+      if (Array.isArray(value)) {
+        return string.toString() + value.join("")
+      } else if (typeof value === "string") {
+        return string.toString() + value
+      } else if (typeof value === "number") {
+        return string.toString() + value.toString()
+      } else {
+        return string
+      }
+    })
+    .join("")
 }
