@@ -111,6 +111,7 @@ export class Server {
         ".js": "text/javascript",
         ".css": "text/css",
         ".json": "application/json",
+        ".ico": "image/x-icon",
         ".png": "image/png",
         ".jpg": "image/jpg",
         ".gif": "image/gif",
