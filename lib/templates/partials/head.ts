@@ -11,6 +11,11 @@ export const head = (title: string): string => html`
 
     <link rel="author" href="humans.txt" />
 
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
     <link rel="stylesheet" href="${getStyle("style.css")}" />
   </head>
 `
