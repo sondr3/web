@@ -572,10 +572,10 @@
   resolved "https://registry.yarnpkg.com/@sondr3/prettier/-/prettier-0.2.49.tgz#75b1ebdebbc6951d25c2e44cf323e4e44350b8bb"
   integrity sha512-8T0BAlL5zjDa5jkq3LiViYICbXiPEgPiWPG/fybfmD7SHC3d+iIyfv7PXO5LEvBSRlnuH3x39gBoyA6Juy0INw==
 
-"@sondr3/stylelint@0.6.44":
-  version "0.6.44"
-  resolved "https://registry.yarnpkg.com/@sondr3/stylelint/-/stylelint-0.6.44.tgz#d29cc43a34b5929070a1e40cc0bd9db4e6d4d582"
-  integrity sha512-WYXaaUTj/4wQVthGtxbumq9mL0Kng4mZI7vdmGJ/Q6VGvddL7Wwn8/9UAS3pldT8i5BGg8C3PPUIErQjRg3zxg==
+"@sondr3/stylelint@0.6.48":
+  version "0.6.48"
+  resolved "https://registry.yarnpkg.com/@sondr3/stylelint/-/stylelint-0.6.48.tgz#5348d2890d6668cad6642938c0d9a810d6389272"
+  integrity sha512-q/MwOB4ZjW4++wj22fXCLZHMGSWYjWSz1albTwVusEZtzu2Dm/UIywdz6SXxZyvLcO4gjOAF8aPVhAnfQXczKw==
   dependencies:
     stylelint-a11y "1.2.3"
     stylelint-config-prettier "8.0.2"

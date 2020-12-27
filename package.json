@@ -26,7 +26,7 @@
   "devDependencies": {
     "@sondr3/eslint-config-typescript": "0.10.56",
     "@sondr3/prettier": "0.2.49",
-    "@sondr3/stylelint": "0.6.44",
+    "@sondr3/stylelint": "0.6.48",
     "@sondr3/tsconfig": "0.4.45",
     "@types/csso": "3.5.1",
     "@types/jest": "26.0.19",
