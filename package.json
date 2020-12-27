@@ -24,7 +24,7 @@
     "ws": "7.4.1"
   },
   "devDependencies": {
-    "@sondr3/eslint-config-typescript": "0.10.52",
+    "@sondr3/eslint-config-typescript": "0.10.56",
     "@sondr3/prettier": "0.2.45",
     "@sondr3/stylelint": "0.6.44",
     "@sondr3/tsconfig": "0.4.45",
