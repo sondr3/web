@@ -63,14 +63,18 @@ export const renderSpecialPages = async (prod: boolean): Promise<void> => {
  * `robots.txt` and so on.
  */
 export const createRootFiles = async (): Promise<void> => {
-  await copyFile(path.join(config.assets.root, "robots.txt"), path.join(config.out, "robots.txt"))
-  await copyFile(path.join(config.assets.root, "humans.txt"), path.join(config.out, "humans.txt"))
-  await copyFile(path.join(config.assets.root, "apple-touch-icon.png"), path.join(config.out, "apple-touch-icon.png"))
-  await copyFile(path.join(config.assets.root, "favicon.ico"), path.join(config.out, "favicon.ico"))
-  await copyFile(path.join(config.assets.root, "icon.svg"), path.join(config.out, "icon.svg"))
-  await copyFile(path.join(config.assets.root, "icon-192.png"), path.join(config.out, "icon-192.png"))
-  await copyFile(path.join(config.assets.root, "icon-512.png"), path.join(config.out, "icon-512.png"))
-  await copyFile(path.join(config.assets.root, "manifest.webmanifest"), path.join(config.out, "manifest.webmanifest"))
+  const files = [
+    "robots.txt",
+    "humans.txt",
+    "apple-touch-icon.png",
+    "favicon.ico",
+    "icon.svg",
+    "icon-192.png",
+    "icon-512.png",
+    "manifest.webmanifest",
+  ].map((file) => copyFile(path.join(config.assets.root, file), path.join(config.out, file)))
+
+  await Promise.allSettled(files)
 }
 
 /**
