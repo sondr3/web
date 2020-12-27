@@ -72,8 +72,10 @@ const run = async (): Promise<void> => {
       return await develop(cli, logger)
     case "serve":
       return serve(logger)
-    case "clean":
+    case "clean": {
+      setConfig(false, "./public")
       return await clean()
+    }
   }
 }
 
