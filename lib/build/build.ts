@@ -6,6 +6,7 @@ import { compress } from "./"
 import { copyAssets, renderStyles } from "../assets"
 import { promises as fs } from "fs"
 import { renderPages, renderSpecialPages } from "../content"
+import { sitemap } from "../content/sitemap"
 
 const logger = logging.getLogger("build")
 const config = getConfig()
@@ -23,6 +24,7 @@ export const buildSite = async (prod: boolean): Promise<void> => {
   await renderSpecialPages(prod)
   await renderPages(prod)
   await createRootFiles()
+  await sitemap()
   await compress(prod)
   duration.end()
   logger.log(`Took ${duration.result()} to build site`)
