@@ -556,10 +556,10 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@sondr3/eslint-config-typescript@0.10.56":
-  version "0.10.56"
-  resolved "https://registry.yarnpkg.com/@sondr3/eslint-config-typescript/-/eslint-config-typescript-0.10.56.tgz#a2162d7d4de33329fb684dd66c183870556196b6"
-  integrity sha512-Jj12X2pvryAJDoLSNYibdhgQMSAVxL7jfM7hzIscemyXXIU6Aj+RLPbnBPkyjfbcBTSjvyDz251RGxySzH/b4w==
+"@sondr3/eslint-config-typescript@0.11.0":
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/@sondr3/eslint-config-typescript/-/eslint-config-typescript-0.11.0.tgz#7064cba46384c7d000aa4df70bf1e9827e1e9f83"
+  integrity sha512-3+rOFiqspLq9cCFoBTExSIClw7WeBCtlafLSDyS5UGE4tSRzAUXUxziq4UqcbEH58Q1x3wK1HENR97YlkCERGA==
   dependencies:
     "@typescript-eslint/eslint-plugin" "4.11.0"
     "@typescript-eslint/parser" "4.11.0"
@@ -567,15 +567,15 @@
     eslint-plugin-import "2.22.1"
     eslint-plugin-prettier "3.3.0"
 
-"@sondr3/prettier@0.2.49":
-  version "0.2.49"
-  resolved "https://registry.yarnpkg.com/@sondr3/prettier/-/prettier-0.2.49.tgz#75b1ebdebbc6951d25c2e44cf323e4e44350b8bb"
-  integrity sha512-8T0BAlL5zjDa5jkq3LiViYICbXiPEgPiWPG/fybfmD7SHC3d+iIyfv7PXO5LEvBSRlnuH3x39gBoyA6Juy0INw==
+"@sondr3/prettier@0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@sondr3/prettier/-/prettier-0.3.0.tgz#8a42f0585de9da21e11ffb073ac35c493c4bdd3d"
+  integrity sha512-A0XCyyfXQe7WRggg+Pn0OkbIZK+l5MOHzGWRQduCbtgiJshGzcw8qcs7Fza8aNNGvsmzCn1T2bBx2sy8+FnnWg==
 
-"@sondr3/stylelint@0.6.48":
-  version "0.6.48"
-  resolved "https://registry.yarnpkg.com/@sondr3/stylelint/-/stylelint-0.6.48.tgz#5348d2890d6668cad6642938c0d9a810d6389272"
-  integrity sha512-q/MwOB4ZjW4++wj22fXCLZHMGSWYjWSz1albTwVusEZtzu2Dm/UIywdz6SXxZyvLcO4gjOAF8aPVhAnfQXczKw==
+"@sondr3/stylelint@0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@sondr3/stylelint/-/stylelint-0.7.0.tgz#ff3fac51abd19605fe49a1c7fa641458fc5a8e59"
+  integrity sha512-el6oNZbl4//hK90ByDvv7WGcli+96pLWL8e1dbeoLCfX+qnTSiv5Hj2dZ5puKx50iEK0dyogvqfYoNvnU6MbGw==
   dependencies:
     stylelint-a11y "1.2.3"
     stylelint-config-prettier "8.0.2"
@@ -583,10 +583,10 @@
     stylelint-order "4.1.0"
     stylelint-prettier "1.1.2"
 
-"@sondr3/tsconfig@0.4.45":
-  version "0.4.45"
-  resolved "https://registry.yarnpkg.com/@sondr3/tsconfig/-/tsconfig-0.4.45.tgz#062e4104fd318bbc021a4063bc0ecc46818d327e"
-  integrity sha512-XkivUUURHrHFJDNo3uFM/ZKRs4MNPK2w7zSwmz54ZwXALSr2PRIu3D3p/m6vMqX5P4JsR6a4sSvkGVUusaA3fg==
+"@sondr3/tsconfig@0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@sondr3/tsconfig/-/tsconfig-0.5.0.tgz#118d70d5c143caeead5729a4691849efb33b3ab2"
+  integrity sha512-bqhyDEXqIpdHAexr2Ahxk4nhWrmG48BVklvXKP9RfoE6DOq50wBj1vXkGNSDoR2Qq8p0CjJm0ZecnXJuD+PHnA==
 
 "@stylelint/postcss-css-in-js@^0.37.2":
   version "0.37.2"
