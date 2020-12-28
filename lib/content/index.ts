@@ -17,7 +17,7 @@ export interface Metadata {
   description: string
   path: string
   createdAt?: Date
-  modifiedAt: Date
+  modifiedAt?: Date
 }
 
 export const addPage = (data: Metadata): void => {

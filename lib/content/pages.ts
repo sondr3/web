@@ -1,8 +1,9 @@
-import { dirWalk, writeFile } from "../utils"
+import { dirWalk } from "../utils"
 import path from "path"
 import * as pages from "../templates/pages"
 import { getConfig } from "../config"
 import { addPage, convertAsciidoc, renderAsciidoc, writeContent, writeHTML } from "./"
+import { convertDate } from "./helpers"
 
 const config = getConfig()
 
@@ -22,10 +23,10 @@ export const renderPages = async (prod: boolean): Promise<void | Error> => {
 
     addPage({
       title: doc.getTitle(),
-      path: path.parse(page).name,
+      path: <string>doc.getAttribute("path", `/${path.parse(page).name}/`),
       description: doc.getCaptionedTitle(),
-      createdAt: <Date>doc.getAttribute("created_at", undefined),
-      modifiedAt: <Date>doc.getAttribute("modified_at", undefined),
+      createdAt: convertDate(doc.getAttribute("created_at", undefined)),
+      modifiedAt: convertDate(doc.getAttribute("modified_at", undefined)),
     })
 
     const file = path.parse(page)
@@ -40,6 +41,18 @@ export const renderPages = async (prod: boolean): Promise<void | Error> => {
  */
 export const renderSpecialPages = async (prod: boolean): Promise<void> => {
   await writeContent(config.out, writeHTML(pages.landing(), prod))
-  await writeFile(path.join(config.out, "404.html"), writeHTML(pages.notFound(), prod))
+  addPage({
+    title: "Eons",
+    path: "/",
+    description: "Webpage for Sondre Nilsen",
+    createdAt: new Date("2020-12-18"),
+  })
+
   await writeContent(path.resolve(config.out, "404/"), writeHTML(pages.notFound(), prod))
+  addPage({
+    title: "404",
+    path: "/404/",
+    description: "Page not found",
+    createdAt: new Date("2020-12-18"),
+  })
 }
