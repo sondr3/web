@@ -1,5 +1,6 @@
 import { getConfig } from "../config"
-import { buildSite, minifyHTML, renderAsciidoc, renderSpecialPages, writeHTML } from "./build"
+import { buildSite } from "./build"
+import { convertAsciidoc, minifyHTML, renderAsciidoc, renderSpecialPages, writeHTML } from "../content"
 import path from "path"
 import { promises as fs } from "fs"
 
@@ -21,8 +22,14 @@ describe("renderPages", () => {
   })
 })
 
+test("convertAsciidoc", async () => {
+  await expect(convertAsciidoc(path.resolve(process.cwd(), "content/pages/about.adoc"))).resolves.toBeDefined()
+})
+
 test("renderAsciidoc", async () => {
-  await expect(renderAsciidoc(path.resolve(process.cwd(), "content/pages/about.adoc"))).resolves.toBeDefined()
+  const doc = await convertAsciidoc(path.resolve(process.cwd(), "content/pages/about.adoc"))
+  if (doc instanceof Error) throw doc
+  await expect(renderAsciidoc(doc)).resolves.toBeDefined()
 })
 
 test("minifyHTML", () => {
@@ -39,7 +46,7 @@ describe("writeHTML", () => {
 
   it("minifies HTML in dev mode", () => {
     expect(writeHTML(`<div   class="hello">\n<p class=""   >Hello</p></div>`, true).toString()).toBe(
-      `<div class=hello><p>Hello</div>`,
+      `<div class="hello"><p>Hello</div>`,
     )
   })
 })

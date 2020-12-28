@@ -2,10 +2,11 @@ import fs from "fs"
 import { getConfig } from "./config"
 import { renderStyles } from "./assets"
 import path from "path"
-import { buildSite, renderPages } from "./build"
+import { buildSite } from "./build"
 import * as http from "http"
 import { logging } from "./logging"
 import WebSocket from "ws"
+import { renderPages } from "./content"
 
 const logger = logging.getLogger("server")
 const config = getConfig()

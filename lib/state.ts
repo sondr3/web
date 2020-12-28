@@ -1,16 +1,17 @@
 import path from "path"
+import { Metadata } from "./content"
 
 /**
  * Site state during building, used to look up styles, content etc.
  */
 interface State {
   styles: Map<string, string>
-  pages: Map<string, string>
+  pages: Map<string, Metadata>
 }
 
 const initialState: State = {
   styles: new Map<string, string>(),
-  pages: new Map<string, string>(),
+  pages: new Map<string, Metadata>(),
 }
 
 export const siteState = initialState
