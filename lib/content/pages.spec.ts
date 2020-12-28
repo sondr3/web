@@ -2,7 +2,7 @@ import { promises as fs } from "fs"
 import { getConfig } from "../config"
 import { renderSpecialPages } from "./pages"
 import path from "path"
-import { convertAsciidoc, minifyHTML, renderAsciidoc, writeHTML } from "./index"
+import { convertAsciidoc, minifyHTML, writeHTML } from "./index"
 
 describe("renderPages", () => {
   afterAll(async () => {
@@ -19,13 +19,6 @@ describe("renderPages", () => {
 
 test("convertAsciidoc", async () => {
   await expect(convertAsciidoc(path.resolve(process.cwd(), "content/pages/about.adoc"))).resolves.toBeDefined()
-})
-
-test("renderAsciidoc", async () => {
-  console.error(path.resolve(process.cwd(), "content/pages/about.adoc"))
-  const doc = await convertAsciidoc(path.resolve(process.cwd(), "content/pages/about.adoc"))
-  if (doc instanceof Error) throw doc
-  await expect(renderAsciidoc(doc)).resolves.toBeDefined()
 })
 
 test("minifyHTML", () => {
