@@ -15,10 +15,9 @@ const state = siteState
  * @param page - Page to get last modified at
  * @returns The formatted date or null
  */
-const modifiedAt = (page: Metadata): string | null => {
+const modifiedAt = (page: Metadata): string => {
   if (page.modifiedAt) return page.modifiedAt.toISOString().split("T")[0]
-  else if (page.createdAt) return page.createdAt?.toISOString().split("T")[0]
-  else return null
+  return page.createdAt?.toISOString().split("T")[0] ?? new Date().toISOString().split("T")[0]
 }
 
 /**
@@ -32,7 +31,7 @@ const renderPage = (page: Metadata): string => {
   return html`
     <url>
       <loc>${config.meta.url}${page.path}</loc>
-      ${lastmod && `<lastmod>${lastmod}</lastmod>`}
+      <lastmod>${lastmod}</lastmod>
       <changefreq>monthly</changefreq>
       <priority>0.7</priority>
     </url>
