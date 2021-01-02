@@ -2,7 +2,7 @@ import { promises as fs } from "fs"
 import path, { extname } from "path"
 import crypto from "crypto"
 import { logging } from "../logging"
-import { asyncTryCatch } from "./"
+import { asyncTryCatch, throwELog } from "./"
 import { EitherAsync } from "purify-ts/EitherAsync"
 import { CustomError } from "ts-custom-error"
 
@@ -97,10 +97,8 @@ export const copyFiles = (source: string, destination: string, recurse = true): 
         if (entry.isDirectory() && recurse) await copyFiles(src, dest, recurse)
         else await fs.copyFile(src, dest, 1)
       }
-    } catch (e) {
-      const err = <Error>e
-      logger.error(err.message)
-      throwE(new FSError(err.message))
+    } catch ({ message }) {
+      return throwELog(new FSError(message), throwE, logger)
     }
   })
 
