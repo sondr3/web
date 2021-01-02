@@ -122,9 +122,8 @@ describe("copyFile", () => {
     const dir = await fs.mkdtemp(path.join(os.tmpdir(), "test-copy2"))
     await copyFile(path.join(config.assets.root, "robots.txt"), path.join(dir, "robots.txt"))
 
-    await expect(
-      copyFile(path.join(config.assets.root, "humans.txt"), path.join(dir, "robots.txt"), false),
-    ).rejects.toThrow()
+    const res = await copyFile(path.join(config.assets.root, "humans.txt"), path.join(dir, "robots.txt"), false).run()
+    expect(res.isLeft()).toBeTruthy()
     expect((await fs.readFile(path.join(dir, "robots.txt"))).toString()).toContain("# www.robotstxt.org/")
   })
 })
