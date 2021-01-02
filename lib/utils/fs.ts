@@ -3,8 +3,16 @@ import path, { extname } from "path"
 import crypto from "crypto"
 import { logging } from "../logging"
 import { asyncTryCatch } from "./"
+import { EitherAsync } from "purify-ts/EitherAsync"
+import { CustomError } from "ts-custom-error"
 
 const logger = logging.getLogger("fs")
+
+export class FSError extends CustomError {
+  public constructor(message: string) {
+    super(message)
+  }
+}
 
 /**
  * Recursively walk directories finding all files matching the extension.
@@ -59,8 +67,7 @@ export async function readdirRecursive(
 
     if (stat.isDirectory()) {
       await readdirRecursive(filepath, ignored_ext, filepaths)
-    } else {
-      if (ignored_ext.includes(extname(filename))) continue
+    } else if (!ignored_ext.includes(extname(filename))) {
       filepaths.push(filepath)
     }
   }
@@ -77,23 +84,25 @@ export async function readdirRecursive(
  * @param recurse - Whether to recursively copy
  * @returns Error if something went wrong
  */
-export const copyFiles = async (source: string, destination: string, recurse = true): Promise<void | Error> => {
-  const entries = await fs.readdir(source, { withFileTypes: true })
-  const dir = await createDirectory(destination)
-  if (dir) return dir
+export const copyFiles = (source: string, destination: string, recurse = true): EitherAsync<FSError, void> =>
+  EitherAsync(async ({ throwE }) => {
+    try {
+      const entries = await fs.readdir(source, { withFileTypes: true })
+      await createDirectory(destination)
 
-  for (const entry of entries) {
-    const src = path.join(source, entry.name)
-    const dest = path.join(destination, entry.name)
+      for (const entry of entries) {
+        const src = path.join(source, entry.name)
+        const dest = path.join(destination, entry.name)
 
-    if (entry.isDirectory() && recurse) {
-      await copyFiles(src, dest, recurse)
-    } else {
-      const res = await asyncTryCatch(async () => fs.copyFile(src, dest, 1), logger)
-      if (res instanceof Error) return res
+        if (entry.isDirectory() && recurse) await copyFiles(src, dest, recurse)
+        else await fs.copyFile(src, dest, 1)
+      }
+    } catch (e) {
+      const err = <Error>e
+      logger.error(err.message)
+      throwE(new FSError(err.message))
     }
-  }
-}
+  })
 
 /**
  * A simple wrapper around {@link fs.copyFile}, mostly for error handling purposes.

@@ -7,11 +7,13 @@ import {
   writeFile,
   readdirRecursive,
   copyFile,
+  FSError,
 } from "./fs"
 import { promises as fs } from "fs"
 import path from "path"
 import * as os from "os"
 import { getConfig } from "../config"
+import { Left, Right } from "purify-ts"
 
 describe("dirWalk", () => {
   it("JSON files without recursing", async () => {
@@ -81,21 +83,26 @@ describe("copyFiles", () => {
     const config = getConfig()
 
     await fs.rmdir(path.join(config.out, "images"), { recursive: true })
-    const res = await copyFiles(config.assets.images, path.join(config.out, "images"), false)
-    expect(res).toBeUndefined()
+    expect(await copyFiles(config.assets.images, path.join(config.out, "images"), false)).toEqual(Right(void {}))
   })
 
   it("copies files recursively", async () => {
     const dir = await fs.mkdtemp(path.join(os.tmpdir(), "test-"))
-    await expect(copyFiles(path.resolve(process.cwd(), "lib"), dir, true)).resolves.toBeUndefined()
+    expect(await copyFiles(path.resolve(process.cwd(), "lib"), dir, true).run()).toEqual(Right(void {}))
   })
 
   it("crashes on illegal directory", async () => {
-    await expect(copyFiles("/asdasd", "./")).rejects.toThrow()
+    expect(await copyFiles("/asdasd", "./").run()).toEqual(
+      Left(new FSError("ENOENT: no such file or directory, scandir '/asdasd'")),
+    )
   })
 
   it("cannot copy wrong files", async () => {
-    await expect(copyFiles(path.resolve(process.cwd()), "/")).rejects.toThrow()
+    expect(await copyFiles(path.resolve(process.cwd()), "/").run()).toEqual(
+      Left(
+        new FSError("EACCES: permission denied, copyfile '/home/sondre/Code/web/.dockerignore' -> '/.dockerignore'"),
+      ),
+    )
   })
 })
 
