@@ -41,3 +41,16 @@ export const slugify = (title: string): string => {
     .join("-")
     .replace(/--+/g, "-")
 }
+
+/**
+ * Utility wrapper around {@link https://gigobyte.github.io/purify/adts/EitherAsync#throwE | throwE} that
+ * logs and throws an error.
+ *
+ * @param e - Error type
+ * @param throwE - Thrower
+ * @param logger - Logging framework
+ */
+export const throwELog = <E extends Error>(e: E, throwE: (e: E) => Promise<void>, logger: Logger): Promise<void> => {
+  logger.error(e.message)
+  return throwE(e)
+}
