@@ -50,11 +50,11 @@ describe("readdirRecursive", () => {
 
 describe("createDirectory", () => {
   it("can create a test directory", async () => {
-    await expect(createDirectory("/tmp/testing")).resolves.toBeUndefined()
+    expect(await createDirectory("/tmp/testing").run()).toEqual(Right(void {}))
   })
 
   it("cannot create a root directory", async () => {
-    await expect(createDirectory("/test")).rejects.toThrow()
+    expect(await createDirectory("/test").run()).toEqual(Left(new FSError("EACCES: permission denied, mkdir '/test'")))
   })
 })
 

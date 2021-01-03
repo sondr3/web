@@ -126,12 +126,14 @@ export const copyFile = (source: string, destination: string, overwrite = true):
  * @param filepath - Path to where file wants to go
  * @returns Error if something goes wrong
  */
-export const createDirectory = async (filepath: string): Promise<void | Error> => {
-  const res = await asyncTryCatch(async () => fs.mkdir(filepath, { recursive: true }), logger)
-  if (res instanceof Error) return res
-
-  return
-}
+export const createDirectory = (filepath: string): EitherAsync<FSError, void> =>
+  EitherAsync(async ({ throwE }) => {
+    try {
+      await fs.mkdir(filepath, { recursive: true })
+    } catch ({ message }) {
+      return throwELog(new FSError(message), throwE, logger)
+    }
+  })
 
 /**
  * Writes some content to a file.
