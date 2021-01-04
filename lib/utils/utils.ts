@@ -50,7 +50,7 @@ export const slugify = (title: string): string => {
  * @param throwE - Thrower
  * @param logger - Logging framework
  */
-export const throwELog = <E extends Error>(e: E, throwE: (e: E) => Promise<void>, logger: Logger): Promise<void> => {
+export const throwELog = <E extends Error>(e: E, throwE: (e: E) => never, logger: Logger): never => {
   logger.error(e.message)
   return throwE(e)
 }

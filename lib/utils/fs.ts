@@ -2,7 +2,7 @@ import { promises as fs } from "fs"
 import path, { extname } from "path"
 import crypto from "crypto"
 import { logging } from "../logging"
-import { asyncTryCatch, throwELog } from "./"
+import { throwELog } from "./"
 import { EitherAsync } from "purify-ts/EitherAsync"
 import { CustomError } from "ts-custom-error"
 
@@ -84,7 +84,7 @@ export async function readdirRecursive(
  * @param recurse - Whether to recursively copy
  * @returns Error if something went wrong
  */
-export const copyFiles = (source: string, destination: string, recurse = true): EitherAsync<FSError, void> =>
+export const copyFiles = (source: string, destination: string, recurse = true): EitherAsync<FSError, boolean> =>
   EitherAsync(async ({ throwE }) => {
     try {
       const entries = await fs.readdir(source, { withFileTypes: true })
@@ -97,6 +97,8 @@ export const copyFiles = (source: string, destination: string, recurse = true): 
         if (entry.isDirectory() && recurse) await copyFiles(src, dest, recurse)
         else await fs.copyFile(src, dest, 1)
       }
+
+      return true
     } catch ({ message }) {
       return throwELog(new FSError(message), throwE, logger)
     }
@@ -110,10 +112,11 @@ export const copyFiles = (source: string, destination: string, recurse = true): 
  * @param overwrite - Overwrite the destination? (true by default)
  * @returns Error if something went wrong
  */
-export const copyFile = (source: string, destination: string, overwrite = true): EitherAsync<FSError, void> =>
+export const copyFile = (source: string, destination: string, overwrite = true): EitherAsync<FSError, boolean> =>
   EitherAsync(async ({ throwE }) => {
     try {
       await fs.copyFile(source, destination, overwrite ? 0 : 1)
+      return true
     } catch ({ message }) {
       return throwELog(new FSError(message), throwE, logger)
     }
@@ -126,10 +129,11 @@ export const copyFile = (source: string, destination: string, overwrite = true):
  * @param filepath - Path to where file wants to go
  * @returns Error if something goes wrong
  */
-export const createDirectory = (filepath: string): EitherAsync<FSError, void> =>
+export const createDirectory = (filepath: string): EitherAsync<FSError, boolean> =>
   EitherAsync(async ({ throwE }) => {
     try {
       await fs.mkdir(filepath, { recursive: true })
+      return true
     } catch ({ message }) {
       return throwELog(new FSError(message), throwE, logger)
     }
@@ -142,10 +146,11 @@ export const createDirectory = (filepath: string): EitherAsync<FSError, void> =>
  * @param content - Content to write
  * @returns Error if writing fails
  */
-export const writeFile = (filepath: string, content: string | Buffer): EitherAsync<FSError, void> =>
+export const writeFile = (filepath: string, content: string | Buffer): EitherAsync<FSError, boolean> =>
   EitherAsync(async ({ throwE }) => {
     try {
       await fs.writeFile(filepath, content)
+      return true
     } catch ({ message }) {
       return throwELog(new FSError(message), throwE, logger)
     }

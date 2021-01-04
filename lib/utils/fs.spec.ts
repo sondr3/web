@@ -84,12 +84,12 @@ describe("copyFiles", () => {
     const config = getConfig()
 
     await fs.rmdir(path.join(config.out, "images"), { recursive: true })
-    expect(await copyFiles(config.assets.images, path.join(config.out, "images"), false)).toEqual(Right(void {}))
+    expect(await copyFiles(config.assets.images, path.join(config.out, "images"), false)).toEqual(Right(true))
   })
 
   it("copies files recursively", async () => {
     const dir = await fs.mkdtemp(path.join(os.tmpdir(), "test-"))
-    expect(await copyFiles(path.resolve(process.cwd(), "lib"), dir, true).run()).toEqual(Right(void {}))
+    expect(await copyFiles(path.resolve(process.cwd(), "lib"), dir, true).run()).toEqual(Right(true))
   })
 
   it("crashes on illegal directory", async () => {
@@ -112,16 +112,22 @@ describe("copyFile", () => {
 
   it("copies and overwrites files by default", async () => {
     const dir = await fs.mkdtemp(path.join(os.tmpdir(), "test-copy"))
-    await copyFile(path.join(config.assets.root, "robots.txt"), path.join(dir, "robots.txt"))
+    expect(await copyFile(path.join(config.assets.root, "robots.txt"), path.join(dir, "robots.txt")).run()).toEqual(
+      Right(true),
+    )
     expect((await fs.readFile(path.join(dir, "robots.txt"))).toString()).toContain("# www.robotstxt.org/")
 
-    await copyFile(path.join(config.assets.root, "humans.txt"), path.join(dir, "robots.txt"))
+    expect(await copyFile(path.join(config.assets.root, "humans.txt"), path.join(dir, "robots.txt")).run()).toEqual(
+      Right(true),
+    )
     expect((await fs.readFile(path.join(dir, "robots.txt"))).toString()).toContain("/* TEAM */")
   })
 
   it("copies and does not overwrite", async () => {
     const dir = await fs.mkdtemp(path.join(os.tmpdir(), "test-copy2"))
-    await copyFile(path.join(config.assets.root, "robots.txt"), path.join(dir, "robots.txt"))
+    expect(await copyFile(path.join(config.assets.root, "robots.txt"), path.join(dir, "robots.txt")).run()).toEqual(
+      Right(true),
+    )
 
     const res = await copyFile(path.join(config.assets.root, "humans.txt"), path.join(dir, "robots.txt"), false).run()
     expect(res.isLeft()).toBeTruthy()
