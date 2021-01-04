@@ -62,12 +62,13 @@ describe("writeFile", () => {
   it("can create a test file", async () => {
     const dir = await fs.mkdtemp(path.join(os.tmpdir(), "test-"))
     const filename = `${dir}/test.txt`
-    const res = await writeFile(filename, "hello")
-    expect(res).toBeUndefined()
+    expect(await writeFile(filename, "hello").run()).toEqual(Right(void {}))
   })
 
   it("cannot write to /", async () => {
-    await expect(writeFile("/test", "hello")).rejects.toThrow()
+    expect(await writeFile("/test", "hello").run()).toEqual(
+      Left(new FSError("EACCES: permission denied, open '/test'")),
+    )
   })
 })
 

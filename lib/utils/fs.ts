@@ -142,9 +142,14 @@ export const createDirectory = (filepath: string): EitherAsync<FSError, void> =>
  * @param content - Content to write
  * @returns Error if writing fails
  */
-export const writeFile = async (filepath: string, content: string | Buffer): Promise<void | Error> => {
-  return await asyncTryCatch(async () => fs.writeFile(filepath, content), logger)
-}
+export const writeFile = (filepath: string, content: string | Buffer): EitherAsync<FSError, void> =>
+  EitherAsync(async ({ throwE }) => {
+    try {
+      await fs.writeFile(filepath, content)
+    } catch ({ message }) {
+      return throwELog(new FSError(message), throwE, logger)
+    }
+  })
 
 /**
  * Reads the content of a file.
