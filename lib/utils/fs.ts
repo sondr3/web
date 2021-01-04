@@ -157,9 +157,14 @@ export const writeFile = (filepath: string, content: string | Buffer): EitherAsy
  * @param filepath - File to read contents of
  * @returns Error if file could not be read
  */
-export const readFile = async (filepath: string): Promise<string | Error> => {
-  return await asyncTryCatch(async () => fs.readFile(filepath, { encoding: "utf-8" }), logger)
-}
+export const readFile = (filepath: string): EitherAsync<FSError, string> =>
+  EitherAsync(async ({ throwE }) => {
+    try {
+      return await fs.readFile(filepath, { encoding: "utf-8" })
+    } catch ({ message }) {
+      return throwELog(new FSError(message), throwE, logger)
+    }
+  })
 
 /**
  * Create a hash of a file, based on its content. The hash is an eight character long

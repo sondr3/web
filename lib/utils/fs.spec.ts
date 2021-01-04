@@ -131,10 +131,11 @@ describe("copyFile", () => {
 
 describe("readFile", () => {
   it("read files", async () => {
-    await expect(readFile(path.resolve(process.cwd(), "package.json"))).resolves.toBeDefined()
+    expect(await readFile(path.resolve(process.cwd(), "package.json")).run()).toBeDefined()
   })
 
   it("throws when reading unknown file", async () => {
-    await expect(readFile(path.resolve(process.cwd(), "poop.json"))).rejects.toThrow()
+    const res = await readFile(path.resolve(process.cwd(), "poop.json")).run()
+    expect(res.isLeft()).toBeTruthy()
   })
 })
