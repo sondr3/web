@@ -9,23 +9,6 @@ import { Logger } from "../logging"
 export const allOk = (...res: (void | Error)[]): boolean => res.every((r) => !(r instanceof Error))
 
 /**
- * A wrapper function around async try/catch blocks that are used extensively in
- * the code base.
- *
- * @param f - Function to wrap
- * @param logger - Logger to output errors to
- * @returns Result from function or throws an error otherwise
- */
-export const asyncTryCatch = async <T>(f: () => Promise<T>, logger: Logger): Promise<T | Error> => {
-  try {
-    return await f()
-  } catch (e) {
-    logger.error(e)
-    throw e
-  }
-}
-
-/**
  * Convert a title from a page to a slug that can be used in the generated site. Turns
  * `Hello, world!` into `hello-world`.
  *
