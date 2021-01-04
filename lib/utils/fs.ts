@@ -178,10 +178,12 @@ export const readFile = (filepath: string): EitherAsync<FSError, string> =>
  * @param filepath - File to read and hash
  * @returns The hash of the file
  */
-export const createFileHash = async (filepath: string): Promise<string> => {
-  const contents = await readFile(filepath)
-  if (contents instanceof Error) throw contents
-  const md5 = crypto.createHash("md5")
-  md5.update(contents)
-  return md5.digest("hex").slice(0, 8)
+export const createFileHash = (filepath: string): EitherAsync<FSError, string> => {
+  return readFile(filepath)
+    .map((c) => {
+      const md5 = crypto.createHash("md5")
+      md5.update(c)
+      return md5.digest("hex").slice(0, 8)
+    })
+    .mapLeft((e) => new FSError(e.message))
 }
