@@ -1,14 +1,6 @@
 import { Logger } from "../logging"
 
 /**
- * Checks if all the supplied results did not error.
- *
- * @param res - List of results from functions
- * @returns `true` if no result is an error, false otherwise
- */
-export const allOk = (...res: (void | Error)[]): boolean => res.every((r) => !(r instanceof Error))
-
-/**
  * Convert a title from a page to a slug that can be used in the generated site. Turns
  * `Hello, world!` into `hello-world`.
  *

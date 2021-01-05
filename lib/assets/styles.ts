@@ -5,7 +5,7 @@ import { getConfig } from "../config"
 import { siteState } from "../state"
 import csso from "csso"
 import { SourceMapGenerator, SourceMapConsumer } from "source-map"
-import { writeFile, prettyPrintDuration, createFileHash, formatCSS, createDirectory, allOk } from "../utils"
+import { writeFile, prettyPrintDuration, createFileHash, formatCSS, createDirectory } from "../utils"
 
 const state = siteState
 const logger = logging.getLogger("sass")
@@ -45,11 +45,11 @@ const writeStyles = async (file: string, res: SassResult, prod: boolean): Promis
   const hash = prod ? `${await createFileHash(file)}.` : ""
   const out = await (prod ? optimize(res, file, hash) : formatCSS(res))
 
-  const dir = await createDirectory(parsed.dir)
-  const css = await writeFile(styleName(file, `${hash}css`), out.css)
-  const map = await writeFile(styleName(file, `${hash}css.map`), out.map)
+  createDirectory(parsed.dir)
+    .chain(() => writeFile(styleName(file, `${hash}css`), out.css))
+    .chain(() => writeFile(styleName(file, `${hash}css.map`), out.map))
+    .mapLeft((err) => err)
 
-  if (!allOk(...[dir, css, map])) return new Error("Could not create styles")
   state.styles.set(`${parsed.name}.css`, styleName(file, `${hash}css`))
 
   return
