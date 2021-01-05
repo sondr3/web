@@ -50,7 +50,7 @@ describe("readdirRecursive", () => {
 
 describe("createDirectory", () => {
   it("can create a test directory", async () => {
-    expect(await createDirectory("/tmp/testing").run()).toEqual(Right(void {}))
+    expect(await createDirectory("/tmp/testing").run()).toEqual(Right(true))
   })
 
   it("cannot create a root directory", async () => {
@@ -62,7 +62,7 @@ describe("writeFile", () => {
   it("can create a test file", async () => {
     const dir = await fs.mkdtemp(path.join(os.tmpdir(), "test-"))
     const filename = `${dir}/test.txt`
-    expect(await writeFile(filename, "hello").run()).toEqual(Right(void {}))
+    expect(await writeFile(filename, "hello").run()).toEqual(Right(true))
   })
 
   it("cannot write to /", async () => {
