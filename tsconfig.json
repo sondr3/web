@@ -8,9 +8,9 @@
   },
   "include": ["lib/**/*"],
   "typedocOptions": {
-    "mode": "file",
     "out": "docs",
-    "exclude": ["**/*+(index|.spec).ts", "**/templates/**/*.ts"],
+    "entryPoints": ["lib"],
+    "exclude": ["**/*+(spec).ts", "**/templates/**/*.ts"],
     "theme": "minimal"
   }
 }
