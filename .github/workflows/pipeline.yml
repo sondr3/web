@@ -44,12 +44,6 @@ jobs:
       - name: Build documentation
         run: npm run docs
 
-      - name: Deploy documentation
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
-
       - uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -62,6 +56,12 @@ jobs:
     if: github.ref == 'refs/heads/master'
 
     steps:
+      - name: Deploy documentation
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+
       - name: Deploy website
         uses: appleboy/ssh-action@master
         with:
