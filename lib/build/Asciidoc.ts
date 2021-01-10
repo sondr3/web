@@ -1,14 +1,15 @@
-import { readFile } from "../utils/"
 import Processor, { Asciidoctor } from "asciidoctor"
-import * as templates from "../templates/"
+
+import * as templates from "../templates"
+import { readFile } from "../utils"
 
 /**
  * A wrapper class around {@link https://github.com/asciidoctor/asciidoctor.js} with its
  * own HTML5 exporter.
  */
 export class Asciidoc {
-  private baseConverter: Asciidoctor.Html5Converter
-  private asciidoc: Asciidoctor
+  private readonly baseConverter: Asciidoctor.Html5Converter
+  private readonly asciidoc: Asciidoctor
 
   constructor() {
     this.asciidoc = Processor()

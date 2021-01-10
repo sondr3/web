@@ -5,8 +5,8 @@ const MS_PER_SEC = 1000000n
  * how much time has passed between creation and invoking {@link Duration.end}.
  */
 export class Duration {
-  private startTime = 0n
-  private finishTime = 0n
+  private readonly startTime = 0n
+  private readonly finishTime = 0n
 
   constructor() {
     this.startTime = process.hrtime.bigint()
@@ -34,7 +34,7 @@ export class Duration {
  * @returns The pretty formatted duration
  */
 export function prettyPrintDuration(duration: number): string {
-  const output: string[] = []
+  const output: readonly string[] = []
 
   const seconds = Math.trunc(duration / 1000)
   if (seconds > 0) {

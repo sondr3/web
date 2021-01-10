@@ -1,15 +1,15 @@
 import { getConfig } from "../config"
 import { logging } from "../logging"
-import * as templates from "../templates/"
+import * as templates from "../templates"
 
 const config = getConfig()
 const logger = logging.getLogger("template")
 
 export type Layout = "default" | "page"
 
-export interface Content {
-  title: string
-  content: string
+export type Content = {
+  readonly title: string
+  readonly content: string
 }
 
 /**

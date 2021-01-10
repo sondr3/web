@@ -1,8 +1,8 @@
 import { buildSite, clean } from "./build"
-import { logging, Logger } from "./logging"
+import { setConfig } from "./config"
+import { Logger, logging } from "./logging"
 import { Server } from "./server"
 import { CLI } from "./utils"
-import { setConfig } from "./config"
 
 /**
  * Builds the site by without serving it.

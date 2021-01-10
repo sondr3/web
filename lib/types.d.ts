@@ -32,7 +32,7 @@ declare module "stream/promises" {
     function pipeline(
       stream1: NodeJS.ReadableStream,
       stream2: NodeJS.ReadWriteStream | NodeJS.WritableStream,
-      ...streams: Array<NodeJS.ReadWriteStream | NodeJS.WritableStream>
+      ...streams: ReadonlyArray<NodeJS.ReadWriteStream | NodeJS.WritableStream>
     ): Promise<void>
   }
 

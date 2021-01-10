@@ -5,10 +5,10 @@
  * @param values - Values that are coerced to strings
  * @returns The converted HTML
  */
-export const html = (input: TemplateStringsArray, ...values: unknown[]): string => {
+export const html = (input: TemplateStringsArray, ...values: readonly unknown[]): string => {
   return input
-    .map((string, i) => {
-      const value = values[i]
+    .map((string, index) => {
+      const value = values[index]
 
       if (Array.isArray(value)) {
         return string.toString() + value.join("")

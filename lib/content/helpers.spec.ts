@@ -6,6 +6,6 @@ describe("convertDate", () => {
   })
 
   it("returns undefined when undefined", () => {
-    expect(convertDate(undefined)).toBeUndefined()
+    expect(convertDate()).toBeUndefined()
   })
 })

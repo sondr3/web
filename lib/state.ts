@@ -1,12 +1,13 @@
 import path from "path"
+
 import { Metadata } from "./content"
 
 /**
  * Site state during building, used to look up styles, content etc.
  */
-interface State {
-  styles: Map<string, string>
-  pages: Map<string, Metadata>
+type State = {
+  readonly styles: ReadonlyMap<string, string>
+  readonly pages: ReadonlyMap<string, Metadata>
 }
 
 const initialState: State = {

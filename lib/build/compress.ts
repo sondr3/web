@@ -1,14 +1,15 @@
-import { Config, getConfig } from "../config"
+import { createReadStream, createWriteStream } from "fs"
 import stream from "stream/promises"
 import { createBrotliCompress, createGzip } from "zlib"
+
+import { Config, getConfig } from "../config"
 import { readdirRecursive } from "../utils"
-import { createReadStream, createWriteStream } from "fs"
 
 const INVALID_EXT = [".map", ".txt", ".scss", ".gz", ".br", ""]
 
-export async function compress(prod: boolean): Promise<void> {
+export async function compress(production: boolean): Promise<void> {
   const config = getConfig()
-  if (prod) {
+  if (production) {
     await gzip(config)
     await brotli(config)
   }
@@ -22,9 +23,9 @@ export async function compress(prod: boolean): Promise<void> {
 export async function gzip(config: Config): Promise<void> {
   const files = (await readdirRecursive(config.out, INVALID_EXT)).map((file) => {
     const source = createReadStream(file)
-    const dest = createWriteStream(`${file}.gz`)
+    const destination = createWriteStream(`${file}.gz`)
     const gzip = createGzip({ level: 9 })
-    return stream.pipeline(source, gzip, dest)
+    return stream.pipeline(source, gzip, destination)
   })
 
   await Promise.allSettled(files)
@@ -38,10 +39,10 @@ export async function gzip(config: Config): Promise<void> {
 export async function brotli(config: Config): Promise<void> {
   const files = (await readdirRecursive(config.out, INVALID_EXT)).map((file) => {
     const source = createReadStream(file)
-    const dest = createWriteStream(`${file}.br`)
+    const destination = createWriteStream(`${file}.br`)
     const brotli = createBrotliCompress()
 
-    return stream.pipeline(source, brotli, dest)
+    return stream.pipeline(source, brotli, destination)
   })
 
   await Promise.allSettled(files)

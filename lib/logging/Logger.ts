@@ -5,10 +5,10 @@ import { LogLevel, LogManager } from "./LogManager"
  * Interface for a log event, contains the message and which module the event
  * cam from alongside the log level.
  */
-export interface LogEntry {
-  level: LogLevel
-  message: string
-  module?: string
+export type LogEntry = {
+  readonly level: LogLevel
+  readonly message: string
+  readonly module?: string
 }
 
 /**
@@ -16,9 +16,9 @@ export interface LogEntry {
  * `trace` events if the application has set the minimum log level threshold to it or above.
  */
 export class Logger {
-  private logManager: LogManager
+  private readonly logManager: LogManager
   private readonly module?: string
-  private readonly levels: { [key: string]: number } = {
+  private readonly levels: { readonly [key: string]: number } = {
     none: 0,
     trace: 1,
     debug: 2,

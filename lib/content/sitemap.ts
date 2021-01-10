@@ -1,9 +1,10 @@
-import { html } from "../templates"
-import { Metadata } from "./index"
-import { siteState } from "../state"
-import { getConfig } from "../config"
 import path from "path"
+
+import { getConfig } from "../config"
+import { siteState } from "../state"
+import { html } from "../templates"
 import { formatHTML, writeFile } from "../utils"
+import { Metadata } from "."
 
 const config = getConfig()
 const state = siteState
@@ -50,7 +51,7 @@ const buildSitemap = (): string => {
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
       xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     >
-      ${Array.from(state.pages.values()).map((page) => renderPage(page))}
+      ${[...state.pages.values()].map(renderPage)}
     </urlset>`
 }
 

@@ -1,4 +1,4 @@
-import { logging } from "./index"
+import { logging } from "."
 
 describe("Logger", () => {
   describe("log", () => {

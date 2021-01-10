@@ -1,4 +1,4 @@
-import { html } from "../"
+import { html } from ".."
 
 export const nav = (): string => html`
   <header>

@@ -15,7 +15,7 @@ export const formatHTML = (source: string): string => formatFile(source, "html")
  * @param source - SCSS result containing CSS and source map
  * @returns The prettified CSS and the source map
  */
-export const formatCSS = (source: Result): { css: string; map: string } => {
+export const formatCSS = (source: Result): { readonly css: string; readonly map: string } => {
   return { css: formatFile(source.css.toString(), "css"), map: source.map?.toString() ?? "" }
 }
 

@@ -1,10 +1,11 @@
+import crypto from "crypto"
 import { promises as fs } from "fs"
 import path, { extname } from "path"
-import crypto from "crypto"
-import { logging } from "../logging"
-import { throwELog } from "./"
 import { EitherAsync } from "purify-ts/EitherAsync"
 import { CustomError } from "ts-custom-error"
+
+import { logging } from "../logging"
+import { throwELog } from "."
 
 const logger = logging.getLogger("fs")
 
@@ -27,8 +28,8 @@ export async function dirWalk(
   directory: string,
   extension: string,
   recurse = true,
-  filepaths: Array<string> = [],
-): Promise<Array<string>> {
+  filepaths: ReadonlyArray<string> = [],
+): Promise<ReadonlyArray<string>> {
   const files = await fs.readdir(directory)
 
   for (const filename of files) {
@@ -56,9 +57,9 @@ export async function dirWalk(
  */
 export async function readdirRecursive(
   directory: string,
-  ignored_ext: Array<string>,
-  filepaths: Array<string> = [],
-): Promise<Array<string>> {
+  ignored_extension: ReadonlyArray<string>,
+  filepaths: ReadonlyArray<string> = [],
+): Promise<ReadonlyArray<string>> {
   const files = await fs.readdir(directory)
 
   for (const filename of files) {
@@ -66,8 +67,8 @@ export async function readdirRecursive(
     const stat = await fs.stat(filepath)
 
     if (stat.isDirectory()) {
-      await readdirRecursive(filepath, ignored_ext, filepaths)
-    } else if (!ignored_ext.includes(extname(filename))) {
+      await readdirRecursive(filepath, ignored_extension, filepaths)
+    } else if (!ignored_extension.includes(extname(filename))) {
       filepaths.push(filepath)
     }
   }
@@ -91,11 +92,12 @@ export const copyFiles = (source: string, destination: string, recurse = true): 
       await createDirectory(destination)
 
       for (const entry of entries) {
-        const src = path.join(source, entry.name)
-        const dest = path.join(destination, entry.name)
+        const source_ = path.join(source, entry.name)
+        const destination_ = path.join(destination, entry.name)
 
-        if (entry.isDirectory() && recurse) await copyFiles(src, dest, recurse)
-        else await fs.copyFile(src, dest, 1)
+        await (entry.isDirectory() && recurse
+          ? copyFiles(source_, destination_, recurse)
+          : fs.copyFile(source_, destination_, 1))
       }
 
       return true

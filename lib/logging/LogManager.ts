@@ -1,6 +1,7 @@
 import { EventEmitter } from "events"
-import { LogEntry, Logger } from "./Logger"
+
 import { Colorize as C } from "../utils/Colors"
+import { LogEntry, Logger } from "./Logger"
 
 /**
  * Logging levels, e.g. which events are logged to the loggers output.
@@ -10,8 +11,8 @@ export type LogLevel = "none" | "trace" | "debug" | "warn" | "error"
 /**
  * Configuration options to the log manager.
  */
-interface LogOptions {
-  minLevel: LogLevel
+type LogOptions = {
+  readonly minLevel: LogLevel
 }
 
 /**
@@ -20,8 +21,8 @@ interface LogOptions {
  * using this manager.
  */
 export class LogManager extends EventEmitter {
-  private registered = false
-  options: LogOptions = {
+  private readonly registered = false
+  readonly options: LogOptions = {
     minLevel: "none",
   }
 

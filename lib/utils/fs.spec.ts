@@ -1,19 +1,20 @@
+import { promises as fs } from "fs"
+import * as os from "os"
+import path from "path"
+import { Left, Right } from "purify-ts"
+
+import { getConfig } from "../config"
 import {
-  createFileHash,
+  copyFile,
   copyFiles,
   createDirectory,
+  createFileHash,
   dirWalk,
+  FSError,
+  readdirRecursive,
   readFile,
   writeFile,
-  readdirRecursive,
-  copyFile,
-  FSError,
 } from "./fs"
-import { promises as fs } from "fs"
-import path from "path"
-import * as os from "os"
-import { getConfig } from "../config"
-import { Left, Right } from "purify-ts"
 
 describe("dirWalk", () => {
   it("JSON files without recursing", async () => {

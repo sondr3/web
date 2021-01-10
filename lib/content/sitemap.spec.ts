@@ -1,6 +1,6 @@
-import { sitemap } from "./sitemap"
-import { createDirectory } from "../utils"
 import { getConfig } from "../config"
+import { createDirectory } from "../utils"
+import { sitemap } from "./sitemap"
 
 const config = getConfig()
 

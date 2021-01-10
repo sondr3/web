@@ -1,4 +1,5 @@
 import { promises as fs } from "fs"
+
 import { getConfig } from "../config"
 import { createTitle, renderTemplate } from "./templating"
 

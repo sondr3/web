@@ -1,5 +1,6 @@
-import { formatCSS, formatHTML } from "./formatting"
 import { Result } from "sass"
+
+import { formatCSS, formatHTML } from "./formatting"
 
 test("formatHTML", () => {
   const html = "<div  >Hello<span >world</span></div >"

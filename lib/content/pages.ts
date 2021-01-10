@@ -1,8 +1,9 @@
-import { dirWalk } from "../utils"
 import path from "path"
-import * as pages from "../templates/pages"
+
 import { getConfig } from "../config"
-import { addPage, convertAsciidoc, renderAsciidoc, writeContent, writeHTML } from "./"
+import * as pages from "../templates/pages"
+import { dirWalk } from "../utils"
+import { addPage, convertAsciidoc, renderAsciidoc, writeContent, writeHTML } from "."
 import { convertDate } from "./helpers"
 
 const config = getConfig()
@@ -12,25 +13,25 @@ const config = getConfig()
  *
  * @param prod - Whether to optimize output
  */
-export const renderPages = async (prod: boolean): Promise<void | Error> => {
+export const renderPages = async (production: boolean): Promise<void | Error> => {
   const pages = await dirWalk(path.resolve(process.cwd(), config.content.pages), "adoc", false)
 
   for (const page of pages) {
-    const doc = await convertAsciidoc(page)
-    if (doc instanceof Error) return doc
-    const rendered = renderAsciidoc(doc)
+    const document = await convertAsciidoc(page)
+    if (document instanceof Error) return document
+    const rendered = renderAsciidoc(document)
     if (rendered instanceof Error) return rendered
 
     addPage({
-      title: doc.getTitle(),
-      path: <string>doc.getAttribute("path", `/${path.parse(page).name}/`),
-      description: doc.getCaptionedTitle(),
-      createdAt: convertDate(doc.getAttribute("created_at", undefined)),
-      modifiedAt: convertDate(doc.getAttribute("modified_at", undefined)),
+      title: document.getTitle(),
+      path: <string>document.getAttribute("path", `/${path.parse(page).name}/`),
+      description: document.getCaptionedTitle(),
+      createdAt: convertDate(document.getAttribute("created_at")),
+      modifiedAt: convertDate(document.getAttribute("modified_at")),
     })
 
     const file = path.parse(page)
-    await writeContent(path.resolve(config.out, file.name), writeHTML(rendered, prod))
+    await writeContent(path.resolve(config.out, file.name), writeHTML(rendered, production))
   }
 }
 
@@ -39,8 +40,8 @@ export const renderPages = async (prod: boolean): Promise<void | Error> => {
  *
  * @param prod - Whether to optimize output
  */
-export const renderSpecialPages = async (prod: boolean): Promise<void> => {
-  await writeContent(config.out, writeHTML(pages.landing(), prod))
+export const renderSpecialPages = async (production: boolean): Promise<void> => {
+  await writeContent(config.out, writeHTML(pages.landing(), production))
   addPage({
     title: "Eons",
     path: "/",
@@ -48,7 +49,7 @@ export const renderSpecialPages = async (prod: boolean): Promise<void> => {
     createdAt: new Date("2020-12-18"),
   })
 
-  await writeContent(path.resolve(config.out, "404/"), writeHTML(pages.notFound(), prod))
+  await writeContent(path.resolve(config.out, "404/"), writeHTML(pages.notFound(), production))
   addPage({
     title: "404",
     path: "/404/",

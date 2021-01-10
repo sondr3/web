@@ -1,10 +1,11 @@
-import { siteState } from "../state"
-import { logging } from "../logging"
-import { Asciidoc, Layout, renderTemplate } from "../build"
-import { createDirectory, formatHTML, writeFile } from "../utils"
-import path from "path"
 import { createConfiguration, minify } from "@minify-html/js"
 import { Asciidoctor } from "asciidoctor"
+import path from "path"
+
+import { Asciidoc, Layout, renderTemplate } from "../build"
+import { logging } from "../logging"
+import { siteState } from "../state"
+import { createDirectory, formatHTML, writeFile } from "../utils"
 
 export * from "./pages"
 
@@ -12,12 +13,12 @@ const asciidoc = new Asciidoc()
 const state = siteState
 const logger = logging.getLogger("content")
 
-export interface Metadata {
-  title: string
-  description: string
-  path: string
-  createdAt?: Date
-  modifiedAt?: Date
+export type Metadata = {
+  readonly title: string
+  readonly description: string
+  readonly path: string
+  readonly createdAt?: Date
+  readonly modifiedAt?: Date
 }
 
 export const addPage = (data: Metadata): void => {
@@ -75,6 +76,6 @@ export const minifyHTML = (source: string): Buffer => {
  * @param prod - Whether we are in production mode
  * @returns The modified HTML
  */
-export const writeHTML = (source: string, prod: boolean): Buffer | string => {
-  return prod ? minifyHTML(source) : formatHTML(source)
+export const writeHTML = (source: string, production: boolean): Buffer | string => {
+  return production ? minifyHTML(source) : formatHTML(source)
 }

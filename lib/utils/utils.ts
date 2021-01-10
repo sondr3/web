@@ -12,7 +12,7 @@ export const slugify = (title: string): string => {
     .trim()
     .toLowerCase()
     .split(" ")
-    .map((w) => w.replace(/[^a-z0-9+]+/gi, ""))
+    .map((w) => w.replace(/[^\d+a-z]+/gi, ""))
     .join("-")
     .replace(/--+/g, "-")
 }

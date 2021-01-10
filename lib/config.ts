@@ -1,35 +1,35 @@
 import path from "path"
 
-export interface About {
-  intro: string
-  name: string
-  socials: {
-    github: string
+export type About = {
+  readonly intro: string
+  readonly name: string
+  readonly socials: {
+    readonly github: string
   }
 }
 
-export interface Config {
-  out: string
-  production: boolean
-  meta: {
-    title: string
-    url: string
-    author: About
+export type Config = {
+  readonly out: string
+  readonly production: boolean
+  readonly meta: {
+    readonly title: string
+    readonly url: string
+    readonly author: About
   }
-  content: {
-    posts: string
-    pages: string
+  readonly content: {
+    readonly posts: string
+    readonly pages: string
   }
-  templates: {
-    pages: string
-    layouts: string
-    partials: string
+  readonly templates: {
+    readonly pages: string
+    readonly layouts: string
+    readonly partials: string
   }
-  assets: {
-    root: string
-    style: string
-    js: string
-    images: string
+  readonly assets: {
+    readonly root: string
+    readonly style: string
+    readonly js: string
+    readonly images: string
   }
 }
 
@@ -67,9 +67,9 @@ const defaultConfig: Config = {
   },
 }
 
-export const setConfig = (prod = false, out = "./test/", url = "http://localhost"): void => {
+export const setConfig = (production = false, out = "./test/", url = "http://localhost"): void => {
   config.out = out
-  config.production = prod
+  config.production = production
   config.meta.url = url
 }
 

@@ -1,12 +1,13 @@
-import { copyFile, Duration } from "../utils/"
-import { getConfig } from "../config"
-import path from "path"
-import { logging } from "../logging"
-import { compress } from "./"
-import { copyAssets, renderStyles } from "../assets"
 import { promises as fs } from "fs"
+import path from "path"
+
+import { copyAssets, renderStyles } from "../assets"
+import { getConfig } from "../config"
 import { renderPages, renderSpecialPages } from "../content"
 import { sitemap } from "../content/sitemap"
+import { logging } from "../logging"
+import { copyFile, Duration } from "../utils"
+import { compress } from "."
 
 const logger = logging.getLogger("build")
 const config = getConfig()
@@ -16,16 +17,16 @@ const config = getConfig()
  *
  * @param prod - Whether to optimize output
  */
-export const buildSite = async (prod: boolean): Promise<void> => {
+export const buildSite = async (production: boolean): Promise<void> => {
   logger.log(`Building site ${config.meta.title} (${config.meta.url})`)
   const duration = new Duration()
   await copyAssets()
-  await renderStyles(path.join(getConfig().assets.style, "style.scss"), prod)
-  await renderSpecialPages(prod)
-  await renderPages(prod)
+  await renderStyles(path.join(getConfig().assets.style, "style.scss"), production)
+  await renderSpecialPages(production)
+  await renderPages(production)
   await createRootFiles()
   await sitemap()
-  await compress(prod)
+  await compress(production)
   duration.end()
   logger.log(`Took ${duration.result()} to build site`)
 }

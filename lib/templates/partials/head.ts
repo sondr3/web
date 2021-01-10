@@ -1,5 +1,5 @@
-import { html } from "../"
 import { getStyle } from "../../state"
+import { html } from ".."
 
 export const head = (title: string): string => html`
   <head>

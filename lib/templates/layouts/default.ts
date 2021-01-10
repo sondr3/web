@@ -1,5 +1,5 @@
-import { html } from "../"
-import { head, nav, footer } from "../partials"
+import { html } from ".."
+import { footer, head, nav } from "../partials"
 
 export const layout = (title: string, content: string): string => html`
   <!DOCTYPE html>

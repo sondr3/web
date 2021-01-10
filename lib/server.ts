@@ -1,12 +1,13 @@
 import fs from "fs"
-import { getConfig } from "./config"
-import { renderStyles } from "./assets"
-import path from "path"
-import { buildSite } from "./build"
 import * as http from "http"
-import { logging } from "./logging"
+import path from "path"
 import WebSocket from "ws"
+
+import { renderStyles } from "./assets"
+import { buildSite } from "./build"
+import { getConfig } from "./config"
 import { renderPages } from "./content"
+import { logging } from "./logging"
 
 const logger = logging.getLogger("server")
 const config = getConfig()
@@ -16,8 +17,8 @@ const config = getConfig()
  * with a file watcher to automatically reload the website using websockets during development.
  */
 export class Server {
-  private wss: WebSocket.Server
-  private server: http.Server
+  private readonly wss: WebSocket.Server
+  private readonly server: http.Server
 
   constructor() {
     this.wss = new WebSocket.Server({
@@ -131,7 +132,7 @@ export class Server {
       fs.readFile(path.join(getConfig().out, filePath), (error, content) => {
         if (error) {
           if (error.code === "ENOENT") {
-            fs.readFile("./404.html", (_err, cont) => {
+            fs.readFile("./404.html", (_error, cont) => {
               response.writeHead(404, { "Content-Type": mimetypes[".html"] })
               response.end(cont, "utf-8")
             })

@@ -10,11 +10,11 @@ type Command = "build" | "develop" | "serve" | "clean"
  */
 export class CLI {
   /** Command to run, e.g. 'build', 'clean' */
-  command: Command
+  readonly command: Command
   /** Log level, debug etc */
-  noisiness: LogLevel
+  readonly noisiness: LogLevel
   /** Run with optimizations etc */
-  production: boolean
+  readonly production: boolean
 
   /**
    * Constructs a CLI program, note that if the command used is invalid it
@@ -22,7 +22,7 @@ export class CLI {
    *
    * @param argv - Command line arguments
    */
-  constructor(argv: Array<string>) {
+  constructor(argv: ReadonlyArray<string>) {
     this.command = CLI.stringToCommand(argv[2]) ?? "develop"
     const options = argv.splice(2)
     this.noisiness = CLI.parseNoise(options)
@@ -52,11 +52,11 @@ export class CLI {
    * @param options - The arguments after the command from the CLI
    * @returns `none` if no valid log level is found.
    */
-  private static parseNoise(options: string[]): LogLevel {
-    const noiseFlag = options.some((val) => val.startsWith("-n") || val.startsWith("--noise"))
+  private static parseNoise(options: readonly string[]): LogLevel {
+    const noiseFlag = options.some((value) => value.startsWith("-n") || value.startsWith("--noise"))
     let noisiness = "none"
     if (noiseFlag) {
-      const flag = options.reverse().find((val) => val.startsWith("-n") || val.startsWith("--noise")) ?? "-n=none"
+      const flag = options.reverse().find((value) => value.startsWith("-n") || value.startsWith("--noise")) ?? "-n=none"
       noisiness = flag.split("=")[1]
     }
 
@@ -68,7 +68,7 @@ export class CLI {
    *
    * @param options - The arguments after the command from the CLI
    */
-  private static parseProd(options: string[]): boolean {
-    return options.some((val) => val === "-p" || val === "--prod")
+  private static parseProd(options: readonly string[]): boolean {
+    return options.some((value) => value === "-p" || value === "--prod")
   }
 }

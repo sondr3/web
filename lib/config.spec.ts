@@ -1,5 +1,6 @@
-import { getConfig, setConfig } from "./config"
 import path from "path"
+
+import { getConfig, setConfig } from "./config"
 
 describe("config", () => {
   it("sets correct default settings", () => {

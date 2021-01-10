@@ -2,17 +2,17 @@
  * Wrapper type for a 256 bit color used in the terminal, with a normal and a
  * bright value.
  */
-interface Color {
-  normal: number
-  bright: number
+type Color = {
+  readonly normal: number
+  readonly bright: number
 }
 
 /**
  * Wrapper type for formatting values used in the terminal, e.g. `bold` and so on.
  */
-interface Format {
-  start: number
-  end: number
+type Format = {
+  readonly start: number
+  readonly end: number
 }
 
 /**
@@ -92,10 +92,10 @@ export abstract class Colorize {
    * @param end - End value
    * @returns The wrapped sequence strings
    */
-  private static getFormatting(start: number, end: number): { start: string; end: string } {
+  private static getFormatting(start: number, end: number): { readonly start: string; readonly end: string } {
     return {
-      start: `\x1b[${start}m`,
-      end: `\x1b[${end}m`,
+      start: `\u001B[${start}m`,
+      end: `\u001B[${end}m`,
     }
   }
 

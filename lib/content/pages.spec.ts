@@ -1,8 +1,9 @@
 import { promises as fs } from "fs"
-import { getConfig } from "../config"
-import { renderSpecialPages } from "./pages"
 import path from "path"
-import { convertAsciidoc, minifyHTML, writeHTML } from "./index"
+
+import { getConfig } from "../config"
+import { convertAsciidoc, minifyHTML, writeHTML } from "."
+import { renderSpecialPages } from "./pages"
 
 describe("renderPages", () => {
   afterAll(async () => {
