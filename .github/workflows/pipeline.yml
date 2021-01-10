@@ -16,38 +16,33 @@ jobs:
         with:
           node-version: 15
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
       - uses: actions/cache@v2
-        id: yarn-cache
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-node-
 
       - name: Install and build
-        run: yarn install --frozen-lockfile
+        run: npm ci
 
       - name: Check formatting and lints
         run: |
-          yarn lint:css
-          yarn lint:style
-          yarn lint:code
+          npm run lint:css
+          npm run lint:style
+          npm run lint:code
 
       - name: Tests
-        run: yarn test --coverage
+        run: npm run test -- --coverage
 
       - name: Compile
-        run: yarn compile
+        run: npm run compile
 
       - name: Build site
-        run: yarn build
+        run: npm run build
 
       - name: Build documentation
-        run: yarn docs
+        run: npm run docs
 
       - name: Deploy documentation
         uses: peaceiris/actions-gh-pages@v3
