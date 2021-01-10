@@ -21,7 +21,7 @@
     "asciidoctor": "2.2.1",
     "csso": "4.2.0",
     "prettier": "2.2.1",
-    "sass": "1.32.0",
+    "sass": "1.32.2",
     "ws": "7.4.2"
   },
   "devDependencies": {
