@@ -189,3 +189,28 @@ export const createFileHash = (filepath: string): EitherAsync<FSError, string> =
     })
     .mapLeft((error) => new FSError(error.message))
 }
+
+/**
+ * Remove a directory, optionally recursive using Either.
+ *
+ * @param directoryPath - Path to delete
+ * @param recursive - Recursively delete all content
+ * @param force - Ignore errors
+ */
+export const rmdir = (directoryPath: string, recursive = false, force = false): EitherAsync<FSError, boolean> =>
+  EitherAsync(({ throwE }) => {
+    return fs
+      .rm(directoryPath, { recursive, force })
+      .then(() => true)
+      .catch(({ message }) => throwELog({ error: new FSError(message), throwE, logger }))
+  })
+
+/**
+ * Wrapper around {@link rmdir} to delete multiple files.
+ *
+ * @param toDelete- Paths to delete
+ * @param recursive - Recursively delete all content
+ * @param force - Ignore errors
+ */
+export const rmdirs = (toDelete: Array<string>, recursive = false, force = false): EitherAsync<FSError, boolean[]> =>
+  EitherAsync.sequence(toDelete.map((path_) => rmdir(path_, recursive, force)))

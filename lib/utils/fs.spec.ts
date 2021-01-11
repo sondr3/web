@@ -1,8 +1,9 @@
-import { promises as fs } from "fs"
+import fsSync, { promises as fs } from "fs"
 import * as os from "os"
 import path from "path"
 import { Left, Right } from "purify-ts"
 
+import { copyAssets } from "../assets"
 import { defaultConfig } from "../config"
 import {
   copyFile,
@@ -12,6 +13,8 @@ import {
   FSError,
   readdirRecursive,
   readFile,
+  rmdir,
+  rmdirs,
   walkDirectory,
   writeFile,
 } from "./fs"
@@ -145,5 +148,42 @@ describe("readFile", () => {
   it("throws when reading unknown file", async () => {
     const result = await readFile(path.resolve(process.cwd(), "poop.json")).run()
     expect(result.isLeft()).toBeTruthy()
+  })
+})
+
+describe("rmdir", () => {
+  it("should delete a directory", async () => {
+    await copyAssets(defaultConfig).run()
+    const path_ = path.resolve(process.cwd(), defaultConfig.out, "images")
+    const result = await rmdir(path_, true).run()
+    expect(result).toEqual(Right(true))
+    expect(fsSync.existsSync(path_)).toBeFalsy()
+  })
+
+  it("should fail if a directory does not exist", async () => {
+    const path_ = path.resolve(process.cwd(), defaultConfig.out, "wrongDir")
+    const result = await rmdir(path_, true).run()
+    expect(result.isLeft()).toBeTruthy()
+    expect(fsSync.existsSync(path_)).toBeFalsy()
+  })
+})
+
+describe("rmdirs", () => {
+  it("should delete multiple", async () => {
+    await copyAssets(defaultConfig).run()
+    const paths = ["js", "images"].map((path_) => path.resolve(process.cwd(), defaultConfig.out, path_))
+    const result = await rmdirs(paths, true)
+    expect(result).toEqual(Right([true, true]))
+
+    paths.map((path_) => expect(fsSync.existsSync(path_)).toBeFalsy())
+  })
+
+  it("should fail if one directory does not exist", async () => {
+    await copyAssets(defaultConfig).run()
+    const paths = ["js", "wrongDir"].map((path_) => path.resolve(process.cwd(), defaultConfig.out, path_))
+    const result = await rmdirs(paths, true)
+    expect(result.isLeft()).toBeTruthy()
+
+    expect(paths.map((path_) => fsSync.existsSync(path_))).toStrictEqual([false, false])
   })
 })
