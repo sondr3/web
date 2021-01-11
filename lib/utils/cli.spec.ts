@@ -1,4 +1,4 @@
-import { CLI } from "./CLI"
+import { CLI } from "./cli"
 
 describe("CLI", () => {
   it("works without a default command", () => {

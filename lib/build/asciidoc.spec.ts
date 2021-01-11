@@ -1,6 +1,6 @@
 import path from "path"
 
-import { Asciidoc } from "./Asciidoc"
+import { Asciidoc } from "./asciidoc"
 
 test("Asciidoc", async () => {
   const engine = new Asciidoc()

@@ -1,4 +1,4 @@
-import { Duration, prettyPrintDuration } from "./Duration"
+import { Duration, prettyPrintDuration } from "./duration"
 
 test("Duration", () => {
   const spy = jest.spyOn(process.hrtime, "bigint")

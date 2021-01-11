@@ -1,5 +1,6 @@
 node_modules/
 assets/
+!lib/assets/
 .vscode/
 .netlify/
 .cache/

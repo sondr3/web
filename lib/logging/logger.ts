@@ -1,5 +1,5 @@
-import { Colorize as C } from "../utils/Colors"
-import { LogLevel, LogManager } from "./LogManager"
+import { Colorize as C } from "../utils/colors"
+import { LogLevel, LogManager } from "./log-manager"
 
 /**
  * Interface for a log event, contains the message and which module the event
