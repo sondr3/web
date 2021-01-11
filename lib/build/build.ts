@@ -51,18 +51,18 @@ export const buildSite = (config: Config, production: boolean): EitherAsync<Buil
  * `robots.txt` and so on.
  */
 export const createRootFiles = async (config: Config): Promise<void> => {
-  const files = [
-    "robots.txt",
-    "humans.txt",
-    "apple-touch-icon.png",
-    "favicon.ico",
-    "icon.svg",
-    "icon-192.png",
-    "icon-512.png",
-    "manifest.webmanifest",
-  ].map((file) => copyFile(path.join(config.assets.root, file), path.join(config.out, file)))
-
-  await Promise.allSettled(files)
+  await Promise.allSettled(
+    [
+      "robots.txt",
+      "humans.txt",
+      "apple-touch-icon.png",
+      "favicon.ico",
+      "icon.svg",
+      "icon-192.png",
+      "icon-512.png",
+      "manifest.webmanifest",
+    ].map((file) => copyFile(path.join(config.assets.root, file), path.join(config.out, file))),
+  )
 }
 
 /**

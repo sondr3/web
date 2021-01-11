@@ -2,7 +2,7 @@ import fs from "fs"
 import path from "path"
 
 import { defaultConfig } from "../config"
-import { renderStyles, styleName } from "./styles"
+import { renderStyles, StyleError, styleName } from "./styles"
 
 describe("styleName", () => {
   it("defaults to css", () => {
@@ -29,6 +29,8 @@ describe("renderStyles", () => {
     try {
       const result = await renderStyles(defaultConfig, "no.scss", false).run()
       expect(result.isLeft()).toBeTruthy()
+      expect(typeof result.leftToMaybe().unsafeCoerce()).toBe(StyleError)
+      expect(result.leftToMaybe().unsafeCoerce().message).toContain(/Error/)
     } catch {
       // noop
     }

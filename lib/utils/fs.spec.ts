@@ -81,6 +81,11 @@ describe("cacheBustFile", () => {
     const actual = await createFileHash(path.resolve(process.cwd(), ".eslintignore")).run()
     expect(actual).toEqual(Right("9fa41bed"))
   })
+
+  it("fails if the file does not exist", async () => {
+    const actual = await createFileHash(path.resolve(process.cwd(), ".hello")).run()
+    expect(actual.isLeft()).toBeTruthy()
+  })
 })
 
 describe("copyFiles", () => {

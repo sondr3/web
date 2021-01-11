@@ -4,9 +4,11 @@ import { defaultConfig } from "../config"
 import { convertAsciidoc, renderAsciidoc } from "../content"
 import { buildSite } from "./build"
 
-test("buildSite", async () => {
-  const result = await buildSite(defaultConfig, false).run()
-  expect(result.isRight()).toBeTruthy()
+describe("buildSite", () => {
+  it("works with default config", async () => {
+    const result = await buildSite(defaultConfig, false).run()
+    expect(result.isRight()).toBeTruthy()
+  })
 })
 
 test("renderAsciidoc", async () => {
