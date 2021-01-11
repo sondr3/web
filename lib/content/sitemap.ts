@@ -51,7 +51,7 @@ const buildSitemap = (): string => {
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
       xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     >
-      ${[...state.pages.values()].map(renderPage)}
+      ${[...state.pages.values()].map((element) => renderPage(element))}
     </urlset>`
 }
 

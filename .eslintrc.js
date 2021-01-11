@@ -5,6 +5,9 @@ module.exports = {
   env: {
     jest: true,
   },
+  globals: {
+    __dirname: true,
+  },
   extends: [
     "@sondr3/eslint-config/typescript",
     "@sondr3/eslint-config/node",

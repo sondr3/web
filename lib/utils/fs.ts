@@ -1,6 +1,6 @@
 import crypto from "crypto"
 import { promises as fs } from "fs"
-import path, { extname } from "path"
+import path from "path"
 import { EitherAsync } from "purify-ts/EitherAsync"
 import { CustomError } from "ts-custom-error"
 
@@ -68,7 +68,7 @@ export async function readdirRecursive(
 
     if (stat.isDirectory()) {
       await readdirRecursive(filepath, ignored_extension, filepaths)
-    } else if (!ignored_extension.includes(extname(filename))) {
+    } else if (!ignored_extension.includes(path.extname(filename))) {
       filepaths.push(filepath)
     }
   }
@@ -102,7 +102,7 @@ export const copyFiles = (source: string, destination: string, recurse = true): 
 
       return true
     } catch ({ message }) {
-      return throwELog(new FSError(message), throwE, logger)
+      return throwELog({ error: new FSError(message), throwE: throwE, logger: logger })
     }
   })
 
@@ -120,7 +120,7 @@ export const copyFile = (source: string, destination: string, overwrite = true):
       await fs.copyFile(source, destination, overwrite ? 0 : 1)
       return true
     } catch ({ message }) {
-      return throwELog(new FSError(message), throwE, logger)
+      return throwELog({ error: new FSError(message), throwE: throwE, logger: logger })
     }
   })
 
@@ -137,7 +137,7 @@ export const createDirectory = (filepath: string): EitherAsync<FSError, boolean>
       await fs.mkdir(filepath, { recursive: true })
       return true
     } catch ({ message }) {
-      return throwELog(new FSError(message), throwE, logger)
+      return throwELog({ error: new FSError(message), throwE: throwE, logger: logger })
     }
   })
 
@@ -154,7 +154,7 @@ export const writeFile = (filepath: string, content: string | Buffer): EitherAsy
       await fs.writeFile(filepath, content)
       return true
     } catch ({ message }) {
-      return throwELog(new FSError(message), throwE, logger)
+      return throwELog({ error: new FSError(message), throwE: throwE, logger: logger })
     }
   })
 
@@ -169,7 +169,7 @@ export const readFile = (filepath: string): EitherAsync<FSError, string> =>
     try {
       return await fs.readFile(filepath, { encoding: "utf-8" })
     } catch ({ message }) {
-      return throwELog(new FSError(message), throwE, logger)
+      return throwELog({ error: new FSError(message), throwE: throwE, logger: logger })
     }
   })
 
@@ -187,5 +187,5 @@ export const createFileHash = (filepath: string): EitherAsync<FSError, string> =
       md5.update(c)
       return md5.digest("hex").slice(0, 8)
     })
-    .mapLeft((e) => new FSError(e.message))
+    .mapLeft((error) => new FSError(error.message))
 }

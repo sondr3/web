@@ -35,12 +35,12 @@ export class CLI {
    * @param input - Command from command line
    * @returns `null` if `input` is not a valid command
    */
-  private static stringToCommand(input: string): Command | null {
+  private static stringToCommand(input: string): Command | undefined {
     if (input === "build" || input === "develop" || input === "serve" || input === "clean") {
       return input
     }
 
-    return null
+    return
   }
 
   /**

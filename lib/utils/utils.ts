@@ -17,15 +17,21 @@ export const slugify = (title: string): string => {
     .replace(/--+/g, "-")
 }
 
+interface ThrowELog<E extends Error> {
+  error: E
+  throwE: (error: E) => never
+  logger: Logger
+}
+
 /**
  * Utility wrapper around {@link https://gigobyte.github.io/purify/adts/EitherAsync#throwE | throwE} that
  * logs and throws an error.
  *
- * @param e - Error type
+ * @param error - Error type
  * @param throwE - Thrower
  * @param logger - Logging framework
  */
-export const throwELog = <E extends Error>(e: E, throwE: (e: E) => never, logger: Logger): never => {
-  logger.error(e.message)
-  return throwE(e)
+export const throwELog = <E extends Error>({ error, throwE, logger }: ThrowELog<E>): never => {
+  logger.error(error.message)
+  return throwE(error)
 }

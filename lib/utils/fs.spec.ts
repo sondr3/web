@@ -61,8 +61,8 @@ describe("createDirectory", () => {
 
 describe("writeFile", () => {
   it("can create a test file", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "test-"))
-    const filename = `${dir}/test.txt`
+    const directory = await fs.mkdtemp(path.join(os.tmpdir(), "test-"))
+    const filename = `${directory}/test.txt`
     expect(await writeFile(filename, "hello").run()).toEqual(Right(true))
   })
 
@@ -89,8 +89,8 @@ describe("copyFiles", () => {
   })
 
   it("copies files recursively", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "test-"))
-    expect(await copyFiles(path.resolve(process.cwd(), "lib"), dir, true).run()).toEqual(Right(true))
+    const directory = await fs.mkdtemp(path.join(os.tmpdir(), "test-"))
+    expect(await copyFiles(path.resolve(process.cwd(), "lib"), directory, true).run()).toEqual(Right(true))
   })
 
   it("crashes on illegal directory", async () => {
@@ -112,27 +112,31 @@ describe("copyFile", () => {
   const config = getConfig()
 
   it("copies and overwrites files by default", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "test-copy"))
-    expect(await copyFile(path.join(config.assets.root, "robots.txt"), path.join(dir, "robots.txt")).run()).toEqual(
-      Right(true),
-    )
-    expect((await fs.readFile(path.join(dir, "robots.txt"))).toString()).toContain("# www.robotstxt.org/")
+    const directory = await fs.mkdtemp(path.join(os.tmpdir(), "test-copy"))
+    expect(
+      await copyFile(path.join(config.assets.root, "robots.txt"), path.join(directory, "robots.txt")).run(),
+    ).toEqual(Right(true))
+    expect((await fs.readFile(path.join(directory, "robots.txt"))).toString()).toContain("# www.robotstxt.org/")
 
-    expect(await copyFile(path.join(config.assets.root, "humans.txt"), path.join(dir, "robots.txt")).run()).toEqual(
-      Right(true),
-    )
-    expect((await fs.readFile(path.join(dir, "robots.txt"))).toString()).toContain("/* TEAM */")
+    expect(
+      await copyFile(path.join(config.assets.root, "humans.txt"), path.join(directory, "robots.txt")).run(),
+    ).toEqual(Right(true))
+    expect((await fs.readFile(path.join(directory, "robots.txt"))).toString()).toContain("/* TEAM */")
   })
 
   it("copies and does not overwrite", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "test-copy2"))
-    expect(await copyFile(path.join(config.assets.root, "robots.txt"), path.join(dir, "robots.txt")).run()).toEqual(
-      Right(true),
-    )
+    const directory = await fs.mkdtemp(path.join(os.tmpdir(), "test-copy2"))
+    expect(
+      await copyFile(path.join(config.assets.root, "robots.txt"), path.join(directory, "robots.txt")).run(),
+    ).toEqual(Right(true))
 
-    const res = await copyFile(path.join(config.assets.root, "humans.txt"), path.join(dir, "robots.txt"), false).run()
-    expect(res.isLeft()).toBeTruthy()
-    expect((await fs.readFile(path.join(dir, "robots.txt"))).toString()).toContain("# www.robotstxt.org/")
+    const result = await copyFile(
+      path.join(config.assets.root, "humans.txt"),
+      path.join(directory, "robots.txt"),
+      false,
+    ).run()
+    expect(result.isLeft()).toBeTruthy()
+    expect((await fs.readFile(path.join(directory, "robots.txt"))).toString()).toContain("# www.robotstxt.org/")
   })
 })
 
@@ -142,7 +146,7 @@ describe("readFile", () => {
   })
 
   it("throws when reading unknown file", async () => {
-    const res = await readFile(path.resolve(process.cwd(), "poop.json")).run()
-    expect(res.isLeft()).toBeTruthy()
+    const result = await readFile(path.resolve(process.cwd(), "poop.json")).run()
+    expect(result.isLeft()).toBeTruthy()
   })
 })
