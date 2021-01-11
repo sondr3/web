@@ -33,7 +33,7 @@ jobs:
           npm run lint:code
 
       - name: Tests
-        run: npm run test -- --coverage
+        run: npm run test
 
       - name: Compile
         run: npm run compile
@@ -43,11 +43,6 @@ jobs:
 
       - name: Build documentation
         run: npm run docs
-
-      - uses: codecov/codecov-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage/coverage-final.json
 
   deploy:
     name: Deploy

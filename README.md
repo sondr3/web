@@ -1,4 +1,4 @@
-# [`eons.io`](https://www.eons.io/) [![codecov](https://codecov.io/gh/sondr3/web/branch/master/graph/badge.svg)](https://codecov.io/gh/sondr3/web)
+# [`eons.io`](https://www.eons.io/) ![pipeline](https://github.com/sondr3/web/workflows/pipeline/badge.svg)
 
 This is my website, held together by tears, glue and a healthy dose of `eh, good enough`. It's essentially a super personal static site generator with no magic.
 
