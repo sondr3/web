@@ -1,27 +1,26 @@
 import path from "path"
 import { EitherAsync } from "purify-ts/EitherAsync"
 
-import { getConfig } from "../config"
+import { Config } from "../config"
 import * as pages from "../templates/pages"
 import { FSError, walkDirectory } from "../utils"
 import { addPage, convertAsciidoc, renderAsciidoc, writeContent, writeHTML } from "."
 import { convertDate } from "./helpers"
 
-const config = getConfig()
-
 /**
  * Render all pages in the `pages` directory in {@link config}.
  *
+ * @param config - Build configuration
  * @param production - Whether to optimize output
  */
-export const renderPages = (production: boolean): EitherAsync<FSError, void> =>
+export const renderPages = (config: Config, production: boolean): EitherAsync<FSError, void> =>
   EitherAsync(async () => {
     const pages = await walkDirectory(path.resolve(process.cwd(), config.content.pages), "adoc", false)
 
     pages.map((page) => {
       void convertAsciidoc(page)
         .map(async (document) => {
-          const rendered = renderAsciidoc(document)
+          const rendered = renderAsciidoc(config, document)
 
           addPage({
             title: document.getTitle(),
@@ -42,9 +41,10 @@ export const renderPages = (production: boolean): EitherAsync<FSError, void> =>
 /**
  * Renders "special" pages, e.g. landing page, 404 and such.
  *
+ * @param config - Build configuration
  * @param production - Whether to optimize output
  */
-export const renderSpecialPages = async (production: boolean): Promise<void> => {
+export const renderSpecialPages = async (config: Config, production: boolean): Promise<void> => {
   await writeContent(config.out, writeHTML(pages.landing(), production))
   addPage({
     title: "Eons",

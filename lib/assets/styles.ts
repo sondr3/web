@@ -1,7 +1,7 @@
 import sass, { Result as SassResult } from "sass"
 import { logging } from "../logging"
 import path from "path"
-import { getConfig } from "../config"
+import { Config } from "../config"
 import { siteState } from "../state"
 import csso from "csso"
 import { SourceMapGenerator, SourceMapConsumer } from "source-map"
@@ -15,22 +15,23 @@ const logger = logging.getLogger("sass")
  * Renders a given SCSS file to CSS, and optimizing it if running in production
  * mode.
  *
+ * @param config - Build configuration
  * @param file - File to render
  * @param prod - Whether to optimize file
  * @returns Error if output file could not be written to
  */
-export const renderStyles = (file: string, prod: boolean): EitherAsync<FSError, void> =>
+export const renderStyles = (config: Config, file: string, prod: boolean): EitherAsync<FSError, void> =>
   EitherAsync(async () => {
     logger.debug(`Rendering ${file}`)
     const style = sass.renderSync({
       file: file,
       sourceMap: true,
-      outFile: styleName(file),
+      outFile: styleName(config, file),
     })
 
     logger.debug(`Rendered ${file}: took ${prettyPrintDuration(style.stats.duration)}`)
 
-    await writeStyles(file, style, prod)
+    await writeStyles(config, file, style, prod)
       .mapLeft((error) => error)
       .run()
   })
@@ -38,12 +39,13 @@ export const renderStyles = (file: string, prod: boolean): EitherAsync<FSError, 
 /**
  * Writes a CSS file and its source map.
  *
+ * @param config - Build configuration
  * @param file - CSS filename to write to
  * @param res - Result object from rendering SCSS
  * @param prod - Whether to optimize file
  * @returns Error if file creation fails
  */
-const writeStyles = (file: string, res: SassResult, prod: boolean): EitherAsync<FSError, void> =>
+const writeStyles = (config: Config, file: string, res: SassResult, prod: boolean): EitherAsync<FSError, void> =>
   EitherAsync(async () => {
     const parsed = path.parse(file)
 
@@ -51,11 +53,11 @@ const writeStyles = (file: string, res: SassResult, prod: boolean): EitherAsync<
     const out = await (prod ? optimize(res, file, hash) : formatCSS(res))
 
     await createDirectory(parsed.dir)
-      .chain(() => writeFile(styleName(file, `${hash}css`), out.css))
-      .chain(() => writeFile(styleName(file, `${hash}css.map`), out.map))
+      .chain(() => writeFile(styleName(config, file, `${hash}css`), out.css))
+      .chain(() => writeFile(styleName(config, file, `${hash}css.map`), out.map))
       .mapLeft((err) => err)
 
-    state.styles.set(`${parsed.name}.css`, styleName(file, `${hash}css`))
+    state.styles.set(`${parsed.name}.css`, styleName(config, file, `${hash}css`))
   })
 
 /**
@@ -82,12 +84,12 @@ const optimize = async (source: SassResult, file: string, hash: string): Promise
 /**
  * Converts e.g. `style.css` to `./public/style.abcdefg123.css`.
  *
+ * @param config - Build configuration
  * @param file - Filename to correct
  * @param ext - File extension
  * @returns The corrected file extension
  */
-export const styleName = (file: string, ext: string = "css"): string => {
-  const config = getConfig()
+export const styleName = (config: Config, file: string, ext: string = "css"): string => {
   const { name } = path.parse(file)
   return `${config.out}/${name}.${ext}`
 }

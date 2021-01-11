@@ -1,13 +1,11 @@
 import path from "path"
 
-import { defaultConfig, getConfig, setConfig } from "./config"
+import { defaultConfig, setConfig } from "./config"
 
 describe("config", () => {
   it("sets correct default settings", () => {
-    const config = getConfig()
-
-    expect(config.out.includes("/test")).toBeTruthy()
-    expect(config.content.pages).toBe(path.join(path.resolve(process.cwd()), "content/pages/"))
+    expect(defaultConfig.out.includes("/test")).toBeTruthy()
+    expect(defaultConfig.content.pages).toBe(path.join(path.resolve(process.cwd()), "content/pages/"))
   })
 
   it("can be overridden", () => {

@@ -1,20 +1,19 @@
 import { promises as fs } from "fs"
 import path from "path"
 
-import { getConfig } from "../config"
+import { defaultConfig } from "../config"
 import { convertAsciidoc, minifyHTML, writeHTML } from "."
 import { renderSpecialPages } from "./pages"
 
 describe("renderPages", () => {
   afterAll(async () => {
-    await fs.rmdir(getConfig().out)
+    await fs.rmdir(defaultConfig.out)
   })
 
   it("renders all pages", async () => {
-    const config = getConfig()
-    await renderSpecialPages(false)
+    await renderSpecialPages(defaultConfig, false)
 
-    expect(await fs.stat(path.join(config.out, "index.html"))).toBeDefined()
+    expect(await fs.stat(path.join(defaultConfig.out, "index.html"))).toBeDefined()
   })
 })
 

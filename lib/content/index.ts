@@ -4,6 +4,7 @@ import path from "path"
 import { EitherAsync } from "purify-ts/EitherAsync"
 
 import { Asciidoc, Layout, renderTemplate } from "../build"
+import { Config } from "../config"
 import { logging } from "../logging"
 import { siteState } from "../state"
 import { createDirectory, formatHTML, FSError, writeFile } from "../utils"
@@ -38,12 +39,13 @@ export const convertAsciidoc = (filepath: string): EitherAsync<FSError, Asciidoc
 /**
  * Renders a Asciidoctor file to HTML.
  *
+ * @param config - Build configuration
  * @param content - Asciidoc document
  * @returns The converted file
  */
-export const renderAsciidoc = (content: Asciidoctor.Document): string => {
+export const renderAsciidoc = (config: Config, content: Asciidoctor.Document): string => {
   const layout = content.getAttribute("layout", "default") as Layout
-  return renderTemplate(layout, { title: content.getTitle(), content: content.getContent() })
+  return renderTemplate(config, layout, { title: content.getTitle(), content: content.getContent() })
 }
 
 /**

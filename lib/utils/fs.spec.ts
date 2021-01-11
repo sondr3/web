@@ -3,7 +3,7 @@ import * as os from "os"
 import path from "path"
 import { Left, Right } from "purify-ts"
 
-import { getConfig } from "../config"
+import { defaultConfig } from "../config"
 import {
   copyFile,
   copyFiles,
@@ -76,13 +76,13 @@ describe("writeFile", () => {
 describe("cacheBustFile", () => {
   it("can add a hash to a file", async () => {
     const actual = await createFileHash(path.resolve(process.cwd(), ".eslintignore")).run()
-    expect(actual).toEqual(Right("e94b497a"))
+    expect(actual).toEqual(Right("c5a0cf51"))
   })
 })
 
 describe("copyFiles", () => {
   it("copies files without recursing", async () => {
-    const config = getConfig()
+    const config = defaultConfig
 
     await fs.rmdir(path.join(config.out, "images"), { recursive: true })
     expect(await copyFiles(config.assets.images, path.join(config.out, "images"), false)).toEqual(Right(true))
@@ -109,7 +109,7 @@ describe("copyFiles", () => {
 })
 
 describe("copyFile", () => {
-  const config = getConfig()
+  const config = defaultConfig
 
   it("copies and overwrites files by default", async () => {
     const directory = await fs.mkdtemp(path.join(os.tmpdir(), "test-copy"))

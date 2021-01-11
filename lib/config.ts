@@ -72,7 +72,3 @@ export const defaultConfig: Config = {
 export const setConfig = (config: Config, options: DeepPartial<Config>): Config => {
   return <Config>{ ...config, ...options }
 }
-
-export const getConfig = (): Config => config
-
-const config: Config = defaultConfig

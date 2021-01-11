@@ -2,13 +2,12 @@ import { createReadStream, createWriteStream } from "fs"
 import stream from "stream/promises"
 import { createBrotliCompress, createGzip } from "zlib"
 
-import { Config, getConfig } from "../config"
+import { Config } from "../config"
 import { readdirRecursive } from "../utils"
 
 const INVALID_EXT = [".map", ".txt", ".scss", ".gz", ".br", ""]
 
-export async function compress(production: boolean): Promise<void> {
-  const config = getConfig()
+export async function compress(config: Config, production: boolean): Promise<void> {
   if (production) {
     await gzip(config)
     await brotli(config)

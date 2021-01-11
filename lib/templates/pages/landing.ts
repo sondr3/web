@@ -1,10 +1,10 @@
-import { getConfig } from "../../config"
+import { defaultConfig } from "../../config"
 import { html } from "../html"
 import { layout } from "../layouts"
 
 const {
   meta: { author },
-} = getConfig()
+} = defaultConfig
 
 const landingPage = html`
   <section class="intro">

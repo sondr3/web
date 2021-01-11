@@ -25,9 +25,13 @@ const build = async (cli: CLI): Promise<void> => {
  * @param logger - Logger to output to
  */
 const develop = async (cli: CLI, logger: Logger): Promise<void> => {
-  setConfig(defaultConfig, { out: "./public", production: cli.production, meta: { url: "http://localhost" } })
-  await buildSite(cli.production)
-  const server = new Server()
+  const config = setConfig(defaultConfig, {
+    out: "./public",
+    production: cli.production,
+    meta: { url: "http://localhost" },
+  })
+  await buildSite(config, cli.production)
+  const server = new Server(config)
   server.run()
 
   process.on("SIGINT", () => shutdown(server, logger))
@@ -39,7 +43,7 @@ const develop = async (cli: CLI, logger: Logger): Promise<void> => {
  * @param logger - Logger to output to
  */
 const serve = (logger: Logger): void => {
-  const server = new Server()
+  const server = new Server(defaultConfig)
   server.serve()
 
   process.on("SIGINT", () => shutdown(server, logger))
@@ -77,8 +81,8 @@ const run = async (): Promise<void> => {
     case "serve":
       return serve(logger)
     case "clean": {
-      setConfig(defaultConfig, { production: false, out: "./public" })
-      return await clean()
+      const config = setConfig(defaultConfig, { production: false, out: "./public" })
+      return await clean(config)
     }
   }
 }
