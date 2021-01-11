@@ -30,9 +30,11 @@ export const buildSite = (config: Config, production: boolean): EitherAsync<Buil
     logger.log(`Building site ${config.meta.title} (${config.meta.url})`)
     const duration = new Duration()
 
-    await copyAssets(config)
-      .chain(() => renderStyles(config, path.join(config.assets.style, "style.scss"), production))
-      .chain(() => renderPages(config, production))
+    await EitherAsync.sequence([
+      copyAssets(config),
+      renderStyles(config, path.join(config.assets.style, "style.scss"), production),
+      renderPages(config, production),
+    ])
       .mapLeft((error) => new BuildError(error.message))
       .run()
 

@@ -72,9 +72,11 @@ const writeStyles = (
 
     const out = await (production ? optimize(result, file, hash) : formatCSS(result))
 
-    await createDirectory(parsed.dir)
-      .chain(() => writeFile(styleName(config, file, `${hash}css`), out.css))
-      .chain(() => writeFile(styleName(config, file, `${hash}css.map`), out.map))
+    await EitherAsync.sequence([
+      createDirectory(parsed.dir),
+      writeFile(styleName(config, file, `${hash}css`), out.css),
+      writeFile(styleName(config, file, `${hash}css.map`), out.map),
+    ])
       .mapLeft((error) => new StyleError(error.message))
       .run()
 

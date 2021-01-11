@@ -153,8 +153,7 @@ describe("readFile", () => {
 
 describe("rmdir", () => {
   it("should delete a directory", async () => {
-    await copyAssets(defaultConfig).run()
-    const path_ = path.resolve(process.cwd(), defaultConfig.out, "images")
+    const path_ = await fs.mkdtemp("rmdir")
     const result = await rmdir(path_, true).run()
     expect(result).toEqual(Right(true))
     expect(fsSync.existsSync(path_)).toBeFalsy()
@@ -171,7 +170,7 @@ describe("rmdir", () => {
 describe("rmdirs", () => {
   it("should delete multiple", async () => {
     await copyAssets(defaultConfig).run()
-    const paths = ["js", "images"].map((path_) => path.resolve(process.cwd(), defaultConfig.out, path_))
+    const paths = [await fs.mkdtemp("rmdirs"), await fs.mkdtemp("rmdirs")]
     const result = await rmdirs(paths, true)
     expect(result).toEqual(Right([true, true]))
 

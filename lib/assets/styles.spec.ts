@@ -1,3 +1,4 @@
+import fs from "fs"
 import path from "path"
 
 import { defaultConfig } from "../config"
@@ -21,6 +22,7 @@ describe("renderStyles", () => {
     const result = await renderStyles(defaultConfig, spec, false).run()
 
     expect(result.isRight()).toBeTruthy()
+    expect(fs.existsSync(path.resolve(process.cwd(), defaultConfig.out, "style.css"))).toBeTruthy()
   })
 
   it("errors when it cannot render", async () => {
