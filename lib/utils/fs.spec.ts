@@ -76,7 +76,7 @@ describe("writeFile", () => {
 describe("cacheBustFile", () => {
   it("can add a hash to a file", async () => {
     const actual = await createFileHash(path.resolve(process.cwd(), ".eslintignore")).run()
-    expect(actual).toEqual(Right("c5a0cf51"))
+    expect(actual).toEqual(Right("9fa41bed"))
   })
 })
 

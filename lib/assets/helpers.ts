@@ -1,9 +1,10 @@
-import { Config } from "../config"
-import { copyFiles, FSError } from "../utils/"
-import path from "path"
 import { promises as fs } from "fs"
-import { logging } from "../logging"
+import path from "path"
 import { EitherAsync } from "purify-ts/EitherAsync"
+
+import { Config } from "../config"
+import { logging } from "../logging"
+import { copyFiles, FSError } from "../utils"
 
 const logger = logging.getLogger("assets")
 
@@ -19,10 +20,11 @@ export const copyAssets = (config: Config): EitherAsync<FSError, void> =>
     await fs.rmdir(path.join(config.out, "assets/scss"), { recursive: true })
     await fs.rmdir(path.join(config.out, "js"), { recursive: true })
 
-    copyFiles(config.assets.images, path.join(config.out, "images"))
+    await copyFiles(config.assets.images, path.join(config.out, "images"))
       .chain(() => copyFiles(config.assets.style, path.join(config.out, "assets/scss")))
       .chain(() => copyFiles(config.assets.js, path.join(config.out, "js")))
       .mapLeft((error) => error)
+      .run()
 
     logger.debug("Copying assets finished")
   })

@@ -18,6 +18,7 @@ export class BuildError extends CustomError {
     super(message)
   }
 }
+
 /**
  * Build the whole site by copying assets, building styles and all pages, posts etc.
  *

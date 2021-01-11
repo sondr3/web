@@ -1,15 +1,23 @@
-import sass, { Result as SassResult } from "sass"
-import { logging } from "../logging"
-import path from "path"
-import { Config } from "../config"
-import { siteState } from "../state"
 import csso from "csso"
-import { SourceMapGenerator, SourceMapConsumer } from "source-map"
-import { writeFile, prettyPrintDuration, createFileHash, formatCSS, createDirectory, FSError } from "../utils"
+import path from "path"
 import { EitherAsync } from "purify-ts/EitherAsync"
+import sass, { Result as SassResult } from "sass"
+import { SourceMapConsumer, SourceMapGenerator } from "source-map"
+import { CustomError } from "ts-custom-error"
+
+import { Config } from "../config"
+import { logging } from "../logging"
+import { siteState } from "../state"
+import { createDirectory, createFileHash, formatCSS, prettyPrintDuration, writeFile } from "../utils"
 
 const state = siteState
 const logger = logging.getLogger("sass")
+
+export class StyleError extends CustomError {
+  public constructor(message: string) {
+    super(message)
+  }
+}
 
 /**
  * Renders a given SCSS file to CSS, and optimizing it if running in production
@@ -17,10 +25,10 @@ const logger = logging.getLogger("sass")
  *
  * @param config - Build configuration
  * @param file - File to render
- * @param prod - Whether to optimize file
+ * @param production - Whether to optimize file
  * @returns Error if output file could not be written to
  */
-export const renderStyles = (config: Config, file: string, prod: boolean): EitherAsync<FSError, void> =>
+export const renderStyles = (config: Config, file: string, production: boolean): EitherAsync<StyleError, void> =>
   EitherAsync(async () => {
     logger.debug(`Rendering ${file}`)
     const style = sass.renderSync({
@@ -31,8 +39,8 @@ export const renderStyles = (config: Config, file: string, prod: boolean): Eithe
 
     logger.debug(`Rendered ${file}: took ${prettyPrintDuration(style.stats.duration)}`)
 
-    await writeStyles(config, file, style, prod)
-      .mapLeft((error) => error)
+    await writeStyles(config, file, style, production)
+      .mapLeft((error) => new StyleError(error.message))
       .run()
   })
 
@@ -41,21 +49,34 @@ export const renderStyles = (config: Config, file: string, prod: boolean): Eithe
  *
  * @param config - Build configuration
  * @param file - CSS filename to write to
- * @param res - Result object from rendering SCSS
- * @param prod - Whether to optimize file
+ * @param result - Result object from rendering SCSS
+ * @param production - Whether to optimize file
  * @returns Error if file creation fails
  */
-const writeStyles = (config: Config, file: string, res: SassResult, prod: boolean): EitherAsync<FSError, void> =>
+const writeStyles = (
+  config: Config,
+  file: string,
+  result: SassResult,
+  production: boolean,
+): EitherAsync<StyleError, void> =>
   EitherAsync(async () => {
     const parsed = path.parse(file)
 
-    const hash = prod ? `${await createFileHash(file)}.` : ""
-    const out = await (prod ? optimize(res, file, hash) : formatCSS(res))
+    let hash = ""
+    if (production) {
+      await createFileHash(file)
+        .mapLeft((error) => new StyleError(error.message))
+        .map((value) => (hash = value))
+        .run()
+    }
+
+    const out = await (production ? optimize(result, file, hash) : formatCSS(result))
 
     await createDirectory(parsed.dir)
       .chain(() => writeFile(styleName(config, file, `${hash}css`), out.css))
       .chain(() => writeFile(styleName(config, file, `${hash}css.map`), out.map))
-      .mapLeft((err) => err)
+      .mapLeft((error) => new StyleError(error.message))
+      .run()
 
     state.styles.set(`${parsed.name}.css`, styleName(config, file, `${hash}css`))
   })
@@ -69,14 +90,14 @@ const writeStyles = (config: Config, file: string, res: SassResult, prod: boolea
  * @returns The optimized CSS and its source map
  */
 const optimize = async (source: SassResult, file: string, hash: string): Promise<{ css: string; map: string }> => {
-  const res = csso.minify(source.css.toString(), {
+  const result = csso.minify(source.css.toString(), {
     filename: file,
     sourceMap: true,
   })
 
-  const map = res.map as SourceMapGenerator
+  const map = result.map as SourceMapGenerator
   map.applySourceMap(await new SourceMapConsumer(source.map?.toString() ?? ""), file)
-  const css = res.css + `/*# sourceMappingURL=style.${hash}css.map */`
+  const css = result.css + `/*# sourceMappingURL=style.${hash}css.map */`
 
   return { css, map: map.toString() }
 }
@@ -86,10 +107,10 @@ const optimize = async (source: SassResult, file: string, hash: string): Promise
  *
  * @param config - Build configuration
  * @param file - Filename to correct
- * @param ext - File extension
+ * @param extension - File extension
  * @returns The corrected file extension
  */
-export const styleName = (config: Config, file: string, ext: string = "css"): string => {
+export const styleName = (config: Config, file: string, extension = "css"): string => {
   const { name } = path.parse(file)
-  return `${config.out}/${name}.${ext}`
+  return `${config.out}/${name}.${extension}`
 }
