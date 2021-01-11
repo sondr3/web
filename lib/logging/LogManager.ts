@@ -21,8 +21,8 @@ type LogOptions = {
  * using this manager.
  */
 export class LogManager extends EventEmitter {
-  private readonly registered = false
-  readonly options: LogOptions = {
+  private registered = false
+  options: LogOptions = {
     minLevel: "none",
   }
 
@@ -51,6 +51,7 @@ export class LogManager extends EventEmitter {
    *
    * @param listener - Entry that was pushed to the listener.
    */
+  // eslint-disable-next-line no-unused-vars
   public onLogEntry(listener: (logEntry: LogEntry) => void): LogManager {
     this.on("log", listener)
     return this

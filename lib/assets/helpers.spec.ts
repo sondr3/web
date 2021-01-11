@@ -1,5 +1,6 @@
 import { copyAssets } from "./helpers"
 
 test("copyAssets", async () => {
-  expect(await copyAssets()).toBeUndefined()
+  const result = await copyAssets().run()
+  expect(result.isRight()).toBeTruthy()
 })

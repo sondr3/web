@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars,no-undef */
+
 declare module "stream/promises" {
   import { FinishedOptions } from "stream"
 

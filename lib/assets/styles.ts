@@ -5,7 +5,8 @@ import { getConfig } from "../config"
 import { siteState } from "../state"
 import csso from "csso"
 import { SourceMapGenerator, SourceMapConsumer } from "source-map"
-import { writeFile, prettyPrintDuration, createFileHash, formatCSS, createDirectory } from "../utils"
+import { writeFile, prettyPrintDuration, createFileHash, formatCSS, createDirectory, FSError } from "../utils"
+import { EitherAsync } from "purify-ts/EitherAsync"
 
 const state = siteState
 const logger = logging.getLogger("sass")
@@ -18,18 +19,21 @@ const logger = logging.getLogger("sass")
  * @param prod - Whether to optimize file
  * @returns Error if output file could not be written to
  */
-export const renderStyles = async (file: string, prod: boolean): Promise<void | Error> => {
-  logger.debug(`Rendering ${file}`)
-  const style = sass.renderSync({
-    file: file,
-    sourceMap: true,
-    outFile: styleName(file),
+export const renderStyles = (file: string, prod: boolean): EitherAsync<FSError, void> =>
+  EitherAsync(async () => {
+    logger.debug(`Rendering ${file}`)
+    const style = sass.renderSync({
+      file: file,
+      sourceMap: true,
+      outFile: styleName(file),
+    })
+
+    logger.debug(`Rendered ${file}: took ${prettyPrintDuration(style.stats.duration)}`)
+
+    await writeStyles(file, style, prod)
+      .mapLeft((error) => error)
+      .run()
   })
-
-  logger.debug(`Rendered ${file}: took ${prettyPrintDuration(style.stats.duration)}`)
-
-  return writeStyles(file, style, prod)
-}
 
 /**
  * Writes a CSS file and its source map.
@@ -39,21 +43,20 @@ export const renderStyles = async (file: string, prod: boolean): Promise<void | 
  * @param prod - Whether to optimize file
  * @returns Error if file creation fails
  */
-const writeStyles = async (file: string, res: SassResult, prod: boolean): Promise<void | Error> => {
-  const parsed = path.parse(file)
+const writeStyles = (file: string, res: SassResult, prod: boolean): EitherAsync<FSError, void> =>
+  EitherAsync(async () => {
+    const parsed = path.parse(file)
 
-  const hash = prod ? `${await createFileHash(file)}.` : ""
-  const out = await (prod ? optimize(res, file, hash) : formatCSS(res))
+    const hash = prod ? `${await createFileHash(file)}.` : ""
+    const out = await (prod ? optimize(res, file, hash) : formatCSS(res))
 
-  createDirectory(parsed.dir)
-    .chain(() => writeFile(styleName(file, `${hash}css`), out.css))
-    .chain(() => writeFile(styleName(file, `${hash}css.map`), out.map))
-    .mapLeft((err) => err)
+    await createDirectory(parsed.dir)
+      .chain(() => writeFile(styleName(file, `${hash}css`), out.css))
+      .chain(() => writeFile(styleName(file, `${hash}css.map`), out.map))
+      .mapLeft((err) => err)
 
-  state.styles.set(`${parsed.name}.css`, styleName(file, `${hash}css`))
-
-  return
-}
+    state.styles.set(`${parsed.name}.css`, styleName(file, `${hash}css`))
+  })
 
 /**
  * Optimize a CSS file by minifying it.

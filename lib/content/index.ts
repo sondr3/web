@@ -1,11 +1,12 @@
 import { createConfiguration, minify } from "@minify-html/js"
 import { Asciidoctor } from "asciidoctor"
 import path from "path"
+import { EitherAsync } from "purify-ts/EitherAsync"
 
 import { Asciidoc, Layout, renderTemplate } from "../build"
 import { logging } from "../logging"
 import { siteState } from "../state"
-import { createDirectory, formatHTML, writeFile } from "../utils"
+import { createDirectory, formatHTML, FSError, writeFile } from "../utils"
 
 export * from "./pages"
 
@@ -32,9 +33,7 @@ export const addPage = (data: Metadata): void => {
  * @param filepath - Path to load
  * @returns The parsed file
  */
-export const convertAsciidoc = async (filepath: string): Promise<Asciidoctor.Document | Error> => {
-  return asciidoc.load(filepath)
-}
+export const convertAsciidoc = (filepath: string): EitherAsync<FSError, Asciidoctor.Document> => asciidoc.load(filepath)
 
 /**
  * Renders a Asciidoctor file to HTML.
@@ -42,7 +41,7 @@ export const convertAsciidoc = async (filepath: string): Promise<Asciidoctor.Doc
  * @param content - Asciidoc document
  * @returns The converted file
  */
-export const renderAsciidoc = (content: Asciidoctor.Document): string | Error => {
+export const renderAsciidoc = (content: Asciidoctor.Document): string => {
   const layout = content.getAttribute("layout", "default") as Layout
   return renderTemplate(layout, { title: content.getTitle(), content: content.getContent() })
 }
@@ -73,7 +72,7 @@ export const minifyHTML = (source: string): Buffer => {
  * function around {@link minifyHTML} and {@link formatHTML}.
  *
  * @param source - HTML to format/minify
- * @param prod - Whether we are in production mode
+ * @param production - Whether we are in production mode
  * @returns The modified HTML
  */
 export const writeHTML = (source: string, production: boolean): Buffer | string => {

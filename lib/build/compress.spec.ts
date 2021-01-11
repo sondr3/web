@@ -6,7 +6,7 @@ import { brotli, compress, gzip } from "./compress"
 describe("compress", () => {
   it("does not compress when developing", async () => {
     await clean()
-    await buildSite(false)
+    await buildSite(false).run()
     await compress(false)
 
     const files = await readdirRecursive(getConfig().out, [])
@@ -18,7 +18,7 @@ describe("compress", () => {
 
   it("does compress when releasing", async () => {
     await clean()
-    await buildSite(true)
+    await buildSite(true).run()
     await compress(true)
 
     const files = await readdirRecursive(getConfig().out, [])
@@ -30,7 +30,7 @@ describe("compress", () => {
 
 test("gzip", async () => {
   await clean()
-  await buildSite(false)
+  await buildSite(false).run()
   await gzip(getConfig())
 
   const files = await readdirRecursive(getConfig().out, [])

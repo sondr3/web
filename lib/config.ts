@@ -1,5 +1,7 @@
 import path from "path"
 
+import { DeepPartial } from "./utils"
+
 export type About = {
   readonly intro: string
   readonly name: string
@@ -35,7 +37,7 @@ export type Config = {
 
 const root = path.resolve(process.cwd())
 
-const defaultConfig: Config = {
+export const defaultConfig: Config = {
   // Defaults to `./test` for... testing, shocking.
   out: "./test",
   production: false,
@@ -67,10 +69,8 @@ const defaultConfig: Config = {
   },
 }
 
-export const setConfig = (production = false, out = "./test/", url = "http://localhost"): void => {
-  config.out = out
-  config.production = production
-  config.meta.url = url
+export const setConfig = (config: Config, options: DeepPartial<Config>): Config => {
+  return <Config>{ ...config, ...options }
 }
 
 export const getConfig = (): Config => config

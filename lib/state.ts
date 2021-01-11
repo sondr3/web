@@ -5,9 +5,9 @@ import { Metadata } from "./content"
 /**
  * Site state during building, used to look up styles, content etc.
  */
-type State = {
-  readonly styles: ReadonlyMap<string, string>
-  readonly pages: ReadonlyMap<string, Metadata>
+export type State = {
+  readonly styles: Map<string, string>
+  readonly pages: Map<string, Metadata>
 }
 
 const initialState: State = {
@@ -26,6 +26,5 @@ export const siteState = initialState
  */
 export const getStyle = (name: string): string | undefined => {
   const stylePath = siteState.styles.get(name)
-  if (stylePath === undefined) return `/${name}`
-  return `/${path.parse(stylePath).base}`
+  return stylePath === undefined ? `/${name}` : `/${path.parse(stylePath).base}`
 }

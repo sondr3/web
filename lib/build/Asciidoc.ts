@@ -1,7 +1,8 @@
 import Processor, { Asciidoctor } from "asciidoctor"
+import { EitherAsync } from "purify-ts/EitherAsync"
 
 import * as templates from "../templates"
-import { readFile } from "../utils"
+import { FSError, readFile } from "../utils"
 
 /**
  * A wrapper class around {@link https://github.com/asciidoctor/asciidoctor.js} with its
@@ -23,10 +24,10 @@ export class Asciidoc {
    * @param filepath - File to open and parse
    * @returns Either a converted document or an error
    */
-  async load(filepath: string): Promise<Asciidoctor.Document | Error> {
-    const content = await readFile(filepath)
-    if (content instanceof Error) throw content
-    return this.asciidoc.load(content)
+  load(filepath: string): EitherAsync<FSError, Asciidoctor.Document> {
+    return readFile(filepath)
+      .map((document) => this.asciidoc.load(document))
+      .mapLeft((error) => error)
   }
 
   /**

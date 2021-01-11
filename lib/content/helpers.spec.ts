@@ -6,6 +6,7 @@ describe("convertDate", () => {
   })
 
   it("returns undefined when undefined", () => {
-    expect(convertDate()).toBeUndefined()
+    // eslint-disable-next-line unicorn/no-useless-undefined
+    expect(convertDate(undefined)).toBeUndefined()
   })
 })

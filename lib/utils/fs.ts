@@ -24,12 +24,12 @@ export class FSError extends CustomError {
  * @param filepaths - Array of found files
  * @returns An array of all found files
  */
-export async function dirWalk(
+export async function walkDirectory(
   directory: string,
   extension: string,
   recurse = true,
-  filepaths: ReadonlyArray<string> = [],
-): Promise<ReadonlyArray<string>> {
+  filepaths: Array<string> = [],
+): Promise<Array<string>> {
   const files = await fs.readdir(directory)
 
   for (const filename of files) {
@@ -37,7 +37,7 @@ export async function dirWalk(
     const stat = await fs.stat(filepath)
 
     if (stat.isDirectory() && recurse) {
-      await dirWalk(filepath, extension, recurse, filepaths)
+      await walkDirectory(filepath, extension, recurse, filepaths)
     } else if (path.extname(filename) === `.${extension}`) {
       filepaths.push(filepath)
     }
@@ -47,19 +47,19 @@ export async function dirWalk(
 }
 
 /**
- * A very similar function to {@link dirWalk}, the major difference being that
+ * A very similar function to {@link walkDirectory}, the major difference being that
  * this lists all files not matching the ignored extensions.
  *
  * @param directory - Directory to find contents of
- * @param ignored_ext - File extensions to ignore, e.g. [".txt"]
+ * @param ignored_extension - File extensions to ignore, e.g. [".txt"]
  * @param filepaths - Array of found files
  * @returns An array of all found files
  */
 export async function readdirRecursive(
   directory: string,
-  ignored_extension: ReadonlyArray<string>,
-  filepaths: ReadonlyArray<string> = [],
-): Promise<ReadonlyArray<string>> {
+  ignored_extension: Array<string>,
+  filepaths: Array<string> = [],
+): Promise<Array<string>> {
   const files = await fs.readdir(directory)
 
   for (const filename of files) {

@@ -1,6 +1,5 @@
 import { renderStyles, styleName } from "./styles"
 import path from "path"
-import assert from "assert"
 import { getConfig } from "../config"
 
 describe("styleName", () => {
@@ -19,18 +18,15 @@ describe("renderStyles", () => {
   it("renders and creates files", async () => {
     const config = getConfig()
     const spec = path.resolve(config.assets.style, "style.scss")
-    const res = await renderStyles(spec, false)
+    const res = await renderStyles(spec, false).run()
 
-    expect(res === undefined).toBeTruthy()
+    expect(res.isRight()).toBeTruthy()
   })
 
   it("errors when it cannot render", async () => {
     try {
-      const res = await renderStyles("no.scss", false)
-
-      expect(res !== undefined).toBeTruthy()
-      assert(res !== undefined)
-      expect(res.message).toContain("Could not create styles")
+      const res = await renderStyles("no.scss", false).run()
+      expect(res.isLeft()).toBeTruthy()
     } catch (e) {
       // noop
     }
@@ -39,6 +35,7 @@ describe("renderStyles", () => {
   it("minifies when in prod", async () => {
     const config = getConfig()
     const spec = path.resolve(config.assets.style, "style.scss")
-    await expect(renderStyles(spec, true)).resolves.toBeUndefined()
+    const res = await renderStyles(spec, false).run()
+    await expect(res.isRight()).toBeTruthy()
   })
 })

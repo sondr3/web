@@ -24,7 +24,7 @@ export class CLI {
    */
   constructor(argv: ReadonlyArray<string>) {
     this.command = CLI.stringToCommand(argv[2]) ?? "develop"
-    const options = argv.splice(2)
+    const options = argv.slice(2, argv.length)
     this.noisiness = CLI.parseNoise(options)
     this.production = CLI.parseProd(options)
   }
@@ -52,7 +52,7 @@ export class CLI {
    * @param options - The arguments after the command from the CLI
    * @returns `none` if no valid log level is found.
    */
-  private static parseNoise(options: readonly string[]): LogLevel {
+  private static parseNoise(options: string[]): LogLevel {
     const noiseFlag = options.some((value) => value.startsWith("-n") || value.startsWith("--noise"))
     let noisiness = "none"
     if (noiseFlag) {

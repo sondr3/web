@@ -9,22 +9,22 @@ import {
   copyFiles,
   createDirectory,
   createFileHash,
-  dirWalk,
   FSError,
   readdirRecursive,
   readFile,
+  walkDirectory,
   writeFile,
 } from "./fs"
 
-describe("dirWalk", () => {
+describe("walkDirectory", () => {
   it("JSON files without recursing", async () => {
-    const files = await dirWalk("./", "json", false)
+    const files = await walkDirectory("./", "json", false)
 
-    expect(files).toStrictEqual(["package.json", "renovate.json", "tsconfig.json"])
+    expect(files).toStrictEqual(["package-lock.json", "package.json", "renovate.json", "tsconfig.json"])
   })
 
   it("TS files with recursing", async () => {
-    const files = await dirWalk("./lib", "ts")
+    const files = await walkDirectory("./lib", "ts")
 
     expect(files).toContain("lib/utils/fs.ts")
     expect(files).toContain("lib/utils/fs.spec.ts")

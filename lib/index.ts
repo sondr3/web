@@ -1,5 +1,5 @@
 import { buildSite, clean } from "./build"
-import { setConfig } from "./config"
+import { defaultConfig, setConfig } from "./config"
 import { Logger, logging } from "./logging"
 import { Server } from "./server"
 import { CLI } from "./utils"
@@ -10,8 +10,12 @@ import { CLI } from "./utils"
  * @param cli - Command line arguments
  */
 const build = async (cli: CLI): Promise<void> => {
-  setConfig(cli.production, "./public", "https://www.eons.io")
-  await buildSite(cli.production)
+  const config = setConfig(defaultConfig, {
+    out: "./public",
+    production: cli.production,
+    meta: { url: "https://www.eons.io" },
+  })
+  await buildSite(config, cli.production).run()
 }
 
 /**
@@ -21,7 +25,7 @@ const build = async (cli: CLI): Promise<void> => {
  * @param logger - Logger to output to
  */
 const develop = async (cli: CLI, logger: Logger): Promise<void> => {
-  setConfig(cli.production, "./public", "https://localhost")
+  setConfig(defaultConfig, { out: "./public", production: cli.production, meta: { url: "http://localhost" } })
   await buildSite(cli.production)
   const server = new Server()
   server.run()
@@ -73,7 +77,7 @@ const run = async (): Promise<void> => {
     case "serve":
       return serve(logger)
     case "clean": {
-      setConfig(false, "./public")
+      setConfig(defaultConfig, { production: false, out: "./public" })
       return await clean()
     }
   }

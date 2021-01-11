@@ -1,6 +1,6 @@
 import path from "path"
 
-import { getConfig, setConfig } from "./config"
+import { defaultConfig, getConfig, setConfig } from "./config"
 
 describe("config", () => {
   it("sets correct default settings", () => {
@@ -11,8 +11,7 @@ describe("config", () => {
   })
 
   it("can be overridden", () => {
-    setConfig(true, "./public", "http://test.com")
-    const config = getConfig()
+    const config = setConfig(defaultConfig, { out: "./public", production: true, meta: { url: "http://test.com" } })
 
     expect(config.out.includes("/public")).toBeTruthy()
     expect(config.production).toBeTruthy()
