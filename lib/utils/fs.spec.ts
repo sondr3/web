@@ -100,11 +100,8 @@ describe("copyFiles", () => {
   })
 
   it("cannot copy wrong files", async () => {
-    expect(await copyFiles(path.resolve(process.cwd()), "/").run()).toEqual(
-      Left(
-        new FSError("EACCES: permission denied, copyfile '/home/sondre/Code/web/.dockerignore' -> '/.dockerignore'"),
-      ),
-    )
+    const result = await copyFiles(path.resolve(process.cwd()), "/").run()
+    expect(result.isLeft()).toBeTruthy()
   })
 })
 
