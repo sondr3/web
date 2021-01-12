@@ -1,7 +1,7 @@
-import { getStyle } from "../../site/state"
+import { Site } from "../../site"
 import { html } from ".."
 
-export const head = (title: string): string => html`
+export const head = (site: Site, title: string): string => html`
   <head>
     <meta charset="UTF-8" />
 
@@ -16,6 +16,6 @@ export const head = (title: string): string => html`
     <link rel="icon" href="/icon.svg" type="image/svg+xml" sizes="any" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-    <link rel="stylesheet" href="${getStyle("style.css")}" />
+    <link rel="stylesheet" href="${site.getStyle("style.css")}" />
   </head>
 `

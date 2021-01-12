@@ -7,7 +7,7 @@ import { copyAssets, renderStyles } from "../assets"
 import { renderPages, renderSpecialPages } from "../content"
 import { sitemap } from "../content/sitemap"
 import { logging } from "../logging"
-import { Config } from "../site/config"
+import { Config, Site } from "../site"
 import { copyFile, Duration } from "../utils"
 import { compress } from "."
 
@@ -22,22 +22,22 @@ export class BuildError extends CustomError {
 /**
  * Build the whole site by copying assets, building styles and all pages, posts etc.
  *
- * @param config - Configuration to build site with
+ * @param site - Configuration to build site with
  * @param production - Whether to optimize output
  */
-export const buildSite = (config: Config, production: boolean): EitherAsync<BuildError, void> =>
+export const buildSite = (site: Site, production: boolean): EitherAsync<BuildError, void> =>
   EitherAsync(async () => {
-    logger.log(`Building site ${config.meta.title} (${config.meta.url})`)
+    logger.log(`Building site ${site.config.meta.title} (${site.config.meta.url})`)
     const duration = new Duration()
 
     await EitherAsync.sequence([
-      copyAssets(config),
-      renderStyles(config, path.join(config.assets.style, "style.scss"), production),
-      renderPages(config, production),
-      renderSpecialPages(config, production),
-      createRootFiles(config),
-      sitemap(config),
-      compress(config, production),
+      copyAssets(site.config),
+      renderStyles(site, path.join(site.config.assets.style, "style.scss"), production),
+      renderPages(site, production),
+      renderSpecialPages(site, production),
+      createRootFiles(site.config),
+      sitemap(site),
+      compress(site.config, production),
     ])
       .mapLeft((error) => new BuildError(error.message))
       .run()

@@ -1,7 +1,7 @@
 import { buildSite, clean } from "./build"
 import { Logger, logging } from "./logging"
 import { Server } from "./server"
-import { defaultConfig, setConfig } from "./site"
+import { defaultConfig, setConfig, Site } from "./site"
 import { CLI } from "./utils"
 
 /**
@@ -10,12 +10,14 @@ import { CLI } from "./utils"
  * @param cli - Command line arguments
  */
 const build = async (cli: CLI): Promise<void> => {
-  const config = setConfig(defaultConfig, {
-    out: "./public",
-    production: cli.production,
-    meta: { url: "https://www.eons.io" },
-  })
-  await buildSite(config, cli.production).run()
+  const site = new Site(
+    setConfig(defaultConfig, {
+      out: "./public",
+      production: cli.production,
+      meta: { url: "https://www.eons.io" },
+    }),
+  )
+  await buildSite(site, cli.production).run()
 }
 
 /**
@@ -25,13 +27,15 @@ const build = async (cli: CLI): Promise<void> => {
  * @param logger - Logger to output to
  */
 const develop = async (cli: CLI, logger: Logger): Promise<void> => {
-  const config = setConfig(defaultConfig, {
-    out: "./public",
-    production: cli.production,
-    meta: { url: "http://localhost" },
-  })
-  await buildSite(config, cli.production)
-  const server = new Server(config)
+  const site = new Site(
+    setConfig(defaultConfig, {
+      out: "./public",
+      production: cli.production,
+      meta: { url: "http://localhost" },
+    }),
+  )
+  await buildSite(site, cli.production)
+  const server = new Server(site)
   server.run()
 
   process.on("SIGINT", () => shutdown(server, logger))
@@ -43,7 +47,7 @@ const develop = async (cli: CLI, logger: Logger): Promise<void> => {
  * @param logger - Logger to output to
  */
 const serve = (logger: Logger): void => {
-  const server = new Server(defaultConfig)
+  const server = new Server(new Site())
   server.serve()
 
   process.on("SIGINT", () => shutdown(server, logger))

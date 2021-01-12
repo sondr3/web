@@ -1,4 +1,4 @@
-import { defaultConfig } from "../site/config"
+import { defaultConfig, Site } from "../site"
 import { readdirRecursive } from "../utils"
 import { buildSite, clean } from "./build"
 import { brotli, compress, gzip } from "./compress"
@@ -6,7 +6,7 @@ import { brotli, compress, gzip } from "./compress"
 describe("compress", () => {
   it("does not compress when developing", async () => {
     await clean(defaultConfig)
-    await buildSite(defaultConfig, false).run()
+    await buildSite(new Site(), false).run()
     await compress(defaultConfig, false)
 
     const files = await readdirRecursive(defaultConfig.out, [])
@@ -18,7 +18,7 @@ describe("compress", () => {
 
   it("does compress when releasing", async () => {
     await clean(defaultConfig)
-    await buildSite(defaultConfig, true).run()
+    await buildSite(new Site(), true).run()
     await compress(defaultConfig, true)
 
     const files = await readdirRecursive(defaultConfig.out, [])
@@ -30,7 +30,7 @@ describe("compress", () => {
 
 test("gzip", async () => {
   await clean(defaultConfig)
-  await buildSite(defaultConfig, false).run()
+  await buildSite(new Site(), false).run()
   await gzip(defaultConfig)
 
   const files = await readdirRecursive(defaultConfig.out, [])
@@ -42,7 +42,7 @@ test("gzip", async () => {
 
 test("brotli", async () => {
   await clean(defaultConfig)
-  await buildSite(defaultConfig, false)
+  await buildSite(new Site(), false)
   await brotli(defaultConfig)
 
   const files = await readdirRecursive(defaultConfig.out, [])

@@ -1,7 +1,7 @@
 import { promises as fs } from "fs"
 import path from "path"
 
-import { defaultConfig } from "../site/config"
+import { defaultConfig, Site } from "../site"
 import { convertAsciidoc, minifyHTML, writeHTML } from "."
 import { renderSpecialPages } from "./pages"
 
@@ -11,7 +11,7 @@ describe("renderPages", () => {
   })
 
   it("renders all pages", async () => {
-    await renderSpecialPages(defaultConfig, false)
+    await renderSpecialPages(new Site(), false)
 
     expect(await fs.stat(path.join(defaultConfig.out, "index.html"))).toBeDefined()
   })

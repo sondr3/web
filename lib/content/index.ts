@@ -4,16 +4,12 @@ import path from "path"
 import { EitherAsync } from "purify-ts/EitherAsync"
 
 import { Asciidoc, Layout, renderTemplate } from "../build"
-import { logging } from "../logging"
-import { Config } from "../site/config"
-import { siteState } from "../site/state"
+import { Site } from "../site"
 import { createDirectory, formatHTML, FSError, writeFile } from "../utils"
 
 export * from "./pages"
 
 const asciidoc = new Asciidoc()
-const state = siteState
-const logger = logging.getLogger("content")
 
 export type Metadata = {
   readonly title: string
@@ -21,11 +17,6 @@ export type Metadata = {
   readonly path: string
   readonly createdAt?: Date
   readonly modifiedAt?: Date
-}
-
-export const addPage = (data: Metadata): void => {
-  logger.debug(`Adding page ${data.title} to state`)
-  state.pages.set(data.path, data)
 }
 
 /**
@@ -39,13 +30,13 @@ export const convertAsciidoc = (filepath: string): EitherAsync<FSError, Asciidoc
 /**
  * Renders a Asciidoctor file to HTML.
  *
- * @param config - Build configuration
+ * @param site - Build configuration
  * @param content - Asciidoc document
  * @returns The converted file
  */
-export const renderAsciidoc = (config: Config, content: Asciidoctor.Document): string => {
+export const renderAsciidoc = (site: Site, content: Asciidoctor.Document): string => {
   const layout = content.getAttribute("layout", "default") as Layout
-  return renderTemplate(config, layout, { title: content.getTitle(), content: content.getContent() })
+  return renderTemplate(site, layout, { title: content.getTitle(), content: content.getContent() })
 }
 
 /**

@@ -6,11 +6,9 @@ import { SourceMapConsumer, SourceMapGenerator } from "source-map"
 import { CustomError } from "ts-custom-error"
 
 import { logging } from "../logging"
-import { Config } from "../site/config"
-import { siteState } from "../site/state"
+import { Config, Site } from "../site"
 import { createDirectory, createFileHash, formatCSS, prettyPrintDuration, writeFile } from "../utils"
 
-const state = siteState
 const logger = logging.getLogger("sass")
 
 export class StyleError extends CustomError {
@@ -23,23 +21,23 @@ export class StyleError extends CustomError {
  * Renders a given SCSS file to CSS, and optimizing it if running in production
  * mode.
  *
- * @param config - Build configuration
+ * @param site - Build configuration
  * @param file - File to render
  * @param production - Whether to optimize file
  * @returns Error if output file could not be written to
  */
-export const renderStyles = (config: Config, file: string, production: boolean): EitherAsync<StyleError, void> =>
+export const renderStyles = (site: Site, file: string, production: boolean): EitherAsync<StyleError, void> =>
   EitherAsync(async () => {
     logger.debug(`Rendering ${file}`)
     const style = sass.renderSync({
       file: file,
       sourceMap: true,
-      outFile: styleName(config, file),
+      outFile: styleName(site.config, file),
     })
 
     logger.debug(`Rendered ${file}: took ${prettyPrintDuration(style.stats.duration)}`)
 
-    await writeStyles(config, file, style, production)
+    await writeStyles(site, file, style, production)
       .mapLeft((error) => new StyleError(error.message))
       .run()
   })
@@ -47,14 +45,14 @@ export const renderStyles = (config: Config, file: string, production: boolean):
 /**
  * Writes a CSS file and its source map.
  *
- * @param config - Build configuration
+ * @param site - Build configuration
  * @param file - CSS filename to write to
  * @param result - Result object from rendering SCSS
  * @param production - Whether to optimize file
  * @returns Error if file creation fails
  */
 const writeStyles = (
-  config: Config,
+  site: Site,
   file: string,
   result: SassResult,
   production: boolean,
@@ -74,13 +72,13 @@ const writeStyles = (
 
     await EitherAsync.sequence([
       createDirectory(parsed.dir),
-      writeFile(styleName(config, file, `${hash}css`), out.css),
-      writeFile(styleName(config, file, `${hash}css.map`), out.map),
+      writeFile(styleName(site.config, file, `${hash}css`), out.css),
+      writeFile(styleName(site.config, file, `${hash}css.map`), out.map),
     ])
       .mapLeft((error) => new StyleError(error.message))
       .run()
 
-    state.styles.set(`${parsed.name}.css`, styleName(config, file, `${hash}css`))
+    site.state.styles.set(`${parsed.name}.css`, styleName(site.config, file, `${hash}css`))
   })
 
 /**

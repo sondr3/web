@@ -1,3 +1,3 @@
 export * from "./config"
 export * from "./site"
-export * from "./state"
+export type { State } from "./state"

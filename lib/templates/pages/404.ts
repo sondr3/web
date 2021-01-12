@@ -1,3 +1,4 @@
+import { Site } from "../../site"
 import { html } from "../html"
 import { layout } from "../layouts"
 
@@ -6,4 +7,4 @@ const fourOhFour = html`
   <p>Oh no :(</p>
 `
 
-export const notFound = (): string => layout("404", fourOhFour)
+export const notFound = (site: Site): string => layout(site, "404", fourOhFour)

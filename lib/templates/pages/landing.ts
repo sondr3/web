@@ -1,3 +1,4 @@
+import { Site } from "../../site"
 import { defaultConfig } from "../../site/config"
 import { html } from "../html"
 import { layout } from "../layouts"
@@ -23,6 +24,6 @@ const landingPage = html`
   </section>
 `
 
-export const landing = (): string => {
-  return layout("EONS", landingPage)
+export const landing = (site: Site): string => {
+  return layout(site, "EONS", landingPage)
 }

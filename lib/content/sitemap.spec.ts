@@ -1,8 +1,8 @@
-import { defaultConfig } from "../site/config"
+import { Site } from "../site"
 import { createDirectory } from "../utils"
 import { sitemap } from "./sitemap"
 
 test("sitemap", async () => {
-  await createDirectory(defaultConfig.out)
-  await expect(sitemap(defaultConfig)).resolves.not.toThrow()
+  await createDirectory(new Site().config.out)
+  await expect(sitemap(new Site())).resolves.not.toThrow()
 })

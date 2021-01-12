@@ -7,7 +7,7 @@ import { renderStyles } from "./assets"
 import { buildSite } from "./build"
 import { renderPages } from "./content"
 import { logging } from "./logging"
-import { Config } from "./site/config"
+import { Site } from "./site"
 
 const logger = logging.getLogger("server")
 
@@ -18,10 +18,10 @@ const logger = logging.getLogger("server")
 export class Server {
   private readonly wss: WebSocket.Server
   private readonly server: http.Server
-  private readonly config: Config
+  private readonly site: Site
 
-  constructor(config: Config) {
-    this.config = config
+  constructor(site: Site) {
+    this.site = site
     this.wss = new WebSocket.Server({
       port: 3001,
     })
@@ -63,20 +63,20 @@ export class Server {
    * Watch content and assets directories and rebuild required content if needed.
    */
   private watch(): void {
-    fs.watch(this.config.assets.style, async (type, name) => {
+    fs.watch(this.site.config.assets.style, async (type, name) => {
       if (name.endsWith("~")) return
       if (type === "change" || type === "rename") {
         logger.log(`Rendering ${name}`)
-        await renderStyles(this.config, path.join(this.config.assets.style, "style.scss"), false)
+        await renderStyles(this.site, path.join(this.site.config.assets.style, "style.scss"), false)
         this.broadcastReload()
       }
     })
 
-    fs.watch(this.config.content.pages, async (type, name) => {
+    fs.watch(this.site.config.content.pages, async (type, name) => {
       if (name.endsWith("~")) return
       if (type === "change" || type === "rename") {
         logger.log(`Rendering ${name}`)
-        await renderPages(this.config, false)
+        await renderPages(this.site, false)
         this.broadcastReload()
       }
     })
@@ -85,7 +85,7 @@ export class Server {
       if (name.endsWith("~")) return
       if (type === "change" || type === "rename") {
         logger.log(`Refreshing due to updates in ${name}`)
-        await buildSite(this.config, false)
+        await buildSite(this.site, false)
         this.broadcastReload()
       }
     })
@@ -130,7 +130,7 @@ export class Server {
 
       const contentType = Server.findMimetype(mimetypes, extension) ?? "application/octet-stream"
 
-      fs.readFile(path.join(this.config.out, filePath), (error, content) => {
+      fs.readFile(path.join(this.site.config.out, filePath), (error, content) => {
         if (error) {
           if (error.code === "ENOENT") {
             fs.readFile("./404.html", (_error, cont) => {

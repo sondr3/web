@@ -1,13 +1,10 @@
 import path from "path"
 import { EitherAsync } from "purify-ts/EitherAsync"
 
-import { Config } from "../site/config"
-import { siteState } from "../site/state"
+import { Config, Site } from "../site"
 import { html } from "../templates"
 import { formatHTML, writeFile } from "../utils"
 import { Metadata } from "."
-
-const state = siteState
 
 /**
  * Get the last modified at date or the creation date if that doesn't exist,
@@ -43,27 +40,27 @@ const renderPage = (config: Config, page: Metadata): string => {
 /**
  * Build the sitemap for the website.
  *
- * @param config - Build configuration
+ * @param site - Build configuration
  * @returns The sitemap
  */
-const buildSitemap = (config: Config): string => {
+const buildSitemap = (site: Site): string => {
   return html`<?xml version="1.0" encoding="UTF-8"?>
     <urlset
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
       xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     >
-      ${[...state.pages.values()].map((element) => renderPage(config, element))}
+      ${[...site.state.pages.values()].map((element) => renderPage(site.config, element))}
     </urlset>`
 }
 
 /**
  * Build and write the sitemap to the out directory.
  *
- * @param config - Build configuration
+ * @param site - Build configuration
  */
-export const sitemap = (config: Config): EitherAsync<Error, void> =>
+export const sitemap = (site: Site): EitherAsync<Error, void> =>
   EitherAsync(async () => {
-    const sitemap = buildSitemap(config)
-    await writeFile(path.resolve(config.out, "sitemap.xml"), formatHTML(sitemap))
+    const sitemap = buildSitemap(site)
+    await writeFile(path.resolve(site.config.out, "sitemap.xml"), formatHTML(sitemap))
   })

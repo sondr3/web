@@ -1,5 +1,5 @@
 import { logging } from "../logging"
-import { Config } from "../site/config"
+import { Config, Site } from "../site"
 import * as templates from "../templates"
 
 const logger = logging.getLogger("template")
@@ -14,19 +14,19 @@ export type Content = {
 /**
  * Renders a HTML layout with its content.
  *
- * @param config - Build configuration
+ * @param site - Build configuration
  * @param layout - Layout to render as, e.g. post, page etc
  * @param content - Content to render
  * @returns The rendered content
  */
-export const renderTemplate = (config: Config, layout: Layout, content: Content): string => {
+export const renderTemplate = (site: Site, layout: Layout, content: Content): string => {
   logger.debug(`Rendering ${String(layout)}`)
 
   switch (layout) {
     case "page":
-      return templates.page(content.title, content.content)
+      return templates.page(site, content.title, content.content)
     case "default":
-      return templates.layout(createTitle(config, content.title), content.content)
+      return templates.layout(site, createTitle(site.config, content.title), content.content)
   }
 }
 
