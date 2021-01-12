@@ -1,7 +1,7 @@
 import fs from "fs"
 import path from "path"
 
-import { defaultConfig } from "../config"
+import { defaultConfig } from "../site/config"
 import { renderStyles, StyleError, styleName } from "./styles"
 
 describe("styleName", () => {

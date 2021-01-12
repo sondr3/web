@@ -1,6 +1,6 @@
 import path from "path"
 
-import { DeepPartial } from "./utils"
+import { DeepPartial } from "../utils"
 
 export type About = {
   readonly intro: string

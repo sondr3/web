@@ -4,10 +4,10 @@ import { EitherAsync } from "purify-ts/EitherAsync"
 import { CustomError } from "ts-custom-error"
 
 import { copyAssets, renderStyles } from "../assets"
-import { Config } from "../config"
 import { renderPages, renderSpecialPages } from "../content"
 import { sitemap } from "../content/sitemap"
 import { logging } from "../logging"
+import { Config } from "../site/config"
 import { copyFile, Duration } from "../utils"
 import { compress } from "."
 

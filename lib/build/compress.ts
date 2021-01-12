@@ -3,7 +3,7 @@ import { EitherAsync } from "purify-ts/EitherAsync"
 import stream from "stream/promises"
 import { createBrotliCompress, createGzip } from "zlib"
 
-import { Config } from "../config"
+import { Config } from "../site"
 import { readdirRecursive } from "../utils"
 
 const INVALID_EXT = [".map", ".txt", ".scss", ".gz", ".br", ""]

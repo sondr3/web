@@ -4,7 +4,7 @@ import path from "path"
 import { Left, Right } from "purify-ts"
 
 import { copyAssets } from "../assets"
-import { defaultConfig } from "../config"
+import { defaultConfig } from "../site/config"
 import {
   copyFile,
   copyFiles,

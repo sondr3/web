@@ -1,4 +1,4 @@
-import { getStyle } from "../../state"
+import { getStyle } from "../../site/state"
 import { html } from ".."
 
 export const head = (title: string): string => html`

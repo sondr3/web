@@ -5,9 +5,9 @@ import sass, { Result as SassResult } from "sass"
 import { SourceMapConsumer, SourceMapGenerator } from "source-map"
 import { CustomError } from "ts-custom-error"
 
-import { Config } from "../config"
 import { logging } from "../logging"
-import { siteState } from "../state"
+import { Config } from "../site/config"
+import { siteState } from "../site/state"
 import { createDirectory, createFileHash, formatCSS, prettyPrintDuration, writeFile } from "../utils"
 
 const state = siteState

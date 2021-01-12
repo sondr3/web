@@ -4,9 +4,9 @@ import path from "path"
 import { EitherAsync } from "purify-ts/EitherAsync"
 
 import { Asciidoc, Layout, renderTemplate } from "../build"
-import { Config } from "../config"
 import { logging } from "../logging"
-import { siteState } from "../state"
+import { Config } from "../site/config"
+import { siteState } from "../site/state"
 import { createDirectory, formatHTML, FSError, writeFile } from "../utils"
 
 export * from "./pages"

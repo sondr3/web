@@ -1,4 +1,4 @@
-import { defaultConfig } from "../config"
+import { defaultConfig } from "../site/config"
 import { readdirRecursive } from "../utils"
 import { buildSite, clean } from "./build"
 import { brotli, compress, gzip } from "./compress"

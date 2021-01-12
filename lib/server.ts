@@ -5,9 +5,9 @@ import WebSocket from "ws"
 
 import { renderStyles } from "./assets"
 import { buildSite } from "./build"
-import { Config } from "./config"
 import { renderPages } from "./content"
 import { logging } from "./logging"
+import { Config } from "./site/config"
 
 const logger = logging.getLogger("server")
 

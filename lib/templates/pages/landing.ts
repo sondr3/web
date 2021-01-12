@@ -1,4 +1,4 @@
-import { defaultConfig } from "../../config"
+import { defaultConfig } from "../../site/config"
 import { html } from "../html"
 import { layout } from "../layouts"
 

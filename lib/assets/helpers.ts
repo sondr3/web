@@ -1,8 +1,8 @@
 import path from "path"
 import { EitherAsync } from "purify-ts/EitherAsync"
 
-import { Config } from "../config"
 import { logging } from "../logging"
+import { Config } from "../site/config"
 import { copyFiles, FSError, rmdirs } from "../utils"
 
 const logger = logging.getLogger("assets")

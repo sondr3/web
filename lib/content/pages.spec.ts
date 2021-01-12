@@ -1,7 +1,7 @@
 import { promises as fs } from "fs"
 import path from "path"
 
-import { defaultConfig } from "../config"
+import { defaultConfig } from "../site/config"
 import { convertAsciidoc, minifyHTML, writeHTML } from "."
 import { renderSpecialPages } from "./pages"
 

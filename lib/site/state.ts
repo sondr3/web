@@ -1,6 +1,6 @@
 import path from "path"
 
-import { Metadata } from "./content"
+import { Metadata } from "../content"
 
 /**
  * Site state during building, used to look up styles, content etc.
@@ -10,7 +10,7 @@ export type State = {
   readonly pages: Map<string, Metadata>
 }
 
-const initialState: State = {
+export const initialState: State = {
   styles: new Map<string, string>(),
   pages: new Map<string, Metadata>(),
 }

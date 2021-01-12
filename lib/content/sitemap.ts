@@ -1,8 +1,8 @@
 import path from "path"
 import { EitherAsync } from "purify-ts/EitherAsync"
 
-import { Config } from "../config"
-import { siteState } from "../state"
+import { Config } from "../site/config"
+import { siteState } from "../site/state"
 import { html } from "../templates"
 import { formatHTML, writeFile } from "../utils"
 import { Metadata } from "."

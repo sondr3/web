@@ -1,7 +1,7 @@
 import path from "path"
 
-import { defaultConfig } from "../config"
 import { convertAsciidoc, renderAsciidoc } from "../content"
+import { defaultConfig } from "../site/config"
 import { buildSite } from "./build"
 
 describe("buildSite", () => {

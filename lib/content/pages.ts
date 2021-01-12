@@ -1,7 +1,7 @@
 import path from "path"
 import { EitherAsync } from "purify-ts/EitherAsync"
 
-import { Config } from "../config"
+import { Config } from "../site/config"
 import * as pages from "../templates/pages"
 import { FSError, walkDirectory } from "../utils"
 import { addPage, convertAsciidoc, renderAsciidoc, writeContent, writeHTML } from "."

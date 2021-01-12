@@ -1,6 +1,6 @@
 import { promises as fs } from "fs"
 
-import { defaultConfig } from "../config"
+import { defaultConfig } from "../site/config"
 import { createTitle, renderTemplate } from "./templating"
 
 test("renderTemplate", async () => {
