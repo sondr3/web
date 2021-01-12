@@ -66,7 +66,7 @@ export const writeContent = async (directory: string, content: string | Buffer):
  * @param source - HTML to minify
  */
 export const minifyHTML = (source: string): Buffer => {
-  return minify(source, createConfiguration({ minifyJs: false }))
+  return minify(source, createConfiguration({ minifyJs: false, minifyCss: false }))
 }
 
 /**
