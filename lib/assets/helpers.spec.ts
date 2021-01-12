@@ -1,4 +1,4 @@
-import { defaultConfig, setConfig } from "../site/config"
+import { defaultConfig, setConfig } from "../site"
 import { copyAssets } from "./helpers"
 
 describe("copyAssets", () => {

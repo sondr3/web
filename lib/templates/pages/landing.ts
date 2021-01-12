@@ -1,5 +1,4 @@
-import { Site } from "../../site"
-import { defaultConfig } from "../../site/config"
+import { defaultConfig, Site } from "../../site"
 import { html } from "../html"
 import { layout } from "../layouts"
 
