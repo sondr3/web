@@ -44,20 +44,21 @@ export const renderPages = (config: Config, production: boolean): EitherAsync<FS
  * @param config - Build configuration
  * @param production - Whether to optimize output
  */
-export const renderSpecialPages = async (config: Config, production: boolean): Promise<void> => {
-  await writeContent(config.out, writeHTML(pages.landing(), production))
-  addPage({
-    title: "Eons",
-    path: "/",
-    description: "Webpage for Sondre Nilsen",
-    createdAt: new Date("2020-12-18"),
-  })
+export const renderSpecialPages = (config: Config, production: boolean): EitherAsync<Error, void> =>
+  EitherAsync(async () => {
+    await writeContent(config.out, writeHTML(pages.landing(), production))
+    addPage({
+      title: "Eons",
+      path: "/",
+      description: "Webpage for Sondre Nilsen",
+      createdAt: new Date("2020-12-18"),
+    })
 
-  await writeContent(path.resolve(config.out, "404/"), writeHTML(pages.notFound(), production))
-  addPage({
-    title: "404",
-    path: "/404/",
-    description: "Page not found",
-    createdAt: new Date("2020-12-18"),
+    await writeContent(path.resolve(config.out, "404/"), writeHTML(pages.notFound(), production))
+    addPage({
+      title: "404",
+      path: "/404/",
+      description: "Page not found",
+      createdAt: new Date("2020-12-18"),
+    })
   })
-}

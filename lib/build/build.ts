@@ -34,14 +34,14 @@ export const buildSite = (config: Config, production: boolean): EitherAsync<Buil
       copyAssets(config),
       renderStyles(config, path.join(config.assets.style, "style.scss"), production),
       renderPages(config, production),
+      renderSpecialPages(config, production),
+      createRootFiles(config),
+      sitemap(config),
+      compress(config, production),
     ])
       .mapLeft((error) => new BuildError(error.message))
       .run()
 
-    await renderSpecialPages(config, production)
-    await createRootFiles(config)
-    await sitemap(config)
-    await compress(config, production)
     duration.end()
     logger.log(`Took ${duration.result()} to build site`)
   })
@@ -50,20 +50,21 @@ export const buildSite = (config: Config, production: boolean): EitherAsync<Buil
  * Create assorted files that are often found in the root of webpages, e.g.
  * `robots.txt` and so on.
  */
-export const createRootFiles = async (config: Config): Promise<void> => {
-  await Promise.allSettled(
-    [
-      "robots.txt",
-      "humans.txt",
-      "apple-touch-icon.png",
-      "favicon.ico",
-      "icon.svg",
-      "icon-192.png",
-      "icon-512.png",
-      "manifest.webmanifest",
-    ].map((file) => copyFile(path.join(config.assets.root, file), path.join(config.out, file))),
-  )
-}
+export const createRootFiles = (config: Config): EitherAsync<BuildError, void> =>
+  EitherAsync(async () => {
+    await Promise.allSettled(
+      [
+        "robots.txt",
+        "humans.txt",
+        "apple-touch-icon.png",
+        "favicon.ico",
+        "icon.svg",
+        "icon-192.png",
+        "icon-512.png",
+        "manifest.webmanifest",
+      ].map((file) => copyFile(path.join(config.assets.root, file), path.join(config.out, file))),
+    )
+  })
 
 /**
  * Clean out the build directory.

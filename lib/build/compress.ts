@@ -1,4 +1,5 @@
 import { createReadStream, createWriteStream } from "fs"
+import { EitherAsync } from "purify-ts/EitherAsync"
 import stream from "stream/promises"
 import { createBrotliCompress, createGzip } from "zlib"
 
@@ -7,12 +8,13 @@ import { readdirRecursive } from "../utils"
 
 const INVALID_EXT = [".map", ".txt", ".scss", ".gz", ".br", ""]
 
-export async function compress(config: Config, production: boolean): Promise<void> {
-  if (production) {
-    await gzip(config)
-    await brotli(config)
-  }
-}
+export const compress = (config: Config, production: boolean): EitherAsync<Error, void> =>
+  EitherAsync(async () => {
+    if (production) {
+      await gzip(config)
+      await brotli(config)
+    }
+  })
 
 /**
  * Compress a directory and all its files with Gzip.

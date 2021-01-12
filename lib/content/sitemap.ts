@@ -1,4 +1,5 @@
 import path from "path"
+import { EitherAsync } from "purify-ts/EitherAsync"
 
 import { Config } from "../config"
 import { siteState } from "../state"
@@ -61,7 +62,8 @@ const buildSitemap = (config: Config): string => {
  *
  * @param config - Build configuration
  */
-export const sitemap = async (config: Config): Promise<void> => {
-  const sitemap = buildSitemap(config)
-  await writeFile(path.resolve(config.out, "sitemap.xml"), formatHTML(sitemap))
-}
+export const sitemap = (config: Config): EitherAsync<Error, void> =>
+  EitherAsync(async () => {
+    const sitemap = buildSitemap(config)
+    await writeFile(path.resolve(config.out, "sitemap.xml"), formatHTML(sitemap))
+  })
