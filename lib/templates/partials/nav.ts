@@ -1,6 +1,6 @@
 import { html } from ".."
 
-export const nav = (): string => html`
+export const nav = html`
   <header>
     <a href="/" class="title">Eons</a>
     <nav>

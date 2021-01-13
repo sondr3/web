@@ -1,5 +1,5 @@
 import { Site } from "../../site"
-import { html } from "../html"
+import { html } from ".."
 import { layout } from "../layouts"
 
 const fourOhFour = html`

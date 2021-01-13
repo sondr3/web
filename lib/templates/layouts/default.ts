@@ -7,7 +7,7 @@ export const layout = (site: Site, title: string, content: string): string => ht
   <html lang="en">
     ${head(site, title)}
     <body>
-      <div class="container">${nav()} ${content} ${footer()}</div>
+      <div class="container">${nav} ${content} ${footer}</div>
     </body>
   </html>
 `

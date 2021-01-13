@@ -34,6 +34,7 @@ export type Content = ContentData & {
   content: Asciidoctor.Document
 }
 
+// FIXME: DOCUMENTATION AND TESTS PLZ
 export const buildPages = (site: Site): EitherAsync<BuildError, void> =>
   EitherAsync(async () => {
     const asciidoc = new Asciidoc()
@@ -52,7 +53,6 @@ export const renderContent = (asciidoc: Asciidoc, content: string, defaultMetada
   const document = asciidoc.parse(content.slice(frontmatterEnd + 4))
   const frontmatter = createFrontmatter(data, document)
   const metadata = createMetadata(data, defaultMetadata)
-  console.error(frontmatter)
 
   return { metadata, frontmatter, content: document }
 }

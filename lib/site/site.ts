@@ -23,7 +23,7 @@ export class Site {
    * @param name - File name to look for
    * @returns The correct filename, or undefined if not found
    */
-  getStyle = (name: string): string | undefined => {
+  getStyle = (name: string): string => {
     const stylePath = this.state.styles.get(name)
     return stylePath === undefined ? `/${name}` : `/${path.parse(stylePath).base}`
   }
