@@ -14,8 +14,8 @@ import { ContentData, Frontmatter } from "."
  * @returns The formatted date or null
  */
 const modifiedAt = (page: Frontmatter): string => {
-  if (page.modifiedAt) return page.modifiedAt.toISOString().split("T")[0]
-  return page.createdAt?.toISOString().split("T")[0] ?? new Date().toISOString().split("T")[0]
+  if (page.modified) return page.modified.toISOString().split("T")[0]
+  return page.created?.toISOString().split("T")[0] ?? new Date().toISOString().split("T")[0]
 }
 
 /**

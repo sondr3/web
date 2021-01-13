@@ -50,7 +50,7 @@ export const renderSpecialPages = (site: Site, production: boolean): EitherAsync
       frontmatter: {
         title: "Eons",
         description: "Webpage for Sondre Nilsen",
-        createdAt: new Date("2020-12-18"),
+        created: new Date(),
       },
     })
 
@@ -63,7 +63,7 @@ export const renderSpecialPages = (site: Site, production: boolean): EitherAsync
       frontmatter: {
         title: "404",
         description: "Page not found",
-        createdAt: new Date("2020-12-18"),
+        created: new Date(),
       },
     })
   })

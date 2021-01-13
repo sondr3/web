@@ -1,6 +1,6 @@
 ---
-created_at: 2020-12-12
-modified_at: 2020-12-20
+created: 2020-12-12
+modified: 2020-12-20
 ---
 = About me
 

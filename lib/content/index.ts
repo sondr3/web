@@ -6,7 +6,9 @@ import YAML from "yaml"
 
 import { Asciidoc, BuildError, Layout } from "../build"
 import { Site } from "../site"
+import type { PartialStringyTyped } from "../utils"
 import { createDirectory, formatHTML, writeFile } from "../utils"
+import { convertDate } from "./helpers"
 import { renderPages, renderSpecialPages } from "./pages"
 
 export type Metadata = {
@@ -16,9 +18,9 @@ export type Metadata = {
 
 export type Frontmatter = {
   readonly title: string
-  readonly description: string
-  readonly createdAt?: Date
-  readonly modifiedAt?: Date
+  readonly description?: string
+  readonly created?: Date
+  readonly modified?: Date
 }
 
 export type ContentData = {
@@ -26,7 +28,7 @@ export type ContentData = {
   readonly frontmatter: Frontmatter
 }
 
-type ParsedData = Partial<Metadata> & Partial<Frontmatter>
+type ParsedData = PartialStringyTyped<Metadata> & PartialStringyTyped<Frontmatter>
 
 export type Content = ContentData & {
   content: Asciidoctor.Document
@@ -46,10 +48,11 @@ export const buildPages = (site: Site): EitherAsync<BuildError, void> =>
 
 export const renderContent = (asciidoc: Asciidoc, content: string, defaultMetadata: Metadata): Content => {
   const frontmatterEnd = findFrontmatter(content)
-  const document = asciidoc.parse(content.slice(frontmatterEnd))
   const data = parseDocumentData(content, frontmatterEnd)
+  const document = asciidoc.parse(content.slice(frontmatterEnd + 4))
   const frontmatter = createFrontmatter(data, document)
   const metadata = createMetadata(data, defaultMetadata)
+  console.error(frontmatter)
 
   return { metadata, frontmatter, content: document }
 }
@@ -71,21 +74,15 @@ export const parseDocumentData = (input: string, frontmatterEnd: number): Parsed
 }
 
 export const createMetadata = (data: ParsedData, defaults: Metadata): Metadata => {
-  return { path: data?.path ?? defaults.path, layout: data?.layout ?? defaults.layout }
+  return { path: data?.path ?? defaults.path, layout: data?.layout ?? defaults.layout } as Metadata
 }
 
 export const createFrontmatter = (data: ParsedData, document: Asciidoctor.Document): Frontmatter => {
   return {
     title: data?.title ?? document.getTitle(),
-    description:
-      data?.description ??
-      document
-        .getSections()
-        .find((s) => s.getContext() === "preamble")
-        ?.getContent() ??
-      "",
-    createdAt: data?.createdAt,
-    modifiedAt: data?.modifiedAt,
+    description: data?.description,
+    created: convertDate(data?.created),
+    modified: convertDate(data?.modified),
   }
 }
 
