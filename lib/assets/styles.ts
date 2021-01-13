@@ -64,7 +64,7 @@ const writeStyles = (
     if (production) {
       await createFileHash(file)
         .mapLeft((error) => new StyleError(error.message))
-        .map((value) => (hash = value))
+        .map((value) => (hash = `.${value}`))
         .run()
     }
 
@@ -72,13 +72,13 @@ const writeStyles = (
 
     await EitherAsync.sequence([
       createDirectory(parsed.dir),
-      writeFile(styleName(site.config, file, `${hash}css`), out.css),
-      writeFile(styleName(site.config, file, `${hash}css.map`), out.map),
+      writeFile(styleName(site.config, file, `${hash}.css`), out.css),
+      writeFile(styleName(site.config, file, `${hash}.css.map`), out.map),
     ])
       .mapLeft((error) => new StyleError(error.message))
       .run()
 
-    site.state.styles.set(`${parsed.name}.css`, styleName(site.config, file, `${hash}css`))
+    site.state.styles.set(`${parsed.name}.css`, styleName(site.config, file, `${hash}.css`))
   })
 
 /**
@@ -97,7 +97,7 @@ const optimize = async (source: SassResult, file: string, hash: string): Promise
 
   const map = result.map as SourceMapGenerator
   map.applySourceMap(await new SourceMapConsumer(source.map?.toString() ?? ""), file)
-  const css = result.css + `/*# sourceMappingURL=style.${hash}css.map */`
+  const css = result.css + `/*# sourceMappingURL=style.${hash}.css.map */`
 
   return { css, map: map.toString() }
 }
@@ -110,7 +110,7 @@ const optimize = async (source: SassResult, file: string, hash: string): Promise
  * @param extension - File extension
  * @returns The corrected file extension
  */
-export const styleName = (config: Config, file: string, extension = "css"): string => {
+export const styleName = (config: Config, file: string, extension = ".css"): string => {
   const { name } = path.parse(file)
-  return `${config.out}/${name}.${extension}`
+  return `${config.out}/${name}${extension}`
 }

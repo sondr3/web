@@ -47,7 +47,7 @@ const develop = async (cli: CLI, logger: Logger): Promise<void> => {
  * @param logger - Logger to output to
  */
 const serve = (logger: Logger): void => {
-  const server = new Server(new Site())
+  const server = new Server(new Site(setConfig(defaultConfig, { out: "./public" })))
   server.serve()
 
   process.on("SIGINT", () => shutdown(server, logger))
