@@ -2,7 +2,7 @@ FROM node:15
 
 WORKDIR /usr/src/web
 
-COPY package.json yarn.lock tsconfig.json ./
+COPY package.json package-lock.json tsconfig.json ./
 RUN npm ci
 
 COPY . .
