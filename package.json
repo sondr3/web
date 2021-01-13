@@ -13,7 +13,8 @@
     "build": "node dist/index.js build -p -n=none",
     "serve": "node dist/index.js serve",
     "clean": "node dist/index.js clean",
-    "docs": "typedoc"
+    "docs": "typedoc",
+    "release": "git commit --allow-empty -m 'Publish site'"
   },
   "dependencies": {
     "@minify-html/js": "0.4.1",
