@@ -1,3 +1,4 @@
+import { Content } from "../content"
 import { logging } from "../logging"
 import { Config, Site } from "../site"
 import * as templates from "../templates"
@@ -5,11 +6,6 @@ import * as templates from "../templates"
 const logger = logging.getLogger("template")
 
 export type Layout = "default" | "page"
-
-export type Content = {
-  readonly title: string
-  readonly content: string
-}
 
 /**
  * Renders a HTML layout with its content.
@@ -24,9 +20,9 @@ export const renderTemplate = (site: Site, layout: Layout, content: Content): st
 
   switch (layout) {
     case "page":
-      return templates.page(site, content.title, content.content)
+      return templates.page(site, content.frontmatter.title, content.content.convert())
     case "default":
-      return templates.layout(site, createTitle(site.config, content.title), content.content)
+      return templates.layout(site, createTitle(site.config, content.frontmatter.title), content.content.convert())
   }
 }
 

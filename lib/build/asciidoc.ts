@@ -1,8 +1,11 @@
 import Processor, { Asciidoctor } from "asciidoctor"
 import { EitherAsync } from "purify-ts/EitherAsync"
 
+import { Content } from "../content"
+import { Site } from "../site"
 import * as templates from "../templates"
 import { FSError, readFile } from "../utils"
+import { renderTemplate } from "./templating"
 
 /**
  * A wrapper class around {@link https://github.com/asciidoctor/asciidoctor.js} with its
@@ -28,6 +31,20 @@ export class Asciidoc {
     return readFile(filepath)
       .map((document) => this.asciidoc.load(document))
       .mapLeft((error) => error)
+  }
+
+  /**
+   * Parses a string into an {@link Asciidoctor.Document}.
+   *
+   * @param content - Content to parse
+   * @returns A converted document
+   */
+  parse(content: string): Asciidoctor.Document {
+    return this.asciidoc.load(content)
+  }
+
+  render(site: Site, content: Content): string {
+    return renderTemplate(site, content.metadata.layout, content)
   }
 
   /**

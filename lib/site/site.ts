@@ -1,6 +1,6 @@
 import path from "path"
 
-import { Metadata } from "../content"
+import { ContentData } from "../content"
 import { logging } from "../logging"
 import { Config, defaultConfig } from "./config"
 import { initialState, State } from "./state"
@@ -28,10 +28,10 @@ export class Site {
     return stylePath === undefined ? `/${name}` : `/${path.parse(stylePath).base}`
   }
 
-  getPages = (): IterableIterator<Metadata> => this.state.pages.values()
+  getPages = (): IterableIterator<ContentData> => this.state.pages.values()
 
-  addPage = (data: Metadata): void => {
-    logger.debug(`Adding page ${data.title} to state`)
-    this.state.pages.set(data.path, data)
+  addPage = (content: ContentData): void => {
+    logger.debug(`Adding page ${content.frontmatter.title} to state`)
+    this.state.pages.set(content.metadata.path, { metadata: content.metadata, frontmatter: content.frontmatter })
   }
 }

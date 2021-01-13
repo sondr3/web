@@ -2,7 +2,7 @@ import { promises as fs } from "fs"
 import path from "path"
 
 import { defaultConfig, Site } from "../site"
-import { convertAsciidoc, minifyHTML, writeHTML } from "."
+import { minifyHTML, writeHTML } from "."
 import { renderSpecialPages } from "./pages"
 
 describe("renderPages", () => {
@@ -15,10 +15,6 @@ describe("renderPages", () => {
 
     expect(await fs.stat(path.join(defaultConfig.out, "index.html"))).toBeDefined()
   })
-})
-
-test("convertAsciidoc", async () => {
-  await expect(convertAsciidoc(path.resolve(process.cwd(), "content/pages/about.adoc"))).resolves.toBeDefined()
 })
 
 test("minifyHTML", () => {

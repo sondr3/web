@@ -4,7 +4,7 @@ import { EitherAsync } from "purify-ts/EitherAsync"
 import { Config, Site } from "../site"
 import { html } from "../templates"
 import { formatHTML, writeFile } from "../utils"
-import { Metadata } from "."
+import { ContentData, Frontmatter } from "."
 
 /**
  * Get the last modified at date or the creation date if that doesn't exist,
@@ -13,7 +13,7 @@ import { Metadata } from "."
  * @param page - Page to get last modified at
  * @returns The formatted date or null
  */
-const modifiedAt = (page: Metadata): string => {
+const modifiedAt = (page: Frontmatter): string => {
   if (page.modifiedAt) return page.modifiedAt.toISOString().split("T")[0]
   return page.createdAt?.toISOString().split("T")[0] ?? new Date().toISOString().split("T")[0]
 }
@@ -25,11 +25,11 @@ const modifiedAt = (page: Metadata): string => {
  * @param page - Page to render
  * @returns A XML entry
  */
-const renderPage = (config: Config, page: Metadata): string => {
-  const lastmod = modifiedAt(page)
+const renderPage = (config: Config, page: ContentData): string => {
+  const lastmod = modifiedAt(page.frontmatter)
   return html`
     <url>
-      <loc>${config.meta.url}${page.path}</loc>
+      <loc>${config.meta.url}${page.metadata.path}</loc>
       <lastmod>${lastmod}</lastmod>
       <changefreq>monthly</changefreq>
       <priority>0.7</priority>

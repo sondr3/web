@@ -5,7 +5,7 @@ import WebSocket from "ws"
 
 import { renderStyles } from "./assets"
 import { buildSite } from "./build"
-import { renderPages } from "./content"
+import { buildPages } from "./content"
 import { logging } from "./logging"
 import { Site } from "./site"
 
@@ -76,7 +76,7 @@ export class Server {
       if (name.endsWith("~")) return
       if (type === "change" || type === "rename") {
         logger.log(`Rendering ${name}`)
-        await renderPages(this.site, false)
+        await buildPages(this.site)
         this.broadcastReload()
       }
     })

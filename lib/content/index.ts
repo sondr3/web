@@ -2,41 +2,91 @@ import { createConfiguration, minify } from "@minify-html/js"
 import { Asciidoctor } from "asciidoctor"
 import path from "path"
 import { EitherAsync } from "purify-ts/EitherAsync"
+import YAML from "yaml"
 
-import { Asciidoc, Layout, renderTemplate } from "../build"
+import { Asciidoc, BuildError, Layout } from "../build"
 import { Site } from "../site"
-import { createDirectory, formatHTML, FSError, writeFile } from "../utils"
-
-export * from "./pages"
-
-const asciidoc = new Asciidoc()
+import { createDirectory, formatHTML, writeFile } from "../utils"
+import { renderPages, renderSpecialPages } from "./pages"
 
 export type Metadata = {
+  readonly path: string
+  readonly layout: Layout
+}
+
+export type Frontmatter = {
   readonly title: string
   readonly description: string
-  readonly path: string
   readonly createdAt?: Date
   readonly modifiedAt?: Date
 }
 
-/**
- * Load and parse a file into a {@Link Asciidoctor.Document}.
- *
- * @param filepath - Path to load
- * @returns The parsed file
- */
-export const convertAsciidoc = (filepath: string): EitherAsync<FSError, Asciidoctor.Document> => asciidoc.load(filepath)
+export type ContentData = {
+  readonly metadata: Metadata
+  readonly frontmatter: Frontmatter
+}
+
+type ParsedData = Partial<Metadata> & Partial<Frontmatter>
+
+export type Content = ContentData & {
+  content: Asciidoctor.Document
+}
+
+export const buildPages = (site: Site): EitherAsync<BuildError, void> =>
+  EitherAsync(async () => {
+    const asciidoc = new Asciidoc()
+
+    await EitherAsync.sequence([
+      renderPages(site, asciidoc, site.config.production),
+      renderSpecialPages(site, site.config.production),
+    ])
+      .mapLeft((error) => new BuildError(error.message))
+      .run()
+  })
+
+export const renderContent = (asciidoc: Asciidoc, content: string, defaultMetadata: Metadata): Content => {
+  const frontmatterEnd = findFrontmatter(content)
+  const document = asciidoc.parse(content.slice(frontmatterEnd))
+  const data = parseDocumentData(content, frontmatterEnd)
+  const frontmatter = createFrontmatter(data, document)
+  const metadata = createMetadata(data, defaultMetadata)
+
+  return { metadata, frontmatter, content: document }
+}
+
+export const findFrontmatter = (input: string): number => {
+  const start = input.indexOf("---\n")
+  return input.indexOf("---\n", start + 4)
+}
 
 /**
- * Renders a Asciidoctor file to HTML.
+ * Parses and converts the frontmatter of a Markdown file.
  *
- * @param site - Build configuration
- * @param content - Asciidoc document
- * @returns The converted file
+ * @param input - File to extract frontmatter from
+ * @param frontmatterEnd - Where the final `---\n` in the frontmatter is
+ * @returns An object of `{ frontmatter, end of frontmatter }`
  */
-export const renderAsciidoc = (site: Site, content: Asciidoctor.Document): string => {
-  const layout = content.getAttribute("layout", "default") as Layout
-  return renderTemplate(site, layout, { title: content.getTitle(), content: content.getContent() })
+export const parseDocumentData = (input: string, frontmatterEnd: number): ParsedData => {
+  return YAML.parse(input.slice(4, frontmatterEnd)) as ParsedData
+}
+
+export const createMetadata = (data: ParsedData, defaults: Metadata): Metadata => {
+  return { path: data?.path ?? defaults.path, layout: data?.layout ?? defaults.layout }
+}
+
+export const createFrontmatter = (data: ParsedData, document: Asciidoctor.Document): Frontmatter => {
+  return {
+    title: data?.title ?? document.getTitle(),
+    description:
+      data?.description ??
+      document
+        .getSections()
+        .find((s) => s.getContext() === "preamble")
+        ?.getContent() ??
+      "",
+    createdAt: data?.createdAt,
+    modifiedAt: data?.modifiedAt,
+  }
 }
 
 /**
@@ -46,10 +96,10 @@ export const renderAsciidoc = (site: Site, content: Asciidoctor.Document): strin
  * @param directory - Directory it belongs to
  * @param content - HTML to write
  */
-export const writeContent = async (directory: string, content: string | Buffer): Promise<void> => {
-  await createDirectory(directory)
-  await writeFile(path.join(directory, "index.html"), content)
-}
+export const writeContent = (directory: string, content: string | Buffer): EitherAsync<BuildError, boolean[]> =>
+  EitherAsync.sequence([createDirectory(directory), writeFile(path.join(directory, "index.html"), content)]).mapLeft(
+    (error) => new BuildError(error.message),
+  )
 
 /**
  * Minifies HTML with {@link https://github.com/wilsonzlin/minify-html}.

@@ -1,8 +1,8 @@
+---
+created_at: 2020-12-12
+modified_at: 2020-12-20
+---
 = About me
-:layout: page
-:created_at: 2020-12-12
-:modified_at: 2020-12-20
-Sondre Nilsen
 
 Hello, I'm Sondre! I'm a master student on my first year studying algorithms at the 
 https://www.uib.no/[University of Bergen] with a passion for safe and reliable software, open

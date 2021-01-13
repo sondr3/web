@@ -4,7 +4,7 @@ import { EitherAsync } from "purify-ts/EitherAsync"
 import { CustomError } from "ts-custom-error"
 
 import { copyAssets, renderStyles } from "../assets"
-import { renderPages, renderSpecialPages } from "../content"
+import { buildPages } from "../content"
 import { sitemap } from "../content/sitemap"
 import { logging } from "../logging"
 import { Config, Site } from "../site"
@@ -33,8 +33,7 @@ export const buildSite = (site: Site, production: boolean): EitherAsync<BuildErr
     await EitherAsync.sequence([
       copyAssets(site.config),
       renderStyles(site, path.join(site.config.assets.style, "style.scss"), production),
-      renderPages(site, production),
-      renderSpecialPages(site, production),
+      buildPages(site),
       createRootFiles(site.config),
       sitemap(site),
       compress(site.config, production),
