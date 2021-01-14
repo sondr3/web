@@ -66,6 +66,13 @@ jobs:
 
       - name: Install and build
         run: npm ci
+
+      - name: Compile
+        run: npm run compile
+
+      - name: Build site
+        run: npm run build
+
       - name: Build documentation
         run: npm run docs
 
@@ -76,12 +83,11 @@ jobs:
           publish_dir: ./docs
 
       - name: Deploy website
-        uses: appleboy/ssh-action@master
+        uses: burnett01/rsync-deployments@4.1
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          script: |
-            cd /var/www/eons.io/source
-            git pull
-            ./deploy.sh
+          path: public/
+          switches: -avzr --delete
+          remote_path: ${{ secrets.OUT }}
+          remote_host: ${{ secrets.HOST }}
+          remote_user: ${{ secrets.USERNAME }}
+          remote_key: ${{ secrets.KEY }}
