@@ -9,10 +9,10 @@ describe("config", () => {
   })
 
   it("can be overridden", () => {
-    const config = setConfig(defaultConfig, { out: "./public", production: true, meta: { url: "http://test.com" } })
+    const config = setConfig(defaultConfig, { out: "./public", production: true, url: "http://test.com" })
 
     expect(config.out.includes("/public")).toBeTruthy()
     expect(config.production).toBeTruthy()
-    expect(config.meta.url).toBe("http://test.com")
+    expect(config.url).toBe("http://test.com")
   })
 })

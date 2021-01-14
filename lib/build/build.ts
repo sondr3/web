@@ -27,7 +27,7 @@ export class BuildError extends CustomError {
  */
 export const buildSite = (site: Site, production: boolean): EitherAsync<BuildError, void> =>
   EitherAsync(async () => {
-    logger.log(`Building site ${site.config.meta.title} (${site.config.meta.url})`)
+    logger.log(`Building site ${site.config.meta.title} (${site.config.url})`)
     const duration = new Duration()
 
     await EitherAsync.sequence([

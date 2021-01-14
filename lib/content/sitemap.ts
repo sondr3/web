@@ -29,7 +29,7 @@ const renderPage = (config: Config, page: ContentData): string => {
   const lastmod = modifiedAt(page.frontmatter)
   return html`
     <url>
-      <loc>${config.meta.url}${page.metadata.path}</loc>
+      <loc>${config.url}${page.metadata.path}</loc>
       <lastmod>${lastmod}</lastmod>
       <changefreq>monthly</changefreq>
       <priority>0.7</priority>

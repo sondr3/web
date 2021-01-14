@@ -13,9 +13,9 @@ export type About = {
 export type Config = {
   readonly out: string
   readonly production: boolean
+  readonly url: string
   readonly meta: {
     readonly title: string
-    readonly url: string
     readonly author: About
   }
   readonly content: {
@@ -41,6 +41,7 @@ export const defaultConfig: Config = {
   // Defaults to `./test` for... testing, shocking.
   out: "./test",
   production: false,
+  url: "http://localhost",
   meta: {
     author: {
       intro: `I make things`,
@@ -49,7 +50,6 @@ export const defaultConfig: Config = {
         github: "https://github.com/sondr3/",
       },
     },
-    url: "http://localhost",
     title: "EONS",
   },
   content: {

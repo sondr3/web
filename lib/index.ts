@@ -14,7 +14,7 @@ const build = async (cli: CLI): Promise<void> => {
     setConfig(defaultConfig, {
       out: "./public",
       production: cli.production,
-      meta: { url: "https://www.eons.io" },
+      url: "https://www.eons.io",
     }),
   )
   await buildSite(site, cli.production).run()
@@ -31,7 +31,7 @@ const develop = async (cli: CLI, logger: Logger): Promise<void> => {
     setConfig(defaultConfig, {
       out: "./public",
       production: cli.production,
-      meta: { url: "http://localhost" },
+      url: "http://localhost",
     }),
   )
   await buildSite(site, cli.production)
