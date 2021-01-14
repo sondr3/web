@@ -12,9 +12,8 @@ import { renderContent, writeContent, writeHTML } from "."
  *
  * @param site - Build configuration
  * @param asciidoc - Asciidoctor instance
- * @param production - Whether to optimize output
  */
-export const renderPages = (site: Site, asciidoc: Asciidoc, production: boolean): EitherAsync<FSError, void> =>
+export const renderPages = (site: Site, asciidoc: Asciidoc): EitherAsync<FSError, void> =>
   EitherAsync(async () => {
     const pages = await walkDirectory(path.resolve(process.cwd(), site.config.content.pages), "adoc", false)
 
@@ -27,7 +26,10 @@ export const renderPages = (site: Site, asciidoc: Asciidoc, production: boolean)
 
           site.addPage(document)
           const file = path.parse(page)
-          await writeContent(path.resolve(site.config.out, file.name), writeHTML(rendered, production)).run()
+          await writeContent(
+            path.resolve(site.config.out, file.name),
+            writeHTML(rendered, site.config.production),
+          ).run()
         })
         .run()
     }
@@ -37,11 +39,10 @@ export const renderPages = (site: Site, asciidoc: Asciidoc, production: boolean)
  * Renders "special" pages, e.g. landing page, 404 and such.
  *
  * @param site - Build configuration
- * @param production - Whether to optimize output
  */
-export const renderSpecialPages = (site: Site, production: boolean): EitherAsync<Error, void> =>
+export const renderSpecialPages = (site: Site): EitherAsync<Error, void> =>
   EitherAsync(async () => {
-    await writeContent(site.config.out, writeHTML(pages.landing(site), production))
+    await writeContent(site.config.out, writeHTML(pages.landing(site), site.config.production))
     site.addPage({
       metadata: {
         path: "/",
@@ -54,7 +55,7 @@ export const renderSpecialPages = (site: Site, production: boolean): EitherAsync
       },
     })
 
-    await writeContent(path.resolve(site.config.out, "404/"), writeHTML(pages.notFound(site), production))
+    await writeContent(path.resolve(site.config.out, "404/"), writeHTML(pages.notFound(site), site.config.production))
     site.addPage({
       metadata: {
         path: "/404/",

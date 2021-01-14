@@ -23,20 +23,19 @@ export class BuildError extends CustomError {
  * Build the whole site by copying assets, building styles and all pages, posts etc.
  *
  * @param site - Configuration to build site with
- * @param production - Whether to optimize output
  */
-export const buildSite = (site: Site, production: boolean): EitherAsync<BuildError, void> =>
+export const buildSite = (site: Site): EitherAsync<BuildError, void> =>
   EitherAsync(async () => {
     logger.log(`Building site ${site.config.meta.title} (${site.config.url})`)
     const duration = new Duration()
 
     await EitherAsync.sequence([
       copyAssets(site.config),
-      renderStyles(site, path.join(site.config.assets.style, "style.scss"), production),
+      renderStyles(site, path.join(site.config.assets.style, "style.scss")),
       buildPages(site),
       createRootFiles(site.config),
       sitemap(site),
-      compress(site.config, production),
+      compress(site.config),
     ])
       .mapLeft((error) => new BuildError(error.message))
       .run()

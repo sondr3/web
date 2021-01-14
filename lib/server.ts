@@ -67,7 +67,7 @@ export class Server {
       if (name.endsWith("~")) return
       if (type === "change" || type === "rename") {
         logger.log(`Rendering ${name}`)
-        await renderStyles(this.site, path.join(this.site.config.assets.style, "style.scss"), false)
+        await renderStyles(this.site, path.join(this.site.config.assets.style, "style.scss"))
         this.broadcastReload()
       }
     })
@@ -85,7 +85,7 @@ export class Server {
       if (name.endsWith("~")) return
       if (type === "change" || type === "rename") {
         logger.log(`Refreshing due to updates in ${name}`)
-        await buildSite(this.site, false)
+        await buildSite(this.site)
         this.broadcastReload()
       }
     })

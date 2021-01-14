@@ -8,9 +8,9 @@ import { readdirRecursive } from "../utils"
 
 const INVALID_EXT = [".map", ".txt", ".scss", ".gz", ".br", ""]
 
-export const compress = (config: Config, production: boolean): EitherAsync<Error, void> =>
+export const compress = (config: Config): EitherAsync<Error, void> =>
   EitherAsync(async () => {
-    if (production) {
+    if (config.production) {
       await gzip(config)
       await brotli(config)
     }

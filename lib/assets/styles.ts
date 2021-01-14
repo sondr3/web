@@ -23,10 +23,9 @@ export class StyleError extends CustomError {
  *
  * @param site - Build configuration
  * @param file - File to render
- * @param production - Whether to optimize file
  * @returns Error if output file could not be written to
  */
-export const renderStyles = (site: Site, file: string, production: boolean): EitherAsync<StyleError, void> =>
+export const renderStyles = (site: Site, file: string): EitherAsync<StyleError, void> =>
   EitherAsync(async () => {
     logger.debug(`Rendering ${file}`)
     const style = sass.renderSync({
@@ -37,7 +36,7 @@ export const renderStyles = (site: Site, file: string, production: boolean): Eit
 
     logger.debug(`Rendered ${file}: took ${prettyPrintDuration(style.stats.duration)}`)
 
-    await writeStyles(site, file, style, production)
+    await writeStyles(site, file, style)
       .mapLeft((error) => new StyleError(error.message))
       .run()
   })
@@ -48,27 +47,21 @@ export const renderStyles = (site: Site, file: string, production: boolean): Eit
  * @param site - Build configuration
  * @param file - CSS filename to write to
  * @param result - Result object from rendering SCSS
- * @param production - Whether to optimize file
  * @returns Error if file creation fails
  */
-const writeStyles = (
-  site: Site,
-  file: string,
-  result: SassResult,
-  production: boolean,
-): EitherAsync<StyleError, void> =>
+const writeStyles = (site: Site, file: string, result: SassResult): EitherAsync<StyleError, void> =>
   EitherAsync(async () => {
     const parsed = path.parse(file)
 
     let hash = ""
-    if (production) {
+    if (site.config.production) {
       await createFileHash(file)
         .mapLeft((error) => new StyleError(error.message))
         .map((value) => (hash = `.${value}`))
         .run()
     }
 
-    const out = await (production ? optimize(result, file, hash) : formatCSS(result))
+    const out = await (site.config.production ? optimize(result, file, hash) : formatCSS(result))
 
     await EitherAsync.sequence([
       createDirectory(parsed.dir),

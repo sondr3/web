@@ -11,7 +11,7 @@ describe("renderPages", () => {
   })
 
   it("renders all pages", async () => {
-    await renderSpecialPages(new Site(), false)
+    await renderSpecialPages(new Site())
 
     expect(await fs.stat(path.join(defaultConfig.out, "index.html"))).toBeDefined()
   })

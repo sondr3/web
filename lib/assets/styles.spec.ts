@@ -21,7 +21,7 @@ describe("renderStyles", () => {
   it("renders and creates files", async () => {
     const site = TestSite()
     const spec = path.resolve(site.config.assets.style, "style.scss")
-    const result = await renderStyles(site, spec, false).run()
+    const result = await renderStyles(site, spec).run()
 
     expect(result.isRight()).toBeTruthy()
     const directories = fs.readdirSync(site.config.out)
@@ -32,7 +32,7 @@ describe("renderStyles", () => {
   it("renders and adds hash in prod", async () => {
     const site = TestSite()
     const spec = path.resolve(site.config.assets.style, "style.scss")
-    const result = await renderStyles(site, spec, true).run()
+    const result = await renderStyles(site, spec).run()
 
     expect(result.isRight()).toBeTruthy()
     const directories = fs.readdirSync(site.config.out)
@@ -42,7 +42,7 @@ describe("renderStyles", () => {
 
   it("errors when it cannot render", async () => {
     try {
-      const result = await renderStyles(TestSite(), "no.scss", false).run()
+      const result = await renderStyles(TestSite(), "no.scss").run()
       expect(result.isLeft()).toBeTruthy()
       expect(typeof result.leftToMaybe().unsafeCoerce()).toBe(StyleError)
       expect(result.leftToMaybe().unsafeCoerce().message).toContain(/Error/)
@@ -54,7 +54,7 @@ describe("renderStyles", () => {
   it("minifies when in prod", async () => {
     const site = TestSite()
     const spec = path.resolve(site.config.assets.style, "style.scss")
-    const result = await renderStyles(site, spec, false).run()
+    const result = await renderStyles(site, spec).run()
     expect(result.isRight()).toBeTruthy()
   })
 })

@@ -39,10 +39,7 @@ export const buildPages = (site: Site): EitherAsync<BuildError, void> =>
   EitherAsync(async () => {
     const asciidoc = new Asciidoc()
 
-    await EitherAsync.sequence([
-      renderPages(site, asciidoc, site.config.production),
-      renderSpecialPages(site, site.config.production),
-    ])
+    await EitherAsync.sequence([renderPages(site, asciidoc), renderSpecialPages(site)])
       .mapLeft((error) => new BuildError(error.message))
       .run()
   })

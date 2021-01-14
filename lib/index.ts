@@ -17,7 +17,7 @@ const build = async (cli: CLI): Promise<void> => {
       url: "https://www.eons.io",
     }),
   )
-  await buildSite(site, cli.production).run()
+  await buildSite(site).run()
 }
 
 /**
@@ -34,7 +34,7 @@ const develop = async (cli: CLI, logger: Logger): Promise<void> => {
       url: "http://localhost",
     }),
   )
-  await buildSite(site, cli.production)
+  await buildSite(site)
   const server = new Server(site)
   server.run()
 
