@@ -12,7 +12,7 @@ describe("styleName", () => {
   })
 
   it("gives correct name with extension", () => {
-    const file = styleName(defaultConfig, "test.html", ".css")
+    const file = styleName(defaultConfig, "test.html", "css")
     expect(file.endsWith("/test/test.css")).toBeTruthy()
   })
 })

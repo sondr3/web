@@ -1,4 +1,4 @@
-import { slugify } from "./utils"
+import { cacheBust, slugify } from "./utils"
 
 test("slugify", () => {
   const tests = [
@@ -9,4 +9,9 @@ test("slugify", () => {
   tests.forEach((inputs) => {
     expect(slugify(inputs[0])).toBe(inputs[1])
   })
+})
+
+test("cacheBust", () => {
+  expect(cacheBust("content", false)).toEqual("")
+  expect(cacheBust("content", true)).toEqual("9a0364b9")
 })

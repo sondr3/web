@@ -7,7 +7,7 @@ import { CustomError } from "ts-custom-error"
 
 import { logging } from "../logging"
 import { Config, Site } from "../site"
-import { createDirectory, createFileHash, formatCSS, prettyPrintDuration, writeFile } from "../utils"
+import { cacheBust, createDirectory, formatCSS, prettyPrintDuration, writeFile } from "../utils"
 
 const logger = logging.getLogger("sass")
 
@@ -53,25 +53,19 @@ const writeStyles = (site: Site, file: string, result: SassResult): EitherAsync<
   EitherAsync(async () => {
     const parsed = path.parse(file)
 
-    let hash = ""
-    if (site.config.production) {
-      await createFileHash(file)
-        .mapLeft((error) => new StyleError(error.message))
-        .map((value) => (hash = `.${value}`))
-        .run()
-    }
-
+    const hash = cacheBust(result.css, site.config.production)
     const out = await (site.config.production ? optimize(result, file, hash) : formatCSS(result))
+    const name = site.config.production ? styleName(site.config, file, `${hash}.css`) : styleName(site.config, file)
 
     await EitherAsync.sequence([
       createDirectory(parsed.dir),
-      writeFile(styleName(site.config, file, `${hash}.css`), out.css),
-      writeFile(styleName(site.config, file, `${hash}.css.map`), out.map),
+      writeFile(name, out.css),
+      writeFile(`${name}.map`, out.map),
     ])
       .mapLeft((error) => new StyleError(error.message))
       .run()
 
-    site.state.styles.set(`${parsed.name}.css`, styleName(site.config, file, `${hash}.css`))
+    site.state.styles.set(`${parsed.name}.css`, name)
   })
 
 /**
@@ -103,7 +97,7 @@ const optimize = async (source: SassResult, file: string, hash: string): Promise
  * @param extension - File extension
  * @returns The corrected file extension
  */
-export const styleName = (config: Config, file: string, extension = ".css"): string => {
+export const styleName = (config: Config, file: string, extension = "css"): string => {
   const { name } = path.parse(file)
-  return `${config.out}/${name}${extension}`
+  return `${config.out}/${name}.${extension}`
 }
