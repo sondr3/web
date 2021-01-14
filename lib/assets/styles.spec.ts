@@ -1,8 +1,8 @@
 import fs from "fs"
 import path from "path"
 
-import { defaultConfig } from "../site"
-import { TestSite } from "../tests"
+import { defaultConfig, setConfig } from "../site"
+import { testConfig, TestSite } from "../tests"
 import { renderStyles, StyleError, styleName } from "./styles"
 
 describe("styleName", () => {
@@ -30,7 +30,7 @@ describe("renderStyles", () => {
   })
 
   it("renders and adds hash in prod", async () => {
-    const site = TestSite()
+    const site = TestSite(setConfig(testConfig, { production: true }))
     const spec = path.resolve(site.config.assets.style, "style.scss")
     const result = await renderStyles(site, spec).run()
 

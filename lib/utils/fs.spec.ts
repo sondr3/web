@@ -4,7 +4,7 @@ import path from "path"
 import { Left, Right } from "purify-ts"
 
 import { copyAssets } from "../assets"
-import { defaultConfig } from "../site"
+import { testConfig } from "../tests"
 import {
   copyFile,
   copyFiles,
@@ -90,7 +90,7 @@ describe("cacheBustFile", () => {
 
 describe("copyFiles", () => {
   it("copies files without recursing", async () => {
-    const config = defaultConfig
+    const config = testConfig
 
     await fs.rmdir(path.join(config.out, "images"), { recursive: true })
     expect(await copyFiles(config.assets.images, path.join(config.out, "images"), false)).toEqual(Right(true))
@@ -114,7 +114,7 @@ describe("copyFiles", () => {
 })
 
 describe("copyFile", () => {
-  const config = defaultConfig
+  const config = testConfig
 
   it("copies and overwrites files by default", async () => {
     const directory = await fs.mkdtemp(path.join(os.tmpdir(), "test-copy"))
@@ -165,7 +165,7 @@ describe("rmdir", () => {
   })
 
   it("should fail if a directory does not exist", async () => {
-    const path_ = path.resolve(process.cwd(), defaultConfig.out, "wrongDir")
+    const path_ = path.resolve(process.cwd(), testConfig.out, "wrongDir")
     const result = await rmdir(path_, true).run()
     expect(result.isLeft()).toBeTruthy()
     expect(fsSync.existsSync(path_)).toBeFalsy()
@@ -174,7 +174,7 @@ describe("rmdir", () => {
 
 describe("rmdirs", () => {
   it("should delete multiple", async () => {
-    await copyAssets(defaultConfig).run()
+    await copyAssets(testConfig).run()
     const paths = [await fs.mkdtemp("rmdirs"), await fs.mkdtemp("rmdirs")]
     const result = await rmdirs(paths, true)
     expect(result).toEqual(Right([true, true]))
@@ -183,8 +183,9 @@ describe("rmdirs", () => {
   })
 
   it("should fail if one directory does not exist", async () => {
-    await copyAssets(defaultConfig).run()
-    const paths = ["js", "wrongDir"].map((path_) => path.resolve(process.cwd(), defaultConfig.out, path_))
+    const config = testConfig
+    await copyAssets(config).run()
+    const paths = ["js", "wrongDir"].map((path_) => path.resolve(process.cwd(), config.out, path_))
     const result = await rmdirs(paths, true)
     expect(result.isLeft()).toBeTruthy()
 

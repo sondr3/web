@@ -1,8 +1,9 @@
-import { Site } from "../site"
+import { TestSite } from "../tests"
 import { createDirectory } from "../utils"
 import { sitemap } from "./sitemap"
 
 test("sitemap", async () => {
-  await createDirectory(new Site().config.out)
-  await expect(sitemap(new Site())).resolves.not.toThrow()
+  const site = TestSite()
+  await createDirectory(site.config.out)
+  await expect(sitemap(site)).resolves.not.toThrow()
 })

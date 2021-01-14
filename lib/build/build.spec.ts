@@ -1,9 +1,9 @@
-import { Site } from "../site"
+import { TestSite } from "../tests"
 import { buildSite } from "./build"
 
 describe("buildSite", () => {
   it("works with default config", async () => {
-    const result = await buildSite(new Site()).run()
+    const result = await buildSite(TestSite()).run()
     expect(result.isRight()).toBeTruthy()
   })
 })
