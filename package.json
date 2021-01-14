@@ -7,7 +7,7 @@
     "dev": "tsc --watch --incremental",
     "test": "jest",
     "lint:style": "prettier --check lib",
-    "lint:code": "eslint lib",
+    "lint:code": "eslint lib --cache",
     "lint:css": "stylelint assets/scss/",
     "start": "nodemon --watch lib --ext ts --delay 1 dist/index.js develop -n=debug",
     "build": "node dist/index.js build -p -n=none",
