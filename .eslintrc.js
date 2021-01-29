@@ -14,4 +14,7 @@ module.exports = {
     "plugin:jest/recommended",
     "plugin:jest/style",
   ],
+  rules: {
+    "unicorn/no-array-for-each": "off",
+  },
 }
