@@ -16,7 +16,7 @@
     "docs": "typedoc"
   },
   "dependencies": {
-    "@minify-html/js": "0.4.1",
+    "@minify-html/js": "0.4.3",
     "asciidoctor": "2.2.1",
     "csso": "4.2.0",
     "prettier": "2.2.1",
