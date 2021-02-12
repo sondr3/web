@@ -13,7 +13,8 @@
     "build": "node dist/index.js build -p -n=none",
     "serve": "node dist/index.js serve",
     "clean": "node dist/index.js clean",
-    "docs": "typedoc"
+    "docs": "typedoc",
+    "postinstall": "husky install"
   },
   "dependencies": {
     "@minify-html/js": "0.4.3",
@@ -64,11 +65,6 @@
   },
   "engines": {
     "node": ">=15"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
