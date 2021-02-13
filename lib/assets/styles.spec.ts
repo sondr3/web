@@ -25,8 +25,8 @@ describe("renderStyles", () => {
 
     expect(result.isRight()).toBeTruthy()
     const directories = fs.readdirSync(site.config.out)
-    expect(directories.some((file) => file === "style.css")).toBeTruthy()
-    expect(directories.some((file) => file === "style..css")).not.toBeTruthy()
+    expect(directories.includes("style.css")).toBeTruthy()
+    expect(directories.includes("style..css")).not.toBeTruthy()
   })
 
   it("renders and adds hash in prod", async () => {
