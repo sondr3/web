@@ -22,7 +22,7 @@
     "csso": "4.2.0",
     "prettier": "2.2.1",
     "purify-ts": "0.16.1",
-    "sass": "1.32.7",
+    "sass": "1.32.8",
     "source-map": "0.7.3",
     "ts-custom-error": "3.2.0",
     "ws": "7.4.3",
