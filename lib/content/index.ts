@@ -76,7 +76,7 @@ export const createMetadata = (data: ParsedData, defaults: Metadata): Metadata =
 
 export const createFrontmatter = (data: ParsedData, document: Asciidoctor.Document): Frontmatter => {
   return {
-    title: data?.title ?? document.getTitle(),
+    title: data?.title ?? (document.getTitle() as string), // this should never happen
     description: data?.description,
     created: convertDate(data?.created),
     modified: convertDate(data?.modified),
