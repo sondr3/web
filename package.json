@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@minify-html/js": "0.4.6",
-    "asciidoctor": "2.2.2",
+    "asciidoctor": "2.2.3",
     "csso": "4.2.0",
     "prettier": "2.2.1",
     "purify-ts": "0.16.1",
