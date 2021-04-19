@@ -17,7 +17,7 @@
     "postinstall": "husky install"
   },
   "dependencies": {
-    "@minify-html/js": "0.4.6",
+    "@minify-html/js": "0.4.10",
     "asciidoctor": "2.2.3",
     "csso": "4.2.0",
     "prettier": "2.2.1",
