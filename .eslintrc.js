@@ -5,18 +5,17 @@ module.exports = {
   env: {
     jest: true,
   },
-  globals: {
-    __dirname: true,
-  },
-  extends: [
-    "@sondr3/eslint-config/typescript",
-    "@sondr3/eslint-config/node",
-    "plugin:jest/recommended",
-    "plugin:jest/style",
-  ],
+  extends: ["@sondr3/eslint-config/typescript", "@sondr3/eslint-config/tsx"],
   rules: {
     "unicorn/no-array-for-each": "off",
-    "unicorn/prefer-node-protocol": "off",
-    "unicorn/prefer-module": "off",
+    "react/react-in-jsx-scope": "off",
   },
+  overrides: [
+    {
+      files: ["pages/**/*.tsx"],
+      rules: {
+        "import/no-default-export": "off",
+      },
+    },
+  ],
 }
