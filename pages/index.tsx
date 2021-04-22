@@ -1,9 +1,12 @@
 import Head from "next/head"
 import Image from "next/image"
 
+import { Menu } from "../components/menu"
+
 export default function Home(): JSX.Element {
   return (
     <div className="relative bg-gray-50">
+      <Menu />
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
@@ -25,8 +28,9 @@ export default function Home(): JSX.Element {
             className="absolute inset-0 w-full h-full object-cover"
             src="/images/me.jpg"
             alt="Picture of me"
-            width={500}
-            height={600}
+            layout="responsive"
+            width={400}
+            height={400}
           />
         </div>
       </main>
