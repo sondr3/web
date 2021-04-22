@@ -13,6 +13,8 @@
     "postinstall": "husky install"
   },
   "dependencies": {
+    "@headlessui/react": "1.0.0",
+    "@heroicons/react": "1.0.1",
     "asciidoctor": "2.2.3",
     "date-fns": "2.10.0",
     "gray-matter": "4.0.2",
