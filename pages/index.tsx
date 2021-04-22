@@ -1,12 +1,11 @@
 import Head from "next/head"
 import Image from "next/image"
 
-import { Menu } from "../components/menu"
+import { Layout } from "../components/layout"
 
 export default function Home(): JSX.Element {
   return (
-    <div className="relative bg-gray-50">
-      <Menu />
+    <Layout>
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
@@ -34,6 +33,6 @@ export default function Home(): JSX.Element {
           />
         </div>
       </main>
-    </div>
+    </Layout>
   )
 }
