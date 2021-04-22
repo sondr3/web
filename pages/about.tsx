@@ -1,9 +1,14 @@
+import Head from "next/head"
+
 import { Content } from "../components/content"
 import { Layout } from "../components/layout"
 
 export default function about(): JSX.Element {
   return (
     <Layout>
+      <Head>
+        <title>About me :: Eons</title>
+      </Head>
       <Content header="About me">
         <p>
           Hello, I’m Sondre! I’m a master student on my first year studying algorithms at the{" "}

@@ -7,7 +7,7 @@ export default function Home(): JSX.Element {
   return (
     <Layout>
       <Head>
-        <title>Create Next App</title>
+        <title>Eons :: IO</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="lg:relative">
