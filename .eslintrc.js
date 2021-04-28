@@ -16,5 +16,7 @@ module.exports = {
   ],
   rules: {
     "unicorn/no-array-for-each": "off",
+    "unicorn/prefer-node-protocol": "off",
+    "unicorn/prefer-module": "off",
   },
 }
