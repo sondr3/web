@@ -3,6 +3,7 @@ import fs, { createReadStream, createWriteStream } from "fs"
 import path from "path"
 
 const INVALID_EXT = [".map", ".txt", ".scss", ".gz", ".br", ""]
+const IGNORE_FILE = ["apple-touch-icon.png", "favicon.ico", "icon-192.png", "icon-512.png", "icon.svg"]
 
 export function readdirRecursive(directory, ignored_extension, filepaths = []) {
   const files = fs.readdirSync(directory)
@@ -11,9 +12,11 @@ export function readdirRecursive(directory, ignored_extension, filepaths = []) {
     const filepath = path.join(directory, filename)
     const stat = fs.statSync(filepath)
 
+    console.log(path.basename(filename))
+
     if (stat.isDirectory()) {
       readdirRecursive(filepath, ignored_extension, filepaths)
-    } else if (!ignored_extension.includes(path.extname(filename))) {
+    } else if (!ignored_extension.includes(path.extname(filename)) && !IGNORE_FILE.includes(path.basename(filename))) {
       filepaths.push(filepath)
     }
   }
