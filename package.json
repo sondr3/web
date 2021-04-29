@@ -3,6 +3,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
+    "compress": "node scripts/compress.mjs",
     "format": "prettier --check assets",
     "format:fix": "prettier --write assets",
     "style": "stylelint assets",

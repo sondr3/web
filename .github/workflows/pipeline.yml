@@ -47,6 +47,9 @@ jobs:
       - name: Build
         run: hugo --minify
 
+      - name: Compress
+        run: npm run compress
+
       - name: Deploy website
         uses: burnett01/rsync-deployments@4.1
         with:
