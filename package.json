@@ -3,8 +3,10 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "format": "prettier --format assets",
-    "style": "stylelint --fix assets"
+    "format": "prettier --check assets",
+    "format:fix": "prettier --write assets",
+    "style": "stylelint assets",
+    "style:fix": "stylelint --fix assets"
   },
   "devDependencies": {
     "@sondr3/prettier": "0.5.1",
