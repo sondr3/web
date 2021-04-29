@@ -47,4 +47,4 @@
 {{ if hugo.IsProduction }}
 {{ $sass = $sass | minify | fingerprint "sha512" }}
 {{ end }}
-<link rel="stylesheet" href="{{ $sass.Permalink }}" integrity="{{ $sass.Data.Integrity }}">
+<link rel="stylesheet" href="{{ $sass.Permalink }}" integrity="{{ $sass.Data.Integrity }}" media="screen">

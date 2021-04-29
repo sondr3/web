@@ -1,7 +1,9 @@
----
-created: 2020-12-12
-modified: 2020-12-20
----
++++
+title = "About me"
+description = "I'm Sondre!"
+date = "2020-12-12"
+lastmod = "2021-04-29"
++++
 
 # About me
 
