@@ -1,22 +1,27 @@
 import { createBrotliCompress, createGzip } from "zlib"
-import fs, { createReadStream, createWriteStream } from "fs"
+import { promises as fs, createReadStream, createWriteStream } from "fs"
+import { EventEmitter } from "events"
+import stream from "stream"
 import path from "path"
+import util from "util"
+
+EventEmitter.defaultMaxListeners = 0
+
+const pipeline = util.promisify(stream.pipeline)
 
 const INVALID_EXT = [".map", ".txt", ".scss", ".gz", ".br", ""]
 const IGNORE_FILE = ["apple-touch-icon.png", "favicon.ico", "icon-192.png", "icon-512.png", "icon.svg"]
 
-export function readdirRecursive(directory, ignored_extension, filepaths = []) {
-  const files = fs.readdirSync(directory)
+async function readdirRecursive(directory, filepaths = []) {
+  const files = await fs.readdir(directory)
 
   for (const filename of files) {
     const filepath = path.join(directory, filename)
-    const stat = fs.statSync(filepath)
-
-    console.log(path.basename(filename))
+    const stat = await fs.stat(filepath)
 
     if (stat.isDirectory()) {
-      readdirRecursive(filepath, ignored_extension, filepaths)
-    } else if (!ignored_extension.includes(path.extname(filename)) && !IGNORE_FILE.includes(path.basename(filename))) {
+      await readdirRecursive(filepath, filepaths)
+    } else if (!INVALID_EXT.includes(path.extname(filename)) && !IGNORE_FILE.includes(path.basename(filename))) {
       filepaths.push(filepath)
     }
   }
@@ -24,39 +29,22 @@ export function readdirRecursive(directory, ignored_extension, filepaths = []) {
   return filepaths
 }
 
-function gzip() {
-  const files = readdirRecursive(path.join(process.cwd(), "public"), INVALID_EXT)
-
-  for (const file of files) {
+async function compress(files, ext, compressor) {
+  const compressed = files.map((file) => {
     const source = createReadStream(file)
-    const destination = createWriteStream(`${file}.gz`)
-    const gzip = createGzip({ level: 9 })
-    source
-      .pipe(gzip)
-      .on("error", (err) => console.error(err))
-      .pipe(destination)
-      .on("error", (err) => console.error(err))
-  }
+    const destination = createWriteStream(`${file}.${ext}`)
+    return pipeline(source, compressor, destination)
+  })
+
+  await Promise.allSettled(compressed)
 }
 
-function brotli() {
-  const files = readdirRecursive(path.join(process.cwd(), "public"), INVALID_EXT)
+async function main() {
+  const files = await readdirRecursive(path.join(process.cwd(), "public"))
+  if (process.env.CI) files.forEach((file) => console.log(path.basename(file)))
 
-  for (const file of files) {
-    const source = createReadStream(file)
-    const destination = createWriteStream(`${file}.br`)
-    const brotli = createBrotliCompress()
-    source
-      .pipe(brotli)
-      .on("error", (err) => console.error(err))
-      .pipe(destination)
-      .on("error", (err) => console.error(err))
-  }
+  await compress(files, "br", createBrotliCompress())
+  await compress(files, "gz", createGzip({ level: 9 }))
 }
 
-function main() {
-  gzip()
-  brotli()
-}
-
-main()
+await main()
