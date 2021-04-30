@@ -1,17 +1,15 @@
-import { createBrotliCompress, createGzip } from "zlib"
-import { promises as fs, createReadStream, createWriteStream } from "fs"
-import { EventEmitter } from "events"
-import stream from "stream"
+import { brotliCompressSync, gzipSync } from "zlib"
+import { promises as fs } from "fs"
 import path from "path"
-import util from "util"
-
-EventEmitter.defaultMaxListeners = 0
-
-const pipeline = util.promisify(stream.pipeline)
 
 const INVALID_EXT = [".map", ".txt", ".scss", ".gz", ".br", ""]
 const IGNORE_FILE = ["apple-touch-icon.png", "favicon.ico", "icon-192.png", "icon-512.png", "icon.svg"]
 
+/**
+ * @param {string} directory - Path to recursively look in
+ * @param {string[]} filepaths - Array to hold found files
+ * @returns {Promise<string[]>} - Files found
+ */
 async function readdirRecursive(directory, filepaths = []) {
   const files = await fs.readdir(directory)
 
@@ -29,22 +27,30 @@ async function readdirRecursive(directory, filepaths = []) {
   return filepaths
 }
 
-async function compress(files, ext, compressor) {
-  const compressed = files.map((file) => {
-    const source = createReadStream(file)
-    const destination = createWriteStream(`${file}.${ext}`)
-    return pipeline(source, compressor, destination)
+/**
+ * @param {string[]} files - Files to compress
+ * @param {string} ext  - Extension for the compressed files
+ * @param {function} compressor - Function to compress with
+ */
+function compress(files, ext, compressor) {
+  files.map(async (file) => {
+    const content = await fs.readFile(file)
+    const compressed = compressor(content)
+    await fs.writeFile(`${file}.${ext}`, compressed)
   })
-
-  await Promise.allSettled(compressed)
 }
 
-async function main() {
-  const files = await readdirRecursive(path.join(process.cwd(), "public"))
-  if (process.env.CI) files.forEach((file) => console.log(path.basename(file)))
+const gzip = (content) => gzipSync(content, { level: 9 })
 
-  await compress(files, "br", createBrotliCompress())
-  await compress(files, "gz", createGzip({ level: 9 }))
+async function main() {
+  const start = process.hrtime.bigint()
+  const files = await readdirRecursive(path.join(process.cwd(), "public"))
+  if (process.env.CI) files.forEach((file) => console.log(file))
+
+  compress(files, "br", brotliCompressSync)
+  compress(files, "gz", gzip)
+  const end = process.hrtime.bigint()
+  console.error(`Compressed ${files.length} files in ${(end - start) / 1000000n}ms`)
 }
 
 await main()
