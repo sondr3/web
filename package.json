@@ -3,6 +3,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
+    "start": "hugo server --bind 0.0.0.0",
     "compress": "node scripts/compress.mjs",
     "format": "prettier --check assets",
     "format:fix": "prettier --write assets",

@@ -1,3 +1,4 @@
 baseURL = "https://www.eons.io/"
 languageCode = "en-us"
+relativeURLs = true
 title = "Eons :: IO ()"

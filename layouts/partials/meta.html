@@ -50,4 +50,4 @@
 {{ if hugo.IsProduction }}
 {{ $css = $css | minify }}
 {{ end }}
-<link rel="stylesheet" href="{{ $css.Permalink }}" integrity="{{ $sri.Data.Integrity }}" media="screen">
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $sri.Data.Integrity }}" media="screen">
