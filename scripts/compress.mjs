@@ -2,8 +2,8 @@ import { brotliCompressSync, gzipSync } from "zlib"
 import { promises as fs } from "fs"
 import path from "path"
 
-const INVALID_EXT = [".map", ".txt", ".scss", ".gz", ".br", ""]
-const IGNORE_FILE = ["apple-touch-icon.png", "favicon.ico", "icon-192.png", "icon-512.png", "icon.svg"]
+const INVALID_EXT = [".map", ".txt", ".scss", ".gz", ".br", ".png", ".jpg", ""]
+const IGNORE_FILE = ["favicon.ico", "icon.svg"]
 
 /**
  * @param {string} directory - Path to recursively look in
