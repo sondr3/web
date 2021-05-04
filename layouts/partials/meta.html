@@ -46,7 +46,7 @@
 {{ $cacheBuster := $resource.Content | sha1 | first 7 }}
 {{ $options := dict "targetPath" (printf "style.%s.css" $cacheBuster) "enableSourceMap" true }}
 {{ $css := $resource | toCSS $options }}
-{{ $sri := $css | fingerprint "sha512" }}
+{{ $sri := $css | minify | fingerprint "sha512" }}
 {{ if hugo.IsProduction }}
 {{ $css = $css | minify }}
 {{ end }}
