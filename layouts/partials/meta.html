@@ -42,9 +42,11 @@
 <meta name="twitter:creator" content="@sondr3" />
 <meta name="theme-color" content="#fff6f6" />
 
-{{ $options := (dict "targetPath" "style.css" "enableSourceMap" true ) }}
-{{ $sass := resources.Get "scss/style.scss" | toCSS $options }}
+{{ $resource := resources.Get "scss/style.scss" }}
+{{ $cacheBuster := $resource.Content | sha1 | first 7 }}
+{{ $options := dict "targetPath" (printf "style.%s.css" $cacheBuster) "enableSourceMap" true }}
+{{ $css := $resource | toCSS $options }}
 {{ if hugo.IsProduction }}
-{{ $sass = $sass | minify | fingerprint "sha512" }}
+{{ $css = $css | minify | fingerprint "sha512" }}
 {{ end }}
-<link rel="stylesheet" href="{{ $sass.Permalink }}" integrity="{{ $sass.Data.Integrity }}" media="screen">
+<link rel="stylesheet" href="{{ $css.Permalink }}" integrity="{{ $css.Data.Integrity }}" media="screen">
