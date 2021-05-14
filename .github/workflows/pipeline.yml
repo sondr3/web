@@ -27,35 +27,7 @@ jobs:
       - name: Check formatting and lints
         run: |
           npm run format
-          npm run style
+          npm run lint
 
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-    needs: pipeline
-    if: github.ref == 'refs/heads/main'
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
-        with:
-          hugo-version: "latest"
-          extended: true
-
-      - name: Build
-        run: hugo --minify
-
-      - name: Compress
-        run: npm run compress
-
-      - name: Deploy website
-        uses: burnett01/rsync-deployments@4.1
-        with:
-          path: public/
-          switches: -avzr --delete
-          remote_path: ${{ secrets.OUT }}
-          remote_host: ${{ secrets.HOST }}
-          remote_user: ${{ secrets.USERNAME }}
-          remote_key: ${{ secrets.KEY }}
+      - name: Build site
+        run: npm run build
