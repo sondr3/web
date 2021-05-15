@@ -6,6 +6,7 @@ export default class MyDocument extends Document {
       <Html lang="en">
         <Head>
           <link rel="icon" href="/favicon.ico" />
+          <link rel="icon" href="/icon.svg" sizes="any" type="image/svg+xml" />
           <link rel="alternate icon" type="image/png" href="/icon-192.png" sizes="192x192" />
           <link rel="alternate icon" type="image/png" href="/icon-512.png" sizes="512x512" />
           <link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180" />

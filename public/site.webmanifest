@@ -4,6 +4,12 @@
   "description": "The online home for Sondre Nilsen",
   "icons": [
     {
+      "src": "/icon.svg",
+      "sizes": "196x196",
+      "type": "image/svg",
+      "purpose": "any maskable"
+    },
+    {
       "src": "/icon-192.png",
       "sizes": "192x192",
       "type": "image/png"
