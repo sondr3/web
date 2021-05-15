@@ -65,6 +65,8 @@ export const Footer = (): JSX.Element => {
           {navigation.social.map((item) => (
             <a key={item.name} href={item.href} className="text-gray-400 hover:text-gray-500">
               <span className="sr-only">{item.name}</span>
+              {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+              {/* @ts-ignore */}
               <item.icon className="h-6 w-6" aria-hidden="true" />
             </a>
           ))}
