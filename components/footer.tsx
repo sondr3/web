@@ -27,7 +27,13 @@ export const Footer = (): JSX.Element => {
             </a>
           ))}
         </div>
-        <p className="mt-8 text-center text-base text-gray-400">&copy; 2020 Workflow, Inc. All rights reserved.</p>
+        <p className="mt-8 text-center text-base text-gray-400">
+          License{" "}
+          <a rel="noopener noreferrer" target="blank" href="https://creativecommons.org/licenses/by-sa/4.0/">
+            CC BY-SA 4.0
+          </a>{" "}
+          — Sondre Nilsen
+        </p>
       </div>
     </footer>
   )
