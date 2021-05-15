@@ -11,6 +11,6 @@ You
 Last Update: 20xx
 Doctype: HTML5
 Language: English
-Standards: HTML5, CSS3, ES2020
-Components: TypeScript, SASS, template literals
-Software: WebStorm
+Standards: HTML5, ES2020
+Components: TypeScript, Tailwind, NextJS, Vercel
+Software: WebStorm, VSCode
