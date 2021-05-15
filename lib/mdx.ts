@@ -16,6 +16,7 @@ const CONTENT_MAP = {
 
 export interface FrontMatter {
   title: string
+  description?: string
 }
 
 export interface MdxContent {

@@ -12,7 +12,14 @@ type Props = {
 
 export const Layout = ({ children, frontMatter }: Props): JSX.Element => (
   <>
-    <NextSeo title={frontMatter.title} />
+    <NextSeo
+      title={frontMatter.title}
+      description={frontMatter.description}
+      openGraph={{
+        title: frontMatter.title,
+        description: frontMatter.description,
+      }}
+    />
     <Navbar />
     {children}
     <Footer />
