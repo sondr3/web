@@ -2,6 +2,7 @@ import { getMDXComponent } from "mdx-bundler/client"
 import { GetStaticPaths, GetStaticProps } from "next"
 import { useMemo } from "react"
 
+import { Content } from "../../components/content"
 import { Layout } from "../../components/layout"
 import { allContentByType, findPostFromSlug, MdxContent, postPathsToSlugs, renderMDX } from "../../lib/mdx"
 
@@ -10,7 +11,9 @@ export default function Post({ mdx, frontMatter }: MdxContent): JSX.Element {
 
   return (
     <Layout title={frontMatter.title}>
-      <Component />
+      <Content title={frontMatter.title}>
+        <Component />
+      </Content>
     </Layout>
   )
 }
