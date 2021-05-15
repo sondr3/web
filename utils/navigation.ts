@@ -8,8 +8,8 @@ export const navigation: NavItem[] = [
     name: "About",
     href: "/about/",
   },
-  {
-    name: "Posts",
-    href: "/posts/",
-  },
+  // {
+  //   name: "Posts",
+  //   href: "/posts/",
+  // },
 ]

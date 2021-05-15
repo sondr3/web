@@ -1,6 +1,6 @@
 # [`eons.io`](https://www.eons.io/) ![pipeline](https://github.com/sondr3/web/workflows/pipeline/badge.svg)
 
-This is my website, held together by tears, glue and a healthy dose of `eh, good enough`. Built using the amazing [Hugo](https://gohugo.io/) static site generator.
+This is my website, held together by tears, glue and a healthy dose of `eh, good enough`. Built using [NextJS](https://nextjs.org/) and [Tailwind](https://tailwindcss.com/).
 
 # License
 
