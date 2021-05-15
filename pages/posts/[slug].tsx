@@ -10,7 +10,7 @@ export default function Post({ mdx, frontMatter }: MdxContent): JSX.Element {
   const Component = useMemo(() => getMDXComponent(mdx), [mdx])
 
   return (
-    <Layout title={frontMatter.title}>
+    <Layout frontMatter={frontMatter}>
       <Content title={frontMatter.title}>
         <Component />
       </Content>

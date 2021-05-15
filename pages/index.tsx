@@ -1,7 +1,11 @@
 import { Layout } from "../components/layout"
 
+const frontMatter = {
+  title: "Home",
+}
+
 const IndexPage = (): JSX.Element => (
-  <Layout title="Home | Next.js + TypeScript Example">
+  <Layout frontMatter={frontMatter}>
     <div className="relative pt-4">
       <main className="lg:relative">
         <div className="mx-auto max-w-7xl w-full pt-16 pb-10 text-center lg:py-48 lg:text-left">
