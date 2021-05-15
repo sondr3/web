@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 import { navigation, socials } from "../utils"
 
 export const Footer = (): JSX.Element => {
@@ -7,9 +9,9 @@ export const Footer = (): JSX.Element => {
         <nav className="-mx-5 -my-2 flex flex-wrap justify-center" aria-label="Footer">
           {navigation.map((item) => (
             <div key={item.name} className="px-5 py-2">
-              <a href={item.href} className="text-base text-gray-500 hover:text-gray-900">
-                {item.name}
-              </a>
+              <Link href={item.href}>
+                <a className="text-base text-gray-500 hover:text-gray-900">{item.name}</a>
+              </Link>
             </div>
           ))}
         </nav>
