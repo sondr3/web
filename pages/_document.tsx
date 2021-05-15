@@ -4,7 +4,13 @@ export default class MyDocument extends Document {
   render(): JSX.Element {
     return (
       <Html lang="en">
-        <Head />
+        <Head>
+          <link rel="icon" href="/favicon.ico" />
+          <link rel="alternate icon" type="image/png" href="/icon-192.png" sizes="192x192" />
+          <link rel="alternate icon" type="image/png" href="/icon-512.png" sizes="512x512" />
+          <link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180" />
+          <link href="/site.webmanifest" rel="manifest" />
+        </Head>
         <body>
           <Main />
           <NextScript />
