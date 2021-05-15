@@ -43,6 +43,10 @@ export const postPathsToSlugs = (posts: string[]): Array<{ path: string; slug: s
   return combined
 }
 
+export const pagePathsToSlug = (pages: string[]): string[] => {
+  return pages.map((p) => p.replace(/\.mdx$/, ""))
+}
+
 export const allContentByType = async (type: ContentType): Promise<string[]> => {
   const path = CONTENT_MAP[type]
   return fs.readdir(path)
