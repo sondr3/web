@@ -39,38 +39,67 @@ export const findPostFromSlug = async (slug: string): Promise<string> => {
 
 export const postPathsToSlugs = (posts: string[]): Array<{ path: string; slug: string }> => {
   const slugs = posts.map((p) => p.replace(/\.mdx$/, "").replace(/\d{4}-\d{2}-\d{2}-/, "")).map((slug) => slug)
-
   const combined = posts.map((p, i) => ({ slug: slugs[i], path: p }))
 
   return combined
 }
 
 export const pagePathsToSlug = (pages: string[]): string[] => {
-  return pages.map((p) => p.replace(/\.mdx$/, ""))
+  return pages.map((p) => removeMDXExtension(p))
 }
 
 export const allContentByType = async (type: ContentType): Promise<string[]> => {
   const path = CONTENT_MAP[type]
-  return fs.readdir(path)
+  const content = await fs.readdir(path)
+
+  const paths = []
+
+  for (const p of content) {
+    const itemPath = contentPathByPath(p, type)
+    const source = await fs.readFile(itemPath)
+    const { frontmatter } = parseDocument(source)
+
+    if (process.env.VERCEL_ENV === "production" && frontmatter.draft) {
+      continue
+    } else {
+      paths.push(p)
+    }
+  }
+
+  return paths
+}
+
+const removeMDXExtension = (filePath: string): string => {
+  return filePath.replace(/\.mdx$/, "")
 }
 
 const contentPathByPath = (slug: string, type: ContentType): string => {
+  const filePath = removeMDXExtension(slug)
   switch (type) {
     case "page":
-      return path.join(PAGES_PATH, `${slug}.mdx`)
+      return path.join(PAGES_PATH, `${filePath}.mdx`)
     case "post":
-      return path.join(POSTS_PATH, slug)
+      return path.join(POSTS_PATH, `${filePath}.mdx`)
   }
 }
 
 export const renderMDX = async (slug: string, type: ContentType): Promise<MdxContent> => {
   const itemPath = contentPathByPath(slug, type)
   const source = await fs.readFile(itemPath)
-  const { data, content } = matter(source)
+  const { frontmatter, content } = parseDocument(source)
   const { code } = await bundleMDX(content)
 
   return {
     mdx: code,
-    frontMatter: data as FrontMatter,
+    frontMatter: frontmatter,
+  }
+}
+
+const parseDocument = (source: string | Buffer): { frontmatter: FrontMatter; content: string } => {
+  const { data, content } = matter(source)
+
+  return {
+    frontmatter: data as FrontMatter,
+    content,
   }
 }
