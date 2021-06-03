@@ -3,6 +3,7 @@ import "tailwindcss/tailwind.css"
 import { AppProps } from "next/app"
 import Head from "next/head"
 import { DefaultSeo } from "next-seo"
+import { ThemeProvider } from "next-themes"
 
 import { defaultSEOConfig } from "../utils"
 
@@ -24,7 +25,9 @@ const App = ({ Component, pageProps }: AppProps): JSX.Element => {
         <meta name="theme-color" content="#ffffff" />
       </Head>
       <DefaultSeo {...defaultSEOConfig} />
-      <Component {...pageProps} />
+      <ThemeProvider attribute="class">
+        <Component {...pageProps} />
+      </ThemeProvider>
     </>
   )
 }

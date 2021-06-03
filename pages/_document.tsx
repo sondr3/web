@@ -12,7 +12,7 @@ export default class MyDocument extends Document {
           <link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180" />
           <link href="/site.webmanifest" rel="manifest" />
         </Head>
-        <body>
+        <body className="bg-white dark:bg-black">
           <Main />
           <NextScript />
         </body>
