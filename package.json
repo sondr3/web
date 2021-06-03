@@ -3,7 +3,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "dev": "next",
+    "dev": "VERCEL_ENV=development next",
     "build": "VERCEL_ENV=production next build",
     "postbuild": "next-sitemap",
     "start": "next start",
