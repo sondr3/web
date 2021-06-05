@@ -1,5 +1,5 @@
-import { Layout } from "../components/layout"
-import { FrontMatter } from "../lib/mdx"
+import { Layout } from "../components"
+import { FrontMatter } from "../lib"
 
 const Custom404 = (): JSX.Element => {
   const frontmatter: FrontMatter = {

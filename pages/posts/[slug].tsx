@@ -2,10 +2,8 @@ import { getMDXComponent } from "mdx-bundler/client"
 import { GetStaticPaths, GetStaticProps } from "next"
 import { useMemo } from "react"
 
-import { Content } from "../../components/content"
-import { Layout } from "../../components/layout"
-import { components } from "../../components/mdx"
-import { allContentByType, findPostFromSlug, MdxContent, postPathsToSlugs, renderMDX } from "../../lib/mdx"
+import { components, Content, Layout } from "../../components"
+import { allContentByType, findPostFromSlug, MdxContent, postPathsToSlugs, renderMDX } from "../../lib"
 
 export default function Post({ mdx, frontMatter }: MdxContent): JSX.Element {
   const Component = useMemo(() => getMDXComponent(mdx), [mdx])

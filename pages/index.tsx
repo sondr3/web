@@ -1,4 +1,4 @@
-import { Layout } from "../components/layout"
+import { Layout } from "../components"
 
 const frontMatter = {
   title: "Home",

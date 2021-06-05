@@ -1,9 +1,8 @@
 import { NextSeo } from "next-seo"
 import { ReactNode } from "react"
 
-import { FrontMatter } from "../lib/mdx"
-import { Footer } from "./footer"
-import { Navbar } from "./navbar"
+import { FrontMatter } from "../lib"
+import { Footer, Navbar } from "."
 
 type Props = {
   children?: ReactNode
