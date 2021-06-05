@@ -1,5 +1,4 @@
 import { promises as fs } from "fs"
-import matter from "gray-matter"
 import { bundleMDX } from "mdx-bundler"
 import path from "path"
 
@@ -57,7 +56,7 @@ export const allContentByType = async (type: ContentType): Promise<string[]> => 
   for (const p of content) {
     const itemPath = contentPathByPath(p, type)
     const source = await fs.readFile(itemPath)
-    const { frontmatter } = parseDocument(source)
+    const { frontmatter } = await bundleMDX(source.toString())
 
     if (process.env.VERCEL_ENV === "production" && frontmatter.draft) {
       continue
@@ -86,20 +85,10 @@ const contentPathByPath = (slug: string, type: ContentType): string => {
 export const renderMDX = async (slug: string, type: ContentType): Promise<MdxContent> => {
   const itemPath = contentPathByPath(slug, type)
   const source = await fs.readFile(itemPath)
-  const { frontmatter, content } = parseDocument(source)
-  const { code } = await bundleMDX(content)
+  const { code, frontmatter } = await bundleMDX(source.toString())
 
   return {
     mdx: code,
-    frontMatter: frontmatter,
-  }
-}
-
-const parseDocument = (source: string | Buffer): { frontmatter: FrontMatter; content: string } => {
-  const { data, content } = matter(source)
-
-  return {
-    frontmatter: data as FrontMatter,
-    content,
+    frontMatter: frontmatter as FrontMatter,
   }
 }
