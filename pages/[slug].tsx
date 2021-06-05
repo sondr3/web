@@ -4,6 +4,7 @@ import { useMemo } from "react"
 
 import { Content } from "../components/content"
 import { Layout } from "../components/layout"
+import { components } from "../components/mdx"
 import { allContentByType, MdxContent, pagePathsToSlug, renderMDX } from "../lib/mdx"
 
 export default function Page({ mdx, frontMatter }: MdxContent): JSX.Element {
@@ -12,7 +13,7 @@ export default function Page({ mdx, frontMatter }: MdxContent): JSX.Element {
   return (
     <Layout frontMatter={frontMatter}>
       <Content title={frontMatter.title}>
-        <Component />
+        <Component components={components} />
       </Content>
     </Layout>
   )
