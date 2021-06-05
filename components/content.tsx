@@ -24,7 +24,7 @@ export function Content({ title, subtitle, description, children }: Props): JSX.
           </h1>
           {description && <p className="mt-8 text-xl text-gray-500 dark:text-gray-400 leading-8">{description}</p>}
         </div>
-        <div className="mt-6 prose prose-indigo prose-lg text-gray-500 dark:text-gray-400 mx-auto">{children}</div>
+        <div className="mt-6 prose dark:prose-dark prose-indigo prose-lg text-gray-500 mx-auto">{children}</div>
       </div>
     </div>
   )
