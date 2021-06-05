@@ -1,7 +1,8 @@
 import { NextSeo } from "next-seo"
 import { ReactNode } from "react"
 
-import { FrontMatter } from "../lib"
+import { FrontMatter } from "@/lib"
+
 import { Footer, Navbar } from "."
 
 type Props = {

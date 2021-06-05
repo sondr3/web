@@ -1,8 +1,8 @@
 import Link from "next/link"
 import { useTheme } from "next-themes"
 
-import { navigation } from "../utils"
-import { MoonIcon, SunIcon } from "."
+import { MoonIcon, SunIcon } from "@/components"
+import { navigation } from "@/utils"
 
 const ThemeToggle = (): JSX.Element => {
   const { resolvedTheme, setTheme } = useTheme()

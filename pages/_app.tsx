@@ -5,7 +5,7 @@ import Head from "next/head"
 import { DefaultSeo } from "next-seo"
 import { ThemeProvider } from "next-themes"
 
-import { defaultSEOConfig } from "../utils"
+import { defaultSEOConfig } from "@/utils"
 
 const App = ({ Component, pageProps }: AppProps): JSX.Element => {
   return (

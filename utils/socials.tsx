@@ -1,6 +1,4 @@
-import { HTMLAttributes } from "react"
-
-import { GitHubIcon, TwitterIcon } from "../components"
+import { GitHubIcon, TwitterIcon } from "@/icons"
 
 export const socials = [
   {

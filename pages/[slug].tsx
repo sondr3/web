@@ -1,9 +1,9 @@
 import { getMDXComponent } from "mdx-bundler/client"
 import { GetStaticPaths, GetStaticProps } from "next"
-import { useMemo } from "react"
+import React, { useMemo } from "react"
 
-import { components, Content, Layout } from "../components"
-import { allContentByType, MdxContent, pagePathsToSlug, renderMDX } from "../lib"
+import { components, Content, Layout } from "@/components"
+import { allContentByType, MdxContent, pagePathsToSlug, renderMDX } from "@/lib"
 
 export default function Page({ mdx, frontMatter }: MdxContent): JSX.Element {
   const Component = useMemo(() => getMDXComponent(mdx), [mdx])

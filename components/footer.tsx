@@ -1,6 +1,6 @@
 import Link from "next/link"
 
-import { navigation, socials } from "../utils"
+import { navigation, socials } from "@/utils"
 
 export const Footer = (): JSX.Element => {
   return (
