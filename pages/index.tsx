@@ -1,4 +1,4 @@
-import { Layout } from "@/components"
+import { Contact, Layout } from "@/components"
 
 const frontMatter = {
   title: "Home",
@@ -6,8 +6,8 @@ const frontMatter = {
 
 const IndexPage = (): JSX.Element => (
   <Layout frontMatter={frontMatter}>
-    <main className="py-16">
-      <section className="max-w-3xl mx-auto px-8">
+    <main className="py-16 max-w-3xl mx-auto px-8">
+      <section>
         <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl lg:text-5xl xl:text-6xl">
           <span className="inline-block dark:text-gray-400">Hello! I&apos;m</span>{" "}
           <span className="inline-block text-indigo-600">Sondre</span>
@@ -17,6 +17,7 @@ const IndexPage = (): JSX.Element => (
           and occasionally creating useful software.
         </p>
       </section>
+      <Contact />
     </main>
   </Layout>
 )

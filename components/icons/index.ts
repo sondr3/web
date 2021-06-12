@@ -1,4 +1,7 @@
 export * from "./github"
+export * from "./inbox"
 export * from "./moon"
+export * from "./sad"
+export * from "./smile"
 export * from "./sun"
 export * from "./twitter"
