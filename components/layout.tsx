@@ -1,7 +1,7 @@
 import { NextSeo } from "next-seo"
 import { ReactNode } from "react"
 
-import { FrontMatter } from "@/lib"
+import { FrontMatter } from "@/lib/mdx"
 
 import { Footer, Navbar } from "."
 
