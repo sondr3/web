@@ -63,7 +63,7 @@ export const Contact = (): JSX.Element => {
 
   return (
     <section className="pt-16">
-      <div className="text-center">
+      <div>
         <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-400 sm:text-4xl">
           Contact me
         </h2>
@@ -71,7 +71,7 @@ export const Contact = (): JSX.Element => {
           Either send me an email to first-name at this domain, or use the form below.
         </p>
       </div>
-      <div className="mt-12">
+      <div className="mt-8">
         {state.state === "missing" && (
           <p className="text-red-400 pb-2 font-bold">You are missing some required fields</p>
         )}
