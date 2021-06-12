@@ -16,8 +16,10 @@ export const Layout = ({ children, frontMatter }: Props): JSX.Element => (
       title={frontMatter.title}
       description={frontMatter.description}
       openGraph={{
+        type: "website",
         title: frontMatter.title,
         description: frontMatter.description,
+        site_name: "Eons :: IO ()",
       }}
     />
     <Navbar />
