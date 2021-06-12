@@ -10,7 +10,7 @@
     "paths": {
       "@/components": ["./components"],
       "@/icons": ["./components/icons"],
-      "@/lib": ["./lib"],
+      "@/lib/*": ["./lib/*"],
       "@/utils": ["./utils"],
     }
   },

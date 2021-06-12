@@ -3,7 +3,7 @@ import { GetStaticPaths, GetStaticProps } from "next"
 import React, { useMemo } from "react"
 
 import { components, Content, Layout } from "@/components"
-import { allContentByType, MdxContent, pagePathsToSlug, renderMDX } from "@/lib"
+import { allContentByType, MdxContent, pagePathsToSlug, renderMDX } from "@/lib/mdx"
 
 export default function Page({ mdx, frontMatter }: MdxContent): JSX.Element {
   const Component = useMemo(() => getMDXComponent(mdx), [mdx])
