@@ -3,7 +3,7 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ["@sondr3/eslint-config/typescript", "@sondr3/eslint-config/tsx"],
+  extends: ["@sondr3/eslint-config/typescript", "@sondr3/eslint-config/tsx", "next"],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: "tsconfig.json",
