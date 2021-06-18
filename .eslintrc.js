@@ -11,8 +11,6 @@ module.exports = {
     sourceType: "module",
   },
   rules: {
-    "unicorn/no-array-for-each": "off",
-    "unicorn/prefer-node-protocol": "off",
     "react/react-in-jsx-scope": "off",
     "jsx-a11y/anchor-is-valid": [
       "error",
