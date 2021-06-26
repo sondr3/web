@@ -3,6 +3,7 @@
   "private": true,
   "license": "MIT",
   "type": "module",
+  "stylelint": "@sondr3/stylelint",
   "scripts": {
     "dev": "svelte-kit dev",
     "build": "svelte-kit build",
@@ -11,11 +12,14 @@
     "format": "prettier --check --ignore-path .gitignore --plugin-search-dir=. .",
     "format:fix": "prettier --write --ignore-path .gitignore --plugin-search-dir=. .",
     "lint": "eslint --cache --ignore-path .gitignore .",
-    "lint:fix": "eslint --fix --cache --ignore-path .gitignore ."
+    "lint:fix": "eslint --fix --cache --ignore-path .gitignore .",
+    "style": "stylelint --config .stylelintrc.cjs src",
+    "style:fix": "stylelint --fix --config .stylelintrc.cjs src"
   },
   "devDependencies": {
     "@sondr3/eslint-config": "0.6.0",
     "@sondr3/prettier": "0.5.1",
+    "@sondr3/stylelint": "0.10.1",
     "@sondr3/tsconfig": "0.7.0",
     "@sveltejs/adapter-vercel": "next",
     "@sveltejs/kit": "next",
@@ -37,6 +41,7 @@
     "prettier-eslint": "12.0.0",
     "prettier-plugin-svelte": "2.3.1",
     "sass": "1.35.1",
+    "stylelint": "13.13.1",
     "svelte": "3.38.3",
     "svelte-check": "2.2.0",
     "svelte-preprocess": "4.7.3",

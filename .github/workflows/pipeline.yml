@@ -28,6 +28,7 @@ jobs:
         run: |
           npm run check
           npm run format
+          npm run style
           npm run lint
 
       - name: Build site

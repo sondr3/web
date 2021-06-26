@@ -1,8 +1,8 @@
 <style lang="scss">
   .portrait {
+    border-radius: 1000px;
     max-width: 100%;
     width: 100%;
-    border-radius: 1000px;
   }
 
   .intro {
@@ -26,9 +26,9 @@
 
   .hello {
     align-items: center;
-    justify-content: center;
     display: flex;
     flex-direction: column;
+    justify-content: center;
 
     @media screen and (min-width: $small-width) {
       width: 100%;
