@@ -17,6 +17,7 @@
     "@sondr3/eslint-config": "0.6.0",
     "@sondr3/prettier": "0.5.1",
     "@sondr3/tsconfig": "0.7.0",
+    "@sveltejs/adapter-vercel": "next",
     "@sveltejs/kit": "next",
     "@types/node": "15.12.4",
     "@types/react": "17.0.11",
