@@ -7,7 +7,7 @@
     "skipLibCheck": true,
     "importsNotUsedAsValues": "error",
     "paths": {
-      "$components": ["./src/lib/components/*"],
+      "$components": ["./src/components/*"],
       "$lib": ["./src/lib/*"]
     }
   },
