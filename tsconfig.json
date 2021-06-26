@@ -1,19 +1,15 @@
 {
   "extends": "@sondr3/tsconfig",
   "compilerOptions": {
-    "allowJs": false,
     "baseUrl": ".",
-    "jsx": "preserve",
-    "lib": ["dom", "es2017"],
-    "noEmit": true,
+    "module": "ES2020",
+    "lib": ["es2020"],
     "skipLibCheck": true,
+    "importsNotUsedAsValues": "error",
     "paths": {
-      "@/components": ["./components"],
-      "@/icons": ["./components/icons"],
-      "@/lib/*": ["./lib/*"],
-      "@/utils": ["./utils"],
+      "$components": ["./src/lib/components/*"],
+      "$lib": ["./src/lib/*"]
     }
   },
-  "exclude": ["node_modules"],
-  "include": ["**/*.ts", "**/*.tsx"]
+  "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.svelte", "**/*.d.ts"]
 }

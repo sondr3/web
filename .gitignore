@@ -1,8 +1,5 @@
-public/robots.txt
-public/sitemap.xml
-public/sw.js
-public/workbox-*.js
-public/*.map
+/.svelte-kit
+/package
 
 ### Created by https://www.gitignore.io
 ### Node ###
