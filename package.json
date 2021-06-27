@@ -18,6 +18,8 @@
     "prepare": "husky install"
   },
   "devDependencies": {
+    "@fontsource/bitter": "4.4.5",
+    "@fontsource/cambo": "4.4.5",
     "@sondr3/eslint-config": "0.6.0",
     "@sondr3/prettier": "0.5.1",
     "@sondr3/stylelint": "0.10.1",
@@ -53,11 +55,11 @@
   },
   "lint-staged": {
     "*.scss": [
-      "stylelint --fix",
+      "stylelint --fix --config .stylelintrc.cjs",
       "prettier --write"
     ],
     "*.{svelte,ts}": [
-      "eslint cache --fix",
+      "eslint --cache --fix",
       "prettier --write"
     ]
   }

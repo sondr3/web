@@ -1,0 +1,21 @@
+@use "reboot";
+
+@use "@fontsource/cambo/scss/mixins" as Cambo;
+@use "@fontsource/bitter/scss/mixins" as Bitter;
+
+@include Cambo.fontFace();
+@include Bitter.fontFace();
+
+body {
+  font-family: "Bitter", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji";
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Cambo", "Helvetica Neue", "Segoe UI", "Helvetica", "Arial", sans-serif;
+}
