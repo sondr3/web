@@ -14,7 +14,8 @@
     "lint": "eslint --cache --ignore-path .gitignore .",
     "lint:fix": "eslint --fix --cache --ignore-path .gitignore .",
     "style": "stylelint --config .stylelintrc.cjs src",
-    "style:fix": "stylelint --fix --config .stylelintrc.cjs src"
+    "style:fix": "stylelint --fix --config .stylelintrc.cjs src",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@sondr3/eslint-config": "0.6.0",
@@ -23,7 +24,7 @@
     "@sondr3/tsconfig": "0.7.0",
     "@sveltejs/adapter-vercel": "next",
     "@sveltejs/kit": "next",
-    "@types/node": "15.12.4",
+    "@types/node": "15.12.5",
     "@types/react": "17.0.11",
     "@types/react-dom": "17.0.8",
     "@typescript-eslint/eslint-plugin": "4.28.0",
@@ -37,6 +38,8 @@
     "eslint-plugin-simple-import-sort": "7.0.0",
     "eslint-plugin-svelte3": "3.2.0",
     "eslint-plugin-tsdoc": "0.2.14",
+    "husky": "6.0.0",
+    "lint-staged": "11.0.0",
     "prettier": "2.3.2",
     "prettier-eslint": "12.0.0",
     "prettier-plugin-svelte": "2.3.1",
@@ -47,5 +50,15 @@
     "svelte-preprocess": "4.7.3",
     "tslib": "2.3.0",
     "typescript": "4.3.4"
+  },
+  "lint-staged": {
+    "*.scss": [
+      "stylelint --fix",
+      "prettier --write"
+    ],
+    "*.{svelte,ts}": [
+      "eslint cache --fix",
+      "prettier --write"
+    ]
   }
 }
