@@ -36,10 +36,16 @@
   }
 </style>
 
+<script context="module">
+  export const prerender = true
+</script>
+
 <script lang="ts">
+  import SEO from "$components/SEO.svelte"
   import avatar from "../assets/avatar.png"
 </script>
 
+<SEO title="Home" />
 <section class="intro">
   <div class="about">
     <div class="hello">
