@@ -4,35 +4,90 @@ on: [push, pull_request]
 
 jobs:
   pipeline:
+    env:
+      CI: true
     name: pipeline
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js 14
+      - name: Use Node.js 15
         uses: actions/setup-node@v2
         with:
-          node-version: 14
-
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
+          node-version: 15
 
       - uses: actions/cache@v2
-        id: yarn-cache
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-node-
 
       - name: Install and build
-        run: yarn
+        run: npm ci
 
       - name: Check formatting and lints
         run: |
-          yarn format
-          yarn lint
+          npm run lint:css
+          npm run lint:style
+          npm run lint:code
+
+      - name: Tests
+        run: npm run test
+
+      - name: Compile
+        run: npm run compile
 
       - name: Build site
-        run: yarn build
+        run: npm run build
+
+      - name: Build documentation
+        run: npm run docs
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: pipeline
+    if: github.ref == 'refs/heads/master'
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 15
+        uses: actions/setup-node@v2
+        with:
+          node-version: 15
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install and build
+        run: npm ci
+
+      - name: Compile
+        run: npm run compile
+
+      - name: Build site
+        run: npm run build
+
+      - name: Build documentation
+        run: npm run docs
+
+      - name: Deploy documentation
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+
+      - name: Deploy website
+        uses: burnett01/rsync-deployments@4.1
+        with:
+          path: public/
+          switches: -avzr --delete
+          remote_path: ${{ secrets.OUT }}
+          remote_host: ${{ secrets.HOST }}
+          remote_user: ${{ secrets.USERNAME }}
+          remote_key: ${{ secrets.KEY }}

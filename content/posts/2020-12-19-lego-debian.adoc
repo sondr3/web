@@ -1,0 +1,116 @@
+= Setting up lego for wildcard SSL on Debian with `systemd`
+:layout: page
+Sondre Nilsen
+
+How to setup https://go-acme.github.io/lego/[lego] for Debian 10 with `systemd` timer and service.
+
+== Installation
+
+1. Follow the instructions on lego's homepage to install it. I personally downloaded the
+latest release and moved it to `/usr/local/bin` to be able to access it from anywhere.
+2. Install `nginx`, I personally use their http://nginx.org/en/linux_packages.html#Debian[instructions].
+Also, remember to enable and start its service before moving on.
+
+== Configuration
+
+Next, I'm going to use the DNS with Cloudflare, meaning you have to create an API key
+for your account. You can again follow the instructions on lego's website. I personally
+used a custom API token, corresponding to the `CF_DNS_API_TOKEN` token.
+
+== Getting the initial certificate
+
+To accept the TOS and generate the initial certificate, run the following command. Note
+that we change the default `$USER/.lego` to `/etc/lego/` as we will need better access
+to the certificates when using nginx.
+
+----
+CF_DNS_API_TOKEN=token LEGO_PATH=/etc/lego/ sudo lego --email your@mail.com --dns cloudflare --domains *.domain.com run --must-staple
+----
+
+After accepting and waiting for a little while, it should finish and print:
+
+----
+2020/12/19 22:05:38 [INFO] [*.domain.com] The server validated our request
+2020/12/19 22:05:38 [INFO] [*.domain.com] acme: Cleaning DNS-01 challenge
+2020/12/19 22:05:39 [INFO] [*.domain.com] acme: Validations succeeded; requesting certificates
+2020/12/19 22:05:39 [INFO] [*.domain.com] Server responded with a certificate.
+----
+
+=== `systemd` service
+Create a new service in `/etc/systemd/system/`, for example `sudoedit /etc/systemd/system/lego.service`.
+
+----
+[Unit]
+Description=lego
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=oneshot
+Environment="LEGO_PATH=/etc/lego/"
+Environment="CF_DNS_API_TOKEN=abcdefgh"
+ExecStart=/usr/local/bin/lego --email your@mail.com --dns cloudflare --domains *.domain.com renew --must-staple --renew-hook="systemctl reload nginx" # <1>
+
+[Install]
+WantedBy=multi-user.target
+----
+<1> Change to your own domain and email.
+
+Then run `sudo systemctl daemon-reload` and `sudo systemctl enable lego`.
+
+[TIP]
+====
+If you change your service file after enabling it, you should rerun `sudo systemctl daemon-reload`
+and then do `sudo systemctl reenable lego`.
+====
+
+== Configuring `nginx`
+
+Then you need to add the certificates to your configuration. I've included how to add them, but the rest of
+the configuration for nginx is out of scope for this tutorial. I highly recommend using the
+https://ssl-config.mozilla.org[Mozilla SSL Configuration Generator] to configure SSL.
+
+----
+server {
+  ssl_certificate /etc/lego/certificates/_.domain.com.crt;
+  ssl_certificate_key  /etc/lego/certificates/_.domain.com.key;
+  ssl_trusted_certificate /etc/lego/certificates/_.domain.com.issuer.crt;
+}
+----
+
+== Creating a `systemd` timer
+
+Instead of relying on cronjobs to refresh, we'll use the modern alternative that is now available. It
+is up to you to set how frequently you want to attempt to refresh the certificates, but know that
+
+1. It will not refresh it unless it will expire in less than 30 days
+2. By default `certbot` tries to refresh twice daily, which we will do as well.
+
+Create a new timer with `sudoedit /etc/systemd/system/lego.timer` and paste the following into it.
+
+----
+[Unit]
+Description=Run lego twice daily
+
+[Timer]
+OnCalendar=*-*-* 00,12:00:00 # <1>
+RandomizedDelaySec=43200 # <2>
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+----
+<1> The format is `DayOfWeek Year-Month-Day Hour:Minute:Second`, with `*` being a wildcard
+<2> But at some random interval so that it is not exactly 1200 and 2400 when it runs, but somewhere in a 12-hour range
+
+Again, refresh the daemon: `sudo systemctl daemon-reload`, enable it: `sudo systemctl enable lego.timer` and then
+start it: `sudo systemctl start lego.timer`. After this, running `systemctl list-timers` should have a line for the
+`lego` service:
+
+----
+Sun 2020-12-20 07:15:02 CET  8h left    n/a                          n/a          lego.timer                   lego.service
+----
+
+== Conclusion
+
+That's it, you now have a nginx server with automatic refreshing of certificates using lego.

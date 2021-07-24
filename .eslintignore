@@ -1,5 +1,7 @@
+node_modules/
+./assets/
+.vscode/
 .netlify/
 .cache/
 ./public/
-old/
-*.js 
+*.js

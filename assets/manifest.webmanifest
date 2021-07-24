@@ -1,0 +1,12 @@
+{
+  "name": "Eons | Sondre Nilsen",
+  "short_name": "Eons",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff",
+  "description": "The personal website of Sondre Nilsen",
+  "icons": [
+    { "src": "/icon-192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "/icon-512.png", "type": "image/png", "sizes": "512x512" }
+  ]
+}
