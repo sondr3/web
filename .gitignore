@@ -1,5 +1,6 @@
 oldpkgs.json
 /old/
+/generated-docs/
 
 ### Created by https://www.gitignore.io
 ### PureScript ###
