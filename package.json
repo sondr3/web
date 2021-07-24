@@ -3,78 +3,15 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "compile": "tsc",
-    "dev": "tsc --watch --incremental",
-    "test": "jest",
-    "lint:style": "prettier --check lib",
-    "lint:code": "eslint lib --cache",
-    "lint:css": "stylelint assets/scss/",
-    "start": "nodemon --watch lib --ext ts --delay 1 dist/index.js develop -n=debug",
-    "build": "node dist/index.js build -p -n=none",
-    "serve": "node dist/index.js serve",
-    "clean": "node dist/index.js clean",
-    "docs": "typedoc",
-    "postinstall": "husky install"
+    "build": "rescript",
+    "clean": "rescript clean -with-deps",
+    "start": "rescript build -w",
+    "test": "retest test/*.mjs test/**/*.mjs"
   },
   "dependencies": {
-    "@minify-html/js": "0.4.10",
-    "asciidoctor": "2.2.3",
-    "csso": "4.2.0",
-    "prettier": "2.2.1",
-    "purify-ts": "0.16.2",
-    "sass": "1.32.11",
-    "source-map": "0.7.3",
-    "ts-custom-error": "3.2.0",
-    "ws": "7.4.5",
-    "yaml": "1.10.2"
+    "rescript": "9.1.4"
   },
   "devDependencies": {
-    "@sondr3/eslint-config": "0.5.1",
-    "@sondr3/prettier": "0.5.1",
-    "@sondr3/stylelint": "0.10.1",
-    "@sondr3/tsconfig": "0.7.0",
-    "@types/csso": "3.5.1",
-    "@types/jest": "26.0.23",
-    "@types/node": "14.14.41",
-    "@types/sass": "1.16.0",
-    "@types/ws": "7.4.1",
-    "@typescript-eslint/eslint-plugin": "4.22.0",
-    "@typescript-eslint/parser": "4.22.0",
-    "eslint": "7.25.0",
-    "eslint-config-prettier": "8.3.0",
-    "eslint-plugin-import": "2.22.1",
-    "eslint-plugin-jest": "24.3.6",
-    "eslint-plugin-jsx-a11y": "6.4.1",
-    "eslint-plugin-node": "11.1.0",
-    "eslint-plugin-prettier": "3.4.0",
-    "eslint-plugin-react": "7.23.2",
-    "eslint-plugin-react-hooks": "4.2.0",
-    "eslint-plugin-simple-import-sort": "7.0.0",
-    "eslint-plugin-tsdoc": "0.2.14",
-    "eslint-plugin-unicorn": "31.0.0",
-    "husky": "6.0.0",
-    "jest": "26.6.3",
-    "lint-staged": "10.5.4",
-    "nodemon": "2.0.7",
-    "prettier-eslint": "12.0.0",
-    "stylelint": "13.13.0",
-    "ts-jest": "26.5.5",
-    "typedoc": "0.20.36",
-    "typescript": "4.2.4"
-  },
-  "engines": {
-    "node": ">=15"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "*.{css,scss}": [
-      "stylelint --fix"
-    ],
-    "*.{json,css,md,mdx}": [
-      "prettier --write"
-    ]
+    "rescript-test": "3.1.0"
   }
 }
