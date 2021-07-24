@@ -8,8 +8,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js 15
-        uses: actions/setup-node@v2
+      - uses: purescript-contrib/setup-purescript@main
+      - uses: actions/setup-node@v2
         with:
           node-version: 16
 
@@ -20,11 +20,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
+      - uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-spago-${{ hashFiles('**/*.dhall') }}
+          path: |
+            .spago
+            output
+          restore-keys: |
+            ${{ runner.os }}-spago-
+
       - name: Install and build
         run: npm ci
 
       - name: Compile
-        run: npm run build
+        run: spago build
 
       - name: Tests
-        run: npm run test
+        run: spago test --no-install

@@ -1,13 +1,20 @@
-.DS_Store
-/node_modules/
-/lib/
+oldpkgs.json
 /old/
-.bsb.lock
-.merlin
-src/**/*.mjs
-test/**/*.mjs
 
 ### Created by https://www.gitignore.io
+### PureScript ###
+# Dependencies
+.psci_modules
+.spago
+bower_components
+node_modules
+/.purs-repl
+/.psc-ide-port
+
+# Generated files
+.psci
+output
+
 ### Node ###
 # Logs
 logs
