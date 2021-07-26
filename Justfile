@@ -5,20 +5,20 @@ alias t := test
 
 flags := "--lock lock.json --unstable --import-map import_map.json"
 
-build:
+build: lock
     deno compile {{flags}} -A -o site main.ts
 
-run COMMAND *FLAGS:
+run COMMAND *FLAGS: lock
     deno run {{flags}} -A main.ts {{COMMAND}} {{FLAGS}}
 
 lock:
     deno cache {{flags}} --lock-write main.ts
 
-fmt:
+fmt: lock
     deno fmt src main.ts
 
-lint:
-    deno lint
+lint: lock
+    deno lint src main.ts
 
-test:
+test: lock
     deno test -A --unstable --import-map import_map.json

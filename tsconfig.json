@@ -1,14 +1,7 @@
 {
-  "extends": "@sondr3/tsconfig",
   "compilerOptions": {
-    "module": "CommonJS",
-    "noEmit": true
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
   },
-  "include": ["lib/**/*"],
-  "typedocOptions": {
-    "out": "docs",
-    "entryPoints": ["lib"],
-    "exclude": ["**/*+(spec).ts", "**/templates/**/*.ts"],
-    "theme": "minimal"
-  }
 }
