@@ -198,11 +198,13 @@ export const createFileHash = (filepath: string): EitherAsync<FSError, string> =
  * @param force - Ignore errors
  */
 export const rmdir = (directoryPath: string, recursive = false, force = false): EitherAsync<FSError, boolean> =>
-  EitherAsync(({ throwE }) => {
-    return fs
-      .rm(directoryPath, { recursive, force })
-      .then(() => true)
-      .catch(({ message }) => throwELog({ error: new FSError(message), throwE, logger }))
+  EitherAsync(async ({ throwE }) => {
+    try {
+      await fs.rm(directoryPath, { recursive, force })
+      return true
+    } catch ({ message }) {
+      return throwELog({ error: new FSError(message), throwE, logger })
+    }
   })
 
 /**

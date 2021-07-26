@@ -92,7 +92,6 @@ describe("copyFiles", () => {
   it("copies files without recursing", async () => {
     const config = testConfig
 
-    await fs.rmdir(path.join(config.out, "images"), { recursive: true })
     expect(await copyFiles(config.assets.images, path.join(config.out, "images"), false)).toEqual(Right(true))
   })
 

@@ -63,29 +63,29 @@ export class Server {
    * Watch content and assets directories and rebuild required content if needed.
    */
   private watch(): void {
-    fs.watch(this.site.config.assets.style, async (type, name) => {
+    fs.watch(this.site.config.assets.style, (type, name) => {
       if (name.endsWith("~")) return
       if (type === "change" || type === "rename") {
         logger.log(`Rendering ${name}`)
-        await renderStyles(this.site, path.join(this.site.config.assets.style, "style.scss"))
+        void renderStyles(this.site, path.join(this.site.config.assets.style, "style.scss"))
         this.broadcastReload()
       }
     })
 
-    fs.watch(this.site.config.content.pages, async (type, name) => {
+    fs.watch(this.site.config.content.pages, (type, name) => {
       if (name.endsWith("~")) return
       if (type === "change" || type === "rename") {
         logger.log(`Rendering ${name}`)
-        await buildPages(this.site)
+        void buildPages(this.site)
         this.broadcastReload()
       }
     })
 
-    fs.watch(path.join(__dirname), async (type, name) => {
+    fs.watch(path.join(__dirname), (type, name) => {
       if (name.endsWith("~")) return
       if (type === "change" || type === "rename") {
         logger.log(`Refreshing due to updates in ${name}`)
-        await buildSite(this.site)
+        void buildSite(this.site)
         this.broadcastReload()
       }
     })

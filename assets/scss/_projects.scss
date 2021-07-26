@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @use "variables/sizes" as *;
 
 .project {
@@ -18,8 +20,8 @@
 
 .technology {
   border: 1px solid var(--color-blue);
-  border-radius: $spacing / 4;
+  border-radius: $spacing * 0.25;
   color: var(--color-blue);
-  margin-right: $spacing / 2;
-  padding: 0 $spacing / 3;
+  margin-right: $spacing * 0.5;
+  padding: 0 math.div($spacing, 3);
 }
