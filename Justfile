@@ -15,7 +15,7 @@ lock:
     deno cache {{flags}} --lock-write main.ts
 
 fmt:
-    deno fmt src/**/*.ts main.ts
+    deno fmt src main.ts
 
 lint:
     deno lint
