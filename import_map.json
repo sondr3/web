@@ -1,0 +1,6 @@
+{
+  "imports": {
+    "site": "./src/mod.ts",
+    "std/": "https://deno.land/std@0.103.0/"
+  }
+}

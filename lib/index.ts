@@ -1,8 +1,8 @@
-import { buildSite, clean } from "./build"
-import { Logger, logging } from "./logging"
-import { Server } from "./server"
-import { defaultConfig, setConfig, Site } from "./site"
-import { CLI } from "./utils"
+import { buildSite, clean } from "./build";
+import { Logger, logging } from "./logging";
+import { Server } from "./server";
+import { defaultConfig, setConfig, Site } from "./site";
+import { CLI } from "./utils";
 
 /**
  * Builds the site by without serving it.
@@ -16,9 +16,9 @@ const build = async (cli: CLI): Promise<void> => {
       production: cli.production,
       url: "https://www.eons.io",
     }),
-  )
-  await buildSite(site).run()
-}
+  );
+  await buildSite(site).run();
+};
 
 /**
  * Build and serves the site.
@@ -33,13 +33,13 @@ const develop = async (cli: CLI, logger: Logger): Promise<void> => {
       production: cli.production,
       url: "http://localhost",
     }),
-  )
-  await buildSite(site)
-  const server = new Server(site)
-  server.run()
+  );
+  await buildSite(site);
+  const server = new Server(site);
+  server.run();
 
-  process.on("SIGINT", () => shutdown(server, logger))
-}
+  process.on("SIGINT", () => shutdown(server, logger));
+};
 
 /**
  * Starts the server by only serving the `./public` directory.
@@ -47,11 +47,13 @@ const develop = async (cli: CLI, logger: Logger): Promise<void> => {
  * @param logger - Logger to output to
  */
 const serve = (logger: Logger): void => {
-  const server = new Server(new Site(setConfig(defaultConfig, { out: "./public" })))
-  server.serve()
+  const server = new Server(
+    new Site(setConfig(defaultConfig, { out: "./public" })),
+  );
+  server.serve();
 
-  process.on("SIGINT", () => shutdown(server, logger))
-}
+  process.on("SIGINT", () => shutdown(server, logger));
+};
 
 /**
  * Utility function to broadcast shutdown and close the server.
@@ -60,35 +62,38 @@ const serve = (logger: Logger): void => {
  * @param logger - Logger to output to
  */
 const shutdown = (server: Server, logger: Logger): void => {
-  logger.log(`Shutting down...`)
-  server.broadcastShutdown()
-  server.close()
-  process.kill(process.pid)
-}
+  logger.log(`Shutting down...`);
+  server.broadcastShutdown();
+  server.close();
+  process.kill(process.pid);
+};
 
 /**
  * Entrypoint for static site generator, parses command line input and run
  * the given command.
  */
 const run = async (): Promise<void> => {
-  const cli = new CLI(process.argv)
+  const cli = new CLI(process.argv);
 
-  logging.configure({ minLevel: cli.noisiness }).registerConsoleLogger()
+  logging.configure({ minLevel: cli.noisiness }).registerConsoleLogger();
 
-  const logger = logging.getLogger("index")
+  const logger = logging.getLogger("index");
 
   switch (cli.command) {
     case "build":
-      return await build(cli)
+      return await build(cli);
     case "develop":
-      return await develop(cli, logger)
+      return await develop(cli, logger);
     case "serve":
-      return serve(logger)
+      return serve(logger);
     case "clean": {
-      const config = setConfig(defaultConfig, { production: false, out: "./public" })
-      return await clean(config)
+      const config = setConfig(defaultConfig, {
+        production: false,
+        out: "./public",
+      });
+      return await clean(config);
     }
   }
-}
+};
 
-void run()
+void run();
