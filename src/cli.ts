@@ -34,7 +34,7 @@ export class CLI {
   }
 
   noisiness(): LevelName {
-    const noise: string = this.argv.noise?.toLowerCase() ?? "debug";
+    const noise: string = this.argv.noise?.toLowerCase() ?? "info";
     switch (noise) {
       case "info":
         return getLevelName(LogLevels.INFO);
