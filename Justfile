@@ -21,4 +21,4 @@ lint: lock
     deno lint src main.ts
 
 test: lock
-    deno test -A --unstable --import-map import_map.json
+    deno test -A {{flags}}

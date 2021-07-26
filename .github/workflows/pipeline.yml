@@ -4,49 +4,31 @@ on: [push, pull_request]
 
 jobs:
   pipeline:
-    env:
-      CI: true
     name: pipeline
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16
 
       - uses: actions/cache@v2
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          key: ${{ runner.os }}-deno-${{ hashFiles('**/lock.json') }}
+          path: |
+            ~/.deno
+            ~/.cache/deno/deps
+          restore-keys: ${{ runner.os }}-deno-
 
-      - name: Install and build
-        run: npm ci
-
-      - name: Check formatting and lints
-        run: |
-          npm run lint:css
-          npm run lint:style
-          npm run lint:code
-
-      - name: Tests
-        run: npm run test
-
-      - name: Build site
-        run: npm run build
-
-      - name: Build documentation
-        run: npm run docs
-
-      - name: Deploy documentation
-        if: ${{ github.ref == 'refs/heads/main' }}
-        uses: peaceiris/actions-gh-pages@v3
+      - uses: denoland/setup-deno@main
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
+          deno-version: v1.x
+
+      - name: Test
+        run: deno test -A --lock lock.json --unstable --import-map import_map.json
+
+      - name: Build
+        run: |
+          deno compile -A --lock lock.json --unstable --import-map import_map.json -o site main.ts
+          ./site build
 
       - name: Deploy website
         if: ${{ github.ref == 'refs/heads/main' }}
