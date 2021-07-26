@@ -35,9 +35,6 @@ jobs:
       - name: Tests
         run: npm run test
 
-      - name: Compile
-        run: npm run compile
-
       - name: Build site
         run: npm run build
 

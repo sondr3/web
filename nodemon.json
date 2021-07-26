@@ -1,0 +1,6 @@
+{
+  "watch": ["lib"],
+  "ignore": ["*.spec.ts"],
+  "extensions": "ts",
+  "exec": "ts-node ./lib/index.ts develop -n=debug"
+}
