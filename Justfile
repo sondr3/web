@@ -12,7 +12,7 @@ run COMMAND *FLAGS: lock
     deno run {{flags}} -A main.ts {{COMMAND}} {{FLAGS}}
 
 lock:
-    deno cache {{flags}} --lock-write main.ts
+    deno cache {{flags}} --lock-write main.ts src/**/*.ts
 
 fmt: lock
     deno fmt src main.ts
