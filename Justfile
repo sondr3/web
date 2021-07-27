@@ -21,4 +21,4 @@ lint: lock
     deno lint src main.ts
 
 test: lock
-    deno test -A {{flags}}
+    deno test -A -q {{flags}}
