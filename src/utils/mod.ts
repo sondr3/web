@@ -1,4 +1,8 @@
 import { createHash } from "std/hash/mod.ts";
+import { defaultConfig, setConfig } from "../mod.ts";
+
+export * from "./duration.ts";
+export * from "./fs/mod.ts";
 
 /**
  * Convert a title from a page to a slug that can be used in the generated site. Turns
@@ -42,3 +46,21 @@ export type DeepPartial<T> = {
  * Utility type for when reading something only returns the values as strings.
  */
 export type PartialStringyTyped<T> = { [Key in keyof T]: string | undefined };
+
+/**
+ * Create a temporary folder in your OS' temporary folder.
+ *
+ * @param prefix - Prefix of folder
+ * @returns Directory path
+ */
+export const createTestDirectory = (prefix = "test"): string => {
+  return Deno.makeTempDirSync({ prefix });
+};
+
+/**
+ * A simple wrapper around the default config that sets `out` to be a
+ * random temporary directory.
+ */
+export const testConfig = setConfig(defaultConfig, {
+  out: createTestDirectory(),
+});
