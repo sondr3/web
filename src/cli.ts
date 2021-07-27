@@ -59,7 +59,6 @@ export class CLI {
     switch (this.argv._[0]) {
       case "h":
       case "help": {
-        console.log(this.argv);
         return this.printHelp();
       }
       case "b":
