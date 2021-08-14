@@ -18,7 +18,6 @@
     "@heroicons/react": "1.0.3",
     "mdx-bundler": "6.0.1",
     "next": "11.1.0",
-    "next-pwa": "5.2.24",
     "next-seo": "4.26.0",
     "next-themes": "0.0.15",
     "react": "17.0.2",
