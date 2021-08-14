@@ -7,7 +7,6 @@
     "lib": ["dom", "es2017"],
     "noEmit": true,
     "skipLibCheck": true,
-    "module": "esnext",
     "paths": {
       "@/components": ["./components"],
       "@/icons": ["./components/icons"],
