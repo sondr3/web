@@ -4,4 +4,6 @@ This is my website, held together by tears, glue and a healthy dose of `eh, good
 
 # License
 
+Code is licensed under MIT.
+
 Content is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License. ([CC BY SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)).
