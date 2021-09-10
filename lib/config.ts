@@ -16,7 +16,7 @@ export const config: Config = {
   },
   api: {
     prod: "https://api.eons.io",
-    dev: "http://localhost:8000",
+    dev: "http://localhost:3001",
   },
 }
 
