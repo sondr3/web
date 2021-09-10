@@ -1,21 +1,41 @@
+import { apiEndpoint } from "./config"
+
 export interface Project {
-  name: string
   owner: string
+  id: string
   description: string
-  github: string
+}
+
+export interface ProjectData {
+  name: string
+  stars: number
+  url: string
+  license: string
+  licenseId: string
+  languages: Array<string>
+  primaryLanguage: string
+  createdAt: string
 }
 
 export const projects: Array<Project> = [
   {
-    name: "git ignore",
     owner: "sondr3",
+    id: "git-ignore",
     description: "Quickly and easily list and fetch .gitignore templates from gitignore.io",
-    github: "https://github.com/sondr3/git-ignore",
   },
   {
-    name: "git anger management",
     owner: "sondr3",
+    id: "git-anger-management",
     description: "Ever wanted to know just how angry your commits are?",
-    github: "https://github.com/sondr3/git-anger-management",
   },
 ]
+
+export const mergedProjects = async (): Promise<Array<Project & ProjectData>> => {
+  return await Promise.all(
+    projects.map(async (project) => {
+      const res = await fetch(`${apiEndpoint}/repo/${project.owner}/${project.id}`)
+      const data = (await res.json()) as ProjectData
+      return { ...project, ...data }
+    }),
+  )
+}

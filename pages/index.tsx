@@ -1,4 +1,7 @@
+import { GetStaticProps } from "next"
+
 import { Contact, Layout } from "@/components"
+import { mergedProjects } from "@/lib/projects"
 
 const frontMatter = {
   title: "Home",
@@ -21,5 +24,15 @@ const IndexPage = (): JSX.Element => (
     </main>
   </Layout>
 )
+
+export const getStaticProps: GetStaticProps = async () => {
+  const projects = await mergedProjects()
+
+  return {
+    props: {
+      projects,
+    },
+  }
+}
 
 export default IndexPage
