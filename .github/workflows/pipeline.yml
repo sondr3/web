@@ -39,6 +39,9 @@ jobs:
 
       - uses: Swatinem/rust-cache@v1
 
+      - name: Create tailwind.css
+        run: touch public/tailwind.css
+
       - name: Run cargo fmt
         uses: actions-rs/cargo@v1
         with:
@@ -56,4 +59,23 @@ jobs:
           command: clippy
           args: -- -D warnings
 
+  publish_docker:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    name: Publish Docker image
+    needs: [styles, app]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
 
+      - uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/sondr3/web:latest,ghcr.io/sondr3/web:${{ github.sha }}
