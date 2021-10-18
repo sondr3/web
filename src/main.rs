@@ -154,7 +154,26 @@ async fn main() -> Result<(), BoxError> {
 
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
+        .with_graceful_shutdown(shutdown_signal())
         .await?;
 
     Ok(())
+}
+
+async fn shutdown_signal() {
+    use std::io;
+    use tokio::signal::unix::SignalKind;
+
+    async fn terminate() -> io::Result<()> {
+        tokio::signal::unix::signal(SignalKind::terminate())?
+            .recv()
+            .await;
+        Ok(())
+    }
+
+    tokio::select! {
+        _ = terminate() => {},
+        _ = tokio::signal::ctrl_c() => {},
+    }
+    tracing::info!("signal received, starting graceful shutdown")
 }
