@@ -98,10 +98,7 @@ async fn humans() -> impl IntoResponse {
 
 async fn styles() -> impl IntoResponse {
     (
-        Headers(vec![(
-            CONTENT_TYPE,
-            "content-type: text/css; charset=utf-8",
-        )]),
+        Headers(vec![(CONTENT_TYPE, "text/css; charset=utf-8")]),
         STYLES,
     )
 }
