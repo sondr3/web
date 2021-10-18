@@ -13,6 +13,9 @@ use tower_http::{
     compression::CompressionLayer, decompression::DecompressionLayer, trace::TraceLayer,
 };
 
+#[cfg(not(debug_assertions))]
+use minify_html::{minify, Cfg};
+
 const FAVICON: &[u8] = include_bytes!("../public/favicon.ico");
 const APPLE_ICON: &[u8] = include_bytes!("../public/apple-touch-icon.png");
 const ICON_192: &[u8] = include_bytes!("../public/icon-192.png");
@@ -21,6 +24,16 @@ const ICON_SVG: &[u8] = include_bytes!("../public/icon.svg");
 const ROBOTS: &str = include_str!("../public/robots.txt");
 const HUMANS: &str = include_str!("../public/humans.txt");
 const STYLES: &str = include_str!("../public/tailwind.css");
+
+#[cfg(not(debug_assertions))]
+const fn minify_html(input: String) -> Vec<u8> {
+    minify(input.as_bytes(), &Cfg::default())
+}
+
+#[cfg(debug_assertions)]
+const fn minify_html(input: String) -> String {
+    input
+}
 
 struct HtmlTemplate<T>(T);
 
@@ -33,7 +46,7 @@ where
 
     fn into_response(self) -> Response<Self::Body> {
         match self.0.render() {
-            Ok(html) => Html(html).into_response(),
+            Ok(html) => Html(minify_html(html)).into_response(),
             Err(err) => Response::builder()
                 .status(StatusCode::INTERNAL_SERVER_ERROR)
                 .body(Full::from(format!(

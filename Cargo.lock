@@ -486,6 +486,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "minify-html"
+version = "0.6.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "af97b0ff1a328e6877ad03266f51d0ee9d8b8b31aa05da6566dc1ca4ed921f0f"
+dependencies = [
+ "aho-corasick",
+ "lazy_static",
+ "memchr",
+]
+
+[[package]]
 name = "miniz_oxide"
 version = "0.4.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1051,6 +1062,7 @@ dependencies = [
  "anyhow",
  "askama",
  "axum",
+ "minify-html",
  "tokio",
  "tower",
  "tower-http",
