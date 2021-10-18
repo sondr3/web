@@ -1,5 +1,5 @@
 {
-	"files.associations": {
-		"**/templates/**/*.html": "jinja-html"
-	}
+  "files.associations": {
+    "**/templates/**/*.html": "jinja-html"
+  }
 }
