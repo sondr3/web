@@ -40,4 +40,6 @@ COPY --from=builder /app/target/release/web web
 
 RUN chmod +x web
 
+ENV WEB_PORT=8082
+
 CMD ["./web"]

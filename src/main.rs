@@ -143,7 +143,13 @@ async fn main() -> Result<(), BoxError> {
 
     // let app = app.or(not_found.into_service());
 
-    let addr = SocketAddr::from(([0, 0, 0, 0], 8080));
+    let port = if let Ok(val) = std::env::var("WEB_PORT") {
+        val.parse().unwrap()
+    } else {
+        8080
+    };
+
+    let addr = SocketAddr::from(([0, 0, 0, 0], port));
     tracing::debug!("Listening on http://{}", addr);
 
     axum::Server::bind(&addr)
