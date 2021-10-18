@@ -150,7 +150,7 @@ async fn main() -> Result<(), BoxError> {
     };
 
     let addr = SocketAddr::from(([0, 0, 0, 0], port));
-    tracing::debug!("Listening on http://{}", addr);
+    tracing::info!("Listening on http://{}", addr);
 
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
