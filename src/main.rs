@@ -26,7 +26,7 @@ const HUMANS: &str = include_str!("../public/humans.txt");
 const STYLES: &str = include_str!("../public/tailwind.css");
 
 #[cfg(not(debug_assertions))]
-const fn minify_html(input: String) -> Vec<u8> {
+fn minify_html(input: String) -> Vec<u8> {
     minify(input.as_bytes(), &Cfg::default())
 }
 
