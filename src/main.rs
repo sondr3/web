@@ -4,8 +4,8 @@ use axum::{
     body::{Bytes, Full},
     extract::Path,
     handler::get,
-    http::{Response, StatusCode},
-    response::{Html, IntoResponse},
+    http::{header::CONTENT_TYPE, Response, StatusCode},
+    response::{Headers, Html, IntoResponse},
     Router,
 };
 use std::{convert::Infallible, net::SocketAddr, time::Duration};
@@ -13,6 +13,14 @@ use tower::{BoxError, ServiceBuilder};
 use tower_http::{
     compression::CompressionLayer, decompression::DecompressionLayer, trace::TraceLayer,
 };
+
+const FAVICON: &[u8] = include_bytes!("../public/favicon.ico");
+const APPLE_ICON: &[u8] = include_bytes!("../public/apple-touch-icon.png");
+const ICON_192: &[u8] = include_bytes!("../public/icon-192.png");
+const ICON_512: &[u8] = include_bytes!("../public/icon-512.png");
+const ICON_SVG: &[u8] = include_bytes!("../public/icon.svg");
+const ROBOTS: &str = include_str!("../public/robots.txt");
+const HUMANS: &str = include_str!("../public/humans.txt");
 
 struct HtmlTemplate<T>(T);
 
@@ -42,6 +50,44 @@ async fn greet(Path(name): Path<String>) -> impl IntoResponse {
     HtmlTemplate(template)
 }
 
+struct Favicon;
+
+impl Favicon {
+    async fn favicon() -> impl IntoResponse {
+        Bytes::from(FAVICON)
+    }
+
+    async fn apple() -> impl IntoResponse {
+        Bytes::from(APPLE_ICON)
+    }
+
+    async fn icon_192() -> impl IntoResponse {
+        Bytes::from(ICON_192)
+    }
+
+    async fn icon_512() -> impl IntoResponse {
+        Bytes::from(ICON_512)
+    }
+
+    async fn svg() -> impl IntoResponse {
+        Bytes::from(ICON_SVG)
+    }
+}
+
+async fn robots() -> impl IntoResponse {
+    (
+        Headers(vec![(CONTENT_TYPE, "text/plain; charset=utf-8")]),
+        ROBOTS,
+    )
+}
+
+async fn humans() -> impl IntoResponse {
+    (
+        Headers(vec![(CONTENT_TYPE, "text/plain; charset=utf-8")]),
+        HUMANS,
+    )
+}
+
 #[derive(Template)]
 #[template(path = "hello.html")]
 struct HelloTemplate {
@@ -58,6 +104,13 @@ async fn main() -> Result<(), BoxError> {
 
     let app = Router::new()
         .route("/greet/:name", get(greet))
+        .route("/favicon.ico", get(Favicon::favicon))
+        .route("/apple-touch-icon.png", get(Favicon::apple))
+        .route("/icon-192.png", get(Favicon::icon_192))
+        .route("/icon-512.png", get(Favicon::icon_512))
+        .route("/icon.svg", get(Favicon::svg))
+        .route("/robots.txt", get(robots))
+        .route("/humans.txt", get(humans))
         .layer(
             ServiceBuilder::new()
                 .timeout(Duration::from_secs(10))
