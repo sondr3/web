@@ -2,7 +2,6 @@ use anyhow::Result;
 use askama::Template;
 use axum::{
     body::{Bytes, Full},
-    extract::Path,
     handler::get,
     http::{header::CONTENT_TYPE, Response, StatusCode},
     response::{Headers, Html, IntoResponse},
@@ -21,6 +20,7 @@ const ICON_512: &[u8] = include_bytes!("../public/icon-512.png");
 const ICON_SVG: &[u8] = include_bytes!("../public/icon.svg");
 const ROBOTS: &str = include_str!("../public/robots.txt");
 const HUMANS: &str = include_str!("../public/humans.txt");
+const STYLES: &str = include_str!("../public/tailwind.css");
 
 struct HtmlTemplate<T>(T);
 
@@ -43,11 +43,6 @@ where
                 .unwrap(),
         }
     }
-}
-
-async fn greet(Path(name): Path<String>) -> impl IntoResponse {
-    let template = HelloTemplate { name };
-    HtmlTemplate(template)
 }
 
 struct Favicon;
@@ -88,10 +83,22 @@ async fn humans() -> impl IntoResponse {
     )
 }
 
+async fn styles() -> impl IntoResponse {
+    (
+        Headers(vec![(
+            CONTENT_TYPE,
+            "content-type: text/css; charset=utf-8",
+        )]),
+        STYLES,
+    )
+}
+
 #[derive(Template)]
-#[template(path = "hello.html")]
-struct HelloTemplate {
-    name: String,
+#[template(path = "index.html")]
+struct IndexTemplate;
+
+async fn index() -> impl IntoResponse {
+    HtmlTemplate(IndexTemplate)
 }
 
 #[tokio::main]
@@ -103,7 +110,7 @@ async fn main() -> Result<(), BoxError> {
     tracing_subscriber::fmt::init();
 
     let app = Router::new()
-        .route("/greet/:name", get(greet))
+        .route("/", get(index))
         .route("/favicon.ico", get(Favicon::favicon))
         .route("/apple-touch-icon.png", get(Favicon::apple))
         .route("/icon-192.png", get(Favicon::icon_192))
@@ -111,6 +118,7 @@ async fn main() -> Result<(), BoxError> {
         .route("/icon.svg", get(Favicon::svg))
         .route("/robots.txt", get(robots))
         .route("/humans.txt", get(humans))
+        .route("/tailwind.css", get(styles))
         .layer(
             ServiceBuilder::new()
                 .timeout(Duration::from_secs(10))
