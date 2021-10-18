@@ -1,0 +1,22 @@
+{
+  "name": "web",
+  "private": true,
+  "description": "This is my website, held together by tears, glue and a healthy dose of `eh, good enough`.",
+  "scripts": {
+    "styles": "tailwindcss --postcss -o public/tailwind.css",
+    "styles:prod": "tailwindcss --postcss --minify -o public/tailwind.css"
+  },
+  "author": "Sondre Nilsen <nilsen.sondre@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sondr3/web/issues"
+  },
+  "homepage": "https://www.eons.io",
+  "devDependencies": {
+    "@tailwindcss/typography": "0.4.1",
+    "autoprefixer": "10.3.7",
+    "postcss": "8.3.9",
+    "postcss-cli": "9.0.1",
+    "tailwindcss": "2.2.17"
+  }
+}
