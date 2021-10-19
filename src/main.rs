@@ -3,11 +3,14 @@ use askama::Template;
 use axum::{
     body::{Bytes, Full},
     handler::get,
-    http::{header::CONTENT_TYPE, Response, StatusCode},
-    response::{Headers, Html, IntoResponse},
+    http::{
+        header::{self, CONTENT_TYPE},
+        HeaderValue, Response, StatusCode,
+    },
+    response::{Headers, IntoResponse},
     Router,
 };
-use once_cell::sync::Lazy;
+use md5::{Digest, Md5};
 use std::{convert::Infallible, net::SocketAddr, time::Duration};
 use tower::{BoxError, ServiceBuilder};
 use tower_http::{
@@ -26,8 +29,6 @@ const ROBOTS: &str = include_str!("../public/robots.txt");
 const HUMANS: &str = include_str!("../public/humans.txt");
 const STYLES: &str = include_str!("../public/tailwind.css");
 
-static SITE: Lazy<Site> = Lazy::new(|| Site::new().unwrap());
-
 #[cfg(not(debug_assertions))]
 fn minify_html(input: String) -> String {
     String::from_utf8(minify(input.as_bytes(), &Cfg::default())).expect("Minified HTML broke")
@@ -36,6 +37,25 @@ fn minify_html(input: String) -> String {
 #[cfg(debug_assertions)]
 const fn minify_html(input: String) -> String {
     input
+}
+
+pub struct Html<T>(pub T);
+
+impl<T> IntoResponse for Html<T>
+where
+    T: Into<Full<Bytes>>,
+{
+    type Body = Full<Bytes>;
+    type BodyError = Infallible;
+
+    fn into_response(self) -> Response<Self::Body> {
+        let mut res = Response::new(self.0.into());
+        res.headers_mut().insert(
+            header::CONTENT_TYPE,
+            HeaderValue::from_static("text/html; charset=utf-8"),
+        );
+        res
+    }
 }
 
 struct HtmlTemplate<T>(T);
@@ -106,23 +126,55 @@ async fn styles() -> impl IntoResponse {
     )
 }
 
+struct Page {
+    etag: String,
+    cache_control: String,
+    content: String,
+}
+
+impl IntoResponse for Page {
+    type Body = Full<Bytes>;
+    type BodyError = Infallible;
+
+    fn into_response(self) -> Response<Self::Body> {
+        let mut res = Response::new(self.content.into());
+        res.headers_mut().insert(
+            header::CONTENT_TYPE,
+            HeaderValue::from_static("text/html; charset=utf-8"),
+        );
+        res.headers_mut().insert(
+            header::ETAG,
+            HeaderValue::from_str(&self.etag).expect("Invalid ETAG value"),
+        );
+        res.headers_mut().insert(
+            header::CACHE_CONTROL,
+            HeaderValue::from_str(&self.cache_control).unwrap(),
+        );
+        res
+    }
+}
+
+impl Page {
+    fn new<T: Template>(content: T, max_age: usize) -> Self {
+        let content = content.render().expect("Could not render template");
+        Page {
+            etag: hash_content(&content),
+            cache_control: format!("max-age={}, public, immutable", max_age),
+            content: minify_html(content),
+        }
+    }
+}
+
+fn hash_content(content: &str) -> String {
+    format!("{:x}", Md5::digest(content.as_bytes()))
+}
+
 #[derive(Template)]
 #[template(path = "index.html")]
 struct IndexTemplate;
 
-async fn index() -> Html<&'static str> {
-    Html(&SITE.index)
-}
-
-struct Site {
-    index: String,
-}
-
-impl Site {
-    fn new() -> Result<Site> {
-        let index = minify_html(IndexTemplate.render()?);
-        Ok(Site { index })
-    }
+async fn index() -> impl IntoResponse {
+    Page::new(IndexTemplate, 300)
 }
 
 #[tokio::main]
