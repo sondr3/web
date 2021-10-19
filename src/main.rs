@@ -26,10 +26,7 @@ const ROBOTS: &str = include_str!("../public/robots.txt");
 const HUMANS: &str = include_str!("../public/humans.txt");
 const STYLES: &str = include_str!("../public/tailwind.css");
 
-static SITE: Lazy<Site> = Lazy::new(|| {
-    let site = Site::new().unwrap();
-    site
-});
+static SITE: Lazy<Site> = Lazy::new(|| Site::new().unwrap());
 
 #[cfg(not(debug_assertions))]
 fn minify_html(input: String) -> String {
