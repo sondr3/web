@@ -4,10 +4,10 @@ use axum::{
     body::{Bytes, Full},
     handler::get,
     http::{
-        header::{self, CONTENT_TYPE},
+        header::{self},
         HeaderValue, Response, StatusCode,
     },
-    response::{Headers, IntoResponse},
+    response::IntoResponse,
     Router,
 };
 use md5::{Digest, Md5};
@@ -25,9 +25,9 @@ const APPLE_ICON: &[u8] = include_bytes!("../public/apple-touch-icon.png");
 const ICON_192: &[u8] = include_bytes!("../public/icon-192.png");
 const ICON_512: &[u8] = include_bytes!("../public/icon-512.png");
 const ICON_SVG: &[u8] = include_bytes!("../public/icon.svg");
-const ROBOTS: &str = include_str!("../public/robots.txt");
-const HUMANS: &str = include_str!("../public/humans.txt");
-const STYLES: &str = include_str!("../public/tailwind.css");
+const ROBOTS: &[u8] = include_bytes!("../public/robots.txt");
+const HUMANS: &[u8] = include_bytes!("../public/humans.txt");
+const STYLES: &[u8] = include_bytes!("../public/tailwind.css");
 
 #[cfg(not(debug_assertions))]
 fn minify_html(input: String) -> String {
@@ -85,45 +85,87 @@ struct Favicon;
 
 impl Favicon {
     async fn favicon() -> impl IntoResponse {
-        Bytes::from(FAVICON)
+        Asset::new(FAVICON, "image/x-icon", 31536000)
     }
 
     async fn apple() -> impl IntoResponse {
-        Bytes::from(APPLE_ICON)
+        Asset::new(APPLE_ICON, "image/png", 31536000)
     }
 
     async fn icon_192() -> impl IntoResponse {
-        Bytes::from(ICON_192)
+        Asset::new(ICON_192, "image/png", 31536000)
     }
 
     async fn icon_512() -> impl IntoResponse {
-        Bytes::from(ICON_512)
+        Asset::new(ICON_512, "image/png", 31536000)
     }
 
     async fn svg() -> impl IntoResponse {
-        Bytes::from(ICON_SVG)
+        Asset::new(ICON_SVG, "image/svg+xml", 31536000)
     }
 }
 
 async fn robots() -> impl IntoResponse {
-    (
-        Headers(vec![(CONTENT_TYPE, "text/plain; charset=utf-8")]),
-        ROBOTS,
-    )
+    Asset::new(ROBOTS, "text/plain; charset=utf-8", 31536000)
 }
 
 async fn humans() -> impl IntoResponse {
-    (
-        Headers(vec![(CONTENT_TYPE, "text/plain; charset=utf-8")]),
-        HUMANS,
-    )
+    Asset::new(HUMANS, "text/plain; charset=utf-8", 31536000)
 }
 
 async fn styles() -> impl IntoResponse {
-    (
-        Headers(vec![(CONTENT_TYPE, "text/css; charset=utf-8")]),
-        STYLES,
-    )
+    Asset::new(STYLES, "text/css; charset=utf-8", 31536000)
+}
+
+struct Asset<'a, T>
+where
+    T: ?Sized + Copy + Into<&'a [u8]>,
+{
+    etag: String,
+    cache_control: String,
+    asset_kind: &'a str,
+    content: T,
+}
+
+impl<'a, T> Asset<'a, T>
+where
+    T: Copy,
+    &'a [u8]: From<T>,
+{
+    fn new(content: T, asset_kind: &'a str, max_age: usize) -> Self {
+        Asset {
+            etag: hash_content(content.into()),
+            cache_control: format!("max-age={}, public, immutable", max_age),
+            asset_kind,
+            content,
+        }
+    }
+}
+
+impl<T> IntoResponse for Asset<'static, T>
+where
+    T: Into<Full<Bytes>> + Copy,
+    &'static [u8]: From<T>,
+{
+    type Body = Full<Bytes>;
+    type BodyError = Infallible;
+
+    fn into_response(self) -> Response<Self::Body> {
+        let mut res = Response::new(self.content.into());
+        res.headers_mut().insert(
+            header::CONTENT_TYPE,
+            HeaderValue::from_str(self.asset_kind).expect("Invalid Content-Type"),
+        );
+        res.headers_mut().insert(
+            header::ETAG,
+            HeaderValue::from_str(&self.etag).expect("Invalid ETAG value"),
+        );
+        res.headers_mut().insert(
+            header::CACHE_CONTROL,
+            HeaderValue::from_str(&self.cache_control).unwrap(),
+        );
+        res
+    }
 }
 
 struct Page {
@@ -158,15 +200,15 @@ impl Page {
     fn new<T: Template>(content: T, max_age: usize) -> Self {
         let content = content.render().expect("Could not render template");
         Page {
-            etag: hash_content(&content),
+            etag: hash_content(content.as_bytes()),
             cache_control: format!("max-age={}, public, immutable", max_age),
             content: minify_html(content),
         }
     }
 }
 
-fn hash_content(content: &str) -> String {
-    format!("{:x}", Md5::digest(content.as_bytes()))
+fn hash_content(content: &[u8]) -> String {
+    format!("{:x}", Md5::digest(content))
 }
 
 #[derive(Template)]
