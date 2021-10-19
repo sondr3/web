@@ -1063,6 +1063,7 @@ dependencies = [
  "askama",
  "axum",
  "minify-html",
+ "once_cell",
  "tokio",
  "tower",
  "tower-http",

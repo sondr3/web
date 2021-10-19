@@ -7,6 +7,7 @@ use axum::{
     response::{Headers, Html, IntoResponse},
     Router,
 };
+use once_cell::sync::Lazy;
 use std::{convert::Infallible, net::SocketAddr, time::Duration};
 use tower::{BoxError, ServiceBuilder};
 use tower_http::{
@@ -25,9 +26,14 @@ const ROBOTS: &str = include_str!("../public/robots.txt");
 const HUMANS: &str = include_str!("../public/humans.txt");
 const STYLES: &str = include_str!("../public/tailwind.css");
 
+static SITE: Lazy<Site> = Lazy::new(|| {
+    let site = Site::new().unwrap();
+    site
+});
+
 #[cfg(not(debug_assertions))]
-fn minify_html(input: String) -> Vec<u8> {
-    minify(input.as_bytes(), &Cfg::default())
+fn minify_html(input: String) -> String {
+    String::from_utf8(minify(input.as_bytes(), &Cfg::default())).expect("Minified HTML broke")
 }
 
 #[cfg(debug_assertions)]
@@ -107,8 +113,19 @@ async fn styles() -> impl IntoResponse {
 #[template(path = "index.html")]
 struct IndexTemplate;
 
-async fn index() -> impl IntoResponse {
-    HtmlTemplate(IndexTemplate)
+async fn index() -> Html<&'static str> {
+    Html(&SITE.index)
+}
+
+struct Site {
+    index: String,
+}
+
+impl Site {
+    fn new() -> Result<Site> {
+        let index = minify_html(IndexTemplate.render()?);
+        Ok(Site { index })
+    }
 }
 
 #[tokio::main]
