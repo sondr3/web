@@ -1,12 +1,9 @@
 use anyhow::Result;
 use askama::Template;
 use axum::{
-    body::{Bytes, Full},
+    body::{Bytes, Full, HttpBody},
     handler::get,
-    http::{
-        header::{self},
-        HeaderValue, Response, StatusCode,
-    },
+    http::{header, HeaderValue, Response, StatusCode},
     response::IntoResponse,
     Router,
 };
@@ -14,7 +11,8 @@ use md5::{Digest, Md5};
 use std::{convert::Infallible, net::SocketAddr, time::Duration};
 use tower::{BoxError, ServiceBuilder};
 use tower_http::{
-    compression::CompressionLayer, decompression::DecompressionLayer, trace::TraceLayer,
+    compression::CompressionLayer, decompression::DecompressionLayer,
+    set_header::SetResponseHeaderLayer, trace::TraceLayer,
 };
 
 #[cfg(not(debug_assertions))]
@@ -164,6 +162,12 @@ where
             header::CACHE_CONTROL,
             HeaderValue::from_str(&self.cache_control).unwrap(),
         );
+        if let Some(size) = res.body().size_hint().exact() {
+            res.headers_mut().insert(
+                header::CONTENT_LENGTH,
+                HeaderValue::from_str(&size.to_string()).unwrap(),
+            );
+        }
         res
     }
 }
@@ -219,6 +223,14 @@ async fn index() -> impl IntoResponse {
     Page::new(IndexTemplate, 300)
 }
 
+fn content_length_from_response<B: HttpBody>(response: &Response<B>) -> Option<HeaderValue> {
+    response
+        .body()
+        .size_hint()
+        .exact()
+        .map(|size| HeaderValue::from_str(&size.to_string()).unwrap())
+}
+
 #[tokio::main]
 async fn main() -> Result<(), BoxError> {
     if std::env::var("RUST_LOG").is_err() {
@@ -226,6 +238,16 @@ async fn main() -> Result<(), BoxError> {
     }
 
     tracing_subscriber::fmt::init();
+
+    let services = ServiceBuilder::new()
+        .timeout(Duration::from_secs(10))
+        .layer(TraceLayer::new_for_http())
+        .layer(CompressionLayer::new())
+        .layer(DecompressionLayer::new())
+        .layer(SetResponseHeaderLayer::if_not_present(
+            header::CONTENT_LENGTH,
+            content_length_from_response,
+        ));
 
     let app = Router::new()
         .route("/", get(index))
@@ -237,14 +259,7 @@ async fn main() -> Result<(), BoxError> {
         .route("/robots.txt", get(robots))
         .route("/humans.txt", get(humans))
         .route("/tailwind.css", get(styles))
-        .layer(
-            ServiceBuilder::new()
-                .timeout(Duration::from_secs(10))
-                .layer(TraceLayer::new_for_http())
-                .layer(CompressionLayer::new())
-                .layer(DecompressionLayer::new())
-                .into_inner(),
-        )
+        .layer(services.into_inner())
         .handle_error(|error: BoxError| {
             let result = if error.is::<tower::timeout::error::Elapsed>() {
                 Ok(StatusCode::REQUEST_TIMEOUT)
