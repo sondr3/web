@@ -1,5 +1,6 @@
 {
   "files.associations": {
     "**/templates/**/*.html": "jinja-html"
-  }
+  },
+  "prettier.printWidth": 120
 }

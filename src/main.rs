@@ -11,7 +11,7 @@ use md5::{Digest, Md5};
 use std::{convert::Infallible, net::SocketAddr, time::Duration};
 use tower::{BoxError, ServiceBuilder};
 use tower_http::{
-    compression::CompressionLayer, decompression::DecompressionLayer,
+    compression::CompressionLayer, decompression::DecompressionLayer, services::ServeDir,
     set_header::SetResponseHeaderLayer, trace::TraceLayer,
 };
 
@@ -259,6 +259,15 @@ async fn main() -> Result<(), BoxError> {
         .route("/robots.txt", get(robots))
         .route("/humans.txt", get(humans))
         .route("/tailwind.css", get(styles))
+        .nest(
+            "/static",
+            axum::service::get(ServeDir::new("static")).handle_error(|error: std::io::Error| {
+                Ok::<_, Infallible>((
+                    StatusCode::INTERNAL_SERVER_ERROR,
+                    format!("unhandled internal error: {}", error),
+                ))
+            }),
+        )
         .layer(services.into_inner())
         .handle_error(|error: BoxError| {
             let result = if error.is::<tower::timeout::error::Elapsed>() {
