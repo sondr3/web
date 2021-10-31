@@ -1,10 +1,12 @@
 {
-  "name": "web",
+  "name": "eons",
   "private": true,
   "description": "This is my website, held together by tears, glue and a healthy dose of `eh, good enough`.",
   "scripts": {
-    "styles": "tailwindcss --postcss -o public/tailwind.css",
-    "styles:prod": "tailwindcss --postcss --minify -o public/tailwind.css"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "author": "Sondre Nilsen <nilsen.sondre@gmail.com>",
   "license": "MIT",
@@ -12,12 +14,16 @@
     "url": "https://github.com/sondr3/web/issues"
   },
   "homepage": "https://www.eons.io",
+  "dependencies": {
+    "next": "12.0.2",
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
+  },
   "devDependencies": {
-    "@tailwindcss/typography": "0.4.1",
-    "autoprefixer": "10.3.7",
-    "postcss": "8.3.9",
-    "postcss-cli": "9.0.1",
-    "sass": "1.43.2",
-    "tailwindcss": "2.2.17"
+    "@types/node": "16.11.6",
+    "@types/react": "17.0.33",
+    "eslint": "7",
+    "eslint-config-next": "12.0.2",
+    "typescript": "4.4.4"
   }
 }
