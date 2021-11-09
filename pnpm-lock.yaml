@@ -4,6 +4,7 @@ specifiers:
   '@sondr3/eslint-config': 0.7.0
   '@sondr3/prettier': 0.5.1
   '@sondr3/tsconfig': 0.7.0
+  '@sveltejs/adapter-static': 1.0.0-next.21
   '@sveltejs/kit': 1.0.0-next.195
   '@types/node': 16.11.7
   '@typescript-eslint/eslint-plugin': 5.3.1
@@ -32,6 +33,7 @@ devDependencies:
   '@sondr3/eslint-config': 0.7.0_79ea543f6d90bfe488232db646d0b43a
   '@sondr3/prettier': 0.5.1_prettier@2.4.1
   '@sondr3/tsconfig': 0.7.0
+  '@sveltejs/adapter-static': 1.0.0-next.21
   '@sveltejs/kit': 1.0.0-next.195_svelte@3.44.1
   '@types/node': 16.11.7
   '@typescript-eslint/eslint-plugin': 5.3.1_4653b7803b7453f5f37717b7e1448517
@@ -227,6 +229,10 @@ packages:
 
   /@sondr3/tsconfig/0.7.0:
     resolution: {integrity: sha512-MUlEyV/jrBvX08e60kzu8vTZI+xS+jRZeu03X1eu95D4H6lQcYM39OqG6snyFBIoKK9u/Fs/964u9ImlmE+MUg==}
+    dev: true
+
+  /@sveltejs/adapter-static/1.0.0-next.21:
+    resolution: {integrity: sha512-B4+QoUVAaANKx+mHntG8SqF45zbj3Ct4Akg/cGauo6COyfKZRhO5OsMa+wPuT2TKJBZC4eEDK0p+p9nyQBkxKQ==}
     dev: true
 
   /@sveltejs/kit/1.0.0-next.195_svelte@3.44.1:

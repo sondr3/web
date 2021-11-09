@@ -22,6 +22,7 @@
     "@sondr3/eslint-config": "0.7.0",
     "@sondr3/prettier": "0.5.1",
     "@sondr3/tsconfig": "0.7.0",
+    "@sveltejs/adapter-static": "1.0.0-next.21",
     "@sveltejs/kit": "1.0.0-next.195",
     "@types/node": "16.11.7",
     "@typescript-eslint/eslint-plugin": "5.3.1",
