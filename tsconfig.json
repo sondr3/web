@@ -1,20 +1,16 @@
 {
   "extends": "@sondr3/tsconfig",
   "compilerOptions": {
-    "allowJs": false,
-    "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "module": "es2020",
+    "target": "es2020",
+    "lib": ["dom", "es2020"],
+    "importsNotUsedAsValues": "error",
     "skipLibCheck": true,
-    "noEmit": true,
-    "jsx": "preserve",
-    "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/components": ["./components"],
-      "@/lib/*": ["./lib/*"],
-      "@/utils": ["./utils"]
+      "$lib": ["src/lib"],
+      "$lib/*": ["src/lib/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": ["**/*.ts", "**/*.svelte"]
 }
