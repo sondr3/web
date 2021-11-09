@@ -1,5 +1,6 @@
 <svelte:head>
   <title>Home => Eons :: IO ()</title>
+  <meta name="description" content="The online home for Sondre Nilsen" />
 </svelte:head>
 
 <main class="py-16 max-w-3xl mx-auto px-8">
