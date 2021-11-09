@@ -6,7 +6,6 @@ import { prerendering } from "$app/env";
 
 const minificationOptions: Options = {
   collapseBooleanAttributes: true,
-  collapseInlineTagWhitespace: true,
   collapseWhitespace: true,
   decodeEntities: true,
   html5: true,
