@@ -9,8 +9,8 @@
     "preview": "svelte-kit preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
-    "lint": "prettier --ignore-path=.eslintignore --plugin-search-dir=. --check . && eslint --cache src",
-    "format": "prettier --ignore-path=.eslintignore --plugin-search-dir=. --write ."
+    "lint": "prettier --ignore-path=.eslintignore --check . && eslint --cache src",
+    "format": "prettier --ignore-path=.eslintignore --write ."
   },
   "author": "Sondre Nilsen <nilsen.sondre@gmail.com>",
   "license": "MIT",
