@@ -3,15 +3,41 @@
   <meta name="description" content="The online home for Sondre Nilsen" />
 </svelte:head>
 
-<main class="py-16 max-w-3xl mx-auto px-8">
+<main class="main">
   <section>
-    <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl lg:text-5xl xl:text-6xl">
-      <span class="inline-block dark:text-gray-400">Hello! I&apos;m</span>
-      <span class="inline-block text-indigo-600"> Sondre</span>
+    <h1 class="hello">
+      <span>Hello! I&apos;m</span>
+      <span class="blue"> Sondre</span>
     </h1>
-    <p class="mt-3 text-lg text-gray-500 dark:text-gray-400 sm:text-xl md:mt-5 md:max-w-3xl">
+    <p class="body">
       I am a full time nerd with a passion for programming languages, mechanical keyboards, hoarding sideprojects and
       occasionally creating useful software.
     </p>
   </section>
 </main>
+
+<style lang="scss">
+@use "../variables.scss" as v;
+
+.main {
+  max-width: v.$max-width;
+  margin: 0 auto;
+  padding: 4rem 0;
+}
+
+.hello {
+  font-size: 3rem;
+  line-height: 2.5rem;
+  font-weight: 800;
+}
+
+.blue {
+  color: rgba(79,70,229);
+}
+
+.body {
+  margin-top: 0.5rem;
+  font-size: 1.5rem;
+	color: rgba(107,114,128);
+}
+</style>
