@@ -19,6 +19,8 @@
   },
   "homepage": "https://www.eons.io",
   "devDependencies": {
+    "@fontsource/bitter": "4.5.0",
+    "@fontsource/cambo": "4.5.0",
     "@sondr3/prettier": "0.5.1",
     "@sondr3/tsconfig": "0.7.0",
     "@sveltejs/adapter-static": "1.0.0-next.21",

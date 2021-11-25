@@ -1,3 +1,6 @@
+@import "@fontsource/bitter/latin.css";
+@import "@fontsource/cambo/latin.css";
+
 /*** The new CSS Reset - version 1.4.1 (last updated 23.11.2021) ***/
 
 /*
@@ -30,4 +33,17 @@ img {
 /* removes spacing between cells in tables */
 table {
   border-collapse: collapse;
+}
+
+body {
+  font-family: "Bitter";
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Cambo";
 }
