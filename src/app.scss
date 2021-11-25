@@ -1,6 +1,3 @@
-@import "@fontsource/bitter/latin.css";
-@import "@fontsource/cambo/latin.css";
-
 /*** The new CSS Reset - version 1.4.1 (last updated 23.11.2021) ***/
 
 /*
@@ -35,15 +32,26 @@ table {
   border-collapse: collapse;
 }
 
-body {
-  font-family: "Bitter";
+/* THE REST OF THE FUCKING OWL */
+
+@font-face {
+  font-family: Piazzolla;
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: block;
+  src: url("Piazzolla.woff2") format("woff2");
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: "Cambo";
+@font-face {
+  font-family: Piazzolla;
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: block;
+  src: url("PiazzollaItalic.woff2") format("woff2");
+}
+
+body {
+  font-family: "Piazzolla";
+  font-optical-sizing: auto;
+  line-height: 1.5;
 }
