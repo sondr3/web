@@ -17,27 +17,27 @@
 </main>
 
 <style lang="scss">
-@use "../variables.scss" as v;
+  @use "../variables.scss" as v;
 
-.main {
-  max-width: v.$max-width;
-  margin: 0 auto;
-  padding: 4rem 0;
-}
+  .main {
+    max-width: v.$max-width;
+    margin: 0 auto;
+    padding: 4rem 0;
+  }
 
-.hello {
-  font-size: 3rem;
-  line-height: 2.5rem;
-  font-weight: 800;
-}
+  .hello {
+    font-size: 3rem;
+    line-height: 2.5rem;
+    font-weight: 800;
+  }
 
-.blue {
-  color: rgba(79,70,229);
-}
+  .blue {
+    color: rgba(79, 70, 229);
+  }
 
-.body {
-  margin-top: 0.5rem;
-  font-size: 1.5rem;
-	color: rgba(107,114,128);
-}
+  .body {
+    margin-top: 0.5rem;
+    font-size: 1.5rem;
+    color: rgba(107, 114, 128);
+  }
 </style>
