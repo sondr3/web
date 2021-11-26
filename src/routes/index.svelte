@@ -3,27 +3,19 @@
   <meta name="description" content="The online home for Sondre Nilsen" />
 </svelte:head>
 
-<main class="main">
-  <section>
-    <h1 class="hello">
-      <span>Hello! I&apos;m</span>
-      <span class="blue"> Sondre</span>
-    </h1>
-    <p class="body">
-      I am a full time nerd with a passion for programming languages, mechanical keyboards, hoarding sideprojects and
-      occasionally creating useful software.
-    </p>
-  </section>
-</main>
+<section>
+  <h1 class="hello">
+    <span>Hello! I&apos;m</span>
+    <span class="blue"> Sondre</span>
+  </h1>
+  <p class="body">
+    I am a full time nerd with a passion for programming languages, mechanical keyboards, hoarding sideprojects and
+    occasionally creating useful software.
+  </p>
+</section>
 
 <style lang="scss">
   @use "../variables.scss" as v;
-
-  .main {
-    max-width: v.$max-width;
-    margin: 0 auto;
-    padding: 4rem 0;
-  }
 
   .hello {
     font-size: 3rem;

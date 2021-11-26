@@ -34,6 +34,11 @@ table {
 
 /* THE REST OF THE FUCKING OWL */
 
+html,
+body {
+  height: 100%;
+}
+
 @font-face {
   font-family: Piazzolla;
   font-style: normal;
@@ -54,4 +59,17 @@ body {
   font-family: "Piazzolla";
   font-optical-sizing: auto;
   line-height: 1.5;
+}
+
+#svelte {
+  height: 100%;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: 50px auto 40px;
+
+  > footer {
+    position: sticky;
+    top: 100vh;
+  }
 }
