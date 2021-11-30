@@ -3,12 +3,14 @@
 </script>
 
 <header>
-  <h1>EONS :: IO ()</h1>
+  <h1>
+    <a href="/">EONS :: IO ()</a>
+  </h1>
   <nav>
     <ul>
       <!-- <li><a href="/">projects</a></li> -->
       <!-- <li><a href="/">articles</a></li> -->
-      <li><a href="/">about</a></li>
+      <li><a href="/about/">about</a></li>
     </ul>
   </nav>
 </header>
@@ -39,7 +41,8 @@
     font-size: 1.5rem;
     align-self: center;
     padding-bottom: 1rem;
-    font-family: monospace;
+    font-family: "Inconsolata", monospace;
+    margin: 0;
   }
 
   ul {

@@ -39,15 +39,6 @@ body {
   height: 100%;
 }
 
-a {
-  cursor: pointer;
-
-  &:hover,
-  &:focus {
-    text-decoration: underline;
-  }
-}
-
 @font-face {
   font-family: Piazzolla;
   font-style: normal;
@@ -62,6 +53,14 @@ a {
   font-weight: 100 900;
   font-display: block;
   src: url("/PiazzollaItalic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: Inconsolata;
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("/Inconsolata.woff2") format("woff2");
 }
 
 body {
@@ -81,4 +80,30 @@ body {
     position: sticky;
     top: 100vh;
   }
+}
+
+a {
+  cursor: pointer;
+  font-weight: 600;
+
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+  }
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.3rem;
+}
+
+p {
+  font-size: 1.15rem;
+  text-align: justify;
+  text-justify: inter-word;
 }
