@@ -39,6 +39,15 @@ body {
   height: 100%;
 }
 
+a {
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+  }
+}
+
 @font-face {
   font-family: Piazzolla;
   font-style: normal;
@@ -66,7 +75,7 @@ body {
   display: grid;
   gap: 10px;
   grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: 50px auto 40px;
+  grid-template-rows: fit-content(8ch) auto fit-content(8ch);
 
   > footer {
     position: sticky;
