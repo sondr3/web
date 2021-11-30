@@ -3,6 +3,9 @@ const config = {
   smartypants: {
     dashes: "oldschool",
   },
+  layout: {
+    page: "./src/lib/layouts/page.svelte",
+  },
   remarkPlugins: [],
   rehypePlugins: [],
 };
