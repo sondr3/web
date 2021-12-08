@@ -1,3 +1,5 @@
+@use "variables" as *;
+
 /*** The new CSS Reset - version 1.4.1 (last updated 23.11.2021) ***/
 
 /*
@@ -34,8 +36,25 @@ table {
 
 /* THE REST OF THE FUCKING OWL */
 
+:root {
+  --background: rgb(255,255,255);
+  --text: rgb(0,0,0);
+  --heading: rgb(0,0,0);
+  --blue: rgb(79,70,229);
+  --grey: rgb(107,114,128);
+
+  @media(prefers-color-scheme: dark) {
+    --background: rgb(0,0,0);
+    --text: rgb(156, 163, 175);
+    --heading: rgb(209, 213, 219);
+    --grey: rgb(229, 231, 235);
+  }
+}
+
 html,
 body {
+  background-color: var(--background);
+  color: var(--text);
   height: 100%;
 }
 
@@ -95,11 +114,13 @@ a {
 h1 {
   font-size: 2rem;
   margin-bottom: 0.5rem;
+  color: var(--heading);
 }
 
 h2 {
   font-size: 1.5rem;
   margin-bottom: 0.3rem;
+  color: var(--heading);
 }
 
 p {

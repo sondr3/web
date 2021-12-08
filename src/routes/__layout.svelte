@@ -53,7 +53,7 @@
   }
 
   li {
-    color: #4b5563;
+    color: var(--grey);
     font-size: 1.25rem;
   }
 
@@ -69,7 +69,7 @@
   footer {
     margin: 0 auto;
     padding-bottom: 1rem;
-    color: #4b5563;
+    color: var(--grey);
     grid-area: 3 / 2 / 3 / 12;
 
     @media (min-width: 32em) {

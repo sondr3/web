@@ -22,12 +22,11 @@
   }
 
   .blue {
-    color: rgba(79, 70, 229);
+    color: var(--blue);
   }
 
   p {
     margin-top: 0.5rem;
     font-size: 1.5rem;
-    color: rgba(107, 114, 128);
   }
 </style>
