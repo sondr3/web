@@ -1,3 +1,7 @@
+<script context="module" lang="ts">
+  export const prerender = true;
+</script>
+
 <svelte:head>
   <title>Home => Eons :: IO ()</title>
   <meta name="description" content="The online home for Sondre Nilsen" />
