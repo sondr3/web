@@ -1,4 +1,7 @@
-web
+/build
+/.svelte-kit
+/package
+.env
 
 ### Created by https://www.gitignore.io
 ### Node ###
