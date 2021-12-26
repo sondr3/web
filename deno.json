@@ -1,9 +1,7 @@
 {
   "compilerOptions": {
     "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
-    "strictPropertyInitialization": true,
-    "resolveJsonModule": true
+    "strictPropertyInitialization": true
   },
   "fmt": {
     "files": {
