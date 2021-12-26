@@ -9,26 +9,22 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      - uses: pnpm/action-setup@v2.0.1
+        
+      - uses: denoland/setup-deno@v1
         with:
-          version: 6.x.x
+          deno-version: v1.x
 
-      - uses: actions/setup-node@v2
-        with:
-          node-version: "17"
-          cache: "pnpm"
+      - name: Formatting
+        run: deno fmt --config deno.json 
 
-      - name: Install and build
-        run: pnpm install --frozen-lockfile
+      - name: Linting
+        run: deno lint --config deno.json
 
-      - name: Lint
-        run: |
-          pnpm lint
-          pnpm check
+      - name: Test
+        run: deno test --lock lock.json --unstable --allow-all --config deno.json --allow-none
 
-      - name: Build site
-        run: pnpm build
+      - name: Build
+        run: deno run --lock lock.json --unstable --allow-all --config deno.json main.ts build
 
       - name: Deploy
         if: ${{ github.ref == 'refs/heads/main' }}
