@@ -18,4 +18,4 @@ lint:
   deno lint
 
 lock:
-  deno cache {{flags}} {{config}} --lock-write main.ts
+  deno cache {{flags}} {{config}} --lock-write **/*.ts
