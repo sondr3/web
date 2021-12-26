@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "strictPropertyInitialization": true,
+    "resolveJsonModule": true
+  },
+  "fmt": {
+    "files": {
+      "exclude": ["content", "static"]
+    },
+    "options": {
+      "lineWidth": 120
+    }
+  },
+  "lint": {
+    "files": {
+      "exclude": ["content", "static"]
+    }
+  }
+}
