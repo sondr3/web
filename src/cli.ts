@@ -4,19 +4,24 @@ const HELP = `web 0.0.0
 A simple website
 
 COMMANDS:
-  serve, s      Serve the built website
-  build, b      Build the website
-  dev, d        Run in development mode
-  help, h       Show this message`;
+  serve, s         Serve the built website
+  build, b         Build the website
+  dev, d           Run in development mode
+  help, h          Show this message
+
+OPTIONS
+  -n, --noise      Noisiness
+  -p, --production Production mode `;
 
 export class CLI {
   private argv: Args;
 
   constructor() {
     this.argv = parse(Deno.args, {
-      boolean: ["verbose"],
-      default: { verbose: false },
-      alias: { v: "verbose" },
+      string: ["noise"],
+      boolean: ["production"],
+      default: { production: false },
+      alias: { p: "production", n: "noise" },
     });
   }
 
@@ -37,6 +42,9 @@ export class CLI {
       case "s":
       case "serve":
         console.log("SERVING");
+        return Deno.exit();
+      default:
+        console.log(HELP);
         return Deno.exit();
     }
   }

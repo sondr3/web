@@ -5,7 +5,7 @@ alias l := lint
 flags := "--lock lock.json --unstable"
 config := "--config deno.json"
 
-run COMMAND="dev" *FLAGS="":
+run COMMAND="" *FLAGS="":
   deno run {{flags}} {{config}} -A main.ts {{COMMAND}} {{FLAGS}}
 
 test:
