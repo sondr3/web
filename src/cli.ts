@@ -1,4 +1,5 @@
 import { Args, parse } from "https://deno.land/std@0.119.0/flags/mod.ts";
+import { getLevelName, LevelName, LogLevels } from "https://deno.land/std@0.119.0/log/levels.ts";
 
 const HELP = `web 0.0.0
 A simple website
@@ -23,6 +24,27 @@ export class CLI {
       default: { production: false },
       alias: { p: "production", n: "noise" },
     });
+  }
+
+  production(): boolean {
+    return this.argv.production;
+  }
+
+  noisiness(): LevelName {
+    const noise = this.argv.noise?.toLowerCase() ?? "info";
+    switch (noise) {
+      case "info":
+        return getLevelName(LogLevels.INFO);
+      case "critical":
+        return getLevelName(LogLevels.CRITICAL);
+      case "error":
+        return getLevelName(LogLevels.ERROR);
+      case "warning":
+        return getLevelName(LogLevels.WARNING);
+      case "debug":
+      default:
+        return getLevelName(LogLevels.DEBUG);
+    }
   }
 
   execute() {
