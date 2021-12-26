@@ -8,6 +8,9 @@ config := "--config deno.json"
 run COMMAND="dev" *FLAGS="":
   deno run {{flags}} {{config}} -A main.ts {{COMMAND}} {{FLAGS}}
 
+test:
+  deno test {{flags}} {{config}}
+
 fmt:
   deno fmt {{config}}
 
