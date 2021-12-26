@@ -5,7 +5,7 @@
   },
   "fmt": {
     "files": {
-      "exclude": ["content", "static"]
+      "exclude": ["static"]
     },
     "options": {
       "lineWidth": 120
