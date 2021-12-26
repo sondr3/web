@@ -9,7 +9,7 @@ run COMMAND="" *FLAGS="":
   deno run {{flags}} {{config}} -A main.ts {{COMMAND}} {{FLAGS}}
 
 test:
-  deno test {{flags}} {{config}}
+  deno test {{flags}} {{config}} --allow-all --lock-write
 
 fmt:
   deno fmt {{config}}
@@ -18,4 +18,4 @@ lint:
   deno lint
 
 lock:
-  deno cache {{flags}} {{config}} --lock-write main.ts src/**/*.ts
+  deno cache {{flags}} {{config}} --lock-write main.ts
