@@ -1,4 +1,4 @@
-import { crypto } from "https://deno.land/std@0.119.0/crypto/mod.ts";
+import { crypto } from "crypto/mod.ts";
 
 export * from "./duration.ts";
 

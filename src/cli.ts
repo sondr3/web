@@ -1,5 +1,5 @@
-import { Args, parse } from "https://deno.land/std@0.119.0/flags/mod.ts";
-import { getLevelName, LevelName, LogLevels } from "https://deno.land/std@0.119.0/log/levels.ts";
+import { Args, parse } from "flags/mod.ts";
+import { getLevelName, LevelName, LogLevels } from "log/levels.ts";
 
 const HELP = `web 0.0.0
 A simple website

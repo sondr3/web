@@ -1,4 +1,4 @@
-import { assert, assertArrayIncludes } from "https://deno.land/std@0.119.0/testing/asserts.ts";
+import { assert, assertArrayIncludes } from "asserts";
 import { walkDirectory } from "./walkdir.ts";
 
 Deno.test("WalkDir", async (t) => {

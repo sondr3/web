@@ -1,5 +1,5 @@
 import { prettyPrintDuration } from "./duration.ts";
-import { assertEquals } from "https://deno.land/std@0.119.0/testing/asserts.ts";
+import { assertEquals } from "asserts";
 
 Deno.test("PrettyPrintDuration", async (t) => {
   await t.step("less than 1 second", () => {
