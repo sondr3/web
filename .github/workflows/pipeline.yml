@@ -10,6 +10,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/.next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**.ts', '**.tsx') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
+
+
       - uses: pnpm/action-setup@v2.0.1
         with:
           version: 6.x.x
@@ -24,19 +32,8 @@ jobs:
 
       - name: Lint
         run: |
+          pnpm format
           pnpm lint
-          pnpm check
 
       - name: Build site
         run: pnpm build
-
-      - name: Deploy
-        if: ${{ github.ref == 'refs/heads/main' }}
-        uses: burnett01/rsync-deployments@5.1
-        with:
-          switches: -avzrh --delete
-          path: build/
-          remote_path: ${{ secrets.DEPLOY_PATH }}
-          remote_host: ${{ secrets.DEPLOY_HOST }}
-          remote_user: ${{ secrets.DEPLOY_USER }}
-          remote_key: ${{ secrets.DEPLOY_KEY }}

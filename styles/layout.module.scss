@@ -1,0 +1,51 @@
+@use "variables" as *;
+
+.header {
+  display: flex;
+  flex-direction: column;
+  padding-top: 1rem;
+  grid-area: 1 / 2 / 1 / 12;
+  @media (min-width: 32em) {
+    grid-area: 1 / 4 / 1 / 8;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.title {
+  font-size: 1.5rem;
+  align-self: center;
+  padding-bottom: 1rem;
+  font-family: "Inconsolata", monospace;
+  margin: 0;
+}
+
+.nav {
+  display: flex;
+  gap: 30px;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.link {
+  color: var(--grey);
+  font-size: 1.25rem;
+}
+
+.main {
+  padding-top: 1rem;
+  grid-area: 2 / 2 / 2 / 12;
+  @media (min-width: 32em) {
+    grid-area: 2 / 4 / 2 / 8;
+  }
+}
+
+.footer {
+  margin: 0 auto;
+  padding-bottom: 1rem;
+  color: var(--grey);
+  grid-area: 3 / 2 / 3 / 12;
+  @media (min-width: 32em) {
+    grid-area: 3 / 4 / 3 / 8;
+  }
+}

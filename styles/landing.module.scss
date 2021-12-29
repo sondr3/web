@@ -1,0 +1,16 @@
+@use "variables" as *;
+
+.hello {
+  font-size: 3rem;
+  line-height: 2.5rem;
+  font-weight: 800;
+}
+
+.blue {
+  color: var(--blue);
+}
+
+.me {
+  margin-top: 0.5rem;
+  font-size: 1.5rem;
+}
