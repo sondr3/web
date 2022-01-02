@@ -2,6 +2,13 @@
 
 /*** The new CSS Reset - version 1.4.1 (last updated 23.11.2021) ***/
 
+/* Preferred box-sizing value */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 /*
     Remove all the styles of the "User-Agent-Stylesheet", except for the 'display' property
     - The "symbol *" part is to solve Firefox SVG sprite bug
@@ -9,13 +16,6 @@
 *:where(:not(iframe, canvas, img, svg, video):not(svg *, symbol *)) {
   all: unset;
   display: revert;
-}
-
-/* Preferred box-sizing value */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
 }
 
 /* Remove list styles (bullets/numbers) */
@@ -59,44 +59,44 @@ body {
 }
 
 @font-face {
+  font-display: block;
   font-family: Piazzolla;
   font-style: normal;
   font-weight: 100 900;
-  font-display: block;
   src: url("/Piazzolla.woff2") format("woff2");
 }
 
 @font-face {
+  font-display: block;
   font-family: Piazzolla;
   font-style: italic;
   font-weight: 100 900;
-  font-display: block;
   src: url("/PiazzollaItalic.woff2") format("woff2");
 }
 
 @font-face {
+  font-display: block;
   font-family: Inconsolata;
   font-style: normal;
   font-weight: 400;
-  font-display: block;
   src: url("/Inconsolata.woff2") format("woff2");
 }
 
 body {
-  font-family: "Piazzolla";
+  font-family: Piazzolla, sans-serif;
   font-optical-sizing: auto;
   line-height: 1.5;
+  transition-duration: 300ms;
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 300ms;
 }
 
-#__next {
-  height: 100%;
+.root {
   display: grid;
   gap: 10px;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: fit-content(8ch) auto fit-content(8ch);
+  height: 100%;
 
   > footer {
     position: sticky;
@@ -115,15 +115,15 @@ a {
 }
 
 h1 {
+  color: var(--heading);
   font-size: 2rem;
   margin-bottom: 0.5rem;
-  color: var(--heading);
 }
 
 h2 {
+  color: var(--heading);
   font-size: 1.5rem;
   margin-bottom: 0.3rem;
-  color: var(--heading);
 }
 
 p {
