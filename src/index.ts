@@ -1,5 +1,5 @@
-export const hello = (name: string = "world") => {
-  console.log(`Hello, ${name}`);
-} 
+export const hello = (name = "world") => {
+  console.log(`Hello, ${name}`)
+}
 
 hello()
