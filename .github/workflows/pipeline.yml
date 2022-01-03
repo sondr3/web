@@ -39,7 +39,7 @@ jobs:
 
       - name: Deploy
         if: ${{ github.ref == 'refs/heads/main' }}
-        uses: burnett01/rsync-deployments@5.1
+        uses: burnett01/rsync-deployments@5.2
         with:
           switches: -avzrh --delete
           path: build/
