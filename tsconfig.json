@@ -1,6 +1,8 @@
 {
   "extends": "@sondr3/tsconfig",
   "compilerOptions": {
+    "lib": ["ES2021", "DOM"],
+    "target": "ES2021",
     "incremental": true,
     "outDir": "dist"
   },
