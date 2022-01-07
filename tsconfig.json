@@ -3,5 +3,7 @@
   "compilerOptions": {
     "incremental": true,
     "outDir": "dist"
-  }
+  },
+  "include": ["src"],
+  "exclude": ["coverage", "node_modules", "dist"]
 }
