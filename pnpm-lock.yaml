@@ -2,6 +2,7 @@ lockfileVersion: 5.3
 
 specifiers:
   '@sondr3/eslint-config': 0.7.0
+  '@sondr3/minitest': 0.1.0
   '@sondr3/prettier': 0.5.1
   '@sondr3/stylelint': 0.11.0
   '@sondr3/tsconfig': 0.7.0
@@ -21,10 +22,10 @@ specifiers:
   sass: 1.45.1
   stylelint: 14.2.0
   typescript: 4.5.4
-  xv: 1.1.1
 
 devDependencies:
   '@sondr3/eslint-config': 0.7.0_865edc5859398f36ab22bc506fc5f23f
+  '@sondr3/minitest': 0.1.0
   '@sondr3/prettier': 0.5.1_prettier@2.5.1
   '@sondr3/stylelint': 0.11.0_15c5e09af93485e423caf861641eb7ff
   '@sondr3/tsconfig': 0.7.0
@@ -44,7 +45,6 @@ devDependencies:
   sass: 1.45.1
   stylelint: 14.2.0
   typescript: 4.5.4
-  xv: 1.1.1
 
 packages:
 
@@ -190,6 +190,12 @@ packages:
       eslint-plugin-simple-import-sort: 7.0.0_eslint@8.5.0
       eslint-plugin-tsdoc: 0.2.14
       prettier-eslint: 13.0.0
+    dev: true
+
+  /@sondr3/minitest/0.1.0:
+    resolution: {integrity: sha512-8g1R/M4Jfj5Eb0FxfaHtZrrT6S5IDFcUbj3HddsmUiWygW9/l13pFhkp36eLKT+U534jGMoqkUZ4q4I8S9dU3A==}
+    engines: {node: '>=16'}
+    hasBin: true
     dev: true
 
   /@sondr3/prettier/0.5.1_prettier@2.5.1:
@@ -2711,12 +2717,6 @@ packages:
       is-typedarray: 1.0.0
       signal-exit: 3.0.6
       typedarray-to-buffer: 3.1.5
-    dev: true
-
-  /xv/1.1.1:
-    resolution: {integrity: sha512-sNjJ2exlLDcyzZS0fgPDREjt6WXzpXDb9KW9GAdg3rRDN2+9M4FhiummDEf2JWtzcpLzEaNa1ZZXl1Kvrenc1Q==}
-    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
-    hasBin: true
     dev: true
 
   /yallist/4.0.0:
