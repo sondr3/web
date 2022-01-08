@@ -1,7 +1,7 @@
 import { promises as fs } from "node:fs";
 import path, { join } from "node:path";
 
-import { returnErr } from "./utils.js";
+import { errOrThrow } from "./utils.js";
 
 /**
  * Recursively walk a directory yielding all files matching the filter.
@@ -53,7 +53,7 @@ export const copyFiles = async (
         : fs.copyFile(source_, destination_, 1));
     }
   } catch (e) {
-    return returnErr(e);
+    return errOrThrow(e);
   }
 };
 /**
@@ -72,7 +72,7 @@ export const copyFile = async (
   try {
     await fs.copyFile(source, destination, overwrite ? 0 : 1);
   } catch (e) {
-    return returnErr(e);
+    return errOrThrow(e);
   }
 };
 
@@ -87,7 +87,7 @@ export const createDirectory = async (filepath: string): Promise<void | Error> =
   try {
     await fs.mkdir(filepath, { recursive: true });
   } catch (e) {
-    return returnErr(e);
+    return errOrThrow(e);
   }
 };
 
@@ -105,7 +105,7 @@ export const writeFile = async (
   try {
     await fs.writeFile(filepath, content);
   } catch (e) {
-    return returnErr(e);
+    return errOrThrow(e);
   }
 };
 
@@ -119,7 +119,7 @@ export const readFile = async (filepath: string): Promise<string | Error> => {
   try {
     return await fs.readFile(filepath, { encoding: "utf-8" });
   } catch (e) {
-    return returnErr(e);
+    return errOrThrow(e);
   }
 };
 
@@ -139,7 +139,7 @@ export const rmdir = async (
     await fs.rm(directory, { recursive, force });
     return;
   } catch (e) {
-    return returnErr(e);
+    return errOrThrow(e);
   }
 };
 

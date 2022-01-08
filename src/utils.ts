@@ -31,7 +31,7 @@ export const cacheBust = (content: string | Buffer, production: boolean): string
   return md5.digest("hex").slice(0, 8);
 };
 
-export const returnErr = (err: unknown): Error => {
+export const errOrThrow = (err: unknown): Error => {
   if (!(err instanceof Error)) throw new Error("err was not an error ???");
 
   return err;
