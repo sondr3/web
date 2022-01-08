@@ -70,7 +70,7 @@ test("hashFile fails if the file does not exist", async () => {
 
 test("copyFiles copies files without recursing", async () => {
   const dest = await fs.mkdtemp(path.join(os.tmpdir(), "wo-rec"));
-  assert((await copyFiles(config.assets.images, dest, false)).isRight());
+  assert((await copyFiles(config().assets.images, dest, false)).isRight());
 });
 
 test("copyFiles copies files recursively", async () => {
@@ -90,7 +90,7 @@ test("copyFile copies and overwrites files by default", async () => {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "test-copy"));
 
   let actual = await copyFile(
-    path.join(config.assets.root, "robots.txt"),
+    path.join(config().assets.root, "robots.txt"),
     path.join(directory, "robots.txt"),
   ).run();
   assert(actual.isRight());
@@ -99,7 +99,7 @@ test("copyFile copies and overwrites files by default", async () => {
   assert(out.includes("Host: https://www.eons.io"));
 
   actual = await copyFile(
-    path.join(config.assets.root, "humans.txt"),
+    path.join(config().assets.root, "humans.txt"),
     path.join(directory, "robots.txt"),
   ).run();
   assert(actual.isRight());
@@ -110,13 +110,13 @@ test("copyFile copies and overwrites files by default", async () => {
 test("copyFile copies and does not overwrite", async () => {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "test-copy2"));
   const actual = await copyFile(
-    path.join(config.assets.root, "robots.txt"),
+    path.join(config().assets.root, "robots.txt"),
     path.join(directory, "robots.txt"),
   ).run();
   assert(actual.isRight());
 
   const result = await copyFile(
-    path.join(config.assets.root, "humans.txt"),
+    path.join(config().assets.root, "humans.txt"),
     path.join(directory, "robots.txt"),
     false,
   ).run();
@@ -144,7 +144,7 @@ test("rmdir should delete a directory", async () => {
 });
 
 test("rmdir should fail if a directory does not exist", async () => {
-  const path_ = path.resolve(process.cwd(), config.out, "wrongDir");
+  const path_ = path.resolve(process.cwd(), config().out, "wrongDir");
   const result = await rmdir(path_, true).run();
   assert(result.isLeft());
   await assert.rejects(async () => await fs.access(path_));
@@ -159,7 +159,7 @@ test("rmdirs should delete multiple", async () => {
 });
 
 test("rmdirs should fail if one directory does not exist", async () => {
-  const paths = ["js", "wrongDir"].map((path_) => path.resolve(process.cwd(), config.out, path_));
+  const paths = ["js", "wrongDir"].map((path_) => path.resolve(process.cwd(), config().out, path_));
   const result = await rmdirs(paths, true);
   assert(result.isLeft());
 
