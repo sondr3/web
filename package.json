@@ -22,6 +22,7 @@
   },
   "homepage": "https://www.eons.io",
   "dependencies": {
+    "asciidoctor": "2.2.5",
     "prettier": "2.5.1",
     "sass": "1.46.0"
   },
