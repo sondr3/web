@@ -10,10 +10,11 @@ export const run = async (): Promise<void> => {
   const cli = new CLI(process.argv);
 
   switch (cli.command) {
-    case "build":
+    case "build": {
       const asciidoc = new Asciidoc();
       await renderPages(asciidoc).run();
-      return console.log("building");
+      return;
+    }
     case "serve":
       return console.log("serve");
     case "clean": {

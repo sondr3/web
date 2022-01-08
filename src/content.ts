@@ -6,17 +6,17 @@ import { Asciidoc } from "./asciidoc.js";
 import { config } from "./config.js";
 import { readFile, walkDir } from "./fs.js";
 
-export const Metadata = Codec.interface({
+export const MetadataCodec = Codec.interface({
   doctitle: string,
   description: string,
   created: optional(date),
   modified: optional(date),
 });
 
-export type Metadata = GetType<typeof Metadata>;
+export type Metadata = GetType<typeof MetadataCodec>;
 
 const decodeMedata = (data: unknown): Metadata => {
-  return Metadata.decode(data).caseOf({
+  return MetadataCodec.decode(data).caseOf({
     Left: (err) => {
       throw new Error(err);
     },
@@ -32,7 +32,7 @@ export const renderPages = (asciidoc: Asciidoc): EitherAsync<Error, void> =>
     for await (const page of walkDir(pages, filter)) {
       try {
         await readFile(page)
-          .map(async (document) => {
+          .map((document) => {
             const doc = asciidoc.parse(document);
             const meta = decodeMedata(doc.getAttributes());
             console.log(meta);
