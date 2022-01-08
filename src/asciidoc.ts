@@ -1,8 +1,8 @@
 import Processor from "asciidoctor";
 import { Asciidoctor } from "asciidoctor/types";
-import { EitherAsync } from "purify-ts/EitherAsync";
+import { EitherAsync } from "purify-ts/EitherAsync.js";
 
-import { readFile } from "./fs";
+import { readFile } from "./fs.js";
 import { html } from "./templating.js";
 
 export class Asciidoc {
@@ -25,6 +25,16 @@ export class Asciidoc {
     return readFile(filepath)
       .map((document) => this.self.load(document))
       .mapLeft((error) => error);
+  }
+
+  /**
+   * Parses a string into an {@link Asciidoctor.Document}.
+   *
+   * @param content - Content to parse
+   * @returns A converted document
+   */
+  parse(content: string): Asciidoctor.Document {
+    return this.self.load(content);
   }
 
   /**
