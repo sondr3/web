@@ -228,3 +228,4 @@ modules.xml
 .idea/sonarlint
 
 .stylelintcache
+.site/

@@ -25,12 +25,6 @@
     "prettier": "2.5.1",
     "sass": "1.46.0"
   },
-  "prettier": "@sondr3/prettier",
-  "stylelint": {
-    "extends": [
-      "@sondr3/stylelint"
-    ]
-  },
   "devDependencies": {
     "@sondr3/eslint-config": "0.7.1",
     "@sondr3/minitest": "0.1.0",
@@ -56,5 +50,22 @@
     "purify-ts": "1.1.0",
     "stylelint": "14.2.0",
     "typescript": "4.5.4"
+  },
+  "prettier": "@sondr3/prettier",
+  "stylelint": {
+    "extends": [
+      "@sondr3/stylelint"
+    ]
+  },
+  "eslintConfig": {
+    "env": {
+      "es2021": true
+    },
+    "extends": [
+      "@sondr3/eslint-config/typescript"
+    ],
+    "parserOptions": {
+      "project": "tsconfig.json"
+    }
   }
 }
