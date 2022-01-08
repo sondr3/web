@@ -1,7 +1,7 @@
 import { promises as fs } from "node:fs";
 import path, { join } from "node:path";
 
-import { errOrThrow } from "./utils.js";
+import { cacheBust, errOrThrow } from "./utils.js";
 
 /**
  * Recursively walk a directory yielding all files matching the filter.
@@ -158,5 +158,22 @@ export const rmdirs = async (
   for (const dir of directories) {
     const res = await rmdir(dir, recursive, force);
     if (res instanceof Error) return res;
+  }
+};
+
+/**
+ * Read the contents of a file and return its hash.
+ *
+ * @param file - File to read
+ * @returns An eight character long hash
+ */
+export const hashFile = async (file: string, production: boolean): Promise<string | Error> => {
+  try {
+    const content = await readFile(file);
+    if (content instanceof Error) throw content;
+
+    return cacheBust(content, production);
+  } catch (e) {
+    return errOrThrow(e);
   }
 };
