@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsc --watch --incremental",
     "build": "tsc",
-    "start": "./bin/web.mjs",
+    "start": "./site.mjs",
     "test": "mt dist",
     "format": "prettier --check src assets",
     "format:fix": "prettier --write src assets",
