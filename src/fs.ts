@@ -1,7 +1,8 @@
 import { promises as fs } from "node:fs";
 import path, { join } from "node:path";
+import { EitherAsync } from "purify-ts/EitherAsync.js";
 
-import { cacheBust, errOrThrow } from "./utils.js";
+import { cacheBust } from "./utils.js";
 
 /**
  * Recursively walk a directory yielding all files matching the filter.
@@ -35,27 +36,29 @@ export async function* walkDir(
  * @param recurse - Whether to recursively copy
  * @returns Error if something went wrong
  */
-export const copyFiles = async (
+export const copyFiles = (
   source: string,
   destination: string,
   recurse = true,
-): Promise<void | Error> => {
-  try {
-    const entries = await fs.readdir(source, { withFileTypes: true });
-    await createDirectory(destination);
+): EitherAsync<Error, void> =>
+  EitherAsync(async ({ throwE }) => {
+    try {
+      const entries = await fs.readdir(source, { withFileTypes: true });
+      await createDirectory(destination);
 
-    for (const entry of entries) {
-      const source_ = path.join(source, entry.name);
-      const destination_ = path.join(destination, entry.name);
+      for (const entry of entries) {
+        const src = path.join(source, entry.name);
+        const dest = path.join(destination, entry.name);
 
-      await (entry.isDirectory() && recurse
-        ? copyFiles(source_, destination_, recurse)
-        : fs.copyFile(source_, destination_, 1));
+        await (entry.isDirectory() && recurse
+          ? copyFiles(src, dest, recurse)
+          : fs.copyFile(src, dest, 1));
+      }
+    } catch (e) {
+      throwE(e as Error);
     }
-  } catch (e) {
-    return errOrThrow(e);
-  }
-};
+  });
+
 /**
  * A simple wrapper around {@link fs.copyFile}, mostly for error handling purposes.
  *
@@ -64,17 +67,19 @@ export const copyFiles = async (
  * @param overwrite - Overwrite the destination? (true by default)
  * @returns Error if something went wrong
  */
-export const copyFile = async (
+export const copyFile = (
   source: string,
   destination: string,
   overwrite = true,
-): Promise<void | Error> => {
-  try {
-    await fs.copyFile(source, destination, overwrite ? 0 : 1);
-  } catch (e) {
-    return errOrThrow(e);
-  }
-};
+): EitherAsync<Error, void> =>
+  EitherAsync(async ({ throwE }) => {
+    try {
+      await fs.copyFile(source, destination, overwrite ? 0 : 1);
+      return;
+    } catch (e) {
+      return throwE(e as Error);
+    }
+  });
 
 /**
  * Create a directory for the file whose path is supplied, recursively creating the directories
@@ -83,13 +88,15 @@ export const copyFile = async (
  * @param filepath - Path to where file wants to go
  * @returns Error if something goes wrong
  */
-export const createDirectory = async (filepath: string): Promise<void | Error> => {
-  try {
-    await fs.mkdir(filepath, { recursive: true });
-  } catch (e) {
-    return errOrThrow(e);
-  }
-};
+export const createDirectory = (filepath: string): EitherAsync<Error, void> =>
+  EitherAsync(async ({ throwE }) => {
+    try {
+      await fs.mkdir(filepath, { recursive: true });
+      return;
+    } catch (e) {
+      return throwE(e as Error);
+    }
+  });
 
 /**
  * Writes some content to a file.
@@ -98,16 +105,15 @@ export const createDirectory = async (filepath: string): Promise<void | Error> =
  * @param content - Content to write
  * @returns Error if writing fails
  */
-export const writeFile = async (
-  filepath: string,
-  content: string | Buffer,
-): Promise<void | Error> => {
-  try {
-    await fs.writeFile(filepath, content);
-  } catch (e) {
-    return errOrThrow(e);
-  }
-};
+export const writeFile = (filepath: string, content: string | Buffer): EitherAsync<Error, void> =>
+  EitherAsync(async ({ throwE }) => {
+    try {
+      await fs.writeFile(filepath, content);
+      return;
+    } catch (e) {
+      return throwE(e as Error);
+    }
+  });
 
 /**
  * Reads the content of a file.
@@ -115,13 +121,14 @@ export const writeFile = async (
  * @param filepath - File to read contents of
  * @returns Error if file could not be read
  */
-export const readFile = async (filepath: string): Promise<string | Error> => {
-  try {
-    return await fs.readFile(filepath, { encoding: "utf-8" });
-  } catch (e) {
-    return errOrThrow(e);
-  }
-};
+export const readFile = (filepath: string): EitherAsync<Error, string> =>
+  EitherAsync(async ({ throwE }) => {
+    try {
+      return await fs.readFile(filepath, { encoding: "utf-8" });
+    } catch (e) {
+      return throwE(e as Error);
+    }
+  });
 
 /**
  * Remove a directory
@@ -130,18 +137,18 @@ export const readFile = async (filepath: string): Promise<string | Error> => {
  * @param recursive - Recursively delete all content
  * @param force - Ignore errors
  */
-export const rmdir = async (
+export const rmdir = (
   directory: string,
   recursive = true,
   force = false,
-): Promise<void | Error> => {
-  try {
-    await fs.rm(directory, { recursive, force });
-    return;
-  } catch (e) {
-    return errOrThrow(e);
-  }
-};
+): EitherAsync<Error, void> =>
+  EitherAsync(async ({ throwE }) => {
+    try {
+      return await fs.rm(directory, { recursive, force });
+    } catch (e) {
+      return throwE(e as Error);
+    }
+  });
 
 /**
  * Wrapper around {@link rmdir} to delete multiple files.
@@ -150,15 +157,12 @@ export const rmdir = async (
  * @param recursive - Recursively delete all content
  * @param force - Ignore errors
  */
-export const rmdirs = async (
+export const rmdirs = (
   directories: Array<string>,
   recursive = false,
   force = false,
-): Promise<void | Error> => {
-  for (const dir of directories) {
-    const res = await rmdir(dir, recursive, force);
-    if (res instanceof Error) return res;
-  }
+): EitherAsync<Error, void[]> => {
+  return EitherAsync.sequence(directories.map((dir) => rmdir(dir, recursive, force)));
 };
 
 /**
@@ -167,13 +171,8 @@ export const rmdirs = async (
  * @param file - File to read
  * @returns An eight character long hash
  */
-export const hashFile = async (file: string, production: boolean): Promise<string | Error> => {
-  try {
-    const content = await readFile(file);
-    if (content instanceof Error) throw content;
-
-    return cacheBust(content, production);
-  } catch (e) {
-    return errOrThrow(e);
-  }
+export const hashFile = (file: string, production: boolean): EitherAsync<Error, string> => {
+  return readFile(file)
+    .map((content) => cacheBust(content, production))
+    .mapLeft((e) => e);
 };

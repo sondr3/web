@@ -22,6 +22,7 @@ specifiers:
   postcss: 8.4.5
   prettier: 2.5.1
   prettier-eslint: 13.0.0
+  purify-ts: 1.1.0
   sass: 1.46.0
   stylelint: 14.2.0
   typescript: 4.5.4
@@ -51,6 +52,7 @@ devDependencies:
   eslint-plugin-tsdoc: 0.2.14
   postcss: 8.4.5
   prettier-eslint: 13.0.0
+  purify-ts: 1.1.0
   stylelint: 14.2.0
   typescript: 4.5.4
 
@@ -2154,6 +2156,12 @@ packages:
   /punycode/2.1.1:
     resolution: {integrity: sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==}
     engines: {node: '>=6'}
+    dev: true
+
+  /purify-ts/1.1.0:
+    resolution: {integrity: sha512-hfXuxs6hoRURvcBwHVGlLdeNp9R96z+l1sQQj5enqU1ZDqV1GGVPIr6wNw2rNKqhQemaaMERrqjqjzO2hVYZsg==}
+    dependencies:
+      '@types/json-schema': 7.0.9
     dev: true
 
   /queue-microtask/1.2.3:
