@@ -227,3 +227,4 @@ modules.xml
 # Sonarlint plugin
 .idea/sonarlint
 
+.stylelintcache

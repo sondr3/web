@@ -12,8 +12,8 @@
     "format:fix": "prettier --write src styles",
     "lint": "eslint --cache src",
     "lint:fix": "eslint --cache --fix src",
-    "style": "stylelint styles",
-    "style:fix": "stylelint --fix styles"
+    "style": "stylelint --cache assets/scss",
+    "style:fix": "stylelint --cache --fix assets/scss"
   },
   "author": "Sondre Nilsen <nilsen.sondre@gmail.com>",
   "license": "MIT",
@@ -26,6 +26,11 @@
     "sass": "1.46.0"
   },
   "prettier": "@sondr3/prettier",
+  "stylelint": {
+    "extends": [
+      "@sondr3/stylelint"
+    ]
+  },
   "devDependencies": {
     "@sondr3/eslint-config": "0.7.1",
     "@sondr3/minitest": "0.1.0",
