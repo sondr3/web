@@ -19,7 +19,8 @@ const walkDirToArray = async (
 test("walkDir for JSON files", async () => {
   const files = await walkDirToArray(".", (name) => extname(name) === ".json", false);
 
-  assert.deepStrictEqual(files, [`package.json`, `tsconfig.json`]);
+  assert(files.includes("package.json"));
+  assert(files.includes("tsconfig.json"));
 });
 
 test("walkDir for TS with recursing", async () => {
