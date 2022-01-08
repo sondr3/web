@@ -4,7 +4,7 @@ import { CLI } from "./cli.js";
  * Entrypoint for static site generator, parses command line input and run
  * the given command.
  */
-const run = (): void => {
+export const run = (): void => {
   const cli = new CLI(process.argv);
 
   switch (cli.command) {
@@ -17,5 +17,3 @@ const run = (): void => {
     }
   }
 };
-
-void run();
