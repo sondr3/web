@@ -4,11 +4,31 @@ import { EitherAsync } from "purify-ts/EitherAsync.js";
 import sass, { CompileResult } from "sass";
 import { SourceMapConsumer, SourceMapGenerator } from "source-map";
 
-import { copyFiles, rmdirs, writeFile } from "../utils/fs.js";
+import { copyFiles, writeFile } from "../utils/fs.js";
 import { cacheBust } from "../utils/utils.js";
 import { Config } from "./config.js";
 import { formatCSS } from "./formatting.js";
 import { Site } from "./site.js";
+
+export const _renderStyle = (site: Site): EitherAsync<Error, void> =>
+  EitherAsync(async () => {
+    const style = await sass.compileAsync(path.join(site.config.assets.styles, "style.scss"), {
+      sourceMap: true,
+    });
+    let hash = cacheBust(style.css, site.config.production);
+    const out = await (site.config.production ? optimize(style, hash) : formatCSS(style));
+    hash = hash === "" ? `.` : `.${hash}.`;
+    const name = `style${hash}css`;
+
+    site.setStyle(name);
+
+    await EitherAsync.sequence([
+      writeFile(path.join(site.config.out, name), out.css),
+      writeFile(path.join(site.config.out, `${name}.map`), out.map),
+    ])
+      .mapLeft((e) => console.error(e))
+      .run();
+  });
 
 /**
  * Renders a given SCSS file to CSS, and optimizing it if running in production
@@ -40,7 +60,7 @@ export const renderStyles = (site: Site, file: string): EitherAsync<Error, void>
 const writeStyles = (site: Site, file: string, result: CompileResult): EitherAsync<Error, void> =>
   EitherAsync(async () => {
     const hash = cacheBust(result.css, site.config.production);
-    const out = await (site.config.production ? optimize(result, file, hash) : formatCSS(result));
+    const out = await (site.config.production ? optimize(result, hash) : formatCSS(result));
     const name = site.config.production
       ? styleName(site.config, file, `${hash}.css`)
       : styleName(site.config, file);
@@ -59,23 +79,21 @@ const writeStyles = (site: Site, file: string, result: CompileResult): EitherAsy
  * Optimize a CSS file by minifying it.
  *
  * @param source - SCSS result object, containing rendered CSS and source map
- * @param file - Filename, used to create correct production source map
  * @param hash - Hash given to the CSS file
  * @returns The optimized CSS and its source map
  */
 const optimize = async (
   source: CompileResult,
-  file: string,
   hash: string,
 ): Promise<{ css: string; map: string }> => {
   const result = minify(source.css.toString(), {
-    filename: file,
+    filename: "style.scss",
     sourceMap: true,
   });
 
   const map = result.map as SourceMapGenerator;
-  map.applySourceMap(await new SourceMapConsumer(source.sourceMap?.mappings ?? ""), file);
-  const css = result.css + `/*# sourceMappingURL=style.${hash}.css.map */`;
+  map.applySourceMap(await new SourceMapConsumer(source.sourceMap?.mappings ?? ""), "style.scss");
+  const css = result.css + `/*# sourceMappingURL=style${hash}css.map */`;
 
   return { css, map: map.toString() };
 };
@@ -94,23 +112,4 @@ export const styleName = (config: Config, file: string, extension = "css"): stri
 };
 
 export const copyAssets = (site: Site): EitherAsync<Error, void> =>
-  EitherAsync(async () => {
-    await rmdirs(
-      [
-        path.join(site.config.out, "scss"),
-        path.join(site.config.out, "images"),
-        path.join(site.config.out, "js"),
-        path.join(site.config.out, "fonts"),
-      ],
-      true,
-    ).run();
-
-    await EitherAsync.sequence([
-      copyFiles(site.config.assets.styles, path.join(site.config.out, "scss")),
-      copyFiles(site.config.assets.images, path.join(site.config.out, "images")),
-      copyFiles(site.config.assets.js, path.join(site.config.out, "js")),
-      copyFiles(site.config.assets.fonts, path.join(site.config.out, "fonts")),
-    ])
-      .mapLeft((e) => e)
-      .run();
-  });
+  copyFiles(site.config.assets.root, site.config.out);

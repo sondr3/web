@@ -161,9 +161,8 @@ export const rmdirs = (
   directories: Array<string>,
   recursive = false,
   force = false,
-): EitherAsync<Error, void[]> => {
-  return EitherAsync.sequence(directories.map((dir) => rmdir(dir, recursive, force)));
-};
+): EitherAsync<Error, void> =>
+  EitherAsync.all(directories.map((dir) => rmdir(dir, recursive, force))).void();
 
 /**
  * Read the contents of a file and return its hash.

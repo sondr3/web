@@ -4,7 +4,7 @@ import { EitherAsync } from "purify-ts/EitherAsync.js";
 import { landing, layout } from "../templates/templates.js";
 import { createDirectory, writeFile } from "../utils/fs.js";
 import { Asciidoc } from "./asciidoc.js";
-import { copyAssets, renderStyles } from "./assets.js";
+import { _renderStyle, copyAssets } from "./assets.js";
 import { buildPages, Content, decodeFrontmatter } from "./content.js";
 import { Site } from "./site.js";
 
@@ -13,7 +13,7 @@ export const build = (site: Site, asciidoc: Asciidoc): EitherAsync<Error, void> 
     await EitherAsync.sequence([
       createDirectory(site.config.out),
       copyAssets(site),
-      renderStyles(site, "style.scss"),
+      _renderStyle(site),
       renderPages(site, asciidoc),
       renderSpecialPages(site),
     ])
@@ -30,11 +30,8 @@ export const renderPages = (site: Site, asciidoc: Asciidoc): EitherAsync<Error, 
 
         await EitherAsync.sequence([
           createDirectory(path.join(site.config.out, dir.dir)),
-          writeFile(
-            path.join(site.config.out, page.path()),
-            layout(page.frontmatter.doctitle, page.content()),
-          ),
-        ]);
+          writeFile(path.join(site.config.out, page.path()), layout(page.title(), page.content())),
+        ]).run();
       }),
     );
   });

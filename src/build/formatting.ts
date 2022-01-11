@@ -20,7 +20,7 @@ export const formatHTML = (source: string): string => formatFile(source, "html")
 export const formatCSS = (
   source: CompileResult,
 ): { readonly css: string; readonly map: string } => {
-  return { css: formatFile(source.css, "css"), map: source.sourceMap?.toString() ?? "" };
+  return { css: formatFile(source.css, "css"), map: source.sourceMap?.file ?? "" };
 };
 
 /**
