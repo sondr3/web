@@ -1,6 +1,7 @@
 import { Asciidoc } from "./asciidoc.js";
 import { CLI } from "./cli.js";
 import { renderPages } from "./content.js";
+import { Site } from "./site.js";
 
 /**
  * Entrypoint for static site generator, parses command line input and run
@@ -11,8 +12,10 @@ export const run = async (): Promise<void> => {
 
   switch (cli.command) {
     case "build": {
+      const site = new Site();
       const asciidoc = new Asciidoc();
-      await renderPages(asciidoc).run();
+      await renderPages(site, asciidoc).run();
+      console.dir(site.pages);
       return;
     }
     case "serve":
