@@ -1,9 +1,15 @@
+import { Config, config } from "./config.js";
 import { Content } from "./content.js";
 
 export class Site {
-  pages: Map<string, Content> = new Map();
+  pages: Array<Content> = [];
+  config: Config;
+
+  constructor(prod: boolean) {
+    this.config = config(prod);
+  }
 
   addPage(content: Content) {
-    this.pages.set(content.metadata.path, content);
+    this.pages.push(content);
   }
 }

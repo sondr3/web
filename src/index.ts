@@ -1,6 +1,6 @@
 import { Asciidoc } from "./asciidoc.js";
+import { renderPages } from "./build.js";
 import { CLI } from "./cli.js";
-import { renderPages } from "./content.js";
 import { Site } from "./site.js";
 
 /**
@@ -12,7 +12,7 @@ export const run = async (): Promise<void> => {
 
   switch (cli.command) {
     case "build": {
-      const site = new Site();
+      const site = new Site(cli.production);
       const asciidoc = new Asciidoc();
       await renderPages(site, asciidoc).run();
       console.dir(site.pages);

@@ -7,6 +7,7 @@ import { Asciidoc } from "./asciidoc.js";
 import { config } from "./config.js";
 import { readFile, walkDir } from "./fs.js";
 import { Site } from "./site.js";
+import { slugify } from "./utils.js";
 
 export type Layout = "page" | "post";
 
@@ -41,15 +42,26 @@ const decodeFrontmatter = (data: unknown): Frontmatter => {
   });
 };
 
-const convertToContent = (document: string, path: string, asciidoc: Asciidoc): Content => {
-  const doc = asciidoc.parse(document);
-  const meta = decodeFrontmatter(doc.getAttributes());
-  const layout = (doc.getAttribute("layout") as Layout) ?? "page";
-
-  return { document: doc, frontmatter: meta, metadata: { layout: layout, path: path } };
+const buildPath = ({ doctitle, category }: Frontmatter): string => {
+  const base = [category, doctitle].flatMap((it) => (it ? [slugify(it)] : [])).join("/");
+  return `/${base}/index.html`;
 };
 
-export const renderPages = (site: Site, asciidoc: Asciidoc): EitherAsync<Error, void> =>
+const buildTitle = ({ doctitle }: Frontmatter): string => `${doctitle} => Eons :: IO ()`;
+
+const convertToContent = (document: string, asciidoc: Asciidoc): Content => {
+  const doc = asciidoc.parse(document);
+  const frontmatter = decodeFrontmatter(doc.getAttributes());
+  const layout = (doc.getAttribute("layout") as Layout) ?? "page";
+
+  return {
+    document: doc,
+    frontmatter: { ...frontmatter, doctitle: buildTitle(frontmatter) },
+    metadata: { layout: layout, path: buildPath(frontmatter) },
+  };
+};
+
+export const buildPages = (site: Site, asciidoc: Asciidoc): EitherAsync<Error, void> =>
   EitherAsync(async ({ throwE }) => {
     const pages = path.resolve(config().content.pages);
     const filter = (name: string) => extname(name) === ".adoc";
@@ -57,7 +69,7 @@ export const renderPages = (site: Site, asciidoc: Asciidoc): EitherAsync<Error, 
     for await (const page of walkDir(pages, filter)) {
       try {
         await readFile(page)
-          .map((document) => convertToContent(document, page, asciidoc))
+          .map((document) => convertToContent(document, asciidoc))
           .map((content) => site.addPage(content))
           .mapLeft((e) => e);
       } catch (e) {

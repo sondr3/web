@@ -1,6 +1,6 @@
 import path from "node:path";
 
-interface Config {
+export interface Config {
   out: string;
   production: boolean;
   url: string;
