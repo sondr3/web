@@ -14,6 +14,7 @@ export type Layout = "page" | "post";
 export const FrontmatterCodec = Codec.interface({
   doctitle: string,
   description: string,
+  slug: optional(string),
   created: optional(date),
   modified: optional(date),
   tags: optional(array(string)),
@@ -42,6 +43,8 @@ export class Content {
   };
 
   path = (): string => {
+    if (this.frontmatter.slug) return `/${this.frontmatter.slug}/index.html`;
+
     const base = [this.frontmatter.category, this.frontmatter.doctitle]
       .flatMap((it) => (it ? [slugify(it)] : []))
       .join("/");
