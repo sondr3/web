@@ -3,11 +3,11 @@ import path, { extname } from "node:path";
 import { array, Codec, date, GetType, optional, string } from "purify-ts/Codec.js";
 import { EitherAsync } from "purify-ts/EitherAsync.js";
 
+import { readFile, walkDir } from "../utils/fs.js";
+import { slugify } from "../utils/utils.js";
 import { Asciidoc } from "./asciidoc.js";
 import { config } from "./config.js";
-import { readFile, walkDir } from "./fs.js";
 import { Site } from "./site.js";
-import { slugify } from "./utils.js";
 
 export type Layout = "page" | "post";
 

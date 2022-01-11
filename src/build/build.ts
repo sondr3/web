@@ -1,11 +1,11 @@
 import path, { parse } from "node:path";
 import { EitherAsync } from "purify-ts/EitherAsync.js";
 
+import { landing, layout } from "../templates/index.js";
+import { createDirectory, writeFile } from "../utils/fs.js";
 import { Asciidoc } from "./asciidoc.js";
 import { buildPages, Content, decodeFrontmatter } from "./content.js";
-import { createDirectory, writeFile } from "./fs.js";
 import { Site } from "./site.js";
-import { landing, layout } from "./templates/index.js";
 
 export const build = (site: Site, asciidoc: Asciidoc): EitherAsync<Error, void> =>
   EitherAsync(async () => {

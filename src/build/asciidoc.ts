@@ -2,8 +2,8 @@ import Processor from "asciidoctor";
 import { Asciidoctor } from "asciidoctor/types";
 import { EitherAsync } from "purify-ts/EitherAsync.js";
 
-import { readFile } from "./fs.js";
-import { html } from "./templating.js";
+import { html } from "../templates/templating.js";
+import { readFile } from "../utils/fs.js";
 
 export class Asciidoc {
   private readonly converter: Asciidoctor.Html5Converter;

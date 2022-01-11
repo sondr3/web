@@ -1,7 +1,7 @@
-import { Asciidoc } from "./asciidoc.js";
-import { build } from "./build.js";
+import { Asciidoc } from "./build/asciidoc.js";
+import { build } from "./build/build.js";
+import { Site } from "./build/site.js";
 import { CLI } from "./cli.js";
-import { Site } from "./site.js";
 
 /**
  * Entrypoint for static site generator, parses command line input and run

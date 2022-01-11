@@ -133,7 +133,7 @@ export const readFile = (filepath: string): EitherAsync<Error, string> =>
 /**
  * Remove a directory
  *
- * @param directoryPath - Path to delete
+ * @param directory - Path to delete
  * @param recursive - Recursively delete all content
  * @param force - Ignore errors
  */
@@ -153,7 +153,7 @@ export const rmdir = (
 /**
  * Wrapper around {@link rmdir} to delete multiple files.
  *
- * @param toDelete- Paths to delete
+ * @param directories - Paths to delete
  * @param recursive - Recursively delete all content
  * @param force - Ignore errors
  */
@@ -169,6 +169,7 @@ export const rmdirs = (
  * Read the contents of a file and return its hash.
  *
  * @param file - File to read
+ * @param production - Are we in production mode?
  * @returns An eight character long hash
  */
 export const hashFile = (file: string, production: boolean): EitherAsync<Error, string> => {

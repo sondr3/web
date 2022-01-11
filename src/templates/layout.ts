@@ -1,4 +1,4 @@
-import { html } from "../templating.js";
+import { html } from "./templating.js";
 
 export const layout = (title: string, content: string): string => html`
   <!DOCTYPE html>

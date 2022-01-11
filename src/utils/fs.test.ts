@@ -4,7 +4,7 @@ import { promises as fs } from "node:fs";
 import os from "node:os";
 import path, { extname } from "node:path";
 
-import { config } from "./config.js";
+import { config } from "../build/config.js";
 import {
   copyFile,
   copyFiles,
@@ -37,8 +37,8 @@ test("walkDir for JSON files", async () => {
 test("walkDir for TS with recursing", async () => {
   const files = await walkDirToArray("./src", (name) => name.endsWith("ts"), true);
 
-  assert(files.includes("src/fs.ts"));
-  assert(files.includes("src/fs.test.ts"));
+  assert(files.includes("src/utils/fs.ts"));
+  assert(files.includes("src/utils/fs.test.ts"));
 });
 
 test("createDirectory can create a test directory", async () => {

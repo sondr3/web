@@ -1,5 +1,5 @@
-import { html } from "../templating.js";
 import { layout } from "./layout.js";
+import { html } from "./templating.js";
 
 const content = html`<section>
   <h1>
