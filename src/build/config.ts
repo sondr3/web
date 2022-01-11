@@ -20,7 +20,7 @@ export interface Config {
 const root = path.resolve(process.cwd());
 
 export const config = (prod = false): Config => ({
-  out: path.join(root, ".site"),
+  out: path.join(root, "build"),
   production: prod,
   url: prod ? "https://www.eons.io" : "http://localhost",
   content: {
