@@ -21,19 +21,37 @@ export const FrontmatterCodec = Codec.interface({
 });
 
 export interface Metadata {
-  path: string;
   layout: Layout;
 }
 
 export type Frontmatter = GetType<typeof FrontmatterCodec>;
 
-export interface Content {
-  metadata: Metadata;
-  frontmatter: Frontmatter;
-  document: Asciidoctor.Document;
+export class Content {
+  readonly metadata: Metadata;
+  readonly frontmatter: Frontmatter;
+  readonly document: Asciidoctor.Document | string;
+
+  constructor(metadata: Metadata, frontmatter: Frontmatter, doc: Asciidoctor.Document | string) {
+    this.metadata = metadata;
+    this.frontmatter = frontmatter;
+    this.document = doc;
+  }
+
+  content = (): string => {
+    return typeof this.document === "string" ? this.document : this.document.getContent();
+  };
+
+  path = (): string => {
+    const base = [this.frontmatter.category, this.frontmatter.doctitle]
+      .flatMap((it) => (it ? [slugify(it)] : []))
+      .join("/");
+    return `/${base}/index.html`;
+  };
+
+  title = (): string => `${this.frontmatter.doctitle} => Eons :: IO ()`;
 }
 
-const decodeFrontmatter = (data: unknown): Frontmatter => {
+export const decodeFrontmatter = (data: unknown): Frontmatter => {
   return FrontmatterCodec.decode(data).caseOf({
     Left: (err) => {
       throw new Error(err);
@@ -42,23 +60,13 @@ const decodeFrontmatter = (data: unknown): Frontmatter => {
   });
 };
 
-const buildPath = ({ doctitle, category }: Frontmatter): string => {
-  const base = [category, doctitle].flatMap((it) => (it ? [slugify(it)] : [])).join("/");
-  return `/${base}/index.html`;
-};
-
-const buildTitle = ({ doctitle }: Frontmatter): string => `${doctitle} => Eons :: IO ()`;
-
 const convertToContent = (document: string, asciidoc: Asciidoc): Content => {
   const doc = asciidoc.parse(document);
   const frontmatter = decodeFrontmatter(doc.getAttributes());
   const layout = (doc.getAttribute("layout") as Layout) ?? "page";
+  const meta = { layout: layout };
 
-  return {
-    document: doc,
-    frontmatter: { ...frontmatter, doctitle: buildTitle(frontmatter) },
-    metadata: { layout: layout, path: buildPath(frontmatter) },
-  };
+  return new Content(meta, frontmatter, doc);
 };
 
 export const buildPages = (site: Site, asciidoc: Asciidoc): EitherAsync<Error, void> =>
