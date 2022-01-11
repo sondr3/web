@@ -12,11 +12,8 @@ export const run = async (): Promise<void> => {
 
   switch (cli.command) {
     case "build": {
-      await build(new Site(cli.production), new Asciidoc())
-        .mapLeft((e) => {
-          throw e;
-        })
-        .run();
+      console.info(`Building with ${cli.production ? "optimizations" : "no optimizations"}`);
+      await build(new Site(cli.production), new Asciidoc());
       return;
     }
     case "serve":

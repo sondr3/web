@@ -1,49 +1,51 @@
 import path, { parse } from "node:path";
-import { EitherAsync } from "purify-ts/EitherAsync.js";
 
-import { landing, layout } from "../templates/templates.js";
+import { landing } from "../templates/landing.js";
+import { renderLayout, renderSpecial } from "../templates/templates.js";
 import { createDirectory, writeFile } from "../utils/fs.js";
 import { Asciidoc } from "./asciidoc.js";
-import { _renderStyle, copyAssets } from "./assets.js";
-import { buildPages, Content, decodeFrontmatter } from "./content.js";
+import { copyAssets, renderStyles } from "./assets.js";
+import { buildPages, Content } from "./content.js";
 import { Site } from "./site.js";
 
-export const build = (site: Site, asciidoc: Asciidoc): EitherAsync<Error, void> =>
-  EitherAsync(async () => {
-    await EitherAsync.sequence([
-      createDirectory(site.config.out),
-      copyAssets(site),
-      _renderStyle(site),
-      renderPages(site, asciidoc),
-      renderSpecialPages(site),
-    ])
-      .mapLeft((e) => e)
-      .run();
-  });
+export const build = async (site: Site, asciidoc: Asciidoc): Promise<Error | void> => {
+  await createDirectory(site.config.out)
+    .then(() => copyAssets(site))
+    .then(() => renderStyles(site))
+    .then(() => renderPages(site, asciidoc))
+    .then(() => renderSpecialPages(site));
+};
 
-export const renderPages = (site: Site, asciidoc: Asciidoc): EitherAsync<Error, void> =>
-  EitherAsync(async () => {
-    await buildPages(site, asciidoc).run();
-    await Promise.allSettled(
-      site.pages.map(async (page: Content) => {
-        const dir = parse(page.path());
+export const renderPages = async (site: Site, asciidoc: Asciidoc): Promise<Error | void> => {
+  await buildPages(site, asciidoc);
+  await Promise.allSettled(
+    site.pages.map(async (page: Content) => {
+      const dir = parse(page.path());
 
-        await EitherAsync.sequence([
-          createDirectory(path.join(site.config.out, dir.dir)),
-          writeFile(path.join(site.config.out, page.path()), layout(page.title(), page.content())),
-        ]).run();
-      }),
-    );
-  });
+      const res = await Promise.all([
+        createDirectory(path.join(site.config.out, dir.dir)),
+        writeFile(path.join(site.config.out, page.path()), renderLayout(site, page)),
+      ]);
 
-export const renderSpecialPages = (site: Site): EitherAsync<Error, void> =>
-  EitherAsync(async () => {
-    await writeFile(path.join(site.config.out, "index.html"), landing());
-    site.addPage(
-      new Content(
-        { layout: "page" },
-        decodeFrontmatter({ doctitle: "Home", description: "Homepage" }),
-        "",
-      ),
-    );
-  });
+      if (res.some((r) => r instanceof Error)) {
+        return new Error(`Failed to render ${page.path()}`);
+      }
+
+      return;
+    }),
+  );
+};
+
+export const renderSpecialPages = async (site: Site): Promise<Error | void> => {
+  const index = new Content(
+    { layout: "page" },
+    {
+      title: "Home => Eons :: IO ()",
+      description: "The online home for Sondre Nilsen",
+    },
+    landing,
+  );
+  const res = await writeFile(path.join(site.config.out, "index.html"), renderSpecial(site, index));
+  if (res instanceof Error) return res;
+  site.addPage(index);
+};

@@ -1,6 +1,6 @@
 import { html } from "./templating.js";
 
-export const layout = (title: string, content: string, styles = "/style.css"): string => html`
+export const layout = (title: string, content: string, styles: string): string => html`
   <!DOCTYPE html>
   <html lang="en">
     <head>
@@ -15,7 +15,7 @@ export const layout = (title: string, content: string, styles = "/style.css"): s
       <link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180" />
 
       <link rel="author" href="/humans.txt" />
-      <link rel="stylesheet" href="${styles}" />
+      <link rel="stylesheet" href="/${styles}" />
       <title>${title}</title>
     </head>
     <body class="root">

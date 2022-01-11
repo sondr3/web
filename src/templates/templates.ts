@@ -1,2 +1,42 @@
-export * from "./landing.js";
-export * from "./layout.js";
+import { Content } from "../build/content.js";
+import { formatFile } from "../build/formatting.js";
+import { Site } from "../build/site.js";
+import { layout } from "./layout.js";
+import { page } from "./page.js";
+
+/**
+ * Render special pages, i.e. not automatically rendered.
+ *
+ * @param site - Site state
+ * @param content - Content to print
+ */
+export const renderSpecial = (site: Site, content: Content): string => {
+  return formatFile(
+    layout(content.title(), content.content(), site.style),
+    "html",
+    site.config.production,
+  );
+};
+
+/**
+ * Render all other pages
+ *
+ * @param site - Site state
+ * @param content - Content to print
+ */
+export const renderLayout = (site: Site, content: Content): string => {
+  switch (content.metadata.layout) {
+    case "page":
+      return formatFile(
+        layout(content.title(), page(content.frontmatter.title, content.content()), site.style),
+        "html",
+        site.config.production,
+      );
+    case "post":
+      return formatFile(
+        layout(content.title(), content.content(), site.style),
+        "html",
+        site.config.production,
+      );
+  }
+};

@@ -1,6 +1,5 @@
 import Processor from "asciidoctor";
 import { Asciidoctor } from "asciidoctor/types";
-import { EitherAsync } from "purify-ts/EitherAsync.js";
 
 import { html } from "../templates/templating.js";
 import { readFile } from "../utils/fs.js";
@@ -21,11 +20,11 @@ export class Asciidoc {
    * @param filepath - File to open and parse
    * @returns Either a converted document or an error
    */
-  load(filepath: string): EitherAsync<Error, Asciidoctor.Document> {
-    return readFile(filepath)
-      .map((document) => this.self.load(document))
-      .mapLeft((error) => error);
-  }
+  load = async (filepath: string): Promise<Error | Asciidoctor.Document> => {
+    const document = await readFile(filepath);
+    if (document instanceof Error) return document;
+    return this.self.load(document);
+  };
 
   /**
    * Parses a string into an {@link Asciidoctor.Document}.

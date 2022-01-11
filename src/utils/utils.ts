@@ -1,6 +1,15 @@
 import crypto from "node:crypto";
 
 /**
+ * Log and coerce a caught thing to an error;
+ * @param e - Something that should be an error
+ */
+export const logErr = (e: unknown): Error => {
+  console.error(e);
+  return e as Error;
+};
+
+/**
  * Convert a title from a page to a slug that can be used in the generated site. Turns
  * `Hello, world!` into `hello-world`.
  *

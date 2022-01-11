@@ -1,7 +1,5 @@
 import { Asciidoctor } from "asciidoctor/types";
 import path, { extname } from "node:path";
-import { array, Codec, date, GetType, optional, string } from "purify-ts/Codec.js";
-import { EitherAsync } from "purify-ts/EitherAsync.js";
 
 import { readFile, walkDir } from "../utils/fs.js";
 import { slugify } from "../utils/utils.js";
@@ -11,21 +9,19 @@ import { Site } from "./site.js";
 
 export type Layout = "page" | "post";
 
-export const FrontmatterCodec = Codec.interface({
-  doctitle: string,
-  description: string,
-  slug: optional(string),
-  created: optional(date),
-  modified: optional(date),
-  tags: optional(array(string)),
-  category: optional(string),
-});
+export interface Frontmatter {
+  title: string;
+  description: string;
+  slug?: string;
+  created?: Date;
+  modified?: Date;
+  tags?: Array<string>;
+  category?: string;
+}
 
 export interface Metadata {
   layout: Layout;
 }
-
-export type Frontmatter = GetType<typeof FrontmatterCodec>;
 
 export class Content {
   readonly metadata: Metadata;
@@ -43,50 +39,57 @@ export class Content {
   };
 
   path = (): string => {
-    if (this.frontmatter.slug) return `/${this.frontmatter.slug}/index.html`;
+    if (this.frontmatter.slug) return `/${slugify(this.frontmatter.slug)}/index.html`;
 
-    const base = [this.frontmatter.category, this.frontmatter.doctitle]
+    const base = [this.frontmatter.category, this.frontmatter.title]
       .flatMap((it) => (it ? [slugify(it)] : []))
       .join("/");
-    return `/${base}/index.html`;
+    return `/${slugify(base)}/index.html`;
   };
 
-  title = (): string => `${this.frontmatter.doctitle} => Eons :: IO ()`;
+  title = (): string => `${this.frontmatter.title} => Eons :: IO ()`;
 }
 
-export const decodeFrontmatter = (data: unknown): Frontmatter => {
-  return FrontmatterCodec.decode(data).caseOf({
-    Left: (err) => {
-      throw new Error(err);
-    },
-    Right: (data) => data,
-  });
+const getDate = (val: string | undefined): Date | undefined => {
+  if (val === undefined) return undefined;
+  return new Date(val);
+};
+
+export const decodeFrontmatter = (document: Asciidoctor.Document): Frontmatter => {
+  const attributes = new Map(Object.entries(document.getAttributes() as Record<string, string>));
+
+  if (!attributes.has("doctitle") || !attributes.has("description")) {
+    throw new Error("Frontmatter is missing title or description");
+  }
+
+  return {
+    title: attributes.get("doctitle") ?? "",
+    description: attributes.get("description") ?? "",
+    slug: attributes.get("slug"),
+    created: getDate(attributes.get("created")),
+    modified: getDate(attributes.get("modified")),
+    tags: attributes.get("tags")?.split(","),
+    category: attributes.get("category"),
+  };
 };
 
 const convertToContent = (document: string, asciidoc: Asciidoc): Content => {
   const doc = asciidoc.parse(document);
-  const frontmatter = decodeFrontmatter(doc.getAttributes());
+  const frontmatter = decodeFrontmatter(doc);
   const layout = (doc.getAttribute("layout") as Layout) ?? "page";
   const meta = { layout: layout };
 
   return new Content(meta, frontmatter, doc);
 };
 
-export const buildPages = (site: Site, asciidoc: Asciidoc): EitherAsync<Error, void> =>
-  EitherAsync(async ({ throwE }) => {
-    const pages = path.resolve(config().content.pages);
-    const filter = (name: string) => extname(name) === ".adoc";
+export const buildPages = async (site: Site, asciidoc: Asciidoc): Promise<Error | void> => {
+  const pages = path.resolve(config().content.pages);
+  const filter = (name: string) => extname(name) === ".adoc";
 
-    for await (const page of walkDir(pages, filter)) {
-      try {
-        await readFile(page)
-          .map((document) => convertToContent(document, asciidoc))
-          .map((content) => site.addPage(content))
-          .mapLeft((e) => e);
-      } catch (e) {
-        return throwE(e as Error);
-      }
-    }
-
-    return;
-  });
+  for await (const page of walkDir(pages, filter)) {
+    const document = await readFile(page);
+    if (document instanceof Error) return document;
+    const content = convertToContent(document, asciidoc);
+    site.addPage(content);
+  }
+};
