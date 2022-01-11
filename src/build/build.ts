@@ -1,15 +1,22 @@
 import path, { parse } from "node:path";
 import { EitherAsync } from "purify-ts/EitherAsync.js";
 
-import { landing, layout } from "../templates/index.js";
+import { landing, layout } from "../templates/templates.js";
 import { createDirectory, writeFile } from "../utils/fs.js";
 import { Asciidoc } from "./asciidoc.js";
+import { copyAssets, renderStyles } from "./assets.js";
 import { buildPages, Content, decodeFrontmatter } from "./content.js";
 import { Site } from "./site.js";
 
 export const build = (site: Site, asciidoc: Asciidoc): EitherAsync<Error, void> =>
   EitherAsync(async () => {
-    await EitherAsync.sequence([renderPages(site, asciidoc), renderSpecialPages(site)])
+    await EitherAsync.sequence([
+      createDirectory(site.config.out),
+      copyAssets(site),
+      renderStyles(site, "style.scss"),
+      renderPages(site, asciidoc),
+      renderSpecialPages(site),
+    ])
       .mapLeft((e) => e)
       .run();
   });

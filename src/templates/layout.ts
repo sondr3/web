@@ -1,6 +1,6 @@
 import { html } from "./templating.js";
 
-export const layout = (title: string, content: string): string => html`
+export const layout = (title: string, content: string, styles = "/style.css"): string => html`
   <!DOCTYPE html>
   <html lang="en">
     <head>
@@ -15,23 +15,24 @@ export const layout = (title: string, content: string): string => html`
       <link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180" />
 
       <link rel="author" href="/humans.txt" />
+      <link rel="stylesheet" href="${styles}" />
       <title>${title}</title>
     </head>
-    <body>
-      <header>
-        <h1>
+    <body class="root">
+      <header class="header">
+        <h1 class="title">
           <a href="/">EONS :: IO ()</a>
         </h1>
         <nav>
-          <ul>
+          <ul class="nav">
             <!-- <li><a href="/">projects</a></li> -->
             <!-- <li><a href="/">articles</a></li> -->
-            <li><a href="/about/">about</a></li>
+            <li class="link"><a href="/about/">about</a></li>
           </ul>
         </nav>
       </header>
-      <main>${content}</main>
-      <footer>
+      <main class="main">${content}</main>
+      <footer class="footer">
         <p>
           Content (C) Sondre Nilsen, licensed under
           <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>

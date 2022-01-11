@@ -12,7 +12,11 @@ export const run = async (): Promise<void> => {
 
   switch (cli.command) {
     case "build": {
-      await build(new Site(cli.production), new Asciidoc());
+      await build(new Site(cli.production), new Asciidoc())
+        .mapLeft((e) => {
+          throw e;
+        })
+        .run();
       return;
     }
     case "serve":

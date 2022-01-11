@@ -23,8 +23,10 @@
   "homepage": "https://www.eons.io",
   "dependencies": {
     "asciidoctor": "2.2.5",
+    "csso": "5.0.2",
     "prettier": "2.5.1",
-    "sass": "1.46.0"
+    "sass": "1.46.0",
+    "source-map": "0.7.3"
   },
   "devDependencies": {
     "@sondr3/eslint-config": "0.7.1",
