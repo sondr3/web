@@ -22,6 +22,7 @@
   },
   "homepage": "https://www.eons.io",
   "dependencies": {
+    "@minify-html/js": "0.8.0",
     "@parcel/css": "1.0.0",
     "asciidoctor": "2.2.5",
     "sass": "1.47.0",
