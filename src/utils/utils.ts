@@ -5,7 +5,7 @@ import crypto from "node:crypto";
  * @param e - Something that should be an error
  */
 export const logErr = (e: unknown): Error => {
-  console.error(e);
+  if (process.env.NODE_ENV !== "test") console.error(e);
   return e as Error;
 };
 

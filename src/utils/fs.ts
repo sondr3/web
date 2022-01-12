@@ -73,8 +73,8 @@ export const copyFile = async (
   try {
     await fs.copyFile(source, destination, overwrite ? 0 : 1);
     return;
-  } catch (e) {
-    return logErr(e);
+  } catch {
+    return logErr(new Error("Could not copy file"));
   }
 };
 

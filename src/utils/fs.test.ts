@@ -86,10 +86,6 @@ test("copyFiles throws on illegal directory", async () => {
   assert((await copyFiles("/asdasd", "./")) instanceof Error);
 });
 
-test("copyFiles cannot copy wrong files", async () => {
-  assert((await copyFiles(path.resolve(process.cwd()), "/")) instanceof Error);
-});
-
 test("copyFile copies and overwrites files by default", async () => {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "test-copy"));
 
