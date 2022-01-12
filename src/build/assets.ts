@@ -1,4 +1,4 @@
-import { minify } from "csso";
+import parcel from "@parcel/css";
 import path from "node:path";
 import sass, { CompileResult } from "sass";
 import { SourceMapConsumer, SourceMapGenerator } from "source-map-js";
@@ -55,12 +55,14 @@ const buildSourceMap = ({ sourceMap }: CompileResult): string => {
  * @returns The optimized CSS and its source map
  */
 const optimize = (source: CompileResult, filename: string): { css: string; sourceMap: string } => {
-  const { css, map } = minify(source.css, {
+  const { code, map } = parcel.transform({
     filename,
+    code: Buffer.from(source.css),
+    minify: true,
     sourceMap: true,
   });
 
-  return { css, sourceMap: map?.toString() ?? "" };
+  return { css: code.toString(), sourceMap: map?.toString() ?? "" };
 };
 
 export const copyAssets = (site: Site): Promise<Error | void> => {
