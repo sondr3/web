@@ -5,7 +5,6 @@ import { SourceMapConsumer, SourceMapGenerator } from "source-map-js";
 
 import { copyFiles, writeFile } from "../utils/fs.js";
 import { cacheBust } from "../utils/utils.js";
-import { formatFile } from "./formatting.js";
 import { Site } from "./site.js";
 
 export const renderStyles = async (site: Site): Promise<Error | void> => {
@@ -20,7 +19,7 @@ export const renderStyles = async (site: Site): Promise<Error | void> => {
   } else {
     result = {
       name: `style.css`,
-      css: formatFile(style.css, "css", false),
+      css: style.css,
       sourceMap: buildSourceMap(style),
     };
   }

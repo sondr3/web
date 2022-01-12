@@ -24,7 +24,6 @@
   "dependencies": {
     "@parcel/css": "1.0.0",
     "asciidoctor": "2.2.5",
-    "prettier": "2.5.1",
     "sass": "1.47.0",
     "source-map-js": "1.0.1"
   },
