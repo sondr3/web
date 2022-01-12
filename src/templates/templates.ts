@@ -1,4 +1,7 @@
-import { createConfiguration, minify } from "@minify-html/js";
+import * as minify from "@minify-html/js";
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const mf = require("@minify-html/js") as typeof minify;
 
 import { Content } from "../build/content.js";
 import { Site } from "../build/site.js";
@@ -7,7 +10,7 @@ import { page } from "./page.js";
 
 const minifyHtml = (html: string, production: boolean): Buffer => {
   if (!production) return Buffer.from(html);
-  return minify(html, createConfiguration({ minify_js: false, minify_css: false }));
+  return mf.minify(html, mf.createConfiguration({ minify_js: false, minify_css: false }));
 };
 
 /**
