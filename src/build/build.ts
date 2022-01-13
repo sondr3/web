@@ -1,5 +1,6 @@
 import path, { parse } from "node:path";
 
+import { fourOhFour } from "../templates/404.js";
 import { landing } from "../templates/landing.js";
 import { renderLayout, renderSpecial } from "../templates/templates.js";
 import { createDirectory, writeFile } from "../utils/fs.js";
@@ -46,7 +47,27 @@ export const renderSpecialPages = async (site: Site): Promise<Error | void> => {
     }),
     landing,
   );
-  const res = await writeFile(path.join(site.config.out, "index.html"), renderSpecial(site, index));
-  if (res instanceof Error) return res;
+  const indexRes = await writeFile(
+    path.join(site.config.out, "index.html"),
+    renderSpecial(site, index),
+  );
+  if (indexRes instanceof Error) return indexRes;
   site.addPage(index);
+
+  const missed = new Content(
+    { layout: "page" },
+    decodeFrontmatter({
+      doctitle: "Not found",
+      description: "You found... nothing?",
+      slug: "404",
+    }),
+    fourOhFour,
+  );
+  await createDirectory(path.join(site.config.out, "404"));
+  const missedRes = await writeFile(
+    path.join(site.config.out, "404/index.html"),
+    renderSpecial(site, missed),
+  );
+  if (missedRes instanceof Error) return missedRes;
+  site.addPage(missed);
 };
