@@ -60,9 +60,9 @@ export class Content {
   type = (): string => {
     switch (this.metadata.layout) {
       case "post":
-        return `<meta property='og:type' content='article' />`;
+        return `article`;
       case "page":
-        return `<meta property='og:type' content='website' />`;
+        return `website`;
     }
   };
 
