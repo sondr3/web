@@ -9,6 +9,7 @@ import { copyAssets, renderStyles } from "./assets.js";
 import { compress } from "./compress.js";
 import { buildPages, Content, decodeFrontmatter } from "./content.js";
 import { Site } from "./site.js";
+import { sitemap } from "./sitemap.js";
 
 export const build = async (site: Site, asciidoc: Asciidoc): Promise<Error | void> => {
   await createDirectory(site.config.out);
@@ -16,6 +17,7 @@ export const build = async (site: Site, asciidoc: Asciidoc): Promise<Error | voi
   await renderStyles(site);
   await renderPages(site, asciidoc);
   await renderSpecialPages(site);
+  await sitemap(site);
   await compress(site.config);
 };
 
