@@ -28,6 +28,6 @@ export class CLI {
   }
 
   private static parseProd(options: readonly string[]): boolean {
-    return options.some((value) => value === "-p" || value === "--prod");
+    return options.some((value) => value === "-p" || value === "--production");
   }
 }
