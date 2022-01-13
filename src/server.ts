@@ -13,9 +13,11 @@ export class Server {
   private readonly wss: WebSocketServer;
   private readonly server: http.Server;
   private readonly site: Site;
+  private readonly asciidoc: Asciidoc;
 
-  constructor(site: Site) {
+  constructor(site: Site, asciidoc: Asciidoc) {
     this.site = site;
+    this.asciidoc = asciidoc;
     this.wss = new WebSocketServer({ port: 3001 });
     this.server = http.createServer((req, res) => void handler(req, res, { public: "build" }));
   }
@@ -31,12 +33,17 @@ export class Server {
   }
 
   close() {
+    this.broadcastShutdown();
     this.server.close();
     this.wss.close();
   }
 
-  broadcastShutdown(): void {
+  private broadcastShutdown(): void {
     this.wss.clients.forEach((c) => c.send("shutdown"));
+  }
+
+  private broadcastReload(): void {
+    this.wss.clients.forEach((c) => c.send("reload"));
   }
 
   private async watch(): Promise<void> {
@@ -48,6 +55,7 @@ export class Server {
           if (dir.ext === ".scss") {
             console.log(`Rebuilding styles, ${dir.name}${dir.ext} changed`);
             await renderStyles(this.site);
+            this.broadcastReload();
           }
         }
       });
@@ -58,7 +66,8 @@ export class Server {
           const dir = parse(path);
           if (dir.ext === ".adoc") {
             console.log(`Rebuilding page ${dir.name}${dir.ext} changed`);
-            await renderPages(this.site, new Asciidoc());
+            await renderPages(this.site, this.asciidoc);
+            this.broadcastReload();
           }
         }
       });
