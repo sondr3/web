@@ -3,6 +3,7 @@ import { build } from "./build/build.js";
 import { Site } from "./build/site.js";
 import { CLI } from "./cli.js";
 import { Server } from "./server.js";
+import { rmdir } from "./utils/fs.js";
 
 /**
  * Stop the running server "nicely"
@@ -39,7 +40,9 @@ export const run = async (): Promise<void> => {
       return;
     }
     case "clean": {
-      return console.log("clean");
+      console.info(`Cleaning out ${site.config.out}`);
+      await rmdir(site.config.out, true, true);
+      return;
     }
   }
 };
