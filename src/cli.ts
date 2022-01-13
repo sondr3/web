@@ -1,4 +1,4 @@
-type Command = "build" | "serve" | "clean";
+type Command = "build" | "dev" | "clean";
 
 /**
  * A simple CLI helper for parsing command line arguments and commands.
@@ -20,7 +20,7 @@ export class CLI {
   }
 
   private static stringToCommand(input: string): Command | undefined {
-    if (input === "build" || input === "serve" || input === "clean") {
+    if (input === "build" || input === "dev" || input === "clean") {
       return input;
     }
 

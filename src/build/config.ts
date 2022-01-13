@@ -5,6 +5,7 @@ export interface Config {
   production: boolean;
   url: string;
   content: {
+    root: string;
     posts: string;
     pages: string;
   };
@@ -24,6 +25,7 @@ export const config = (prod = false): Config => ({
   production: prod,
   url: prod ? "https://www.eons.io" : "http://localhost",
   content: {
+    root: path.join(root, "content"),
     posts: path.join(root, "content", "posts"),
     pages: path.join(root, "content", "pages"),
   },
