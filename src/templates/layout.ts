@@ -1,6 +1,8 @@
+import { Content } from "../build/content.js";
+import { Site } from "../build/site.js";
 import { html } from "./templating.js";
 
-export const layout = (title: string, content: string, styles: string): string => html`
+export const layout = (content: Content, site: Site): string => html`
   <!DOCTYPE html>
   <html lang="en">
     <head>
@@ -15,8 +17,8 @@ export const layout = (title: string, content: string, styles: string): string =
       <link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180" />
 
       <link rel="author" href="/humans.txt" />
-      <link rel="stylesheet" href="/${styles}" />
-      <title>${title}</title>
+      <link rel="stylesheet" href="/${site.style}" />
+      <title>${content.title()}</title>
     </head>
     <body class="root">
       <header class="header">
@@ -31,7 +33,7 @@ export const layout = (title: string, content: string, styles: string): string =
           </ul>
         </nav>
       </header>
-      <main class="main">${content}</main>
+      <main class="main">${content.content()}</main>
       <footer class="footer">
         <p>
           Content (C) Sondre Nilsen, licensed under
@@ -39,5 +41,6 @@ export const layout = (title: string, content: string, styles: string): string =
         </p>
       </footer>
     </body>
+    ${!site.config.production && "<script type='text/javascript' src='/js/livereload.js'></script>"}
   </html>
 `;

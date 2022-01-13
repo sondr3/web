@@ -20,7 +20,7 @@ const minifyHtml = (html: string, production: boolean): Buffer => {
  * @param content - Content to print
  */
 export const renderSpecial = (site: Site, content: Content): Buffer => {
-  return minifyHtml(layout(content.title(), content.content(), site.style), site.config.production);
+  return minifyHtml(layout(content, site), site.config.production);
 };
 
 /**
@@ -33,10 +33,17 @@ export const renderLayout = (site: Site, content: Content): Buffer => {
   let res: string;
   switch (content.metadata.layout) {
     case "page":
-      res = layout(content.title(), page(content.frontmatter.title, content.content()), site.style);
+      res = layout(
+        new Content(
+          content.metadata,
+          content.frontmatter,
+          page(content.title(), content.content()),
+        ),
+        site,
+      );
       break;
     case "post":
-      res = layout(content.title(), content.content(), site.style);
+      res = layout(content, site);
       break;
   }
 
