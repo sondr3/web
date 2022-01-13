@@ -1,5 +1,5 @@
-import * as minify from "@minify-html/js";
-import { createRequire } from "module";
+import minify from "@minify-html/js";
+import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 const mf = require("@minify-html/js") as typeof minify;
 
