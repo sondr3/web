@@ -27,7 +27,7 @@ export const renderStyles = async (site: Site): Promise<Error | void> => {
   site.setStyle(result.name);
   result.css += `/*# sourceMappingURL=/${result.name}.map */`;
 
-  const res = await Promise.all([
+  const res = await Promise.allSettled([
     writeFile(path.join(site.config.out, result.name), result.css),
     writeFile(path.join(site.config.out, `${result.name}.map`), result.sourceMap),
   ]);
@@ -64,6 +64,6 @@ const optimize = (source: CompileResult, filename: string): { css: string; sourc
   return { css: code.toString(), sourceMap: map?.toString() ?? "" };
 };
 
-export const copyAssets = (site: Site): Promise<Error | void> => {
-  return copyFiles(site.config.assets.root, site.config.out);
+export const copyAssets = async (site: Site): Promise<Error | void> => {
+  return await copyFiles(site.config.assets.root, site.config.out);
 };
