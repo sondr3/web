@@ -18,7 +18,25 @@ export const layout = (content: Content, site: Site): string => html`
 
       <link rel="author" href="/humans.txt" />
       <link rel="stylesheet" href="/${site.style}" />
+      <link rel="canonical" href="${site.url()}${content.url()}" />
+
+      <meta name="author" content="Sondre Nilsen" />
+      <meta name="description" content="${content.frontmatter.description}" />
       <title>${content.title()}</title>
+
+      <meta property="og:locale" content="en" />
+      <meta property="og:site_name" content="Eons :: IO ()" />
+      <meta property="og:description" content="${content.frontmatter.description}" />
+      <meta property="og:url" content="${site.url()}${content.url()}" />
+      <meta property="og:type" content="${content.type()}" />
+      <meta property="og:image" content="" />
+      ${content.isArticle() && [
+        `<meta property="article:published_time" content="${content.createdDate()}" />`,
+        `<meta property="article:modified_time" content="${content.modifiedDate()}" />`,
+      ]}
+
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="sondr3" />
     </head>
     <body class="root">
       <header class="header">

@@ -5,7 +5,7 @@ import { renderLayout, renderSpecial } from "../templates/templates.js";
 import { createDirectory, writeFile } from "../utils/fs.js";
 import { Asciidoc } from "./asciidoc.js";
 import { copyAssets, renderStyles } from "./assets.js";
-import { buildPages, Content } from "./content.js";
+import { buildPages, Content, decodeFrontmatter } from "./content.js";
 import { Site } from "./site.js";
 
 export const build = async (site: Site, asciidoc: Asciidoc): Promise<Error | void> => {
@@ -39,10 +39,11 @@ export const renderPages = async (site: Site, asciidoc: Asciidoc): Promise<Error
 export const renderSpecialPages = async (site: Site): Promise<Error | void> => {
   const index = new Content(
     { layout: "page" },
-    {
-      title: "Home => Eons :: IO ()",
+    decodeFrontmatter({
+      doctitle: "Home => Eons :: IO ()",
       description: "The online home for Sondre Nilsen",
-    },
+      slug: "",
+    }),
     landing,
   );
   const res = await writeFile(path.join(site.config.out, "index.html"), renderSpecial(site, index));
