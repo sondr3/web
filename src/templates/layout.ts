@@ -25,10 +25,11 @@ export const layout = (content: Content, site: Site): string => html`
       <title>${content.title()}</title>
 
       <meta property="og:locale" content="en" />
+      <meta property="og:type" content="${content.type()}" />
       <meta property="og:site_name" content="Eons :: IO ()" />
+      <meta property="og:title" content="${content.title()}" />
       <meta property="og:description" content="${content.frontmatter.description}" />
       <meta property="og:url" content="${site.url()}${content.url()}" />
-      <meta property="og:type" content="${content.type()}" />
       <meta property="og:image" content="" />
       ${content.isArticle() && [
         `<meta property="article:published_time" content="${content.createdDate()}" />`,
