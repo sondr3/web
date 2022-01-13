@@ -40,7 +40,7 @@ export const renderSpecialPages = async (site: Site): Promise<Error | void> => {
   const index = new Content(
     { layout: "page" },
     decodeFrontmatter({
-      doctitle: "Home => Eons :: IO ()",
+      doctitle: "Home",
       description: "The online home for Sondre Nilsen",
       slug: "",
     }),
