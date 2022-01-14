@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsc --watch --incremental",
     "build": "tsc",
-    "start": "./site.mjs",
+    "start": "nodemon --watch dist ./site.mjs",
     "test": "mt dist",
     "format": "prettier --check src assets",
     "format:fix": "prettier --write src assets",
@@ -51,6 +51,7 @@
     "eslint-plugin-prettier": "4.0.0",
     "eslint-plugin-simple-import-sort": "7.0.0",
     "eslint-plugin-tsdoc": "0.2.14",
+    "nodemon": "2.0.15",
     "postcss": "8.4.5",
     "prettier": "2.5.1",
     "prettier-eslint": "13.0.0",
