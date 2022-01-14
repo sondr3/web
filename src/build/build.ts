@@ -7,7 +7,7 @@ import { createDirectory, writeFile } from "../utils/fs.js";
 import { Asciidoc } from "./asciidoc.js";
 import { copyAssets, renderStyles } from "./assets.js";
 import { compress } from "./compress.js";
-import { buildPages, Content, decodeFrontmatter } from "./content.js";
+import { buildPages, buildPosts, Content, decodeFrontmatter } from "./content.js";
 import { Site } from "./site.js";
 import { sitemap } from "./sitemap.js";
 
@@ -23,8 +23,9 @@ export const build = async (site: Site, asciidoc: Asciidoc): Promise<Error | voi
 
 export const renderPages = async (site: Site, asciidoc: Asciidoc): Promise<Error | void> => {
   await buildPages(site, asciidoc);
+  await buildPosts(site, asciidoc);
   await Promise.allSettled(
-    site.pages.map(async (page: Content) => {
+    site.content().map(async (page: Content) => {
       const dir = parse(page.path());
 
       const res = await Promise.allSettled([

@@ -12,6 +12,7 @@ export type Layout = "page" | "post";
 export interface Frontmatter {
   title: string;
   description: string;
+  draft: boolean;
   slug: string | null;
   created: Date | null;
   modified: Date | null;
@@ -47,7 +48,7 @@ export class Content {
       .flatMap((it) => (it ? [slugify(it)] : []))
       .join("/");
 
-    return `/${slugify(base)}/`;
+    return `/${base}/`;
   };
 
   path = (): string => {
@@ -94,6 +95,7 @@ export const decodeFrontmatter = (document: Record<string, string>): Frontmatter
   return {
     title: attributes.get("doctitle") ?? "",
     description: attributes.get("description") ?? "",
+    draft: Boolean(attributes.get("draft")) ?? false,
     slug: attributes.get("slug") ?? null,
     created: getDate(attributes.get("created")),
     modified: getDate(attributes.get("modified")),
@@ -120,5 +122,19 @@ export const buildPages = async (site: Site, asciidoc: Asciidoc): Promise<Error 
     if (document instanceof Error) return document;
     const content = convertToContent(document, asciidoc);
     site.addPage(content);
+  }
+};
+
+export const buildPosts = async (site: Site, asciidoc: Asciidoc): Promise<Error | void> => {
+  const pages = path.resolve(config().content.posts);
+  const filter = (name: string) => extname(name) === ".adoc";
+
+  for await (const page of walkDir(pages, filter)) {
+    const document = await readFile(page);
+    if (document instanceof Error) return document;
+    const content = convertToContent(document, asciidoc);
+    if (content.metadata.layout === null) content.metadata.layout = "post";
+    if (site.config.production && content.frontmatter.draft) continue;
+    site.addPost(content);
   }
 };
