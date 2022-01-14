@@ -37,13 +37,20 @@ export const renderLayout = (site: Site, content: Content): Buffer => {
         new Content(
           content.metadata,
           content.frontmatter,
-          page(content.title(), content.content()),
+          page(content.frontmatter.title, content.content()),
         ),
         site,
       );
       break;
     case "post":
-      res = layout(content, site);
+      res = layout(
+        new Content(
+          content.metadata,
+          content.frontmatter,
+          page(content.frontmatter.title, content.content()),
+        ),
+        site,
+      );
       break;
   }
 
