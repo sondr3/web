@@ -63,7 +63,7 @@ test("writeFile cannot write to /", async () => {
 
 test("hashFile can add a hash to a file", async () => {
   const actual = await hashFile(path.resolve(process.cwd(), "tsconfig.json"), true);
-  assert.equal(actual, "a4d9a208");
+  assert.equal(actual, "a0faaf01");
 });
 
 test("hashFile fails if the file does not exist", async () => {

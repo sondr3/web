@@ -71,6 +71,9 @@
     "extends": [
       "@sondr3/eslint-config/typescript"
     ],
+    "ignorePatterns": [
+      "templates/*"
+    ],
     "parserOptions": {
       "project": "tsconfig.json"
     }
