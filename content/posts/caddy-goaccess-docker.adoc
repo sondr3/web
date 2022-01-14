@@ -1,0 +1,7 @@
+= Using Caddy, Goaccess, Docker and static pages
+:description: How I've configured my web server with Caddy, Goaccess, Docker and more.
+:created: 2022-01-14
+:draft: true
+:tags: caddy,goaccess,docker
+
+This is some content...
