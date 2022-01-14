@@ -3,6 +3,7 @@ import { Content } from "./content.js";
 
 export class Site {
   pages: Array<Content> = [];
+  posts: Array<Content> = [];
   config: Config;
   style!: string;
 
@@ -12,6 +13,14 @@ export class Site {
 
   addPage(content: Content) {
     this.pages.push(content);
+  }
+
+  addPost(content: Content) {
+    this.posts.push(content);
+  }
+
+  content(): Array<Content> {
+    return this.pages.concat(this.posts);
   }
 
   setStyle(name: string) {

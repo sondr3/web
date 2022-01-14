@@ -30,7 +30,7 @@ const buildSitemap = (site: Site): string => {
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
       xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     >
-      ${[...site.pages].map((element) => renderPage(site, element))}
+      ${site.content().map((element) => renderPage(site, element))}
     </urlset>`;
 };
 
