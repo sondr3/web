@@ -24,7 +24,7 @@ const root = path.resolve(process.cwd());
 export const config = (prod = false): Config => ({
   out: path.join(root, "build"),
   production: prod,
-  url: prod ? "https://www.eons.io" : "http://localhost",
+  url: prod ? "https://www.eons.io" : "http://localhost:3000",
   templates: path.join(root, "templates"),
   content: {
     root: path.join(root, "content"),

@@ -2,6 +2,7 @@ import { createReadStream, createWriteStream } from "node:fs";
 import { promises as stream } from "node:stream";
 import { createBrotliCompress, createGzip } from "node:zlib";
 
+import { Context } from "../context.js";
 import { walkDir } from "../utils/fs.js";
 import { Config } from "./config.js";
 
@@ -9,7 +10,7 @@ const filterFiles = (file: string): boolean => {
   return [".gz", ".br", ".png", ".jpg"].every((ext) => !file.endsWith(ext));
 };
 
-export const compress = async (config: Config): Promise<void> => {
+export const compress = async ({ config }: Context): Promise<void> => {
   if (config.production) {
     await Promise.allSettled([gzip(config), brotli(config)]);
   }

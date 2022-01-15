@@ -3,19 +3,19 @@ import path from "node:path";
 import sass, { CompileResult } from "sass";
 import { SourceMapConsumer, SourceMapGenerator } from "source-map-js";
 
+import { Context } from "../context.js";
 import { copyFiles, writeFile } from "../utils/fs.js";
 import { cacheBust } from "../utils/utils.js";
-import { Site } from "./site.js";
 
-export const renderStyles = async (site: Site): Promise<Error | void> => {
-  const style = await sass.compileAsync(path.join(site.config.assets.styles, "style.scss"), {
+export const renderStyles = async ({ site, config }: Context): Promise<Error | void> => {
+  const style = await sass.compileAsync(path.join(config.assets.styles, "style.scss"), {
     sourceMap: true,
   });
   let result: { name: string; css: string; sourceMap: string };
-  if (site.config.production) {
-    const hash = cacheBust(style.css, site.config.production);
+  if (config.production) {
+    const hash = cacheBust(style.css, config.production);
     const name = `style.${hash}.css`;
-    result = { ...optimize(style, path.join(site.config.out, name)), name };
+    result = { ...optimize(style, path.join(config.out, name)), name };
   } else {
     result = {
       name: `style.css`,
@@ -28,8 +28,8 @@ export const renderStyles = async (site: Site): Promise<Error | void> => {
   result.css += `/*# sourceMappingURL=/${result.name}.map */`;
 
   const res = await Promise.allSettled([
-    writeFile(path.join(site.config.out, result.name), result.css),
-    writeFile(path.join(site.config.out, `${result.name}.map`), result.sourceMap),
+    writeFile(path.join(config.out, result.name), result.css),
+    writeFile(path.join(config.out, `${result.name}.map`), result.sourceMap),
   ]);
 
   if (res.some((r) => r instanceof Error)) {
@@ -64,6 +64,6 @@ const optimize = (source: CompileResult, filename: string): { css: string; sourc
   return { css: code.toString(), sourceMap: map?.toString() ?? "" };
 };
 
-export const copyAssets = async (site: Site): Promise<Error | void> => {
-  return await copyFiles(site.config.assets.root, site.config.out);
+export const copyAssets = async ({ config }: Context): Promise<Error | void> => {
+  return await copyFiles(config.assets.root, config.out);
 };

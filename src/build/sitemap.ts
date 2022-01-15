@@ -1,7 +1,9 @@
 import path from "node:path";
 
+import { Context } from "../context.js";
 import { html } from "../templates/html.js";
 import { writeFile } from "../utils/fs.js";
+import { Config } from "./config.js";
 import { Content, Frontmatter } from "./content.js";
 import { Site } from "./site.js";
 
@@ -10,31 +12,31 @@ const modifiedAt = (fm: Frontmatter): string => {
   return fm.created?.toISOString().split("T")[0] ?? new Date().toISOString().split("T")[0];
 };
 
-const renderPage = (site: Site, content: Content): string => {
-  const lastmod = modifiedAt(content.frontmatter);
+const renderPage = (config: Config, content: Content): string => {
+  const lastMod = modifiedAt(content.frontmatter);
 
   return html`
     <url>
-      <loc>${site.url()}${content.url()}</loc>
-      <lastmod>${lastmod}</lastmod>
+      <loc>${config.url}${content.url()}</loc>
+      <lastmod>${lastMod}</lastmod>
       <changefreq>monthly</changefreq>
       <priority>0.7</priority>
     </url>
   `;
 };
 
-const buildSitemap = (site: Site): string => {
+const buildSitemap = (site: Site, config: Config): string => {
   return html`<?xml version="1.0" encoding="UTF-8"?>
     <urlset
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
       xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     >
-      ${site.content().map((element) => renderPage(site, element))}
+      ${site.content().map((element) => renderPage(config, element))}
     </urlset>`;
 };
 
-export const sitemap = async (site: Site): Promise<Error | void> => {
-  const sitemap = buildSitemap(site);
-  return await writeFile(path.resolve(site.config.out, "sitemap.xml"), sitemap);
+export const sitemap = async ({ site, config }: Context): Promise<Error | void> => {
+  const sitemap = buildSitemap(site, config);
+  return await writeFile(path.resolve(config.out, "sitemap.xml"), sitemap);
 };

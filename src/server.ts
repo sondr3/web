@@ -4,20 +4,17 @@ import { parse } from "node:path";
 import handler from "serve-handler";
 import { WebSocketServer } from "ws";
 
-import { Asciidoc } from "./build/asciidoc.js";
 import { renderStyles } from "./build/assets.js";
 import { renderPages } from "./build/build.js";
-import { Site } from "./build/site.js";
+import { Context } from "./context.js";
 
 export class Server {
   private readonly wss: WebSocketServer;
   private readonly server: http.Server;
-  private readonly site: Site;
-  private readonly asciidoc: Asciidoc;
+  private readonly context: Context;
 
-  constructor(site: Site, asciidoc: Asciidoc) {
-    this.site = site;
-    this.asciidoc = asciidoc;
+  constructor(ctx: Context) {
+    this.context = ctx;
     this.wss = new WebSocketServer({ port: 3001 });
     this.server = http.createServer((req, res) => void handler(req, res, { public: "build" }));
   }
@@ -48,25 +45,25 @@ export class Server {
 
   private async watch(): Promise<void> {
     try {
-      await watcher.subscribe(this.site.config.assets.root, async (err, events) => {
+      await watcher.subscribe(this.context.config.assets.root, async (err, events) => {
         if (err !== null) throw err;
         for (const { path } of events) {
           const dir = parse(path);
           if (dir.ext === ".scss") {
             console.log(`Rebuilding styles, ${dir.name}${dir.ext} changed`);
-            await renderStyles(this.site);
+            await renderStyles(this.context);
             this.broadcastReload();
           }
         }
       });
 
-      await watcher.subscribe(this.site.config.content.root, async (err, events) => {
+      await watcher.subscribe(this.context.config.content.root, async (err, events) => {
         if (err !== null) throw err;
         for (const { path } of events) {
           const dir = parse(path);
           if (dir.ext === ".adoc") {
             console.log(`Rebuilding page ${dir.name}${dir.ext} changed`);
-            await renderPages(this.site, this.asciidoc);
+            await renderPages(this.context);
             this.broadcastReload();
           }
         }

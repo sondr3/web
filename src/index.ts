@@ -1,7 +1,6 @@
-import { Asciidoc } from "./build/asciidoc.js";
 import { build } from "./build/build.js";
-import { Site } from "./build/site.js";
 import { CLI } from "./cli.js";
+import { context } from "./context.js";
 import { Server } from "./server.js";
 import { rmdir } from "./utils/fs.js";
 
@@ -20,28 +19,27 @@ const shutdown = (server: Server) => {
  */
 export const run = async (): Promise<void> => {
   const cli = new CLI(process.argv);
-  const site = new Site(cli.production);
-  const asciidoc = new Asciidoc();
+  const ctx = await context(cli.production);
 
   switch (cli.command) {
     case "build": {
       console.info(`Building with ${cli.production ? "optimizations" : "no optimizations"}`);
-      await build(site, asciidoc);
+      await build(ctx);
       return;
     }
     case "dev": {
       console.info(`Building with ${cli.production ? "optimizations" : "no optimizations"}`);
-      await build(site, asciidoc);
+      await build(ctx);
       console.info(`Starting development server...`);
-      const server = new Server(site, asciidoc);
+      const server = new Server(ctx);
       server.start();
 
       process.on("SIGINT", () => shutdown(server));
       return;
     }
     case "clean": {
-      console.info(`Cleaning out ${site.config.out}`);
-      await rmdir(site.config.out, true, true);
+      console.info(`Cleaning out ${ctx.config.out}`);
+      await rmdir(ctx.config.out, true, true);
       return;
     }
   }

@@ -1,8 +1,9 @@
+import { Config } from "../build/config.js";
 import { Content } from "../build/content.js";
 import { Site } from "../build/site.js";
 import { html } from "./html.js";
 
-export const base = (content: Content, site: Site): string => html`
+export const base = (content: Content, site: Site, config: Config): string => html`
   <!DOCTYPE html>
   <html lang="en">
     <head>
@@ -18,7 +19,7 @@ export const base = (content: Content, site: Site): string => html`
 
       <link rel="author" href="/humans.txt" />
       <link rel="stylesheet" href="/${site.style}" />
-      <link rel="canonical" href="${site.url()}${content.url()}" />
+      <link rel="canonical" href="${config.url}${content.url()}" />
 
       <meta name="author" content="Sondre Nilsen" />
       <meta name="description" content="${content.frontmatter.description}" />
@@ -29,7 +30,7 @@ export const base = (content: Content, site: Site): string => html`
       <meta property="og:site_name" content="Eons :: IO ()" />
       <meta property="og:title" content="${content.title()}" />
       <meta property="og:description" content="${content.frontmatter.description}" />
-      <meta property="og:url" content="${site.url()}${content.url()}" />
+      <meta property="og:url" content="${config.url}${content.url()}" />
       <meta property="og:image" content="" />
       ${content.isArticle() && [
         `<meta property="article:published_time" content="${content.createdDate()}" />`,
@@ -60,6 +61,6 @@ export const base = (content: Content, site: Site): string => html`
         </p>
       </footer>
     </body>
-    ${!site.config.production && "<script type='text/javascript' src='/js/livereload.js'></script>"}
+    ${!config.production && "<script type='text/javascript' src='/js/livereload.js'></script>"}
   </html>
 `;

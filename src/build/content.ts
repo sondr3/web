@@ -1,11 +1,11 @@
 import { Asciidoctor } from "asciidoctor/types";
 import path, { extname } from "node:path";
 
+import { Context } from "../context.js";
 import { readFile, walkDir } from "../utils/fs.js";
 import { slugify } from "../utils/utils.js";
 import { Asciidoc } from "./asciidoc.js";
 import { config } from "./config.js";
-import { Site } from "./site.js";
 
 export type Layout = "page" | "post";
 
@@ -117,7 +117,7 @@ const convertToContent = (document: string, asciidoc: Asciidoc): Content => {
   return new Content(meta, frontmatter, doc);
 };
 
-export const buildPages = async (site: Site, asciidoc: Asciidoc): Promise<Error | void> => {
+export const buildPages = async ({ site, asciidoc }: Context): Promise<Error | void> => {
   const pages = path.resolve(config().content.pages);
   const filter = (name: string) => extname(name) === ".adoc";
 
@@ -129,8 +129,8 @@ export const buildPages = async (site: Site, asciidoc: Asciidoc): Promise<Error 
   }
 };
 
-export const buildPosts = async (site: Site, asciidoc: Asciidoc): Promise<Error | void> => {
-  const pages = path.resolve(config().content.posts);
+export const buildPosts = async ({ site, asciidoc, config }: Context): Promise<Error | void> => {
+  const pages = path.resolve(config.content.posts);
   const filter = (name: string) => extname(name) === ".adoc";
 
   for await (const page of walkDir(pages, filter)) {
@@ -138,7 +138,7 @@ export const buildPosts = async (site: Site, asciidoc: Asciidoc): Promise<Error 
     if (document instanceof Error) return document;
     const content = convertToContent(document, asciidoc);
     if (content.metadata.layout === null) content.metadata.layout = "post";
-    if (site.config.production && content.frontmatter.draft) continue;
+    if (config.production && content.frontmatter.draft) continue;
     site.addPost(content);
   }
 };
