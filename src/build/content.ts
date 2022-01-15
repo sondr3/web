@@ -78,6 +78,10 @@ export class Content {
     if (this.frontmatter.created === null) return "";
     return this.frontmatter.created.toISOString().split("T")[0];
   };
+
+  static fromLayout = (content: Content, layout: string): Content => {
+    return new Content(content.metadata, content.frontmatter, layout);
+  };
 }
 
 const getDate = (val: string | undefined): Date | null => {
