@@ -3,7 +3,9 @@ import { promises as fs } from "node:fs";
 import path, { extname } from "node:path";
 
 import { Context } from "../context.js";
+import { Duration } from "../utils/duration.js";
 import { walkDir } from "../utils/fs.js";
+import * as logger from "../utils/logger.js";
 import { slugify } from "../utils/utils.js";
 import { Asciidoc } from "./asciidoc.js";
 import { config } from "./config.js";
@@ -118,6 +120,7 @@ const convertToContent = (document: string | Buffer, asciidoc: Asciidoc): Conten
 };
 
 export const buildPages = async ({ site, asciidoc }: Context): Promise<void> => {
+  const pageDuration = new Duration();
   const pages = path.resolve(config().content.pages);
   const filter = (name: string) => extname(name) === ".adoc";
 
@@ -126,9 +129,13 @@ export const buildPages = async ({ site, asciidoc }: Context): Promise<void> => 
     const content = convertToContent(document, asciidoc);
     site.addPage(content);
   }
+
+  pageDuration.end();
+  logger.info("Finished rendering pages in", pageDuration.result());
 };
 
 export const buildPosts = async ({ site, asciidoc, config }: Context): Promise<void> => {
+  const postDuration = new Duration();
   const pages = path.resolve(config.content.posts);
   const filter = (name: string) => extname(name) === ".adoc";
 
@@ -139,4 +146,7 @@ export const buildPosts = async ({ site, asciidoc, config }: Context): Promise<v
     if (config.production && content.frontmatter.draft) continue;
     site.addPost(content);
   }
+
+  postDuration.end();
+  logger.info("Finished rendering posts in", postDuration.result());
 };

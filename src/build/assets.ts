@@ -5,10 +5,13 @@ import sass, { CompileResult } from "sass";
 import { SourceMapConsumer, SourceMapGenerator } from "source-map-js";
 
 import { Context } from "../context.js";
+import { Duration } from "../utils/duration.js";
 import { copyFiles } from "../utils/fs.js";
+import * as logger from "../utils/logger.js";
 import { cacheBust } from "../utils/utils.js";
 
 export const renderStyles = async ({ site, config }: Context): Promise<void> => {
+  const styleDuration = new Duration();
   const style = await sass.compileAsync(path.join(config.assets.styles, "style.scss"), {
     sourceMap: true,
   });
@@ -32,6 +35,9 @@ export const renderStyles = async ({ site, config }: Context): Promise<void> => 
     fs.writeFile(path.join(config.out, result.name), result.css),
     fs.writeFile(path.join(config.out, `${result.name}.map`), result.sourceMap),
   ]);
+
+  styleDuration.end();
+  logger.info("Finished rendering styles in", styleDuration.result());
 };
 
 const buildSourceMap = ({ sourceMap }: CompileResult): string => {
