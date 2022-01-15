@@ -7,7 +7,7 @@ const mf = require("@minify-html/js") as typeof minify;
 import { Content } from "../build/content.js";
 import { Site } from "../build/site.js";
 import { walkDir } from "../utils/fs.js";
-import { layout } from "./layout.js";
+import { base } from "./base.js";
 import { page } from "./page.js";
 
 type Template = (content: Content) => string;
@@ -51,7 +51,7 @@ const minifyHtml = (html: string, production: boolean): Buffer => {
  * @param content - Content to print
  */
 export const renderSpecial = (site: Site, content: Content): Buffer => {
-  return minifyHtml(layout(content, site), site.config.production);
+  return minifyHtml(base(content, site), site.config.production);
 };
 
 /**
@@ -64,7 +64,7 @@ export const renderLayout = (site: Site, content: Content): Buffer => {
   let res: string;
   switch (content.metadata.layout) {
     case "page":
-      res = layout(
+      res = base(
         new Content(
           content.metadata,
           content.frontmatter,
@@ -74,7 +74,7 @@ export const renderLayout = (site: Site, content: Content): Buffer => {
       );
       break;
     case "post":
-      res = layout(
+      res = base(
         new Content(
           content.metadata,
           content.frontmatter,

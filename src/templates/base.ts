@@ -2,7 +2,7 @@ import { Content } from "../build/content.js";
 import { Site } from "../build/site.js";
 import { html } from "./html.js";
 
-export const layout = (content: Content, site: Site): string => html`
+export const base = (content: Content, site: Site): string => html`
   <!DOCTYPE html>
   <html lang="en">
     <head>
