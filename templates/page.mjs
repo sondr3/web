@@ -1,5 +1,5 @@
 import { slugify } from "../dist/utils/utils.js";
-import { html } from "../dist/templates/templating.js";
+import { html } from "../dist/templates/html.js";
 
 export default (content) => {
   return html`

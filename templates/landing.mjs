@@ -1,4 +1,4 @@
-import { html } from "../dist/templates/templating.js";
+import { html } from "../dist/templates/html.js";
 
 export default (_content) => html`<section>
     <h1 class="hello">
@@ -12,5 +12,4 @@ export default (_content) => html`<section>
   </section>
   <section>
     <h2 class="hello">Projects</h2>
-    <p>And some text</p>
   </section>`;

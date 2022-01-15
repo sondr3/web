@@ -1,4 +1,4 @@
-import { html } from "../dist/templates/templating.js";
+import { html } from "../dist/templates/html.js";
 
 export default (_content) => html`<section>
   <h1 class="hello">Not found :(</h1>
