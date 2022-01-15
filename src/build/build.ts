@@ -1,14 +1,14 @@
+import { promises as fs } from "node:fs";
 import path, { parse } from "node:path";
 
 import { Context } from "../context.js";
-import { createDirectory, writeFile } from "../utils/fs.js";
 import { copyAssets, renderStyles } from "./assets.js";
 import { compress } from "./compress.js";
 import { buildPages, buildPosts, Content, decodeFrontmatter } from "./content.js";
 import { sitemap } from "./sitemap.js";
 
-export const build = async (ctx: Context): Promise<Error | void> => {
-  await createDirectory(ctx.config.out);
+export const build = async (ctx: Context): Promise<void> => {
+  await fs.mkdir(ctx.config.out, { recursive: true });
   await copyAssets(ctx);
   await renderStyles(ctx);
   await renderPages(ctx);
@@ -17,7 +17,7 @@ export const build = async (ctx: Context): Promise<Error | void> => {
   await compress(ctx);
 };
 
-export const renderPages = async (ctx: Context): Promise<Error | void> => {
+export const renderPages = async (ctx: Context): Promise<void> => {
   const { site, config, template } = ctx;
   await buildPages(ctx);
   await buildPosts(ctx);
@@ -25,21 +25,15 @@ export const renderPages = async (ctx: Context): Promise<Error | void> => {
     site.content().map(async (page: Content) => {
       const dir = parse(page.path());
 
-      const res = await Promise.allSettled([
-        createDirectory(path.join(config.out, dir.dir)),
-        writeFile(path.join(config.out, page.path()), template.render(page, ctx)),
+      return Promise.allSettled([
+        fs.mkdir(path.join(config.out, dir.dir), { recursive: true }),
+        fs.writeFile(path.join(config.out, page.path()), template.render(page, ctx)),
       ]);
-
-      if (res.some((r) => r instanceof Error)) {
-        return new Error(`Failed to render ${page.path()}`);
-      }
-
-      return;
     }),
   );
 };
 
-export const renderSpecialPages = async (ctx: Context): Promise<Error | void> => {
+export const renderSpecialPages = async (ctx: Context): Promise<void> => {
   const { config, site, template } = ctx;
   const index = new Content(
     { layout: "landing" },
@@ -50,11 +44,7 @@ export const renderSpecialPages = async (ctx: Context): Promise<Error | void> =>
     }),
     "",
   );
-  const indexRes = await writeFile(
-    path.join(config.out, "index.html"),
-    template.render(index, ctx),
-  );
-  if (indexRes instanceof Error) return indexRes;
+  await fs.writeFile(path.join(config.out, "index.html"), template.render(index, ctx));
   site.addPage(index);
 
   const missed = new Content(
@@ -66,11 +56,7 @@ export const renderSpecialPages = async (ctx: Context): Promise<Error | void> =>
     }),
     "",
   );
-  await createDirectory(path.join(config.out, "404"));
-  const missedRes = await writeFile(
-    path.join(config.out, "404/index.html"),
-    template.render(missed, ctx),
-  );
-  if (missedRes instanceof Error) return missedRes;
+  await fs.mkdir(path.join(config.out, "404"), { recursive: true });
+  await fs.writeFile(path.join(config.out, "404/index.html"), template.render(missed, ctx));
   site.addPage(missed);
 };

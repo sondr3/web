@@ -1,13 +1,14 @@
 import parcel from "@parcel/css";
+import { promises as fs } from "node:fs";
 import path from "node:path";
 import sass, { CompileResult } from "sass";
 import { SourceMapConsumer, SourceMapGenerator } from "source-map-js";
 
 import { Context } from "../context.js";
-import { copyFiles, writeFile } from "../utils/fs.js";
+import { copyFiles } from "../utils/fs.js";
 import { cacheBust } from "../utils/utils.js";
 
-export const renderStyles = async ({ site, config }: Context): Promise<Error | void> => {
+export const renderStyles = async ({ site, config }: Context): Promise<void> => {
   const style = await sass.compileAsync(path.join(config.assets.styles, "style.scss"), {
     sourceMap: true,
   });
@@ -27,14 +28,10 @@ export const renderStyles = async ({ site, config }: Context): Promise<Error | v
   site.setStyle(result.name);
   result.css += `/*# sourceMappingURL=/${result.name}.map */`;
 
-  const res = await Promise.allSettled([
-    writeFile(path.join(config.out, result.name), result.css),
-    writeFile(path.join(config.out, `${result.name}.map`), result.sourceMap),
+  await Promise.allSettled([
+    fs.writeFile(path.join(config.out, result.name), result.css),
+    fs.writeFile(path.join(config.out, `${result.name}.map`), result.sourceMap),
   ]);
-
-  if (res.some((r) => r instanceof Error)) {
-    return new Error("Error when building styles");
-  }
 };
 
 const buildSourceMap = ({ sourceMap }: CompileResult): string => {
@@ -64,6 +61,6 @@ const optimize = (source: CompileResult, filename: string): { css: string; sourc
   return { css: code.toString(), sourceMap: map?.toString() ?? "" };
 };
 
-export const copyAssets = async ({ config }: Context): Promise<Error | void> => {
+export const copyAssets = async ({ config }: Context): Promise<void> => {
   return await copyFiles(config.assets.root, config.out);
 };

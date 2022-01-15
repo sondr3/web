@@ -19,7 +19,7 @@ export const compress = async ({ config }: Context): Promise<void> => {
 /**
  * Compress a directory and all its files with Gzip.
  *
- * @param config - Sitewide configuration
+ * @param config - Configuration
  */
 export const gzip = async (config: Config): Promise<void> => {
   for await (const file of walkDir(config.out, filterFiles)) {
@@ -33,7 +33,7 @@ export const gzip = async (config: Config): Promise<void> => {
 /**
  * Compress a directory and all its files with brotli.
  *
- * @param config - Sitewide configuration
+ * @param config - Configuration
  */
 export const brotli = async (config: Config): Promise<void> => {
   for await (const file of walkDir(config.out, filterFiles)) {

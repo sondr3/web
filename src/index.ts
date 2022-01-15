@@ -1,8 +1,9 @@
+import { promises as fs } from "node:fs";
+
 import { build } from "./build/build.js";
 import { CLI } from "./cli.js";
 import { context } from "./context.js";
 import { Server } from "./server.js";
-import { rmdir } from "./utils/fs.js";
 
 /**
  * Stop the running server "nicely"
@@ -39,7 +40,7 @@ export const run = async (): Promise<void> => {
     }
     case "clean": {
       console.info(`Cleaning out ${ctx.config.out}`);
-      await rmdir(ctx.config.out, true, true);
+      await fs.rm(ctx.config.out, { recursive: true, force: true });
       return;
     }
   }

@@ -1,8 +1,9 @@
 import { Asciidoctor } from "asciidoctor/types";
+import { promises as fs } from "node:fs";
 import path, { extname } from "node:path";
 
 import { Context } from "../context.js";
-import { readFile, walkDir } from "../utils/fs.js";
+import { walkDir } from "../utils/fs.js";
 import { slugify } from "../utils/utils.js";
 import { Asciidoc } from "./asciidoc.js";
 import { config } from "./config.js";
@@ -107,7 +108,7 @@ export const decodeFrontmatter = (document: Record<string, string>): Frontmatter
   };
 };
 
-const convertToContent = (document: string, asciidoc: Asciidoc): Content => {
+const convertToContent = (document: string | Buffer, asciidoc: Asciidoc): Content => {
   const doc = asciidoc.parse(document);
   const frontmatter = decodeFrontmatter(doc.getAttributes() as Record<string, string>);
   const layout = (doc.getAttribute("layout") as string) ?? "page";
@@ -116,25 +117,23 @@ const convertToContent = (document: string, asciidoc: Asciidoc): Content => {
   return new Content(meta, frontmatter, doc);
 };
 
-export const buildPages = async ({ site, asciidoc }: Context): Promise<Error | void> => {
+export const buildPages = async ({ site, asciidoc }: Context): Promise<void> => {
   const pages = path.resolve(config().content.pages);
   const filter = (name: string) => extname(name) === ".adoc";
 
   for await (const page of walkDir(pages, filter)) {
-    const document = await readFile(page);
-    if (document instanceof Error) return document;
+    const document = await fs.readFile(page);
     const content = convertToContent(document, asciidoc);
     site.addPage(content);
   }
 };
 
-export const buildPosts = async ({ site, asciidoc, config }: Context): Promise<Error | void> => {
+export const buildPosts = async ({ site, asciidoc, config }: Context): Promise<void> => {
   const pages = path.resolve(config.content.posts);
   const filter = (name: string) => extname(name) === ".adoc";
 
   for await (const page of walkDir(pages, filter)) {
-    const document = await readFile(page);
-    if (document instanceof Error) return document;
+    const document = await fs.readFile(page);
     const content = convertToContent(document, asciidoc);
     if (content.metadata.layout === null) content.metadata.layout = "post";
     if (config.production && content.frontmatter.draft) continue;

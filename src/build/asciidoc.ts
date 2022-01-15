@@ -2,7 +2,6 @@ import Processor from "asciidoctor";
 import { Asciidoctor } from "asciidoctor/types";
 
 import { html } from "../templates/html.js";
-import { readFile } from "../utils/fs.js";
 
 export class Asciidoc {
   private readonly converter: Asciidoctor.Html5Converter;
@@ -15,24 +14,12 @@ export class Asciidoc {
   }
 
   /**
-   * Reads and converts a file to an {@link Asciidoctor.Document}.
-   *
-   * @param filepath - File to open and parse
-   * @returns Either a converted document or an error
-   */
-  load = async (filepath: string): Promise<Error | Asciidoctor.Document> => {
-    const document = await readFile(filepath);
-    if (document instanceof Error) return document;
-    return this.self.load(document);
-  };
-
-  /**
    * Parses a string into an {@link Asciidoctor.Document}.
    *
    * @param content - Content to parse
    * @returns A converted document
    */
-  parse(content: string): Asciidoctor.Document {
+  parse(content: string | Buffer): Asciidoctor.Document {
     return this.self.load(content);
   }
 
@@ -44,7 +31,7 @@ export class Asciidoc {
    * @param transform - Only defined when node is a Document
    * @returns The converted node
    */
-  protected convert<T extends Asciidoctor.AbstractNode & Asciidoctor.AbstractBlock>(
+  convert<T extends Asciidoctor.AbstractNode & Asciidoctor.AbstractBlock>(
     node: T,
     transform?: string,
   ): string {

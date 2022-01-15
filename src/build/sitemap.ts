@@ -1,8 +1,8 @@
+import { promises as fs } from "node:fs";
 import path from "node:path";
 
 import { Context } from "../context.js";
 import { html } from "../templates/html.js";
-import { writeFile } from "../utils/fs.js";
 import { Config } from "./config.js";
 import { Content, Frontmatter } from "./content.js";
 import { Site } from "./site.js";
@@ -36,7 +36,7 @@ const buildSitemap = (site: Site, config: Config): string => {
     </urlset>`;
 };
 
-export const sitemap = async ({ site, config }: Context): Promise<Error | void> => {
+export const sitemap = async ({ site, config }: Context): Promise<void> => {
   const sitemap = buildSitemap(site, config);
-  return await writeFile(path.resolve(config.out, "sitemap.xml"), sitemap);
+  return await fs.writeFile(path.resolve(config.out, "sitemap.xml"), sitemap);
 };
