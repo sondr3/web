@@ -13,7 +13,7 @@ export interface Context {
 export const context = async (production: boolean): Promise<Context> => {
   const cfg = config(production);
   const template = new Template();
-  await template.init(cfg);
+  await template.update(cfg);
   return {
     site: new Site(),
     config: cfg,

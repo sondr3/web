@@ -15,10 +15,11 @@ type TemplateFn = (content: Content) => string;
 export class Template {
   templates: Map<string, TemplateFn> = new Map();
 
-  init = async (config: Config): Promise<void> => {
+  update = async (config: Config): Promise<void> => {
+    this.templates.clear();
     for await (const file of walkDir(config.templates, (file) => file.endsWith(".mjs"))) {
-      const imp = (await import(file)) as { default: TemplateFn };
-      const template = imp.default;
+      const fn: unknown = await import(`${file}?fml=${performance.now().toFixed(0)}`);
+      const template = (fn as { default: TemplateFn }).default;
       this.templates.set(path.parse(file).name, template);
     }
   };
