@@ -15,12 +15,27 @@ type Template = (content: Content) => string;
 export class Templating {
   templates: Map<string, Template> = new Map();
 
-  run = async (site: Site): Promise<void> => {
+  init = async (site: Site): Promise<void> => {
     for await (const file of walkDir(site.config.templates, (file) => file.endsWith(".mjs"))) {
       const imp = (await import(file)) as { default: Template };
       const template = imp.default;
       this.templates.set(path.parse(file).name, template);
     }
+  };
+
+  render = (content: Content, site: Site): Buffer => {
+    const layout = this.templates.get(content.metadata.layout);
+    if (!layout) throw new Error("what");
+
+    return this.minifyHtml(
+      base(Content.fromLayout(content, layout(content)), site),
+      site.config.production,
+    );
+  };
+
+  minifyHtml = (html: string, production: boolean): Buffer => {
+    if (!production) return Buffer.from(html);
+    return mf.minify(html, mf.createConfiguration({ minify_js: false, minify_css: false }));
   };
 }
 
