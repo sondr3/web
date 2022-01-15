@@ -48,7 +48,7 @@ export const renderSpecialPages = async (ctx: Context): Promise<void> => {
   site.addPage(index);
 
   const missed = new Content(
-    { layout: "page" },
+    { layout: "404" },
     decodeFrontmatter({
       doctitle: "Not found",
       description: "You found... nothing?",
