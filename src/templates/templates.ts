@@ -9,7 +9,6 @@ import { Content } from "../build/content.js";
 import { Context } from "../context.js";
 import { walkDir } from "../utils/fs.js";
 import { base } from "./base.js";
-import { page } from "./page.js";
 
 type Template = (content: Content) => string;
 
@@ -26,7 +25,7 @@ export class Templating {
 
   render = (content: Content, { site, config }: Context): Buffer => {
     const layout = this.templates.get(content.metadata.layout);
-    if (!layout) throw new Error("what");
+    if (!layout) throw new Error(`Template ${content.metadata.layout} not found`);
 
     return this.minifyHtml(
       base(Content.fromLayout(content, layout(content)), site, config),
@@ -39,56 +38,3 @@ export class Templating {
     return mf.minify(html, mf.createConfiguration({ minify_js: false, minify_css: false }));
   };
 }
-
-const minifyHtml = (html: string, production: boolean): Buffer => {
-  if (!production) return Buffer.from(html);
-  return mf.minify(html, mf.createConfiguration({ minify_js: false, minify_css: false }));
-};
-
-/**
- * Render special pages, i.e. not automatically rendered.
- *
- * @param site - Site state
- * @param config - Configuration
- * @param content - Content to print
- */
-export const renderSpecial = ({ site, config }: Context, content: Content): Buffer => {
-  return minifyHtml(base(content, site, config), config.production);
-};
-
-/**
- * Render all other pages
- *
- * @param site - Site state
- * @param config - Configuration
- * @param content - Content to print
- */
-export const renderLayout = ({ site, config }: Context, content: Content): Buffer => {
-  let res: string;
-  switch (content.metadata.layout) {
-    case "page":
-      res = base(
-        new Content(
-          content.metadata,
-          content.frontmatter,
-          page(content.frontmatter.title, content.content()),
-        ),
-        site,
-        config,
-      );
-      break;
-    case "post":
-      res = base(
-        new Content(
-          content.metadata,
-          content.frontmatter,
-          page(content.frontmatter.title, content.content()),
-        ),
-        site,
-        config,
-      );
-      break;
-  }
-
-  return minifyHtml(res, config.production);
-};

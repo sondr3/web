@@ -1,9 +1,6 @@
 import path, { parse } from "node:path";
 
 import { Context } from "../context.js";
-import { fourOhFour } from "../templates/404.js";
-import { landing } from "../templates/landing.js";
-import { renderLayout, renderSpecial } from "../templates/templates.js";
 import { createDirectory, writeFile } from "../utils/fs.js";
 import { copyAssets, renderStyles } from "./assets.js";
 import { compress } from "./compress.js";
@@ -21,7 +18,7 @@ export const build = async (ctx: Context): Promise<Error | void> => {
 };
 
 export const renderPages = async (ctx: Context): Promise<Error | void> => {
-  const { site, config } = ctx;
+  const { site, config, templating } = ctx;
   await buildPages(ctx);
   await buildPosts(ctx);
   await Promise.allSettled(
@@ -30,7 +27,7 @@ export const renderPages = async (ctx: Context): Promise<Error | void> => {
 
       const res = await Promise.allSettled([
         createDirectory(path.join(config.out, dir.dir)),
-        writeFile(path.join(config.out, page.path()), renderLayout(ctx, page)),
+        writeFile(path.join(config.out, page.path()), templating.render(page, ctx)),
       ]);
 
       if (res.some((r) => r instanceof Error)) {
@@ -43,17 +40,20 @@ export const renderPages = async (ctx: Context): Promise<Error | void> => {
 };
 
 export const renderSpecialPages = async (ctx: Context): Promise<Error | void> => {
-  const { config, site } = ctx;
+  const { config, site, templating } = ctx;
   const index = new Content(
-    { layout: "page" },
+    { layout: "landing" },
     decodeFrontmatter({
       doctitle: "Home",
       description: "The online home for Sondre Nilsen",
       slug: "",
     }),
-    landing,
+    "",
   );
-  const indexRes = await writeFile(path.join(config.out, "index.html"), renderSpecial(ctx, index));
+  const indexRes = await writeFile(
+    path.join(config.out, "index.html"),
+    templating.render(index, ctx),
+  );
   if (indexRes instanceof Error) return indexRes;
   site.addPage(index);
 
@@ -64,12 +64,12 @@ export const renderSpecialPages = async (ctx: Context): Promise<Error | void> =>
       description: "You found... nothing?",
       slug: "404",
     }),
-    fourOhFour,
+    "",
   );
   await createDirectory(path.join(config.out, "404"));
   const missedRes = await writeFile(
     path.join(config.out, "404/index.html"),
-    renderSpecial(ctx, missed),
+    templating.render(missed, ctx),
   );
   if (missedRes instanceof Error) return missedRes;
   site.addPage(missed);

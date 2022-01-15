@@ -7,8 +7,6 @@ import { slugify } from "../utils/utils.js";
 import { Asciidoc } from "./asciidoc.js";
 import { config } from "./config.js";
 
-export type Layout = "page" | "post";
-
 export interface Frontmatter {
   title: string;
   description: string;
@@ -21,7 +19,7 @@ export interface Frontmatter {
 }
 
 export interface Metadata {
-  layout: Layout;
+  layout: string;
 }
 
 export class Content {
@@ -63,6 +61,7 @@ export class Content {
       case "post":
         return `article`;
       case "page":
+      default:
         return `website`;
     }
   };
@@ -111,7 +110,7 @@ export const decodeFrontmatter = (document: Record<string, string>): Frontmatter
 const convertToContent = (document: string, asciidoc: Asciidoc): Content => {
   const doc = asciidoc.parse(document);
   const frontmatter = decodeFrontmatter(doc.getAttributes() as Record<string, string>);
-  const layout = (doc.getAttribute("layout") as Layout) ?? "page";
+  const layout = (doc.getAttribute("layout") as string) ?? "page";
   const meta = { layout: layout };
 
   return new Content(meta, frontmatter, doc);
