@@ -10,14 +10,14 @@ import { Context } from "../context.js";
 import { walkDir } from "../utils/fs.js";
 import { base } from "./base.js";
 
-type Template = (content: Content) => string;
+type TemplateFn = (content: Content) => string;
 
-export class Templating {
-  templates: Map<string, Template> = new Map();
+export class Template {
+  templates: Map<string, TemplateFn> = new Map();
 
   init = async (config: Config): Promise<void> => {
     for await (const file of walkDir(config.templates, (file) => file.endsWith(".mjs"))) {
-      const imp = (await import(file)) as { default: Template };
+      const imp = (await import(file)) as { default: TemplateFn };
       const template = imp.default;
       this.templates.set(path.parse(file).name, template);
     }

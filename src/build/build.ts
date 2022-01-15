@@ -18,7 +18,7 @@ export const build = async (ctx: Context): Promise<Error | void> => {
 };
 
 export const renderPages = async (ctx: Context): Promise<Error | void> => {
-  const { site, config, templating } = ctx;
+  const { site, config, template } = ctx;
   await buildPages(ctx);
   await buildPosts(ctx);
   await Promise.allSettled(
@@ -27,7 +27,7 @@ export const renderPages = async (ctx: Context): Promise<Error | void> => {
 
       const res = await Promise.allSettled([
         createDirectory(path.join(config.out, dir.dir)),
-        writeFile(path.join(config.out, page.path()), templating.render(page, ctx)),
+        writeFile(path.join(config.out, page.path()), template.render(page, ctx)),
       ]);
 
       if (res.some((r) => r instanceof Error)) {
@@ -40,7 +40,7 @@ export const renderPages = async (ctx: Context): Promise<Error | void> => {
 };
 
 export const renderSpecialPages = async (ctx: Context): Promise<Error | void> => {
-  const { config, site, templating } = ctx;
+  const { config, site, template } = ctx;
   const index = new Content(
     { layout: "landing" },
     decodeFrontmatter({
@@ -52,7 +52,7 @@ export const renderSpecialPages = async (ctx: Context): Promise<Error | void> =>
   );
   const indexRes = await writeFile(
     path.join(config.out, "index.html"),
-    templating.render(index, ctx),
+    template.render(index, ctx),
   );
   if (indexRes instanceof Error) return indexRes;
   site.addPage(index);
@@ -69,7 +69,7 @@ export const renderSpecialPages = async (ctx: Context): Promise<Error | void> =>
   await createDirectory(path.join(config.out, "404"));
   const missedRes = await writeFile(
     path.join(config.out, "404/index.html"),
-    templating.render(missed, ctx),
+    template.render(missed, ctx),
   );
   if (missedRes instanceof Error) return missedRes;
   site.addPage(missed);

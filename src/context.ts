@@ -1,23 +1,23 @@
 import { Asciidoc } from "./build/asciidoc.js";
 import { Config, config } from "./build/config.js";
 import { Site } from "./build/site.js";
-import { Templating } from "./templates/templates.js";
+import { Template } from "./templates/template.js";
 
 export interface Context {
   site: Site;
   config: Config;
   asciidoc: Asciidoc;
-  templating: Templating;
+  template: Template;
 }
 
-export const context = async (production: boolean) => {
+export const context = async (production: boolean): Promise<Context> => {
   const cfg = config(production);
-  const templating = new Templating();
-  await templating.init(cfg);
+  const template = new Template();
+  await template.init(cfg);
   return {
     site: new Site(),
     config: cfg,
     asciidoc: new Asciidoc(),
-    templating,
+    template,
   };
 };
