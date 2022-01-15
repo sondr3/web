@@ -7,6 +7,7 @@ import { WebSocketServer } from "ws";
 import { renderStyles } from "./build/assets.js";
 import { renderPages, renderSpecialPages } from "./build/build.js";
 import { Context } from "./context.js";
+import * as logger from "./utils/logger.js";
 
 export class Server {
   private readonly wss: WebSocketServer;
@@ -26,7 +27,7 @@ export class Server {
 
   serve() {
     this.server.listen(3000);
-    console.info(`Server started on http://localhost:3000`);
+    logger.info(`Server started on http://localhost:3000`);
   }
 
   close() {
@@ -50,7 +51,7 @@ export class Server {
         for (const { path } of events) {
           const dir = parse(path);
           if (dir.ext === ".scss") {
-            console.log(`Rebuilding styles, ${dir.name}${dir.ext} changed`);
+            logger.info(`Rebuilding styles, ${dir.name}${dir.ext} changed`);
             await renderStyles(this.context);
           }
         }
@@ -61,7 +62,7 @@ export class Server {
         if (err !== null) throw err;
         for (const { path } of events) {
           const dir = parse(path);
-          console.log(`Rebuilding page ${dir.name}${dir.ext}`);
+          logger.info(`Rebuilding page ${dir.name}${dir.ext}`);
           await renderPages(this.context);
         }
         this.broadcastReload();
@@ -72,7 +73,7 @@ export class Server {
         await this.context.template.update(this.context.config);
         for (const { path } of events) {
           const dir = parse(path);
-          console.log(`Rebuilding... template '${dir.name}' changed`);
+          logger.info(`Rebuilding... template '${dir.name}' changed`);
           await renderSpecialPages(this.context);
           await renderPages(this.context);
         }
@@ -80,7 +81,7 @@ export class Server {
       });
     } catch (error) {
       if (error instanceof Error && error.name === "AbortError") return;
-      console.error(error);
+      logger.error(error);
     }
   }
 }

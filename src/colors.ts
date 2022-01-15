@@ -5,7 +5,7 @@ const colors = {
   red: 31,
   green: 32,
   yellow: 33,
-  blue: 33,
+  blue: 34,
 };
 
 export const color = (str: string, color: "red" | "green" | "yellow" | "blue") => {

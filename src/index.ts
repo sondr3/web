@@ -4,12 +4,13 @@ import { build } from "./build/build.js";
 import { CLI } from "./cli.js";
 import { context } from "./context.js";
 import { Server } from "./server.js";
+import * as logger from "./utils/logger.js";
 
 /**
  * Stop the running server "nicely"
  */
 const shutdown = (server: Server) => {
-  console.log(`Shutting down...`);
+  logger.warn(`Shutting down...`);
   server.close();
   process.exit();
 };
@@ -24,14 +25,14 @@ export const run = async (): Promise<void> => {
 
   switch (cli.command) {
     case "build": {
-      console.info(`Building with ${cli.production ? "optimizations" : "no optimizations"}`);
+      logger.info(`Building with ${cli.production ? "optimizations" : "no optimizations"}`);
       await build(ctx);
       return;
     }
     case "dev": {
-      console.info(`Building with ${cli.production ? "optimizations" : "no optimizations"}`);
+      logger.info(`Building with ${cli.production ? "optimizations" : "no optimizations"}`);
       await build(ctx);
-      console.info(`Starting development server...`);
+      logger.info(`Starting development server...`);
       const server = new Server(ctx);
       server.start();
 
@@ -39,7 +40,7 @@ export const run = async (): Promise<void> => {
       return;
     }
     case "clean": {
-      console.info(`Cleaning out ${ctx.config.out}`);
+      logger.info(`Cleaning out ${ctx.config.out}`);
       await fs.rm(ctx.config.out, { recursive: true, force: true });
       return;
     }
