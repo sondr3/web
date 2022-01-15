@@ -64,4 +64,17 @@ export const renderSpecialPages = async (ctx: Context): Promise<void> => {
   await fs.mkdir(path.join(config.out, "404"), { recursive: true });
   await fs.writeFile(path.join(config.out, "404/index.html"), template.render(missed, ctx));
   site.addPage(missed);
+
+  const resume = new Content(
+    { layout: "resume" },
+    decodeFrontmatter({
+      doctitle: "Resume",
+      description: "Resume for Sondre Nilsen",
+      slug: "resume",
+    }),
+    "",
+  );
+  await fs.mkdir(path.join(config.out, "resume"), { recursive: true });
+  await fs.writeFile(path.join(config.out, "resume/index.html"), template.render(resume, ctx));
+  site.addPage(resume);
 };

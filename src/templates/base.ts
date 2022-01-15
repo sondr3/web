@@ -49,6 +49,7 @@ export const base = (content: Content, site: Site, config: Config): string => ht
           <ul class="nav">
             <!-- <li><a href="/">projects</a></li> -->
             <!-- <li><a href="/">articles</a></li> -->
+            <li class="link"><a href="/resume/">resume</a></li>
             <li class="link"><a href="/about/">about</a></li>
           </ul>
         </nav>
