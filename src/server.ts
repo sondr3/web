@@ -5,7 +5,7 @@ import handler from "serve-handler";
 import { WebSocketServer } from "ws";
 
 import { renderStyles } from "./build/assets.js";
-import { renderPages } from "./build/build.js";
+import { renderPages, renderSpecialPages } from "./build/build.js";
 import { Context } from "./context.js";
 
 export class Server {
@@ -52,21 +52,31 @@ export class Server {
           if (dir.ext === ".scss") {
             console.log(`Rebuilding styles, ${dir.name}${dir.ext} changed`);
             await renderStyles(this.context);
-            this.broadcastReload();
           }
         }
+        this.broadcastReload();
       });
 
       await watcher.subscribe(this.context.config.content.root, async (err, events) => {
         if (err !== null) throw err;
         for (const { path } of events) {
           const dir = parse(path);
-          if (dir.ext === ".adoc") {
-            console.log(`Rebuilding page ${dir.name}${dir.ext} changed`);
-            await renderPages(this.context);
-            this.broadcastReload();
-          }
+          console.log(`Rebuilding page ${dir.name}${dir.ext}`);
+          await renderPages(this.context);
         }
+        this.broadcastReload();
+      });
+
+      await watcher.subscribe(this.context.config.templates, async (err, events) => {
+        if (err !== null) throw err;
+        await this.context.template.update(this.context.config);
+        for (const { path } of events) {
+          const dir = parse(path);
+          console.log(`Rebuilding... template '${dir.name}' changed`);
+          await renderSpecialPages(this.context);
+          await renderPages(this.context);
+        }
+        this.broadcastReload();
       });
     } catch (error) {
       if (error instanceof Error && error.name === "AbortError") return;
