@@ -1,7 +1,7 @@
 import Processor from "asciidoctor";
 import { Asciidoctor } from "asciidoctor/types";
 
-import { html } from "../templates/templating.js";
+import { html } from "../templates/html.js";
 import { readFile } from "../utils/fs.js";
 
 export class Asciidoc {

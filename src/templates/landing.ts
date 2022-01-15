@@ -1,4 +1,4 @@
-import { html } from "./templating.js";
+import { html } from "./html.js";
 
 export const landing = html`<section>
   <h1 class="hello">

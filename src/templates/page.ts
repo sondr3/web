@@ -1,5 +1,5 @@
 import { slugify } from "../utils/utils.js";
-import { html } from "./templating.js";
+import { html } from "./html.js";
 
 export const page = (title: string, content: string): string => {
   return html`

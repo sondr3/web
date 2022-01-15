@@ -1,6 +1,6 @@
 import { Content } from "../build/content.js";
 import { Site } from "../build/site.js";
-import { html } from "./templating.js";
+import { html } from "./html.js";
 
 export const layout = (content: Content, site: Site): string => html`
   <!DOCTYPE html>

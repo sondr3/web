@@ -1,6 +1,6 @@
 import path from "node:path";
 
-import { html } from "../templates/templating.js";
+import { html } from "../templates/html.js";
 import { writeFile } from "../utils/fs.js";
 import { Content, Frontmatter } from "./content.js";
 import { Site } from "./site.js";

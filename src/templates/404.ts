@@ -1,4 +1,4 @@
-import { html } from "./templating.js";
+import { html } from "./html.js";
 
 export const fourOhFour = html`<section>
   <h1 class="hello">Not found :(</h1>

@@ -1,7 +1,7 @@
 import { test } from "@sondr3/minitest";
 import { strict as assert } from "node:assert";
 
-import { html } from "./templating.js";
+import { html } from "./html.js";
 
 const EXPECTED = `<html lang="en">
       
