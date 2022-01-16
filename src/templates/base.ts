@@ -11,6 +11,15 @@ export const base = (content: Content, site: Site, config: Config): string => ht
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
       <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
+      <link rel="preload" as="font" type="font/woff2" href="/fonts/Piazzolla.woff2" crossorigin />
+      <link
+        rel="preload"
+        as="font"
+        type="font/woff2"
+        href="/fonts/PiazzollaItalic.woff2"
+        crossorigin
+      />
+
       <link rel="icon" href="/favicon.ico" />
       <link rel="icon" href="/icon.svg" sizes="any" type="image/svg+xml" />
       <link rel="alternate icon" type="image/png" href="/icon-192.png" sizes="192x192" />
@@ -49,7 +58,7 @@ export const base = (content: Content, site: Site, config: Config): string => ht
           <ul class="nav">
             <!-- <li><a href="/">projects</a></li> -->
             <!-- <li><a href="/">articles</a></li> -->
-            <li class="link"><a href="/resume/">resume</a></li>
+            <!-- <li class="link"><a href="/resume/">resume</a></li> -->
             <li class="link"><a href="/about/">about</a></li>
           </ul>
         </nav>
