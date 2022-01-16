@@ -10,6 +10,4 @@ export default (_content) => html`<section>
       side-projects and occasionally creating useful software.
     </p>
   </section>
-  <section>
-    <h2 class="hello">Projects</h2>
-  </section>`;
+  `;
