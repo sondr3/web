@@ -64,7 +64,7 @@ body {
   font-family: Piazzolla;
   font-style: normal;
   font-weight: 100 900;
-  src: url("/fonts/Piazzolla.woff2") format("woff2");
+  src: local("Piazzolla"), url("/fonts/Piazzolla.woff2") format("woff2");
 }
 
 @font-face {
@@ -72,7 +72,7 @@ body {
   font-family: Piazzolla;
   font-style: italic;
   font-weight: 100 900;
-  src: url("/fonts/PiazzollaItalic.woff2") format("woff2");
+  src: local("PiazzollaItalic"), url("/fonts/PiazzollaItalic.woff2") format("woff2");
 }
 
 @font-face {
@@ -80,7 +80,7 @@ body {
   font-family: Inconsolata;
   font-style: normal;
   font-weight: 400;
-  src: url("/fonts/Inconsolata.woff2") format("woff2");
+  src: local("Inconsolata"), url("/fonts/Inconsolata.woff2") format("woff2");
 }
 
 body {

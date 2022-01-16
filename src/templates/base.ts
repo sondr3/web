@@ -11,7 +11,10 @@ export const base = (content: Content, site: Site, config: Config): string => ht
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
       <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
+      <link rel="preload" as="style" href="/${site.style}" />
+      <link rel="preload" as="script" href="/js/${site.js.get("theme.js")}" />
       <link rel="preload" as="font" type="font/woff2" href="/fonts/Piazzolla.woff2" crossorigin />
+      <link rel="preload" as="font" type="font/woff2" href="/fonts/Inconsolata.woff2" crossorigin />
       <link
         rel="preload"
         as="font"
@@ -19,7 +22,6 @@ export const base = (content: Content, site: Site, config: Config): string => ht
         href="/fonts/PiazzollaItalic.woff2"
         crossorigin
       />
-      <link rel="preload" as="font" type="font/woff2" href="/fonts/Inconsolata.woff2" crossorigin />
 
       <link rel="icon" href="/favicon.ico" />
       <link rel="icon" href="/icon.svg" sizes="any" type="image/svg+xml" />
