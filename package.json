@@ -62,7 +62,17 @@
   "stylelint": {
     "extends": [
       "@sondr3/stylelint"
-    ]
+    ],
+    "rules": {
+      "selector-no-qualifying-type": [
+        true,
+        {
+          "ignore": [
+            "attribute"
+          ]
+        }
+      ]
+    }
   },
   "eslintConfig": {
     "env": {
