@@ -4,7 +4,7 @@ import { parse } from "node:path";
 import handler from "serve-handler";
 import { WebSocketServer } from "ws";
 
-import { renderStyles } from "./build/assets.js";
+import { copyAssets, renderStyles } from "./build/assets.js";
 import { renderPages, renderSpecialPages } from "./build/build.js";
 import { Context } from "./context.js";
 import * as logger from "./utils/logger.js";
@@ -53,6 +53,9 @@ export class Server {
           if (dir.ext === ".scss") {
             logger.info(`Rebuilding styles, ${dir.name}${dir.ext} changed`);
             await renderStyles(this.context);
+          } else if (dir.ext === ".js") {
+            logger.info(`Copying JS assets, ${dir.name}${dir.ext} changed`);
+            await copyAssets(this.context);
           }
         }
         this.broadcastReload();

@@ -36,6 +36,6 @@ export class Template {
 
   minifyHtml = (html: string, production: boolean): Buffer => {
     if (!production) return Buffer.from(html);
-    return mf.minify(html, mf.createConfiguration({ minify_js: false, minify_css: false }));
+    return mf.minify(html, mf.createConfiguration({ minify_js: true, minify_css: false }));
   };
 }
