@@ -4,7 +4,7 @@ import path, { parse } from "node:path";
 import { Context } from "../context.js";
 import { Duration } from "../utils/duration.js";
 import * as logger from "../utils/logger.js";
-import { copyAssets, renderStyles } from "./assets.js";
+import { compileJs, copyAssets, renderStyles } from "./assets.js";
 import { compress } from "./compress.js";
 import { buildPages, buildPosts, Content, decodeFrontmatter } from "./content.js";
 import { sitemap } from "./sitemap.js";
@@ -14,6 +14,7 @@ export const build = async (ctx: Context): Promise<void> => {
   await fs.mkdir(ctx.config.out, { recursive: true });
   await copyAssets(ctx);
   await renderStyles(ctx);
+  await compileJs(ctx);
   await renderPages(ctx);
   await renderSpecialPages(ctx);
   await sitemap(ctx);

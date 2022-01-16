@@ -117,6 +117,6 @@ export const base = (content: Content, site: Site, config: Config): string => ht
       </footer>
     </body>
     ${!config.production && "<script type='text/javascript' src='/js/livereload.js'></script>"}
-    <script type="text/javascript" src="/js/theme.js"></script>
+    <script type="text/javascript" src="/js/${site.js.get("theme.js")}"></script>
   </html>
 `;

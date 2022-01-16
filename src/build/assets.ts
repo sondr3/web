@@ -1,4 +1,5 @@
 import parcel from "@parcel/css";
+import swc from "@swc/core";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import sass, { CompileResult } from "sass";
@@ -6,7 +7,7 @@ import { SourceMapConsumer, SourceMapGenerator } from "source-map-js";
 
 import { Context } from "../context.js";
 import { Duration } from "../utils/duration.js";
-import { copyFiles } from "../utils/fs.js";
+import { copyFiles, walkDir } from "../utils/fs.js";
 import * as logger from "../utils/logger.js";
 import { cacheBust } from "../utils/utils.js";
 
@@ -69,4 +70,20 @@ const optimize = (source: CompileResult, filename: string): { css: string; sourc
 
 export const copyAssets = async ({ config }: Context): Promise<void> => {
   return await copyFiles(config.assets.root, config.out);
+};
+
+export const compileJs = async ({ site, config }: Context): Promise<void> => {
+  for await (const file of walkDir(config.assets.js, () => true)) {
+    await site.addJs(file, config.production);
+  }
+
+  for (const [file, out] of site.js.entries()) {
+    const content = await fs.readFile(path.join(config.assets.js, file));
+    if (config.production) {
+      const { code } = await swc.minify(content.toString(), { compress: true, mangle: true });
+      await fs.writeFile(path.join(config.out, "js", out), code);
+    } else {
+      await fs.writeFile(path.join(config.out, "js", out), content);
+    }
+  }
 };
