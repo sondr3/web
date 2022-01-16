@@ -5,7 +5,7 @@ import { html } from "./html.js";
 
 export const base = (content: Content, site: Site, config: Config): string => html`
   <!DOCTYPE html>
-  <html lang="en">
+  <html lang="en" data-theme="light">
     <head>
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -48,20 +48,65 @@ export const base = (content: Content, site: Site, config: Config): string => ht
 
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="sondr3" />
+      <script>
+        const set = (val) => document.documentElement.setAttribute("data-theme", val);
+        if (window.localStorage.getItem("theme")) {
+          set(window.localStorage.getItem("theme"));
+        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          set("dark");
+        }
+        window
+          .matchMedia("(prefers-color-scheme: dark)")
+          .addEventListener("change", (e) => set(e.matches ? "dark" : "light"));
+      </script>
     </head>
     <body class="root">
       <header class="header">
         <h1 class="title">
           <a href="/">EONS :: IO ()</a>
         </h1>
-        <nav>
-          <ul class="nav">
+        <nav class="nav">
+          <ul class="nav__links">
             <!-- <li><a href="/">projects</a></li> -->
             <!-- <li><a href="/">articles</a></li> -->
-            <!-- <li class="link"><a href="/resume/">resume</a></li> -->
-            <li class="link"><a href="/about/">about</a></li>
+            <!-- <li class="nav__link"><a href="/resume/">resume</a></li> -->
+            <li class="nav__link"><a href="/about/">about</a></li>
           </ul>
         </nav>
+        <button class="theme-btn -light">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class=""
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            width="24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+            />
+          </svg>
+        </button>
+        <button class="theme-btn -dark">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class=""
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            width="24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+            />
+          </svg>
+        </button>
       </header>
       <main class="main">${content.content()}</main>
       <footer class="footer">
@@ -72,5 +117,6 @@ export const base = (content: Content, site: Site, config: Config): string => ht
       </footer>
     </body>
     ${!config.production && "<script type='text/javascript' src='/js/livereload.js'></script>"}
+    <script type="text/javascript" src="/js/theme.js"></script>
   </html>
 `;

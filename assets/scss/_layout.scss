@@ -1,35 +1,48 @@
 @use "variables" as *;
 
 .header {
-  display: flex;
-  flex-direction: column;
-  grid-area: 1 / 2 / 1 / 12;
+  display: grid;
+  grid-area: 1 / 1 / 1 / 13;
+  grid-template-columns: repeat(12, 1fr);
   padding-top: 1rem;
-  @media (min-width: 32em) {
-    flex-direction: row;
-    grid-area: 1 / 4 / 1 / 8;
-    justify-content: space-between;
-  }
 }
 
 .title {
-  align-self: center;
   font-family: "Inconsolata", monospace;
   font-size: 1.5rem;
+  grid-area: 1 / 2 / 1 / 4;
   margin: 0;
-  padding-bottom: 1rem;
+  place-self: center;
 }
 
 .nav {
-  display: flex;
-  flex-direction: row;
   gap: 30px;
-  justify-content: center;
+  grid-area: 1 / 6 / 1 / 8;
+  justify-self: end;
+
+  &__links {
+    display: flex;
+  }
+
+  &__link {
+    color: var(--grey);
+    font-size: 1.25rem;
+  }
 }
 
-.link {
+:root[data-theme="light"] .root .-light {
+  display: none;
+}
+
+:root[data-theme="dark"] .root .-dark {
+  display: none;
+}
+
+.theme-btn {
   color: var(--grey);
-  font-size: 1.25rem;
+  grid-area: 1 / 8 / 1 / 9;
+  justify-self: center;
+  padding-top: 0.2rem;
 }
 
 .main {

@@ -36,19 +36,20 @@ table {
 
 /* THE REST OF THE FUCKING OWL */
 
-:root {
+:root,
+root[data-theme="light"] {
   --background: rgb(255, 255, 255);
   --text: rgb(0, 0, 0);
   --heading: rgb(0, 0, 0);
   --blue: rgb(79, 70, 229);
   --grey: rgb(107, 114, 128);
+}
 
-  @media (prefers-color-scheme: dark) {
-    --background: rgb(0, 0, 0);
-    --text: rgb(156, 163, 175);
-    --heading: rgb(209, 213, 219);
-    --grey: rgb(229, 231, 235);
-  }
+:root[data-theme="dark"] {
+  --background: rgb(0, 0, 0);
+  --text: rgb(156, 163, 175);
+  --heading: rgb(209, 213, 219);
+  --grey: rgb(229, 231, 235);
 }
 
 html,
@@ -120,7 +121,11 @@ h1 {
   margin-bottom: 0.5rem;
 }
 
-h2, h3, h4, h5, h6 {
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: var(--heading);
   font-size: 1.5rem;
   margin-bottom: 0.3rem;
