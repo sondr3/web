@@ -27,13 +27,6 @@ export const base = (content: Content, site: Site, config: Config): string => ht
         href="/fonts/Inconsolata.woff2"
         crossorigin="anonymous"
       />
-      <link
-        rel="preload"
-        as="font"
-        type="font/woff2"
-        href="/fonts/PiazzollaItalic.woff2"
-        crossorigin="anonymous"
-      />
 
       <link rel="icon" href="/favicon.ico" />
       <link rel="icon" href="/icon.svg" sizes="any" type="image/svg+xml" />
