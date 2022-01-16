@@ -81,7 +81,7 @@ export const base = (content: Content, site: Site, config: Config): string => ht
             <li class="nav__link"><a href="/about/">about</a></li>
           </ul>
         </nav>
-        <button class="theme-btn -light" aria-hidden="true" tabindex="-1">
+        <button class="theme-btn -light" aria-label="toggle dark theme">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class=""
@@ -98,7 +98,7 @@ export const base = (content: Content, site: Site, config: Config): string => ht
             />
           </svg>
         </button>
-        <button class="theme-btn -dark" aria-hidden="true" tabindex="-1">
+        <button class="theme-btn -dark" aria-label="toggle light theme">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class=""
