@@ -7,13 +7,13 @@ export default (_content) => html`
 
   <h2>Education</h2>
   ${data.education.map((edu) => html`
-    <h3>${edu.university}</h3>
     <ul>
       ${edu.degrees.map((deg) => html`
         <li>
-          <h4>${deg.title}, ${deg.degree}</h4>
-          <p>${deg.institute}, ${deg.university}</p>
-          <p>${deg.start} - ${deg.end}</p>
+          <h4>${deg.university}
+            <span class="degree__time">${deg.start} - ${deg.end}</span>
+          </h4>
+          <p>${deg.degree}, ${deg.title}</p>
         </li>
       `)}
     </ul>
