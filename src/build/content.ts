@@ -8,7 +8,6 @@ import { walkDir } from "../utils/fs.js";
 import * as logger from "../utils/logger.js";
 import { slugify } from "../utils/utils.js";
 import { Asciidoc } from "./asciidoc.js";
-import { config } from "./config.js";
 
 export interface Frontmatter {
   title: string;
@@ -119,9 +118,9 @@ const convertToContent = (document: string | Buffer, asciidoc: Asciidoc): Conten
   return new Content(meta, frontmatter, doc);
 };
 
-export const buildPages = async ({ site, asciidoc }: Context): Promise<void> => {
+export const buildPages = async ({ site, asciidoc, config }: Context): Promise<void> => {
   const pageDuration = new Duration();
-  const pages = path.resolve(config().content.pages);
+  const pages = path.resolve(config.content.pages);
   const filter = (name: string) => extname(name) === ".adoc";
 
   for await (const page of walkDir(pages, filter)) {
