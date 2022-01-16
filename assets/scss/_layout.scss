@@ -3,22 +3,39 @@
 .header {
   display: grid;
   grid-area: 1 / 1 / 1 / 13;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template: 1fr 1fr / auto;
   padding-top: 1rem;
+
+  @media (min-width: 32em) {
+    grid-template: 1fr / repeat(12, 1fr);
+  }
 }
 
 .title {
+  align-self: center;
   font-family: "Inconsolata", monospace;
   font-size: 1.5rem;
-  grid-area: 1 / 2 / 1 / 4;
+  grid-area: 2/3/1/8;
   margin: 0;
-  place-self: center;
+
+  @media (min-width: 32em) {
+    grid-area: 1 / 2 / 1 / 4;
+    place-self: center;
+  }
 }
 
 .nav {
-  gap: 30px;
-  grid-area: 1 / 6 / 1 / 8;
-  justify-self: end;
+  font-size: 1.5rem;
+  grid-area: 2 / 1 / 2 / 12;
+  justify-self: center;
+  padding-top: 0.4rem;
+
+  @media (min-width: 32em) {
+    font-size: 1.25rem;
+    grid-area: 1 / 6 / 1 / 8;
+    justify-self: end;
+    padding-top: 0;
+  }
 
   &__links {
     display: flex;
@@ -26,7 +43,6 @@
 
   &__link {
     color: var(--grey);
-    font-size: 1.25rem;
   }
 }
 
@@ -40,14 +56,19 @@
 
 .theme-btn {
   color: var(--grey);
-  grid-area: 1 / 8 / 1 / 9;
+  grid-area: 1 / 8 / 1 / 12;
   justify-self: center;
   padding-top: 0.2rem;
+
+  @media (min-width: 32em) {
+    grid-area: 1 / 8 / 1 / 9;
+  }
 }
 
 .main {
   grid-area: 2 / 2 / 2 / 12;
   padding-top: 1rem;
+
   @media (min-width: 32em) {
     grid-area: 2 / 4 / 2 / 8;
   }
@@ -58,6 +79,7 @@
   grid-area: 3 / 2 / 3 / 12;
   margin: 0 auto;
   padding-bottom: 1rem;
+
   @media (min-width: 32em) {
     grid-area: 3 / 4 / 3 / 8;
   }
