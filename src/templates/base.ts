@@ -13,14 +13,26 @@ export const base = (content: Content, site: Site, config: Config): string => ht
 
       <link rel="preload" as="style" href="/${site.style}" />
       <link rel="preload" as="script" href="/js/${site.js.get("theme.js")}" />
-      <link rel="preload" as="font" type="font/woff2" href="/fonts/Piazzolla.woff2" crossorigin />
-      <link rel="preload" as="font" type="font/woff2" href="/fonts/Inconsolata.woff2" crossorigin />
+      <link
+        rel="preload"
+        as="font"
+        type="font/woff2"
+        href="/fonts/Piazzolla.woff2"
+        crossorigin="anonymous"
+      />
+      <link
+        rel="preload"
+        as="font"
+        type="font/woff2"
+        href="/fonts/Inconsolata.woff2"
+        crossorigin="anonymous"
+      />
       <link
         rel="preload"
         as="font"
         type="font/woff2"
         href="/fonts/PiazzollaItalic.woff2"
-        crossorigin
+        crossorigin="anonymous"
       />
 
       <link rel="icon" href="/favicon.ico" />
