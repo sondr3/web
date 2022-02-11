@@ -1,8 +1,8 @@
 /**
- * My handrolled JSX-like solution to templating. Its gloriously awful.
+ * My handrolled JSX-like solution to templating. It's gloriously awful.
  *
  * @param input - Some HTML
- * @param values - Values that are coerced to strings
+ * @param values - Values that are coerced to string
  * @returns The converted HTML
  */
 export const html = (input: TemplateStringsArray, ...values: readonly unknown[]): string => {

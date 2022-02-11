@@ -1,14 +1,15 @@
 import minify from "@minify-html/js";
 import { createRequire } from "node:module";
 import path from "node:path";
-const require = createRequire(import.meta.url);
-const mf = require("@minify-html/js") as typeof minify;
 
 import { Config } from "../build/config.js";
 import { Content } from "../build/content.js";
 import { Context } from "../context.js";
 import { walkDir } from "../utils/fs.js";
 import { base } from "./base.js";
+
+const require = createRequire(import.meta.url);
+const mf = require("@minify-html/js") as typeof minify;
 
 type TemplateFn = (content: Content) => string;
 
