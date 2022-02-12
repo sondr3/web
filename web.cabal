@@ -24,7 +24,6 @@ executable web
     DerivingStrategies
     DuplicateRecordFields
     FlexibleContexts
-    GeneralizedNewtypeDeriving
     LambdaCase
     MultiWayIf
     NamedFieldPuns
@@ -39,14 +38,15 @@ executable web
     -fwrite-ide-info -Wunused-packages
 
   build-depends:
-    , aeson       ^>=1.5
-    , base        ^>=4.15.1.0
+    , aeson                 ^>=1.5
+    , base                  ^>=4.15.1.0
     , containers
     , directory
     , filepath
     , lens
     , lens-aeson
     , shake
-    , slick       ^>=1.1
-    , text        ^>=1.2
+    , slick                 ^>=1.1
+    , text                  ^>=1.2
     , time
+    , unordered-containers
