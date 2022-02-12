@@ -1,8 +1,10 @@
-= About me
-:description: Hello, I'm Sondre! I make things
-:created: 2020-12-12
-:modified: 2022-01-10
-:slug: about
+---
+title: About me
+description: Hello, I'm Sondre! I make things
+createdAt: 2020-12-12
+modifietAt: 2022-01-10
+slug: about
+---
 
 Hello, I'm Sondre! I'm a master student on my first year studying algorithms at the
 https://www.uib.no/[University of Bergen] with a passion for safe and reliable
