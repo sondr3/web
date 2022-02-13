@@ -1,0 +1,25 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "description": "This is my website, held together by tears, glue and a healthy dose of `eh, good enough`. Built with my own static site generator.",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sondr3/web.git"
+  },
+  "author": "Sondre Nilsen <sondre@eons.io>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sondr3/web/issues"
+  },
+  "homepage": "https://github.com/sondr3/web#readme",
+  "prettier": "@sondr3/prettier",
+  "devDependencies": {
+    "@minify-html/js": "0.8.0",
+    "@parcel/css": "1.2.0",
+    "@sondr3/prettier": "0.6.0",
+    "prettier": "2.5.1",
+    "sass": "1.49.7",
+    "terser": "5.10.0"
+  }
+}

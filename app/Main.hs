@@ -3,9 +3,13 @@
 
 module Main (main) where
 
+import Control.Applicative (Applicative (liftA2))
 import Control.Monad (void)
+import Data.Aeson (ToJSON (toJSON), object)
 import qualified Data.Aeson as A
-import Data.Aeson.Types
+import Data.Digest.Pure.MD5 (md5)
+import Data.Maybe (isJust)
+import qualified Data.String as BLU
 import Data.Text (Text)
 import qualified Data.Text as T
 import Development.Shake
@@ -13,6 +17,7 @@ import Development.Shake.FilePath
 import Development.Shake.Forward
 import GHC.Generics (Generic)
 import Slick (compileTemplate', substitute)
+import System.Environment (lookupEnv)
 
 data SiteMeta = SiteMeta
   { siteTitle :: Text,
@@ -35,15 +40,15 @@ instance ToJSON SiteMeta where
         "themeUrl" A..= themeUrl
       ]
 
-siteMeta :: SiteMeta
-siteMeta =
+siteMeta :: Text -> Text -> SiteMeta
+siteMeta style theme =
   SiteMeta
     { siteTitle = "Eons :: IO ()",
       siteDescription = "The online home for Sondre Nilsen",
       siteAuthor = "Sondre Nilsen",
       baseUrl = "https://www.eons.io/",
-      cssUrl = "style.css",
-      themeUrl = "/js/theme.js"
+      cssUrl = style,
+      themeUrl = theme
     }
 
 -- withSiteMeta :: Value -> Value
@@ -58,24 +63,59 @@ outputFolder = "./build/"
 siteFolder :: FilePath
 siteFolder = "./site/"
 
-buildIndex :: Action ()
-buildIndex = do
+buildIndex :: SiteMeta -> Action ()
+buildIndex meta = do
   indexT <- compileTemplate' (siteFolder <> "templates/index.html")
-  writeFile' (outputFolder </> "index.html") (T.unpack $ substitute indexT (toJSON siteMeta))
+  writeFile' (outputFolder </> "index.html") (T.unpack $ substitute indexT (toJSON meta))
 
 copyStaticFiles :: Action ()
 copyStaticFiles = do
   statics <- getDirectoryFiles siteFolder ["static//*"]
-  files <- getDirectoryFiles siteFolder ["js//*", "fonts//*"]
+  files <- getDirectoryFiles siteFolder ["fonts//*"]
   void $ forP statics $ \path -> copyFileChanged (siteFolder </> path) (outputFolder </> takeFileName path)
   void $ forP files $ \path -> copyFileChanged (siteFolder </> path) (outputFolder </> path)
 
+compileScss :: Action Text
+compileScss = do
+  cache $ cmd ("pnpx sass" :: String) ([siteFolder </> "scss" </> "style.scss", siteFolder </> "scss" </> "style.css"] :: [String])
+  css <- readFile' (siteFolder </> "scss" </> "style.css")
+  let hash = T.pack $ take 8 $ show $ md5 (BLU.fromString css)
+      file = "style." <> hash <> ".css"
+  Stdout compressed <- cmd ("node scripts/css.mjs" :: String) ([T.unpack file] :: [String])
+  writeFile' (outputFolder </> T.unpack file) compressed
+  pure file
+
+compileJs :: Action Text
+compileJs = do
+  cache $ cmd ("pnpx terser" :: String) ([siteFolder </> "js" </> "theme.js", "-c", "-m toplevel", "-o", outputFolder </> "theme.js"] :: [String])
+  js <- readFile' (outputFolder </> "theme.js")
+  let hash = T.pack $ take 8 $ show $ md5 (BLU.fromString js)
+      file = "theme." <> hash <> ".js"
+  writeFile' (outputFolder </> T.unpack file) js
+  pure file
+
+optimizeHTML :: Bool -> Action ()
+optimizeHTML prod =
+  if prod
+    then do
+      files <- getDirectoryFiles "" [outputFolder </> "**/*.html"]
+      void $ forP files $ \f -> cmd_ ("pnpx minify-html --minify-css --minify-js" <> " --output " <> f :: String) ([f] :: [String])
+    else pure ()
+
 buildRules :: Action ()
 buildRules = do
-  buildIndex
+  css <- compileScss
+  js <- compileJs
   copyStaticFiles
+  prod <- liftIO isProd
+  let meta = siteMeta css js
+  buildIndex meta
+  optimizeHTML prod
+
+isProd :: IO Bool
+isProd = liftA2 (||) (isJust <$> lookupEnv "CI") (isJust <$> lookupEnv "PROD")
 
 main :: IO ()
 main = do
-  let shOpts = forwardOptions $ shakeOptions {shakeVerbosity = Chatty, shakeLintInside = [siteFolder]}
+  let shOpts = forwardOptions $ shakeOptions {shakeVerbosity = Normal, shakeLintInside = [siteFolder]}
   shakeArgsForward shOpts buildRules

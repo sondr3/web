@@ -45,6 +45,7 @@ executable web
     , filepath
     , lens
     , lens-aeson
+    , pureMD5
     , shake
     , slick                 ^>=1.1
     , text                  ^>=1.2
