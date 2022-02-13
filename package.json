@@ -17,7 +17,9 @@
   "devDependencies": {
     "@minify-html/js": "0.8.0",
     "@parcel/css": "1.2.0",
+    "@parcel/watcher": "2.0.5",
     "@sondr3/prettier": "0.6.0",
+    "browser-sync": "2.27.7",
     "prettier": "2.5.1",
     "sass": "1.49.7",
     "terser": "5.10.0"
