@@ -47,8 +47,8 @@ jobs:
       - name: Compile
         run: cabal build
 
-      - name: Run
-        run: cabal run
+      # - name: Run
+      #   run: cabal run
 
       - name: Deploy
         if: ${{ github.ref == 'refs/heads/main' }}
