@@ -14,28 +14,38 @@ jobs:
         with:
           version: 6.x.x
 
+      - name: Setup Haskell
+        id: setup-haskell-cabal
+        uses: haskell/actions/setup@v1
+        with:
+          ghc-version: "9.0.2"
+
       - uses: actions/setup-node@v2
         with:
           node-version: "17"
           cache: "pnpm"
 
+      - name: Cache ~/.cabal/packages, ~/.cabal/store and dist-newstyle
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cabal/packages
+            ~/.cabal/store
+            dist-newstyle
+          key: ${{ runner.os }}-ghc-${{ hashFiles('**/*.cabal', '**/cabal.project', '**/cabal.project.freeze') }}
+          restore-keys: ${{ runner.os }}-ghc-
+
+      - name: Formatting
+        uses: mrkkrp/ormolu-action@v5
+
       - name: Install and build
         run: pnpm install --frozen-lockfile
 
-      - name: Lint
-        run: |
-          pnpm format
-          pnpm lint
-          pnpm style
+      - name: Compile
+        run: cabal build
 
-      - name: Build app
-        run: pnpm build
-
-      - name: Test
-        run: pnpm test
-
-      - name: Build site
-        run: ./site.mjs --production
+      - name: Run
+        run: cabal run
 
       - name: Deploy
         if: ${{ github.ref == 'refs/heads/main' }}
