@@ -87,8 +87,8 @@ compileScss = do
 
 compileJs :: Action Text
 compileJs = do
+  js <- readFile' (siteFolder </> "js" </> "theme.js")
   cache $ cmd ("pnpx terser" :: String) ([siteFolder </> "js" </> "theme.js", "-c", "-m toplevel", "-o", outputFolder </> "theme.js"] :: [String])
-  js <- readFile' (outputFolder </> "theme.js")
   let hash = T.pack $ take 8 $ show $ md5 (BLU.fromString js)
       file = "theme." <> hash <> ".js"
   writeFile' (outputFolder </> T.unpack file) js
@@ -102,6 +102,16 @@ optimizeHTML prod =
       void $ forP files $ \f -> cmd_ ("pnpx minify-html --minify-css --minify-js" <> " --output " <> f :: String) ([f] :: [String])
     else pure ()
 
+compress :: Bool -> Action ()
+compress prod =
+  if prod
+    then do
+      files <- getDirectoryFiles "" (map (\f -> outputFolder </> "**" </> f) ["*.html", "*.css", "*.js", "*.woff2"])
+      cache $ cmd ("gzip -9 -f" :: String) files
+      cache $ cmd ("brotli -Z -f" :: String) files
+      pure ()
+    else pure ()
+
 buildRules :: Action ()
 buildRules = do
   css <- compileScss
@@ -111,6 +121,7 @@ buildRules = do
   let meta = siteMeta css js
   buildIndex meta
   optimizeHTML prod
+  compress prod
 
 isProd :: IO Bool
 isProd = liftA2 (||) (isJust <$> lookupEnv "CI") (isJust <$> lookupEnv "PROD")
