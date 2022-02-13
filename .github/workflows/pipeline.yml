@@ -34,10 +34,10 @@ jobs:
             dist-newstyle
           key: ${{ runner.os }}-ghc-${{ hashFiles('**/*.cabal', '**/cabal.project', '**/cabal.project.freeze') }}
           restore-keys: ${{ runner.os }}-ghc-
-      
-    - uses: ndmitchell/neil@master
-      with:
-        install-fsatrace: true
+
+      - uses: ndmitchell/neil@master
+        with:
+          install-fsatrace: true
 
       - name: Formatting
         uses: mrkkrp/ormolu-action@v5
