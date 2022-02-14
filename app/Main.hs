@@ -1,18 +1,18 @@
+{-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE DerivingStrategies #-}
 
 module Main (main) where
 
 import Control.Applicative (Applicative (liftA2))
 import Control.Monad (void)
-import Data.Aeson (ToJSON (toJSON), object)
-import qualified Data.Aeson as A
+import Data.Aeson (ToJSON (toJSON))
 import Data.Digest.Pure.MD5 (md5)
 import Data.Maybe (isJust)
 import qualified Data.String as BLU
-import Data.Text (Text)
 import qualified Data.Text as T
 import Development.Shake
+import Development.Shake.Classes (Binary)
 import Development.Shake.FilePath
 import Development.Shake.Forward
 import GHC.Generics (Generic)
@@ -20,27 +20,17 @@ import Slick (compileTemplate', substitute)
 import System.Environment (lookupEnv)
 
 data SiteMeta = SiteMeta
-  { siteTitle :: Text,
-    siteDescription :: Text,
-    siteAuthor :: Text,
-    baseUrl :: Text,
-    cssUrl :: Text,
-    themeUrl :: Text
+  { siteTitle :: String,
+    siteDescription :: String,
+    siteAuthor :: String,
+    baseUrl :: String,
+    cssUrl :: String,
+    themeUrl :: String
   }
   deriving stock (Generic, Eq, Ord, Show)
+  deriving anyclass (ToJSON, Binary)
 
-instance ToJSON SiteMeta where
-  toJSON SiteMeta {..} =
-    object
-      [ "title" A..= siteTitle,
-        "description" A..= siteDescription,
-        "author" A..= siteAuthor,
-        "baseUrl" A..= baseUrl,
-        "cssUrl" A..= cssUrl,
-        "themeUrl" A..= themeUrl
-      ]
-
-siteMeta :: Text -> Text -> SiteMeta
+siteMeta :: String -> String -> SiteMeta
 siteMeta style theme =
   SiteMeta
     { siteTitle = "Eons :: IO ()",
@@ -66,7 +56,7 @@ siteFolder = "./site/"
 buildIndex :: SiteMeta -> Action ()
 buildIndex meta = do
   indexT <- compileTemplate' (siteFolder <> "templates/index.html")
-  writeFile' (outputFolder </> "index.html") (T.unpack $ substitute indexT (toJSON meta))
+  writeFile' (outputFolder </> "index.html") . T.unpack $ substitute indexT (toJSON meta)
 
 copyStaticFiles :: Action ()
 copyStaticFiles = do
@@ -75,23 +65,23 @@ copyStaticFiles = do
   void $ forP statics $ \path -> copyFileChanged (siteFolder </> path) (outputFolder </> takeFileName path)
   void $ forP files $ \path -> copyFileChanged (siteFolder </> path) (outputFolder </> path)
 
-compileScss :: Action Text
+compileScss :: Action String
 compileScss = do
-  cache $ cmd ("pnpx sass" :: String) ([siteFolder </> "scss" </> "style.scss", siteFolder </> "scss" </> "style.css"] :: [String])
+  cache $ cmd "pnpx sass" [siteFolder </> "scss" </> "style.scss", siteFolder </> "scss" </> "style.css"]
   css <- readFile' (siteFolder </> "scss" </> "style.css")
-  let hash = T.pack $ take 8 $ show $ md5 (BLU.fromString css)
+  let hash = take 8 $ show $ md5 (BLU.fromString css)
       file = "style." <> hash <> ".css"
-  Stdout compressed <- cmd ("node scripts/css.mjs" :: String) ([T.unpack file] :: [String])
-  writeFile' (outputFolder </> T.unpack file) compressed
+  Stdout compressed <- cmd "node scripts/css.mjs" [file]
+  writeFile' (outputFolder </> file) compressed
   pure file
 
-compileJs :: Action Text
+compileJs :: Action String
 compileJs = do
   js <- readFile' (siteFolder </> "js" </> "theme.js")
-  cache $ cmd ("pnpx terser" :: String) ([siteFolder </> "js" </> "theme.js", "-c", "-m toplevel", "-o", outputFolder </> "theme.js"] :: [String])
-  let hash = T.pack $ take 8 $ show $ md5 (BLU.fromString js)
+  cache $ cmd "pnpx terser" [siteFolder </> "js" </> "theme.js", "-c", "-m toplevel", "-o", outputFolder </> "theme.js"]
+  let hash = take 8 $ show $ md5 (BLU.fromString js)
       file = "theme." <> hash <> ".js"
-  writeFile' (outputFolder </> T.unpack file) js
+  writeFile' (outputFolder </> file) js
   pure file
 
 optimizeHTML :: Bool -> Action ()
@@ -99,7 +89,7 @@ optimizeHTML prod =
   if prod
     then do
       files <- getDirectoryFiles "" [outputFolder </> "**/*.html"]
-      void $ forP files $ \f -> cmd_ ("pnpx minify-html --minify-css --minify-js" <> " --output " <> f :: String) ([f] :: [String])
+      void $ forP files $ \f -> cmd_ ("pnpx minify-html --minify-css --minify-js" <> " --output " <> f) [f]
     else pure ()
 
 compress :: Bool -> Action ()
@@ -107,8 +97,8 @@ compress prod =
   if prod
     then do
       files <- getDirectoryFiles "" (map (\f -> outputFolder </> "**" </> f) ["*.html", "*.css", "*.js", "*.woff2"])
-      cache $ cmd ("gzip -9 -f" :: String) files
-      cache $ cmd ("brotli -Z -f" :: String) files
+      cache $ cmd "gzip -9 -f" files
+      cache $ cmd "brotli -Z -f" files
       pure ()
     else pure ()
 
