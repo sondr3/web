@@ -17,6 +17,7 @@ import Data.Aeson.Lens
 import Data.Digest.Pure.MD5 (md5)
 import Data.Generics.Labels ()
 import qualified Data.HashMap.Lazy as HML
+import qualified Data.HashMap.Strict as HM
 import Data.Maybe (isJust)
 import qualified Data.String as BLU
 import qualified Data.Text as T
@@ -52,15 +53,16 @@ siteMeta style theme =
       themeUrl = theme
     }
 
-withSiteMeta :: Value -> Value -> Value
-withSiteMeta (Object obj) (Object meta) = Object $ HML.union obj meta
-withSiteMeta _ _ = error "only add site meta to objects"
+mergeJson :: Value -> Value -> Value
+mergeJson (Object r) (Object l) = Object $ HML.union r l
+mergeJson _ _ = error "can only merge two objects"
 
 data Page = Page
   { title :: String,
     description :: String,
     content :: String,
     slug :: String,
+    kind :: String,
     createdAt :: Maybe String,
     modifiedAt :: Maybe String
   }
@@ -81,6 +83,9 @@ outputFolder = "./build/"
 siteFolder :: FilePath
 siteFolder = "./site/"
 
+commonPage :: Value -> Value -> Value
+commonPage meta page = mergeJson meta (mergeJson page $ toJSON (HM.fromList [("kind", "website")]))
+
 rfc3339 :: Maybe String
 rfc3339 = Just "%H:%M:SZ"
 
@@ -96,8 +101,8 @@ sitemap meta ps = do
 
 buildIndex :: SiteMeta -> Action ()
 buildIndex meta = do
-  let page = Page {title = "Home", description = "The online home for Sondre Nilsen", content = "", slug = "", createdAt = Nothing, modifiedAt = Nothing}
-      indexData = withSiteMeta (toJSON page) (toJSON meta)
+  let page = Page {title = "Home", description = "The online home for Sondre Nilsen", kind = "website", content = "", slug = "", createdAt = Nothing, modifiedAt = Nothing}
+      indexData = mergeJson (toJSON page) (toJSON meta)
   indexT <- compileTemplate' (siteFolder <> "templates" </> "index.html")
   writeFile' (outputFolder </> "index.html") . T.unpack $ substitute indexT indexData
 
@@ -110,14 +115,13 @@ buildPage :: SiteMeta -> FilePath -> Action Page
 buildPage meta path = cacheAction ("pages", path) $ do
   liftIO . putStrLn $ "Rebuilding page " <> path
   content <- readFile' path
-  page <- markdownToHTML $ T.pack content
-  let pageData = withSiteMeta page (toJSON meta)
-      slug = case pageData ^? key (T.pack "slug") . _String of
+  page <- commonPage (toJSON meta) <$> markdownToHTML (T.pack content)
+  let slug = case page ^? key (T.pack "slug") . _String of
         Just v -> v
         Nothing -> error "could not get page slug"
   template <- compileTemplate' (siteFolder </> "templates" </> "page.html")
-  writeFile' (outputFolder </> T.unpack slug </> "index.html") (T.unpack $ substitute template pageData)
-  convert pageData
+  writeFile' (outputFolder </> T.unpack slug </> "index.html") . T.unpack $ substitute template page
+  convert page
 
 copyStaticFiles :: Action ()
 copyStaticFiles = do

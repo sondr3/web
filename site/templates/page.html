@@ -1,2 +1,13 @@
-<h1>{{ title }}</h1>
-{{ content }}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  {{>site/templates/head.html}}
+
+  <body class="root">
+    {{>site/templates/header.html}}
+    <main class="main">
+      <h1>{{ title }}</h1>
+      {{{ content }}}
+    </main>
+    {{>site/templates/footer.html}}
+  </body>
+</html>
