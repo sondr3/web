@@ -97,8 +97,8 @@ compress prod =
   if prod
     then do
       files <- getDirectoryFiles "" (map (\f -> outputFolder </> "**" </> f) ["*.html", "*.css", "*.js", "*.woff2"])
-      cache $ cmd "gzip -9 -f" files
-      cache $ cmd "brotli -Z -f" files
+      cache $ cmd "gzip -k -9 -f" files
+      cache $ cmd "brotli -k -Z -f" files
       pure ()
     else pure ()
 
