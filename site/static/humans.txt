@@ -11,6 +11,6 @@ You
 Last Update: 20xx
 Doctype: HTML5
 Language: English
-Standards: HTML5, ES2020
-Components: TypeScript, Sass, Asciidoctor
-Software: WebStorm, Neovim
+Standards: HTML5
+Components: Haskell, Sass, Pandoc
+Software: Neovim
