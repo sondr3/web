@@ -2,7 +2,7 @@
 title: About me
 description: Hello, I'm Sondre! I make things
 createdAt: 2020-12-12
-modifietAt: 2022-01-10
+modifiedAt: 2022-01-10
 slug: about
 ---
 

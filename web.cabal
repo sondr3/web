@@ -41,6 +41,7 @@ executable web
     , containers
     , directory
     , filepath
+    , generic-lens
     , lens
     , lens-aeson
     , pureMD5

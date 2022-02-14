@@ -1,6 +1,11 @@
+{-# LANGUAGE DataKinds #-}
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DerivingStrategies #-}
+{-# LANGUAGE DuplicateRecordFields #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE OverloadedLabels #-}
+{-# LANGUAGE NoMonomorphismRestriction #-}
 
 module Main (main) where
 
@@ -10,10 +15,13 @@ import Control.Monad (void)
 import Data.Aeson
 import Data.Aeson.Lens
 import Data.Digest.Pure.MD5 (md5)
+import Data.Generics.Labels ()
 import qualified Data.HashMap.Lazy as HML
 import Data.Maybe (isJust)
 import qualified Data.String as BLU
 import qualified Data.Text as T
+import Data.Time (defaultTimeLocale, formatTime, getCurrentTime, iso8601DateFormat)
+import Data.Time.Clock (UTCTime)
 import Development.Shake
 import Development.Shake.Classes
 import Development.Shake.FilePath
@@ -36,7 +44,7 @@ data SiteMeta = SiteMeta
 siteMeta :: String -> String -> SiteMeta
 siteMeta style theme =
   SiteMeta
-    { siteTitle = "=> Eons :: IO ()",
+    { siteTitle = "Eons :: IO ()",
       siteDescription = "The online home for Sondre Nilsen",
       siteAuthor = "Sondre Nilsen",
       baseUrl = "https://www.eons.io/",
@@ -59,17 +67,38 @@ data Page = Page
   deriving stock (Generic, Eq, Ord, Show)
   deriving anyclass (ToJSON, FromJSON, Binary)
 
+data Sitemap = Sitemap
+  { baseUrl :: String,
+    buildTime :: String,
+    pages :: [Page]
+  }
+  deriving stock (Generic, Eq, Ord, Show)
+  deriving anyclass (ToJSON, FromJSON, Binary)
+
 outputFolder :: FilePath
 outputFolder = "./build/"
 
 siteFolder :: FilePath
 siteFolder = "./site/"
 
+rfc3339 :: Maybe String
+rfc3339 = Just "%H:%M:SZ"
+
+toIsoDate :: UTCTime -> String
+toIsoDate = formatTime defaultTimeLocale (iso8601DateFormat Nothing)
+
+sitemap :: SiteMeta -> [Page] -> Action ()
+sitemap meta ps = do
+  now <- liftIO getCurrentTime
+  let sm = Sitemap {baseUrl = meta ^. #baseUrl, buildTime = toIsoDate now, pages = ps}
+  indexT <- compileTemplate' (siteFolder <> "templates" </> "sitemap.xml")
+  writeFile' (outputFolder </> "sitemap.xml") . T.unpack $ substitute indexT (toJSON sm)
+
 buildIndex :: SiteMeta -> Action ()
 buildIndex meta = do
   let page = Page {title = "Home", description = "The online home for Sondre Nilsen", content = "", slug = "", createdAt = Nothing, modifiedAt = Nothing}
       indexData = withSiteMeta (toJSON page) (toJSON meta)
-  indexT <- compileTemplate' (siteFolder <> "templates/index.html")
+  indexT <- compileTemplate' (siteFolder <> "templates" </> "index.html")
   writeFile' (outputFolder </> "index.html") . T.unpack $ substitute indexT indexData
 
 buildPages :: SiteMeta -> Action [Page]
@@ -143,6 +172,7 @@ buildRules = do
   let meta = siteMeta css js
   pages <- buildPages meta
   buildIndex meta
+  sitemap meta pages
   optimizeHTML prod
   compress prod
 
