@@ -39,7 +39,7 @@ jobs:
         run: |
           git clone https://github.com/jacereda/fsatrace.git .fsatrace
           (cd .fsatrace && make)
-          echo "$GITHUB_WORKSPACE/.fstrace/" >> $GITHUB_PATH
+          echo "${GITHUB_WORKSPACE}/.fsatrace" >> $GITHUB_PATH
 
       - name: Install and build
         run: pnpm install --frozen-lockfile
@@ -47,8 +47,8 @@ jobs:
       - name: Compile
         run: cabal build
 
-      # - name: Run
-      #   run: cabal run
+      - name: Run
+        run: cabal run web -- --rebuild
 
       - name: Deploy
         if: ${{ github.ref == 'refs/heads/main' }}
