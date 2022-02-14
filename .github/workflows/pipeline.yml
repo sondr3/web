@@ -39,7 +39,7 @@ jobs:
         run: |
           git clone https://github.com/jacereda/fsatrace.git .fsatrace
           (cd .fsatrace && make)
-          export PATH=$PATH:`pwd`/.fsatrace
+          echo "$GITHUB_WORKSPACE/.fstrace/" >> $GITHUB_PATH
 
       - name: Install and build
         run: pnpm install --frozen-lockfile
