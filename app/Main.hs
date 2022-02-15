@@ -161,11 +161,12 @@ compress :: Bool -> Action ()
 compress prod =
   if prod
     then do
-      files <- getDirectoryFiles "" (map (\f -> outputFolder </> "**" </> f) ["*.html", "*.css", "*.js", "*.woff2"])
-      cache $ cmd "gzip -k -9 -f" files
-      cache $ cmd "brotli -k -Z -f" files
-      pure ()
+      files <- filterFiles <$> getDirectoryFiles "" [outputFolder </> "**/*"]
+      cmd_ "gzip -k -9 -f" files
+      cmd_ "brotli -k -Z -f" files
     else pure ()
+  where
+    filterFiles = filter (\f -> takeExtension f `notElem` [".gz", ".br", ".png", ".jpg"])
 
 buildRules :: Action ()
 buildRules = do
