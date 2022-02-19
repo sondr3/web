@@ -169,9 +169,9 @@ compress prod =
 
 buildRules :: Action ()
 buildRules = do
+  copyStaticFiles
   css <- compileScss
   js <- compileJs
-  copyStaticFiles
   prod <- liftIO isProd
   let meta = siteMeta css js
   pages <- buildPages meta
