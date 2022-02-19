@@ -136,8 +136,7 @@ compileScss = do
   css <- readFile' (siteFolder </> "scss" </> "style.css")
   let cssHash = take 8 $ show $ md5 (BLU.fromString css)
       file = "style." <> cssHash <> ".css"
-  Stdout compressed <- cmd "node scripts/css.mjs" [file]
-  writeFile' (outputFolder </> file) compressed
+  cache $ cmd "pnpx parcel-css" [siteFolder </> "scss" </> "style.css", "-o", outputFolder </> file, "-m"]
   pure file
 
 compileJs :: Action String
