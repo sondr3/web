@@ -130,20 +130,23 @@ copyStaticFiles = do
   void $ forP statics $ \path -> copyFileChanged (siteFolder </> path) (outputFolder </> takeFileName path)
   void $ forP files $ \path -> copyFileChanged (siteFolder </> path) (outputFolder </> path)
 
+hashFile :: FilePath -> String -> String -> Action String
+hashFile path name ext = do
+  content <- readFile' path
+  let cssHash = take 8 $ show $ md5 (BLU.fromString content)
+      file = name <> cssHash <> ext
+  pure file
+
 compileScss :: Action String
 compileScss = do
   cache $ cmd "pnpx sass" [siteFolder </> "scss" </> "style.scss", siteFolder </> "scss" </> "style.css"]
-  css <- readFile' (siteFolder </> "scss" </> "style.css")
-  let cssHash = take 8 $ show $ md5 (BLU.fromString css)
-      file = "style." <> cssHash <> ".css"
+  file <- hashFile (siteFolder </> "scss" </> "style.css") "style." ".css"
   cache $ cmd "pnpx parcel-css" [siteFolder </> "scss" </> "style.css", "-o", outputFolder </> file, "-m"]
   pure file
 
 compileJs :: Action String
 compileJs = do
-  js <- readFile' (siteFolder </> "js" </> "theme.js")
-  let jsHash = take 8 $ show $ md5 (BLU.fromString js)
-      file = "theme." <> jsHash <> ".js"
+  file <- hashFile (siteFolder </> "js" </> "theme.js") "theme." ".js"
   cache $ cmd "pnpx esbuild" [siteFolder </> "js" </> "theme.js", "--minify", "--format=iife", "--outfile=" <> outputFolder </> file, "--log-level=warning"]
   pure file
 
