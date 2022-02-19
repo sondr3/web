@@ -20,8 +20,8 @@
     "@parcel/watcher": "2.0.5",
     "@sondr3/prettier": "0.6.0",
     "browser-sync": "2.27.7",
+    "esbuild": "0.14.23",
     "prettier": "2.5.1",
-    "sass": "1.49.8",
-    "terser": "5.10.0"
+    "sass": "1.49.8"
   }
 }

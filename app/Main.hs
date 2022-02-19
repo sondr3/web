@@ -142,10 +142,9 @@ compileScss = do
 compileJs :: Action String
 compileJs = do
   js <- readFile' (siteFolder </> "js" </> "theme.js")
-  cache $ cmd "pnpx terser" [siteFolder </> "js" </> "theme.js", "-c", "-m toplevel", "-o", outputFolder </> "theme.js"]
   let jsHash = take 8 $ show $ md5 (BLU.fromString js)
       file = "theme." <> jsHash <> ".js"
-  writeFile' (outputFolder </> file) js
+  cache $ cmd "pnpx esbuild" [siteFolder </> "js" </> "theme.js", "--minify", "--format=iife", "--outfile=" <> outputFolder </> file, "--log-level=warning"]
   pure file
 
 optimizeHTML :: Bool -> Action ()
