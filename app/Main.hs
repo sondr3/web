@@ -27,6 +27,7 @@ import Development.Shake
 import Development.Shake.Classes
 import Development.Shake.FilePath
 import Development.Shake.Forward
+import Dhall (FromDhall, auto, defaultInputSettings, inputWithSettings, rootDirectory)
 import GHC.Generics (Generic)
 import Slick
 import System.Environment (lookupEnv)
@@ -81,10 +82,10 @@ data Project = Project
   { name :: String,
     description :: String,
     technology :: [String],
-    github :: String
+    gitHub :: String
   }
   deriving stock (Generic, Eq, Ord, Show)
-  deriving anyclass (ToJSON, FromJSON, Binary)
+  deriving anyclass (ToJSON, Binary, FromDhall)
 
 outputFolder :: FilePath
 outputFolder = "./build/"
@@ -97,6 +98,9 @@ commonPage meta page = mergeJson meta (mergeJson page $ toJSON (HM.fromList [("k
 
 rfc3339 :: Maybe String
 rfc3339 = Just "%H:%M:SZ"
+
+parseDhall :: FromDhall a => T.Text -> FilePath -> IO a
+parseDhall input root = inputWithSettings (defaultInputSettings & rootDirectory .~ (siteFolder </> root)) auto input
 
 toIsoDate :: UTCTime -> String
 toIsoDate = formatTime defaultTimeLocale (iso8601DateFormat Nothing)
@@ -141,8 +145,10 @@ buildProject :: SiteMeta -> FilePath -> Action Project
 buildProject meta path = cacheAction ("projects", path) $ do
   liftIO . putStrLn $ "Rebuilding project " <> path
   content <- readFile' path
-  project <- commonPage (toJSON meta) <$> markdownToHTML (T.pack content)
-  convert project
+  dhall <- T.pack <$> readFile' (replaceExtension path ".dhall")
+  info <- liftIO $ parseDhall dhall "projects"
+  _ <- commonPage (toJSON meta) <$> markdownToHTML (T.pack content)
+  pure info
 
 copyStaticFiles :: Action ()
 copyStaticFiles = do

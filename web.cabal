@@ -39,6 +39,7 @@ executable web
     , aeson                 ^>=1.5
     , base                  ^>=4.15.1.0
     , containers
+    , dhall                 ^>=1.40
     , directory
     , filepath
     , generic-lens
