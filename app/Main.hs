@@ -77,6 +77,15 @@ data Sitemap = Sitemap
   deriving stock (Generic, Eq, Ord, Show)
   deriving anyclass (ToJSON, FromJSON, Binary)
 
+data Project = Project
+  { name :: String,
+    description :: String,
+    technology :: [String],
+    github :: String
+  }
+  deriving stock (Generic, Eq, Ord, Show)
+  deriving anyclass (ToJSON, FromJSON, Binary)
+
 outputFolder :: FilePath
 outputFolder = "./build/"
 
@@ -92,15 +101,15 @@ rfc3339 = Just "%H:%M:SZ"
 toIsoDate :: UTCTime -> String
 toIsoDate = formatTime defaultTimeLocale (iso8601DateFormat Nothing)
 
-sitemap :: SiteMeta -> [Page] -> Action ()
-sitemap meta ps = do
+sitemap :: SiteMeta -> [Page] -> [Project] -> Action ()
+sitemap meta ps _ = do
   now <- liftIO getCurrentTime
   let sm = Sitemap {baseUrl = meta ^. #baseUrl, buildTime = toIsoDate now, pages = ps}
   indexT <- compileTemplate' (siteFolder <> "templates" </> "sitemap.xml")
   writeFile' (outputFolder </> "sitemap.xml") . T.unpack $ substitute indexT (toJSON sm)
 
-buildIndex :: SiteMeta -> Action ()
-buildIndex meta = do
+buildIndex :: SiteMeta -> [Page] -> [Project] -> Action ()
+buildIndex meta _ _ = do
   let page = Page {title = "Home", description = "The online home for Sondre Nilsen", kind = "website", content = "", slug = "", createdAt = Nothing, modifiedAt = Nothing}
       indexData = mergeJson (toJSON page) (toJSON meta)
   indexT <- compileTemplate' (siteFolder <> "templates" </> "index.html")
@@ -122,6 +131,18 @@ buildPage meta path = cacheAction ("pages", path) $ do
   template <- compileTemplate' (siteFolder </> "templates" </> "page.html")
   writeFile' (outputFolder </> T.unpack slug </> "index.html") . T.unpack $ substitute template page
   convert page
+
+buildProjects :: SiteMeta -> Action [Project]
+buildProjects meta = do
+  projects <- getDirectoryFiles "" [siteFolder </> "projects" </> "*.md"]
+  forP projects (buildProject meta)
+
+buildProject :: SiteMeta -> FilePath -> Action Project
+buildProject meta path = cacheAction ("projects", path) $ do
+  liftIO . putStrLn $ "Rebuilding project " <> path
+  content <- readFile' path
+  project <- commonPage (toJSON meta) <$> markdownToHTML (T.pack content)
+  convert project
 
 copyStaticFiles :: Action ()
 copyStaticFiles = do
@@ -177,8 +198,9 @@ buildRules = do
   prod <- liftIO isProd
   let meta = siteMeta css js
   pages <- buildPages meta
-  buildIndex meta
-  sitemap meta pages
+  projects <- buildProjects meta
+  buildIndex meta pages projects
+  sitemap meta pages projects
   optimizeHTML prod
   compress prod
 
