@@ -26,7 +26,7 @@ jobs:
           cache: "pnpm"
 
       - name: Cache ~/.cabal/packages, ~/.cabal/store and dist-newstyle
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.cabal/packages
