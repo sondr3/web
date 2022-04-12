@@ -7,7 +7,7 @@
     "type": "git",
     "url": "git+https://github.com/sondr3/web.git"
   },
-  "author": "Sondre Nilsen <sondre@eons.io>",
+  "author": "Sondre Aasemoen <sondre@eons.io>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/sondr3/web/issues"

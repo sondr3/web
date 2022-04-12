@@ -1,5 +1,5 @@
 /* TEAM */
-Everything Man: Sondre Nilsen
+Everything Man: Sondre Aasemoen
 Site: eons.io
 Twitter: @sondr3
 Location: Norway

@@ -47,8 +47,8 @@ siteMeta :: String -> String -> SiteMeta
 siteMeta style theme =
   SiteMeta
     { siteTitle = "Eons :: IO ()",
-      siteDescription = "The online home for Sondre Nilsen",
-      siteAuthor = "Sondre Nilsen",
+      siteDescription = "The online home for Sondre Aasemoen",
+      siteAuthor = "Sondre Aasemoen",
       baseUrl = "https://www.eons.io/",
       cssUrl = style,
       themeUrl = theme
@@ -114,7 +114,7 @@ sitemap meta ps _ = do
 
 buildIndex :: SiteMeta -> [Page] -> [Project] -> Action ()
 buildIndex meta _ _ = do
-  let page = Page {title = "Home", description = "The online home for Sondre Nilsen", kind = "website", content = "", slug = "", createdAt = Nothing, modifiedAt = Nothing}
+  let page = Page {title = "Home", description = "The online home for Sondre Aasemoen", kind = "website", content = "", slug = "", createdAt = Nothing, modifiedAt = Nothing}
       indexData = mergeJson (toJSON page) (toJSON meta)
   indexT <- compileTemplate' (siteFolder <> "templates" </> "index.html")
   writeFile' (outputFolder </> "index.html") . T.unpack $ substitute indexT indexData
