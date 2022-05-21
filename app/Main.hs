@@ -166,15 +166,15 @@ hashFile path name ext = do
 
 compileScss :: Action String
 compileScss = do
-  cache $ cmd "pnpx sass" [siteFolder </> "scss" </> "style.scss", siteFolder </> "scss" </> "style.css"]
+  cache $ cmd "node_modules/.bin/sass" [siteFolder </> "scss" </> "style.scss", siteFolder </> "scss" </> "style.css"]
   file <- hashFile (siteFolder </> "scss" </> "style.css") "style." ".css"
-  cache $ cmd "pnpx parcel-css" [siteFolder </> "scss" </> "style.css", "-o", outputFolder </> file, "-m"]
+  cache $ cmd "node_modules/.bin/parcel-css" [siteFolder </> "scss" </> "style.css", "-o", outputFolder </> file, "-m"]
   pure file
 
 compileJs :: Action String
 compileJs = do
   file <- hashFile (siteFolder </> "js" </> "theme.js") "theme." ".js"
-  cache $ cmd "pnpx esbuild" [siteFolder </> "js" </> "theme.js", "--minify", "--format=iife", "--outfile=" <> outputFolder </> file, "--log-level=warning"]
+  cache $ cmd "node_modules/.bin/esbuild" [siteFolder </> "js" </> "theme.js", "--minify", "--format=iife", "--outfile=" <> outputFolder </> file, "--log-level=warning"]
   pure file
 
 optimizeHTML :: Bool -> Action ()
@@ -182,7 +182,7 @@ optimizeHTML prod =
   if prod
     then do
       files <- getDirectoryFiles "" [outputFolder </> "**/*.html"]
-      void $ forP files $ \f -> cmd_ ("pnpx minify-html --minify-css --minify-js" <> " --output " <> f) [f]
+      void $ forP files $ \f -> cmd_ ("node_modules/.bin/minify-html --minify-css --minify-js" <> " --output " <> f) [f]
     else pure ()
 
 compress :: Bool -> Action ()
