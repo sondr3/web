@@ -12,7 +12,7 @@ jobs:
 
       - uses: pnpm/action-setup@v2.2.1
         with:
-          version: 6.x.x
+          version: 7
 
       - name: Setup Haskell
         id: setup-haskell-cabal
