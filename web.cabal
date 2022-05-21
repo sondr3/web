@@ -33,11 +33,11 @@ executable web
     -Wredundant-constraints -Wnoncanonical-monad-instances
     -fhide-source-paths -Wmissing-export-lists -Wpartial-fields
     -Wmissing-deriving-strategies -Werror=missing-deriving-strategies
-    -fwrite-ide-info -Wunused-packages
+    -fwrite-ide-info -Wunused-packages -O2
 
   build-depends:
     , aeson                 ^>=1.5
-    , base                  ^>=4.15.1.0
+    , base                  ^>=4.15
     , containers
     , dhall                 ^>=1.40
     , directory
