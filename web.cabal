@@ -37,7 +37,7 @@ executable web
 
   build-depends:
     , aeson                 ^>=1.5
-    , base                  ^>=4.15
+    , base                  >= 4.10 && <5
     , containers
     , dhall                 ^>=1.40
     , directory

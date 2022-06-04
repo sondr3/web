@@ -273,7 +273,7 @@ constraints: any.Cabal ==3.4.1.0,
              unicode-transforms -bench-show -dev -has-icu -has-llvm -use-gauge,
              any.uniplate ==1.6.13,
              any.unix ==2.7.2.2,
-             any.unix-compat ==0.5.4,
+             any.unix-compat ==0.6,
              unix-compat -old-time,
              any.unliftio-core ==0.2.0.1,
              any.unordered-containers ==0.2.19.1,
@@ -301,4 +301,4 @@ constraints: any.Cabal ==3.4.1.0,
              zip-archive -executable,
              any.zlib ==0.6.3.0,
              zlib -bundled-c-zlib -non-blocking-ffi -pkg-config
-index-state: hackage.haskell.org 2022-05-21T12:33:50Z
+index-state: hackage.haskell.org 2022-05-29T09:30:00Z
