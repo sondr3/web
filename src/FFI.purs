@@ -2,13 +2,10 @@ module FFI where
 
 import Prelude
 
-import Effect.Uncurried (EffectFn2, EffectFn3)
+import Effect.Uncurried (EffectFn1, EffectFn2, EffectFn3)
 import Node.Path (FilePath)
 
-data CpSyncOptions = CpSyncOptions
-  { recursive :: Boolean
-  }
-
-foreign import cpSyncImpl :: EffectFn3 FilePath FilePath CpSyncOptions Unit
+foreign import cpSyncImpl :: EffectFn3 FilePath FilePath { recursive :: Boolean } Unit
 foreign import copyFileSyncImpl :: EffectFn2 FilePath FilePath Unit
-
+foreign import sassCompileImpl :: EffectFn1 FilePath { css :: String }
+foreign import createHash :: String -> String
