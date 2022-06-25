@@ -6,17 +6,11 @@ import Data.Array (filter)
 import Data.Traversable (for_)
 import Effect (Effect)
 import Effect.Console (log)
-import Effect.Uncurried (EffectFn2, EffectFn3, runEffectFn2, runEffectFn3)
+import Effect.Uncurried (runEffectFn2, runEffectFn3)
+import FFI (CpSyncOptions(..), copyFileSyncImpl, cpSyncImpl)
 import Node.FS.Perms (all, mkPerms)
 import Node.FS.Sync (mkdir', readdir)
 import Node.Path (FilePath, basename, dirname, extname)
-
-data CpSyncOptions = CpSyncOptions
-  { recursive :: Boolean
-  }
-
-foreign import cpSyncImpl :: EffectFn3 FilePath FilePath CpSyncOptions Unit
-foreign import copyFileSyncImpl :: EffectFn2 FilePath FilePath Unit
 
 outputFolder :: FilePath
 outputFolder = "./build/"
