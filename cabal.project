@@ -1,7 +1,0 @@
-packages: web.cabal
-
-source-repository-package
-    type: git
-    location: https://github.com/ChrisPenner/slick.git
-    tag: 0127e8d7942dba17967d6ef431093f730e00d5e3
-
