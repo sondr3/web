@@ -13,16 +13,17 @@ import Control.Applicative (Applicative (liftA2))
 import Control.Lens
 import Control.Monad (void)
 import Data.Aeson
+import Data.Aeson.Key (fromString)
+import qualified Data.Aeson.KeyMap as KM
 import Data.Aeson.Lens
 import Data.Digest.Pure.MD5 (md5)
 import Data.Generics.Labels ()
-import qualified Data.HashMap.Lazy as HML
 import qualified Data.HashMap.Strict as HM
 import Data.Maybe (isJust)
 import qualified Data.String as BLU
 import qualified Data.Text as T
-import Data.Time (defaultTimeLocale, formatTime, getCurrentTime, iso8601DateFormat)
-import Data.Time.Clock (UTCTime)
+import Data.Time.Clock (UTCTime, getCurrentTime)
+import Data.Time.Format.ISO8601
 import Development.Shake
 import Development.Shake.Classes
 import Development.Shake.FilePath
@@ -55,7 +56,7 @@ siteMeta style theme =
     }
 
 mergeJson :: Value -> Value -> Value
-mergeJson (Object r) (Object l) = Object $ HML.union r l
+mergeJson (Object r) (Object l) = Object $ KM.union r l
 mergeJson _ _ = error "can only merge two objects"
 
 data Page = Page
@@ -103,7 +104,9 @@ parseDhall :: FromDhall a => T.Text -> FilePath -> IO a
 parseDhall input root = inputWithSettings (defaultInputSettings & rootDirectory .~ (siteFolder </> root)) auto input
 
 toIsoDate :: UTCTime -> String
-toIsoDate = formatTime defaultTimeLocale (iso8601DateFormat Nothing)
+toIsoDate date = case formatShowM iso8601Format date of
+  Just v -> v
+  Nothing -> ""
 
 sitemap :: SiteMeta -> [Page] -> [Project] -> Action ()
 sitemap meta ps _ = do
@@ -129,7 +132,7 @@ buildPage meta path = cacheAction ("pages", path) $ do
   liftIO . putStrLn $ "Rebuilding page " <> path
   content <- readFile' path
   page <- commonPage (toJSON meta) <$> markdownToHTML (T.pack content)
-  let slug = case page ^? key (T.pack "slug") . _String of
+  let slug = case page ^? key (fromString "slug") . _String of
         Just v -> v
         Nothing -> error "could not get page slug"
   template <- compileTemplate' (siteFolder </> "templates" </> "page.html")
