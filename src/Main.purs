@@ -3,6 +3,7 @@ module Main where
 import Prelude
 
 import Data.Array (filter)
+import Data.Maybe (isJust)
 import Data.String (take)
 import Data.Traversable (for_)
 import Effect (Effect)
@@ -13,6 +14,13 @@ import Node.Encoding (Encoding(..))
 import Node.FS.Perms (all, mkPerms)
 import Node.FS.Sync (mkdir', readTextFile, readdir, writeTextFile)
 import Node.Path (FilePath, basename, dirname, extname, normalize)
+import Node.Process (lookupEnv)
+
+isProd :: Effect Boolean
+isProd = prod >>= pure ci
+  where
+  prod = isJust <$> lookupEnv "PROD"
+  ci = isJust <$> lookupEnv "CI"
 
 combine :: FilePath -> FilePath -> FilePath
 combine x y = normalize $ x <> "/" <> y
@@ -73,6 +81,7 @@ compileJs = do
 main :: Effect Unit
 main = do
   log "Building site..."
+  prod <- isProd
   copyStaticFiles
   _ <- compileSass
   _ <- compileJs
