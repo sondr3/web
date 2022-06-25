@@ -6,10 +6,9 @@ import Data.Array (filter)
 import Data.String (take)
 import Data.Traversable (for_)
 import Effect (Effect)
-import Effect.Class.Console (logShow)
 import Effect.Console (log)
 import Effect.Uncurried (runEffectFn1, runEffectFn2, runEffectFn3)
-import FFI (copyFileSyncImpl, cpSyncImpl, createHash, sassCompileImpl)
+import FFI (copyFileSyncImpl, cpSyncImpl, createHash, optimizeCSS, sassCompileImpl)
 import Node.Encoding (Encoding(..))
 import Node.FS.Perms (all, mkPerms)
 import Node.FS.Sync (mkdir', readdir, writeTextFile)
@@ -57,13 +56,14 @@ compileSass = do
   createDir (outputFolder </> "css")
   result <- runEffectFn1 sassCompileImpl (siteFolder </> "scss" </> "style.scss")
   let name = "style." <> hashString result.css <> ".css"
-  writeTextFile UTF8 (outputFolder </> "css" </> name) result.css
+  optimized <- optimizeCSS name result.css false
+  writeTextFile UTF8 (outputFolder </> "css" </> name) optimized.code
+  writeTextFile UTF8 (outputFolder </> "css" </> name <> ".map") optimized.map
   pure name
 
 main :: Effect Unit
 main = do
   log "Building site..."
   copyStaticFiles
-  sass <- compileSass
-  logShow sass
+  _ <- compileSass
   pure unit
