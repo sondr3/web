@@ -1,6 +1,7 @@
 import sass from "sass";
 import { createHash as createHashImpl } from "node:crypto";
 import css from "@parcel/css";
+import esbuild from "esbuild";
 
 const sassCompile = sass.compile;
 
@@ -28,5 +29,17 @@ export function optimizeCSS(filename) {
         };
       };
     };
+  };
+}
+
+export function optimizeJS(code) {
+  return function() {
+    const res = esbuild.transformSync(code, {
+      minify: true,
+      logLevel: "warning",
+      format: "iife",
+    });
+
+    return res.code;
   };
 }

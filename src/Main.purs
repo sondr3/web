@@ -8,10 +8,10 @@ import Data.Traversable (for_)
 import Effect (Effect)
 import Effect.Console (log)
 import Effect.Uncurried (runEffectFn1, runEffectFn2, runEffectFn3)
-import FFI (copyFileSyncImpl, cpSyncImpl, createHash, optimizeCSS, sassCompileImpl)
+import FFI (copyFileSyncImpl, cpSyncImpl, createHash, optimizeCSS, optimizeJS, sassCompileImpl)
 import Node.Encoding (Encoding(..))
 import Node.FS.Perms (all, mkPerms)
-import Node.FS.Sync (mkdir', readdir, writeTextFile)
+import Node.FS.Sync (mkdir', readTextFile, readdir, writeTextFile)
 import Node.Path (FilePath, basename, dirname, extname, normalize)
 
 combine :: FilePath -> FilePath -> FilePath
@@ -61,9 +61,19 @@ compileSass = do
   writeTextFile UTF8 (outputFolder </> "css" </> name <> ".map") optimized.map
   pure name
 
+compileJs :: Effect String
+compileJs = do
+  createDir (outputFolder </> "js")
+  file <- readTextFile UTF8 $ siteFolder </> "js" </> "theme.js"
+  let name = "theme." <> hashString file <> ".js"
+  res <- optimizeJS file
+  writeTextFile UTF8 (outputFolder </> "js" </> name) res
+  pure name
+
 main :: Effect Unit
 main = do
   log "Building site..."
   copyStaticFiles
   _ <- compileSass
+  _ <- compileJs
   pure unit
