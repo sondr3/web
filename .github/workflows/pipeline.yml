@@ -43,6 +43,9 @@ jobs:
       - name: Build
         run: spago build
 
+      - name: Test
+        run: spago test
+
       - name: Run
         run: spago run
 
