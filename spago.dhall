@@ -11,6 +11,7 @@
   , "node-path"
   , "node-process"
   , "prelude"
+  , "record"
   , "spec"
   , "strings"
   ]

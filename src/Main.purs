@@ -3,7 +3,7 @@ module Main where
 import Prelude
 
 import Data.Array (filter)
-import Data.Maybe (isJust)
+import Data.Maybe (Maybe, isJust)
 import Data.String (take)
 import Data.Traversable (for_)
 import Effect (Effect)
@@ -15,6 +15,48 @@ import Node.FS.Perms (all, mkPerms)
 import Node.FS.Sync (mkdir', readTextFile, readdir, writeTextFile)
 import Node.Path (FilePath, basename, dirname, extname, normalize)
 import Node.Process (lookupEnv)
+
+data SiteMeta = SiteMeta
+  { siteTitle :: String
+  , siteDescription :: String
+  , siteAuthor :: String
+  , baseUrl :: String
+  , cssUrl :: String
+  , themeUrl :: String
+  }
+
+createSiteMeta :: String -> String -> SiteMeta
+createSiteMeta style theme = SiteMeta
+  { siteTitle: "Eons :: IO ()"
+  , siteDescription: "The online home for Sondre Aasemoen"
+  , siteAuthor: "Sondre Aasemoen"
+  , baseUrl: "https://www.eons.io/"
+  , cssUrl: style
+  , themeUrl: theme
+  }
+
+data Page = Page
+  { title :: String
+  , description :: String
+  , content :: String
+  , slug :: String
+  , kind :: String
+  , createdAt :: Maybe String
+  , modifiedAt :: Maybe String
+  }
+
+data Sitemap = Sitemap
+  { baseUrl :: String
+  , buildTime :: String
+  , pages :: Array Page
+  }
+
+data Project = Project
+  { name :: String
+  , description :: String
+  , technology :: Array String
+  , gitHub :: String
+  }
 
 isProd :: Effect Boolean
 isProd = prod >>= pure ci
