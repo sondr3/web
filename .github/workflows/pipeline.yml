@@ -14,40 +14,46 @@ jobs:
         with:
           version: 7
 
-      - name: Setup PureScript
-        uses: purescript-contrib/setup-purescript@main
+      - name: Setup Haskell
+        id: setup-haskell-cabal
+        uses: haskell/actions/setup@v2
         with:
-          purescript: 0.15.3
-          psa: latest
-          spago: latest
-          purs-tidy: latest
+          ghc-version: "9.2.3"
 
       - uses: actions/setup-node@v3.3.0
         with:
           node-version: latest
           cache: "pnpm"
 
-      - name: Cache PureScript dependencies
-        uses: actions/cache@v2
+      - name: Cache ~/.cabal/packages, ~/.cabal/store and dist-newstyle
+        uses: actions/cache@v3
         with:
-          key: ${{ runner.os }}-spago-${{ hashFiles('**/*.dhall') }}
           path: |
-            .spago
-            output
+            ~/.cabal/packages
+            ~/.cabal/store
+            dist-newstyle
+          key: ${{ runner.os }}-ghc-${{ hashFiles('**/*.cabal', '**/cabal.project', '**/cabal.project.freeze') }}
+          restore-keys: ${{ runner.os }}-ghc-
 
-      - name: Install dependencies
+      - name: Install fsatrace
         run: |
-          pnpm install --frozen-lockfile
-          spago install
+          git clone https://github.com/jacereda/fsatrace.git .fsatrace
+          (cd .fsatrace && make)
+          echo "${GITHUB_WORKSPACE}/.fsatrace" >> $GITHUB_PATH
 
-      - name: Build
-        run: spago build
+      - name: Install and build
+        run: pnpm install --frozen-lockfile
 
-      - name: Test
-        run: spago test
+      - name: Configure
+        run: |
+          cabal update
+          cabal configure
+
+      - name: Compile
+        run: cabal build
 
       - name: Run
-        run: spago run
+        run: cabal run web -- --rebuild
 
       - name: Deploy
         if: ${{ github.ref == 'refs/heads/main' }}

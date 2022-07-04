@@ -1,0 +1,53 @@
+cabal-version:      3.0
+name:               web
+version:            0.1.0.0
+author:             Sondre Aasemoen
+maintainer:         sondre@eons.io
+extra-source-files: README.md
+synopsis:           My website
+description:        My website
+homepage:           https://github.com/sondr3/web
+license:            MIT 
+license-file:       LICENSE
+build-type:         Simple
+tested-with:        GHC ==9.2
+
+source-repository head
+  type:     git
+  location: https://github.com/sondr3/web.git
+
+executable web
+  main-is:            Main.hs
+  hs-source-dirs:     app
+  default-language:   GHC2021
+  default-extensions:
+    DuplicateRecordFields
+    FlexibleContexts
+    LambdaCase
+    MultiWayIf
+    NamedFieldPuns
+
+  ghc-options:
+    -threaded -rtsopts -with-rtsopts=-N -Wall -Wcompat -Widentities
+    -Wincomplete-uni-patterns -Wincomplete-record-updates
+    -Wredundant-constraints -Wnoncanonical-monad-instances
+    -fhide-source-paths -Wmissing-export-lists -Wpartial-fields
+    -Wmissing-deriving-strategies -Werror=missing-deriving-strategies
+    -fwrite-ide-info -Wunused-packages -O2
+
+  build-depends:
+    , aeson                 ^>=2
+    , base                  >=4.10 && <5
+    , containers
+    , dhall                 ^>=1.40
+    , directory
+    , filepath
+    , generic-lens
+    , lens
+    , lens-aeson
+    , pureMD5
+    , shake
+    , slick
+    , text                  ^>=2
+    , time
+    , unordered-containers

@@ -162,22 +162,3 @@ dist
 # SvelteKit build / generate output
 .svelte-kit
 
-
-
-### Created by https://www.gitignore.io
-### PureScript ###
-# Dependencies
-.psci_modules
-.spago
-bower_components
-node_modules
-
-# Generated files
-.psci
-output
-
-.psc-package/
-.psc*
-.purs*
-.psa*
-.spago
