@@ -5,6 +5,7 @@
 {-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE OverloadedLabels #-}
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE NoMonomorphismRestriction #-}
 
 module Main (main) where
@@ -13,15 +14,14 @@ import Control.Applicative (Applicative (liftA2))
 import Control.Lens
 import Control.Monad (void)
 import Data.Aeson
-import Data.Aeson.Key (fromString)
-import qualified Data.Aeson.KeyMap as KM
-import Data.Aeson.Lens
+import Data.Aeson.KeyMap qualified as KM
 import Data.Digest.Pure.MD5 (md5)
 import Data.Generics.Labels ()
-import qualified Data.HashMap.Strict as HM
 import Data.Maybe (isJust)
-import qualified Data.String as BLU
-import qualified Data.Text as T
+import Data.String qualified as BLU
+import Data.Text (Text)
+import Data.Text qualified as T
+import Data.Text.Lazy qualified as L
 import Data.Time.Clock (UTCTime, getCurrentTime)
 import Data.Time.Format.ISO8601
 import Development.Shake
@@ -30,21 +30,24 @@ import Development.Shake.FilePath
 import Development.Shake.Forward
 import Dhall (FromDhall, auto, defaultInputSettings, inputWithSettings, rootDirectory)
 import GHC.Generics (Generic)
-import Slick
 import System.Environment (lookupEnv)
+import Text.Mustache (PName, Template, compileMustacheDir, displayMustacheWarning, renderMustache, renderMustacheW)
+import Text.Pandoc hiding (Template, compileTemplate, getCurrentTime, lookupEnv, renderTemplate)
+import Text.Pandoc.Highlighting (tango)
+import Text.Pandoc.Sources (ToSources)
 
 data SiteMeta = SiteMeta
-  { siteTitle :: String,
-    siteDescription :: String,
-    siteAuthor :: String,
-    baseUrl :: String,
-    cssUrl :: String,
-    themeUrl :: String
+  { siteTitle :: Text,
+    siteDescription :: Text,
+    siteAuthor :: Text,
+    baseUrl :: Text,
+    cssUrl :: Text,
+    themeUrl :: Text
   }
   deriving stock (Generic, Eq, Ord, Show)
   deriving anyclass (ToJSON, FromJSON, Binary)
 
-siteMeta :: String -> String -> SiteMeta
+siteMeta :: Text -> Text -> SiteMeta
 siteMeta style theme =
   SiteMeta
     { siteTitle = "Eons :: IO ()",
@@ -55,35 +58,31 @@ siteMeta style theme =
       themeUrl = theme
     }
 
-mergeJson :: Value -> Value -> Value
-mergeJson (Object r) (Object l) = Object $ KM.union r l
-mergeJson _ _ = error "can only merge two objects"
-
 data Page = Page
-  { title :: String,
-    description :: String,
-    content :: String,
-    slug :: String,
-    kind :: String,
-    createdAt :: Maybe String,
-    modifiedAt :: Maybe String
+  { title :: Text,
+    description :: Text,
+    content :: Text,
+    slug :: Text,
+    kind :: Text,
+    createdAt :: Maybe Text,
+    modifiedAt :: Maybe Text
   }
   deriving stock (Generic, Eq, Ord, Show)
-  deriving anyclass (ToJSON, FromJSON, Binary)
+  deriving anyclass (ToJSON, FromJSON, Binary, FromDhall)
 
 data Sitemap = Sitemap
-  { baseUrl :: String,
-    buildTime :: String,
+  { baseUrl :: Text,
+    buildTime :: Text,
     pages :: [Page]
   }
   deriving stock (Generic, Eq, Ord, Show)
   deriving anyclass (ToJSON, FromJSON, Binary)
 
 data Project = Project
-  { name :: String,
-    description :: String,
-    technology :: [String],
-    gitHub :: String
+  { name :: Text,
+    description :: Text,
+    technology :: [Text],
+    gitHub :: Text
   }
   deriving stock (Generic, Eq, Ord, Show)
   deriving anyclass (ToJSON, Binary, FromDhall)
@@ -94,33 +93,63 @@ outputFolder = "./build/"
 siteFolder :: FilePath
 siteFolder = "./site/"
 
-commonPage :: Value -> Value -> Value
-commonPage meta page = mergeJson meta (mergeJson page $ toJSON (HM.fromList [("kind", "website")]))
+mergeJson :: Value -> Value -> Value
+mergeJson (Object r) (Object l) = Object $ KM.union r l
+mergeJson _ _ = error "can only merge two objects"
+
+commonPage :: ToJSON a => SiteMeta -> a -> Value
+commonPage meta page = mergeJson (toJSON meta) (toJSON page)
 
 rfc3339 :: Maybe String
 rfc3339 = Just "%H:%M:SZ"
 
-parseDhall :: FromDhall a => T.Text -> FilePath -> IO a
+parseDhall :: FromDhall a => Text -> FilePath -> IO a
 parseDhall input root = inputWithSettings (defaultInputSettings & rootDirectory .~ (siteFolder </> root)) auto input
 
-toIsoDate :: UTCTime -> String
+toIsoDate :: UTCTime -> Text
 toIsoDate date = case formatShowM iso8601Format date of
-  Just v -> v
+  Just v -> T.pack v
   Nothing -> ""
+
+compileTemplate :: PName -> Action Template
+compileTemplate name = compileMustacheDir name (siteFolder </> "templates")
+
+renderTemplate :: Template -> Value -> IO L.Text
+renderTemplate templ info = do
+  let (warnings, rendered) = renderMustacheW templ info
+  mapM_ (\w -> print $ displayMustacheWarning w) warnings
+  pure rendered
+
+markdownToHTML :: ToSources a => a -> IO Text
+markdownToHTML val = runIOorExplode $ readCommonMark markdownOpts val >>= writeHtml5String htmlOpts
+  where
+    markdownOpts =
+      def
+        { readerExtensions =
+            mconcat
+              [ extensionsFromList [Ext_fenced_code_attributes, Ext_auto_identifiers]
+              ]
+        }
+    htmlOpts =
+      def
+        { writerHighlightStyle = Just tango,
+          writerExtensions = writerExtensions def
+        }
 
 sitemap :: SiteMeta -> [Page] -> [Project] -> Action ()
 sitemap meta ps _ = do
   now <- liftIO getCurrentTime
   let sm = Sitemap {baseUrl = meta ^. #baseUrl, buildTime = toIsoDate now, pages = ps}
-  indexT <- compileTemplate' (siteFolder <> "templates" </> "sitemap.xml")
-  writeFile' (outputFolder </> "sitemap.xml") . T.unpack $ substitute indexT (toJSON sm)
+  indexT <- compileTemplate "sitemap"
+  writeFile' (outputFolder </> "sitemap.xml") . L.unpack $ renderMustache indexT (toJSON sm)
 
 buildIndex :: SiteMeta -> [Page] -> [Project] -> Action ()
 buildIndex meta _ _ = do
   let page = Page {title = "Home", description = "The online home for Sondre Aasemoen", kind = "website", content = "", slug = "", createdAt = Nothing, modifiedAt = Nothing}
       indexData = mergeJson (toJSON page) (toJSON meta)
-  indexT <- compileTemplate' (siteFolder <> "templates" </> "index.html")
-  writeFile' (outputFolder </> "index.html") . T.unpack $ substitute indexT indexData
+  templ <- compileTemplate "index"
+  template <- liftIO $ renderTemplate templ indexData
+  writeFile' (outputFolder </> "index.html") (L.unpack template)
 
 buildPages :: SiteMeta -> Action [Page]
 buildPages meta = do
@@ -128,16 +157,16 @@ buildPages meta = do
   forP pages (buildPage meta)
 
 buildPage :: SiteMeta -> FilePath -> Action Page
-buildPage meta path = cacheAction ("pages", path) $ do
+buildPage meta path = cacheAction ("pages" :: String, path) $ do
   liftIO . putStrLn $ "Rebuilding page " <> path
   content <- readFile' path
-  page <- commonPage (toJSON meta) <$> markdownToHTML (T.pack content)
-  let slug = case page ^? key (fromString "slug") . _String of
-        Just v -> v
-        Nothing -> error "could not get page slug"
-  template <- compileTemplate' (siteFolder </> "templates" </> "page.html")
-  writeFile' (outputFolder </> T.unpack slug </> "index.html") . T.unpack $ substitute template page
-  convert page
+  page <- liftIO $ markdownToHTML (T.pack content)
+  templ <- compileTemplate "page"
+  dhall <- T.pack <$> readFile' (replaceExtension path ".dhall")
+  info <- liftIO $ parseDhall dhall "pages"
+  let pageMeta = commonPage meta (info & #content .~ page)
+  writeFile' (outputFolder </> T.unpack (info ^. #slug) </> "index.html") . L.unpack $ renderMustache templ pageMeta
+  pure info
 
 buildProjects :: SiteMeta -> Action [Project]
 buildProjects meta = do
@@ -145,12 +174,12 @@ buildProjects meta = do
   forP projects (buildProject meta)
 
 buildProject :: SiteMeta -> FilePath -> Action Project
-buildProject meta path = cacheAction ("projects", path) $ do
+buildProject _ path = cacheAction ("projects" :: String, path) $ do
   liftIO . putStrLn $ "Rebuilding project " <> path
   content <- readFile' path
   dhall <- T.pack <$> readFile' (replaceExtension path ".dhall")
   info <- liftIO $ parseDhall dhall "projects"
-  _ <- commonPage (toJSON meta) <$> markdownToHTML (T.pack content)
+  _ <- liftIO $ markdownToHTML (T.pack content)
   pure info
 
 copyStaticFiles :: Action ()
@@ -167,18 +196,18 @@ hashFile path name ext = do
       file = name <> cssHash <> ext
   pure file
 
-compileScss :: Action String
+compileScss :: Action Text
 compileScss = do
-  cache $ cmd "node_modules/.bin/sass" [siteFolder </> "scss" </> "style.scss", siteFolder </> "scss" </> "style.css"]
+  cache $ cmd ("node_modules/.bin/sass" :: String) [siteFolder </> "scss" </> "style.scss", siteFolder </> "scss" </> "style.css"]
   file <- hashFile (siteFolder </> "scss" </> "style.css") "style." ".css"
-  cache $ cmd "node_modules/.bin/parcel-css" [siteFolder </> "scss" </> "style.css", "-o", outputFolder </> file, "-m"]
-  pure file
+  cache $ cmd ("node_modules/.bin/parcel-css" :: String) [siteFolder </> "scss" </> "style.css", "-o", outputFolder </> file, "-m"]
+  pure $ T.pack file
 
-compileJs :: Action String
+compileJs :: Action Text
 compileJs = do
   file <- hashFile (siteFolder </> "js" </> "theme.js") "theme." ".js"
-  cache $ cmd "node_modules/.bin/esbuild" [siteFolder </> "js" </> "theme.js", "--minify", "--format=iife", "--outfile=" <> outputFolder </> file, "--log-level=warning"]
-  pure file
+  cache $ cmd ("node_modules/.bin/esbuild" :: String) [siteFolder </> "js" </> "theme.js", "--minify", "--format=iife", "--outfile=" <> outputFolder </> file, "--log-level=warning"]
+  pure $ T.pack file
 
 optimizeHTML :: Bool -> Action ()
 optimizeHTML prod =
@@ -193,8 +222,8 @@ compress prod =
   if prod
     then do
       files <- filterFiles <$> getDirectoryFiles "" [outputFolder </> "**/*"]
-      cmd_ "gzip -k -9 -f" files
-      cmd_ "brotli -k -Z -f" files
+      cmd_ ("gzip -k -9 -f" :: String) files
+      cmd_ ("brotli -k -Z -f" :: String) files
     else pure ()
   where
     filterFiles = filter (\f -> takeExtension f `notElem` [".gz", ".br", ".png", ".jpg"])

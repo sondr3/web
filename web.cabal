@@ -36,18 +36,17 @@ executable web
     -fwrite-ide-info -Wunused-packages -O2
 
   build-depends:
-    , aeson                 ^>=2
-    , base                  >=4.10 && <5
-    , containers
-    , dhall                 ^>=1.40
-    , directory
-    , filepath
-    , generic-lens
-    , lens
-    , lens-aeson
+    , aeson         ^>=2.1
+    , base          ^>=4.16
+    , dhall         ^>=1.41
+    , directory     ^>=1.3
+    , filepath      ^>=1.4
+    , generic-lens  ^>=2.2
+    , lens          ^>=5.1
+    , lens-aeson    ^>=1.2
+    , pandoc        ^>=2.18
     , pureMD5
-    , shake
-    , slick
-    , text                  ^>=2
+    , shake         ^>=0.19
+    , stache        ^>=2.3
+    , text          ^>=2
     , time
-    , unordered-containers

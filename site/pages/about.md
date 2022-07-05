@@ -1,11 +1,3 @@
----
-title: About me
-description: Hello, I'm Sondre! I make things
-createdAt: 2020-12-12
-modifiedAt: 2022-01-10
-slug: about
----
-
 Hello, I'm Sondre! I'm a master student on my first year studying algorithms at the
 [University of Bergen](https://www.uib.no/) with a passion for safe and reliable
 software, open source and programming. I'm also a firm believer in applying the KISS principle

@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@minify-html/js': 0.8.1
   '@parcel/css-cli': 1.10.1
+  '@parcel/watcher': 2.0.5
   '@sondr3/prettier': 0.6.0
   browser-sync: 2.27.10
   esbuild: 0.14.46
@@ -12,6 +13,7 @@ specifiers:
 devDependencies:
   '@minify-html/js': 0.8.1
   '@parcel/css-cli': 1.10.1
+  '@parcel/watcher': 2.0.5
   '@sondr3/prettier': 0.6.0_prettier@2.7.1
   browser-sync: 2.27.10
   esbuild: 0.14.46
@@ -115,6 +117,15 @@ packages:
       '@parcel/css-cli-linux-x64-gnu': 1.10.1
       '@parcel/css-cli-linux-x64-musl': 1.10.1
       '@parcel/css-cli-win32-x64-msvc': 1.10.1
+    dev: true
+
+  /@parcel/watcher/2.0.5:
+    resolution: {integrity: sha512-x0hUbjv891omnkcHD7ZOhiyyUqUUR6MNjq89JhEI3BxppeKWAm6NPQsqqRrAkCJBogdT/o/My21sXtTI9rJIsw==}
+    engines: {node: '>= 10.0.0'}
+    requiresBuild: true
+    dependencies:
+      node-addon-api: 3.2.1
+      node-gyp-build: 4.5.0
     dev: true
 
   /@socket.io/component-emitter/3.1.0:
@@ -1015,6 +1026,15 @@ packages:
   /negotiator/0.6.3:
     resolution: {integrity: sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==}
     engines: {node: '>= 0.6'}
+    dev: true
+
+  /node-addon-api/3.2.1:
+    resolution: {integrity: sha512-mmcei9JghVNDYydghQmeDX8KoAm0FAiYyIcUt/N4nhyAipB17pllZQDOJD2fotxABnt4Mdz+dKTO7eftLg4d0A==}
+    dev: true
+
+  /node-gyp-build/4.5.0:
+    resolution: {integrity: sha512-2iGbaQBV+ITgCz76ZEjmhUKAKVf7xfY1sRl4UiKQspfZMH2h06SyhNsnSVy50cwkFQDGLyif6m/6uFXHkOZ6rg==}
+    hasBin: true
     dev: true
 
   /normalize-path/3.0.0:
