@@ -29,6 +29,7 @@ executable web
 
   other-modules:
     Templates
+    Templates.Footer
     Templates.Head
     Types
 
