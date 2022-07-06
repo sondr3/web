@@ -6,10 +6,13 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE OverloadedLabels #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE NoMonomorphismRestriction #-}
 
 module Main (main) where
 
+import Commonmark (Html, defaultSyntaxSpec, parseCommonmarkWith, renderHtml, tokenize)
+import Commonmark.Extensions (attributesSpec, autoIdentifiersAsciiSpec, fencedDivSpec, footnoteSpec, smartPunctuationSpec)
 import Control.Applicative (Applicative (liftA2))
 import Control.Lens
 import Control.Monad (void)
@@ -32,9 +35,6 @@ import Dhall (FromDhall, auto, defaultInputSettings, inputWithSettings, rootDire
 import GHC.Generics (Generic)
 import System.Environment (lookupEnv)
 import Text.Mustache (PName, Template, compileMustacheDir, displayMustacheWarning, renderMustache, renderMustacheW)
-import Text.Pandoc hiding (Template, compileTemplate, getCurrentTime, lookupEnv, renderTemplate)
-import Text.Pandoc.Highlighting (tango)
-import Text.Pandoc.Sources (ToSources)
 
 data SiteMeta = SiteMeta
   { siteTitle :: Text,
@@ -120,21 +120,13 @@ renderTemplate templ info = do
   mapM_ (\w -> print $ displayMustacheWarning w) warnings
   pure rendered
 
-markdownToHTML :: ToSources a => a -> IO Text
-markdownToHTML val = runIOorExplode $ readCommonMark markdownOpts val >>= writeHtml5String htmlOpts
-  where
-    markdownOpts =
-      def
-        { readerExtensions =
-            mconcat
-              [ extensionsFromList [Ext_fenced_code_attributes, Ext_auto_identifiers]
-              ]
-        }
-    htmlOpts =
-      def
-        { writerHighlightStyle = Just tango,
-          writerExtensions = writerExtensions def
-        }
+markdownToHTML :: Text -> Action L.Text
+markdownToHTML val = do
+  let exts = (smartPunctuationSpec <> footnoteSpec <> attributesSpec <> autoIdentifiersAsciiSpec <> fencedDivSpec <> defaultSyntaxSpec)
+      parser = runIdentity . parseCommonmarkWith exts
+  case parser (tokenize "file" val) of
+    Right (html :: Html ()) -> pure $ renderHtml html
+    Left e -> error (show e)
 
 sitemap :: SiteMeta -> [Page] -> [Project] -> Action ()
 sitemap meta ps _ = do
@@ -160,7 +152,7 @@ buildPage :: SiteMeta -> FilePath -> Action Page
 buildPage meta path = cacheAction ("pages" :: String, path) $ do
   liftIO . putStrLn $ "Rebuilding page " <> path
   content <- readFile' path
-  page <- liftIO $ markdownToHTML (T.pack content)
+  page <- L.toStrict <$> markdownToHTML (T.pack content)
   templ <- compileTemplate "page"
   dhall <- T.pack <$> readFile' (replaceExtension path ".dhall")
   info <- liftIO $ parseDhall dhall "pages"
@@ -179,7 +171,7 @@ buildProject _ path = cacheAction ("projects" :: String, path) $ do
   content <- readFile' path
   dhall <- T.pack <$> readFile' (replaceExtension path ".dhall")
   info <- liftIO $ parseDhall dhall "projects"
-  _ <- liftIO $ markdownToHTML (T.pack content)
+  _ <- L.toStrict <$> markdownToHTML (T.pack content)
   pure info
 
 copyStaticFiles :: Action ()
