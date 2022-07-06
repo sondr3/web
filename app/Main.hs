@@ -28,64 +28,12 @@ import Data.Text.Lazy qualified as L
 import Data.Time.Clock (UTCTime, getCurrentTime)
 import Data.Time.Format.ISO8601
 import Development.Shake
-import Development.Shake.Classes
 import Development.Shake.FilePath
 import Development.Shake.Forward
 import Dhall (FromDhall, auto, defaultInputSettings, inputWithSettings, rootDirectory)
-import GHC.Generics (Generic)
 import System.Environment (lookupEnv)
 import Text.Mustache (PName, Template, compileMustacheDir, displayMustacheWarning, renderMustache, renderMustacheW)
-
-data SiteMeta = SiteMeta
-  { siteTitle :: Text,
-    siteDescription :: Text,
-    siteAuthor :: Text,
-    baseUrl :: Text,
-    cssUrl :: Text,
-    themeUrl :: Text
-  }
-  deriving stock (Generic, Eq, Ord, Show)
-  deriving anyclass (ToJSON, FromJSON, Binary)
-
-siteMeta :: Text -> Text -> SiteMeta
-siteMeta style theme =
-  SiteMeta
-    { siteTitle = "Eons :: IO ()",
-      siteDescription = "The online home for Sondre Aasemoen",
-      siteAuthor = "Sondre Aasemoen",
-      baseUrl = "https://www.eons.io/",
-      cssUrl = style,
-      themeUrl = theme
-    }
-
-data Page = Page
-  { title :: Text,
-    description :: Text,
-    content :: Text,
-    slug :: Text,
-    kind :: Text,
-    createdAt :: Maybe Text,
-    modifiedAt :: Maybe Text
-  }
-  deriving stock (Generic, Eq, Ord, Show)
-  deriving anyclass (ToJSON, FromJSON, Binary, FromDhall)
-
-data Sitemap = Sitemap
-  { baseUrl :: Text,
-    buildTime :: Text,
-    pages :: [Page]
-  }
-  deriving stock (Generic, Eq, Ord, Show)
-  deriving anyclass (ToJSON, FromJSON, Binary)
-
-data Project = Project
-  { name :: Text,
-    description :: Text,
-    technology :: [Text],
-    gitHub :: Text
-  }
-  deriving stock (Generic, Eq, Ord, Show)
-  deriving anyclass (ToJSON, Binary, FromDhall)
+import Types
 
 outputFolder :: FilePath
 outputFolder = "./build/"

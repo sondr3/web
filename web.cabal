@@ -27,6 +27,11 @@ executable web
     MultiWayIf
     NamedFieldPuns
 
+  other-modules:
+    Templates
+    Templates.Head
+    Types
+
   ghc-options:
     -threaded -rtsopts -with-rtsopts=-N -Wall -Wcompat -Widentities
     -Wincomplete-uni-patterns -Wincomplete-record-updates
@@ -43,6 +48,7 @@ executable web
     , dhall                  ^>=1.41
     , generic-lens           ^>=2.2
     , lens                   ^>=5.1
+    , lucid2
     , pureMD5
     , shake                  ^>=0.19
     , stache                 ^>=2.3
