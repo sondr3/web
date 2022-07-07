@@ -22,6 +22,7 @@ class Content a where
   getTitle :: a -> Text
   getDescription :: a -> Text
   getType :: a -> Text
+  getContent :: a -> Text
   getCreatedAt :: a -> Maybe Text
   getModifiedAt :: a -> Maybe Text
 
@@ -83,6 +84,7 @@ instance Content Page where
   getTitle page = page ^. #title
   getDescription page = page ^. #description
   getType page = page ^. #kind
+  getContent page = page ^. #content
   getCreatedAt page = page ^. #createdAt
   getModifiedAt page = page ^. #modifiedAt
 

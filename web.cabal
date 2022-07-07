@@ -33,6 +33,7 @@ executable web
     Templates.Head
     Templates.Header
     Templates.Index
+    Templates.Page
     Types
 
   ghc-options:
