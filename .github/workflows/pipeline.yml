@@ -25,6 +25,11 @@ jobs:
           node-version: latest
           cache: "pnpm"
 
+      - name: Configure
+        run: |
+          cabal configure
+          cabal freeze
+
       - name: Cache ~/.cabal/packages, ~/.cabal/store and dist-newstyle
         uses: actions/cache@v3
         with:
@@ -43,11 +48,6 @@ jobs:
 
       - name: Install and build
         run: pnpm install --frozen-lockfile
-
-      - name: Configure
-        run: |
-          cabal configure
-          cabal freeze
 
       - name: Compile
         run: cabal build
