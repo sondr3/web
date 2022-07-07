@@ -34,6 +34,7 @@ executable web
     Templates.Header
     Templates.Index
     Templates.Page
+    Templates.Sitemap
     Types
 
   ghc-options:
