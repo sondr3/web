@@ -29,11 +29,12 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            ~/.cabal/packages
-            ~/.cabal/store
+            ${{ steps.setup-haskell-cabal.outputs.cabal-store }}
             dist-newstyle
-          key: ${{ runner.os }}-ghc-${{ hashFiles('**/*.cabal', '**/cabal.project', '**/cabal.project.freeze') }}
-          restore-keys: ${{ runner.os }}-ghc-
+          key: ${{ runner.os }}-ghc-${{ hashFiles('cabal.project.freeze') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-ghc-${{ hashFiles('cabal.project.freeze') }}-
+            ${{ runner.os }}-ghc-
 
       - name: Install fsatrace
         run: |
