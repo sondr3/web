@@ -32,6 +32,7 @@ executable web
     Templates.Footer
     Templates.Head
     Templates.Header
+    Templates.Index
     Types
 
   ghc-options:
