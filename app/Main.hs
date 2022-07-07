@@ -15,7 +15,7 @@ import Commonmark (Html, defaultSyntaxSpec, parseCommonmarkWith, renderHtml, tok
 import Commonmark.Extensions (attributesSpec, autoIdentifiersAsciiSpec, fencedDivSpec, footnoteSpec, smartPunctuationSpec)
 import Control.Applicative (Applicative (liftA2))
 import Control.Lens
-import Control.Monad (void)
+import Control.Monad (void, when)
 import Data.Digest.Pure.MD5 (md5)
 import Data.Generics.Labels ()
 import Data.Maybe (isJust)
@@ -129,22 +129,17 @@ compileJs = do
   cache $ cmd ("node_modules/.bin/esbuild" :: String) [siteFolder </> "js" </> "theme.js", "--minify", "--format=iife", "--outfile=" <> outputFolder </> file, "--log-level=warning"]
   pure $ T.pack file
 
-optimizeHTML :: Bool -> Action ()
-optimizeHTML prod =
-  if prod
-    then do
-      files <- getDirectoryFiles "" [outputFolder </> "**/*.html"]
-      void $ forP files $ \f -> cmd_ ("node_modules/.bin/minify-html --minify-css --minify-js" <> " --output " <> f) [f]
-    else pure ()
+optimizeHTML :: Action ()
+optimizeHTML = do
+  files <- getDirectoryFiles "" [outputFolder </> "**/*.html"]
+  void $ forP files $ \f -> cmd_ ("node_modules/.bin/minify-html --minify-css --minify-js" <> " --output " <> f) [f]
 
-compress :: Bool -> Action ()
-compress prod =
-  if prod
-    then do
-      files <- filterFiles <$> getDirectoryFiles "" [outputFolder </> "**/*"]
-      cmd_ ("gzip -k -9 -f" :: String) files
-      cmd_ ("brotli -k -Z -f" :: String) files
-    else pure ()
+compress :: Action ()
+compress =
+  do
+    files <- filterFiles <$> getDirectoryFiles "" [outputFolder </> "**/*"]
+    cmd_ ("gzip -k -9 -f" :: String) files
+    cmd_ ("brotli -k -Z -f" :: String) files
   where
     filterFiles = filter (\f -> takeExtension f `notElem` [".gz", ".br", ".png", ".jpg"])
 
@@ -153,14 +148,16 @@ buildRules = do
   copyStaticFiles
   css <- compileScss
   js <- compileJs
-  prod <- liftIO isProd
   let meta = siteMeta css js
   pages <- buildPages meta
   projects <- buildProjects meta
   buildIndex meta pages projects
   sitemap meta pages projects
-  optimizeHTML prod
-  compress prod
+
+  prod <- liftIO isProd
+  when prod $ do
+    optimizeHTML
+    compress
 
 isProd :: IO Bool
 isProd = liftA2 (||) (isJust <$> lookupEnv "CI") (isJust <$> lookupEnv "PROD")
