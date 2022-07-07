@@ -19,7 +19,7 @@ mainBody content =
     [class_ "main"]
     ( do
         h1_ (toHtml $ getTitle content)
-        (toHtml $ getContent content)
+        (toHtmlRaw $ getContent content)
     )
 
 pageTemplate :: Content a => SiteMeta -> a -> Html ()
