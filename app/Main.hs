@@ -16,8 +16,6 @@ import Commonmark.Extensions (attributesSpec, autoIdentifiersAsciiSpec, fencedDi
 import Control.Applicative (Applicative (liftA2))
 import Control.Lens
 import Control.Monad (void)
-import Data.Aeson
-import Data.Aeson.KeyMap qualified as KM
 import Data.Digest.Pure.MD5 (md5)
 import Data.Generics.Labels ()
 import Data.Maybe (isJust)
@@ -41,13 +39,6 @@ outputFolder = "./build/"
 
 siteFolder :: FilePath
 siteFolder = "./site/"
-
-mergeJson :: Value -> Value -> Value
-mergeJson (Object r) (Object l) = Object $ KM.union r l
-mergeJson _ _ = error "can only merge two objects"
-
-commonPage :: ToJSON a => SiteMeta -> a -> Value
-commonPage meta page = mergeJson (toJSON meta) (toJSON page)
 
 rfc3339 :: Maybe String
 rfc3339 = Just "%H:%M:SZ"

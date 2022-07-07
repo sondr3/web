@@ -9,7 +9,6 @@
 module Types where
 
 import Control.Lens
-import Data.Aeson
 import Data.Generics.Labels ()
 import Data.Text (Text)
 import Data.Text qualified as T
@@ -35,7 +34,7 @@ data SiteMeta = SiteMeta
     themeUrl :: Text
   }
   deriving stock (Generic, Eq, Ord, Show)
-  deriving anyclass (ToJSON, FromJSON, Binary)
+  deriving anyclass (Binary)
 
 data Sitemap = Sitemap
   { baseUrl :: Text,
@@ -43,7 +42,7 @@ data Sitemap = Sitemap
     pages :: [Page]
   }
   deriving stock (Generic, Eq, Ord, Show)
-  deriving anyclass (ToJSON, FromJSON, Binary)
+  deriving anyclass (Binary)
 
 siteMeta :: Text -> Text -> SiteMeta
 siteMeta style theme =
@@ -66,7 +65,7 @@ data Page = Page
     modifiedAt :: Maybe Text
   }
   deriving stock (Generic, Eq, Ord, Show)
-  deriving anyclass (ToJSON, FromJSON, Binary, FromDhall)
+  deriving anyclass (Binary, FromDhall)
 
 data Project = Project
   { name :: Text,
@@ -75,7 +74,7 @@ data Project = Project
     gitHub :: Text
   }
   deriving stock (Generic, Eq, Ord, Show)
-  deriving anyclass (ToJSON, Binary, FromDhall)
+  deriving anyclass (Binary, FromDhall)
 
 data Content' = Page' Page | Project' Project
 

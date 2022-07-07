@@ -46,7 +46,6 @@ executable web
     -fwrite-ide-info -Wunused-packages -O2
 
   build-depends:
-    , aeson                  ^>=2.1
     , base                   ^>=4.16
     , commonmark             ^>=0.2
     , commonmark-extensions  ^>=0.2
