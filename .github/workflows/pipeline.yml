@@ -18,15 +18,12 @@ jobs:
         id: setup-haskell-cabal
         uses: haskell/actions/setup@v2
         with:
-          ghc-version: "9.2.3"
+          ghc-version: "9.2.2"
 
       - uses: actions/setup-node@v3.3.0
         with:
           node-version: latest
           cache: "pnpm"
-
-      - name: Freeze
-        run: cabal freeze
 
       - name: Cache ~/.cabal/packages, ~/.cabal/store and dist-newstyle
         uses: actions/cache@v3
