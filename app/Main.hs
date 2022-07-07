@@ -31,8 +31,9 @@ import Development.Shake
 import Development.Shake.FilePath
 import Development.Shake.Forward
 import Dhall (FromDhall, auto, defaultInputSettings, inputWithSettings, rootDirectory)
+import Lucid (renderText)
 import System.Environment (lookupEnv)
-import Text.Mustache (PName, Template, compileMustacheDir, displayMustacheWarning, renderMustache, renderMustacheW)
+import Templates (indexTemplate, pageTemplate, sitemapTemplate)
 import Types
 
 outputFolder :: FilePath
@@ -59,15 +60,6 @@ toIsoDate date = case formatShowM iso8601Format date of
   Just v -> T.pack v
   Nothing -> ""
 
-compileTemplate :: PName -> Action Template
-compileTemplate name = compileMustacheDir name (siteFolder </> "templates")
-
-renderTemplate :: Template -> Value -> IO L.Text
-renderTemplate templ info = do
-  let (warnings, rendered) = renderMustacheW templ info
-  mapM_ (\w -> print $ displayMustacheWarning w) warnings
-  pure rendered
-
 markdownToHTML :: Text -> Action L.Text
 markdownToHTML val = do
   let exts = (smartPunctuationSpec <> footnoteSpec <> attributesSpec <> autoIdentifiersAsciiSpec <> fencedDivSpec <> defaultSyntaxSpec)
@@ -80,16 +72,13 @@ sitemap :: SiteMeta -> [Page] -> [Project] -> Action ()
 sitemap meta ps _ = do
   now <- liftIO getCurrentTime
   let sm = Sitemap {baseUrl = meta ^. #baseUrl, buildTime = toIsoDate now, pages = ps}
-  indexT <- compileTemplate "sitemap"
-  writeFile' (outputFolder </> "sitemap.xml") . L.unpack $ renderMustache indexT (toJSON sm)
+  writeFile' (outputFolder </> "sitemap.xml") . L.unpack $ renderText $ sitemapTemplate sm
 
 buildIndex :: SiteMeta -> [Page] -> [Project] -> Action ()
 buildIndex meta _ _ = do
   let page = Page {title = "Home", description = "The online home for Sondre Aasemoen", kind = "website", content = "", slug = "", createdAt = Nothing, modifiedAt = Nothing}
-      indexData = mergeJson (toJSON page) (toJSON meta)
-  templ <- compileTemplate "index"
-  template <- liftIO $ renderTemplate templ indexData
-  writeFile' (outputFolder </> "index.html") (L.unpack template)
+      template = indexTemplate meta page
+  writeFile' (outputFolder </> "index.html") (L.unpack $ renderText template)
 
 buildPages :: SiteMeta -> Action [Page]
 buildPages meta = do
@@ -101,11 +90,11 @@ buildPage meta path = cacheAction ("pages" :: String, path) $ do
   liftIO . putStrLn $ "Rebuilding page " <> path
   content <- readFile' path
   page <- L.toStrict <$> markdownToHTML (T.pack content)
-  templ <- compileTemplate "page"
   dhall <- T.pack <$> readFile' (replaceExtension path ".dhall")
   info <- liftIO $ parseDhall dhall "pages"
-  let pageMeta = commonPage meta (info & #content .~ page)
-  writeFile' (outputFolder </> T.unpack (info ^. #slug) </> "index.html") . L.unpack $ renderMustache templ pageMeta
+  let pageMeta = (info & #content .~ page)
+      template = pageTemplate meta pageMeta
+  writeFile' (outputFolder </> T.unpack (info ^. #slug) </> "index.html") . L.unpack $ renderText template
   pure info
 
 buildProjects :: SiteMeta -> Action [Project]
