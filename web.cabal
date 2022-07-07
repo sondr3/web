@@ -56,6 +56,5 @@ executable web
     , lucid2
     , pureMD5
     , shake                  ^>=0.19
-    , stache                 ^>=2.3
     , text                   ^>=2
     , time
