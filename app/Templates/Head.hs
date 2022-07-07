@@ -28,6 +28,7 @@ headTemplate :: Content a => SiteMeta -> a -> Html ()
 headTemplate meta content =
   head_
     ( do
+        meta_ [charset_ "utf-8"]
         meta_ [name_ "viewport", content_ "width=device-width, initial-scale=1, shrink-to-fit=no"]
         meta_ [httpEquiv_ "X-UA-Compatible", content_ "IE=edge,chrome=1"]
 
