@@ -9,7 +9,7 @@ where
 
 import Data.Text (Text)
 import Lucid
-import Lucid.Base (makeAttributes, makeElementNoEnd)
+import Lucid.Base (makeAttributes)
 
 ariaLabel_ :: Text -> Attributes
 ariaLabel_ = makeAttributes "aria-label"
@@ -23,8 +23,8 @@ viewBox_ = makeAttributes "viewBox"
 stroke_ :: Text -> Attributes
 stroke_ = makeAttributes "stroke"
 
-path_ :: Monad m => [Attributes] -> HtmlT m ()
-path_ = makeElementNoEnd "path"
+path_ :: Term arg result => arg -> result
+path_ = term "path"
 
 strokeLinecap_ :: Text -> Attributes
 strokeLinecap_ = makeAttributes "stroke-linecap"
@@ -56,7 +56,7 @@ themeButton variant svg =
           stroke_ "currentColor",
           width_ "24"
         ]
-        (path_ [strokeLinecap_ "round", strokeLinejoin_ "round", strokeWidth_ "2", d_ svg])
+        (path_ [strokeLinecap_ "round", strokeLinejoin_ "round", strokeWidth_ "2", d_ svg] mempty)
     )
 
 headerTemplate :: Html ()
