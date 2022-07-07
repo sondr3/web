@@ -25,10 +25,8 @@ jobs:
           node-version: latest
           cache: "pnpm"
 
-      - name: Configure
-        run: |
-          cabal configure
-          cabal freeze
+      - name: Freeze
+        run: cabal freeze
 
       - name: Cache ~/.cabal/packages, ~/.cabal/store and dist-newstyle
         uses: actions/cache@v3
@@ -46,7 +44,10 @@ jobs:
           (cd .fsatrace && make)
           echo "${GITHUB_WORKSPACE}/.fsatrace" >> $GITHUB_PATH
 
-      - name: Install and build
+      - name: Configure
+        run: cabal configure
+
+      - name: Install npm packages
         run: pnpm install --frozen-lockfile
 
       - name: Compile
