@@ -45,7 +45,9 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Configure
-        run: cabal configure
+        run: |
+          cabal configure
+          cabal freeze
 
       - name: Compile
         run: cabal build
