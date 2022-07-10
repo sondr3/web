@@ -16,6 +16,7 @@ import Commonmark.Extensions (attributesSpec, autoIdentifiersAsciiSpec, fencedDi
 import Control.Applicative (Applicative (liftA2))
 import Control.Lens
 import Control.Monad (void, when)
+import Data.ByteString qualified as BS
 import Data.Digest.Pure.MD5 (md5)
 import Data.Generics.Labels ()
 import Data.Maybe (isJust)
@@ -23,16 +24,15 @@ import Data.String qualified as BLU
 import Data.Text (Text)
 import Data.Text qualified as T
 import Data.Text.Lazy qualified as L
-import Data.Time.Clock (UTCTime, getCurrentTime)
-import Data.Time.Format.ISO8601
 import Development.Shake
 import Development.Shake.FilePath
 import Development.Shake.Forward
 import Dhall (FromDhall, auto, defaultInputSettings, inputWithSettings, rootDirectory)
 import Lucid (renderText)
 import System.Environment (lookupEnv)
-import Templates (indexTemplate, pageTemplate, sitemapTemplate)
+import Templates (indexTemplate, pageTemplate)
 import Types
+import Web.Sitemap.Gen (Sitemap (..), renderSitemap)
 
 outputFolder :: FilePath
 outputFolder = "./build/"
@@ -40,16 +40,8 @@ outputFolder = "./build/"
 siteFolder :: FilePath
 siteFolder = "./site/"
 
-rfc3339 :: Maybe String
-rfc3339 = Just "%H:%M:SZ"
-
 parseDhall :: FromDhall a => Text -> FilePath -> IO a
 parseDhall input root = inputWithSettings (defaultInputSettings & rootDirectory .~ (siteFolder </> root)) auto input
-
-toIsoDate :: UTCTime -> Text
-toIsoDate date = case formatShowM iso8601Format date of
-  Just v -> T.pack v
-  Nothing -> ""
 
 markdownToHTML :: Text -> Action L.Text
 markdownToHTML val = do
@@ -61,9 +53,8 @@ markdownToHTML val = do
 
 sitemap :: SiteMeta -> [Page] -> [Project] -> Action ()
 sitemap meta ps _ = do
-  now <- liftIO getCurrentTime
-  let sm = Sitemap {baseUrl = meta ^. #baseUrl, buildTime = toIsoDate now, pages = ps}
-  writeFile' (outputFolder </> "sitemap.xml") . L.unpack $ renderText $ sitemapTemplate sm
+  let sm = Sitemap {sitemapUrls = map (\p -> pageToSitemap meta p) ps}
+  liftIO $ BS.writeFile (outputFolder </> "sitemap.xml") (renderSitemap sm)
 
 buildIndex :: SiteMeta -> [Page] -> [Project] -> Action ()
 buildIndex meta _ _ = do

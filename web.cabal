@@ -34,7 +34,6 @@ executable web
     Templates.Header
     Templates.Index
     Templates.Page
-    Templates.Sitemap
     Types
 
   ghc-options:
@@ -47,6 +46,7 @@ executable web
 
   build-depends:
     , base                   ^>=4.16
+    , bytestring             ^>=0.11
     , commonmark             ^>=0.2
     , commonmark-extensions  ^>=0.2
     , dhall                  ^>=1.41

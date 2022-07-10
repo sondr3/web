@@ -15,6 +15,7 @@ import Data.Text qualified as T
 import Development.Shake.Classes
 import Dhall (FromDhall)
 import GHC.Generics (Generic)
+import Web.Sitemap.Gen
 
 class Content a where
   getUrl :: SiteMeta -> a -> Text
@@ -32,14 +33,6 @@ data SiteMeta = SiteMeta
     baseUrl :: Text,
     cssUrl :: Text,
     themeUrl :: Text
-  }
-  deriving stock (Generic, Eq, Ord, Show)
-  deriving anyclass (Binary)
-
-data Sitemap = Sitemap
-  { baseUrl :: Text,
-    buildTime :: Text,
-    pages :: [Page]
   }
   deriving stock (Generic, Eq, Ord, Show)
   deriving anyclass (Binary)
@@ -66,6 +59,15 @@ data Page = Page
   }
   deriving stock (Generic, Eq, Ord, Show)
   deriving anyclass (Binary, FromDhall)
+
+pageToSitemap :: SiteMeta -> Page -> SitemapUrl
+pageToSitemap meta page =
+  SitemapUrl
+    { sitemapLocation = getUrl meta page,
+      sitemapLastModified = Nothing,
+      sitemapChangeFrequency = Just Monthly,
+      sitemapPriority = Just 0.5
+    }
 
 data Project = Project
   { name :: Text,
