@@ -55,5 +55,6 @@ executable web
     , lucid2
     , pureMD5
     , shake                  ^>=0.19
+    , sitemap-gen
     , text                   ^>=2
     , time
