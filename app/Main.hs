@@ -16,6 +16,7 @@ import Commonmark.Extensions (attributesSpec, autoIdentifiersAsciiSpec, fencedDi
 import Control.Applicative (Applicative (liftA2))
 import Control.Lens
 import Control.Monad (void, when)
+import Control.Monad.State (State, modify)
 import Data.ByteString qualified as BS
 import Data.Digest.Pure.MD5 (md5)
 import Data.Generics.Labels ()
@@ -24,21 +25,45 @@ import Data.String qualified as BLU
 import Data.Text (Text)
 import Data.Text qualified as T
 import Data.Text.Lazy qualified as L
+import Data.Time (UTCTime, getCurrentTime)
+import Data.Time.Format.ISO8601
 import Development.Shake
 import Development.Shake.FilePath
 import Development.Shake.Forward
 import Dhall (FromDhall, auto, defaultInputSettings, inputWithSettings, rootDirectory)
+import GHC.Generics (Generic)
 import Lucid (renderText)
 import System.Environment (lookupEnv)
 import Templates (indexTemplate, pageTemplate)
 import Types
 import Web.Sitemap.Gen (Sitemap (..), renderSitemap)
 
+data Site = Site
+  { meta :: SiteMeta,
+    pages :: [Page]
+  }
+  deriving stock (Generic, Show)
+
+addPage :: Page -> State Site ()
+addPage page = modify (\s -> s & #pages %~ (:) page)
+
+initSite :: SiteMeta -> IO Site
+initSite meta = do
+  now <- liftIO getCurrentTime
+  let idx = Page {title = "Home", description = "The online home for Sondre Aasemoen", kind = "website", content = "", slug = "", createdAt = Nothing, modifiedAt = Just $ toIsoDate now}
+      notFound = Page {title = "Not Found", description = "The page you're looking for was not found", kind = "website", content = "", slug = "404", createdAt = Nothing, modifiedAt = Just $ toIsoDate now}
+  pure $ Site {meta, pages = [idx, notFound]}
+
 outputFolder :: FilePath
 outputFolder = "./build/"
 
 siteFolder :: FilePath
 siteFolder = "./site/"
+
+toIsoDate :: UTCTime -> Text
+toIsoDate date = case formatShowM iso8601Format date of
+  Just v -> T.pack v
+  Nothing -> ""
 
 parseDhall :: FromDhall a => Text -> FilePath -> IO a
 parseDhall input root = inputWithSettings (defaultInputSettings & rootDirectory .~ (siteFolder </> root)) auto input

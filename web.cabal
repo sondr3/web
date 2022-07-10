@@ -53,6 +53,7 @@ executable web
     , generic-lens           ^>=2.2
     , lens                   ^>=5.1
     , lucid2
+    , mtl                    ^>=2.2
     , pureMD5
     , shake                  ^>=0.19
     , sitemap-gen
