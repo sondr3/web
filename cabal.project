@@ -1,2 +1,0 @@
-packages: web.cabal
-allow-newer: all:aeson, all:text

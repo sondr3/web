@@ -1,27 +1,15 @@
 {
-  "name": "web",
-  "version": "0.1.0",
-  "description": "This is my website, held together by tears, glue and a healthy dose of `eh, good enough`. Built with my own static site generator.",
-  "type": "module",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sondr3/web.git"
+  "name": "@example/basics",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
   },
-  "author": "Sondre Aasemoen <sondre@eons.io>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/sondr3/web/issues"
-  },
-  "homepage": "https://github.com/sondr3/web#readme",
-  "prettier": "@sondr3/prettier",
   "devDependencies": {
-    "@minify-html/js": "0.8.1",
-    "@parcel/css-cli": "1.10.1",
-    "@parcel/watcher": "2.0.5",
-    "@sondr3/prettier": "0.6.0",
-    "browser-sync": "2.27.10",
-    "esbuild": "0.14.46",
-    "prettier": "2.7.1",
-    "sass": "1.52.3"
+    "astro": "^1.1.1"
   }
 }
