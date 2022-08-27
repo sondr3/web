@@ -12,5 +12,5 @@ Last Update: 20xx
 Doctype: HTML5
 Language: English
 Standards: HTML5
-Components: Haskell, Sass, Pandoc
-Software: Neovim
+Components: Astro, SolidJS, TailwindCSS
+Software: VSCode
