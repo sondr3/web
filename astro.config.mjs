@@ -9,5 +9,13 @@ import compressor from "astro-compressor";
 export default defineConfig({
   site: "https://www.eons.io",
   trailingSlash: "always",
-  integrations: [solidJs(), tailwind(), sitemap(), htmlMinifier(), compressor()],
+  integrations: [
+    solidJs(),
+    tailwind({
+      config: { applyBaseStyles: false },
+    }),
+    sitemap(),
+    htmlMinifier(),
+    compressor(),
+  ],
 });
