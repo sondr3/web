@@ -1,56 +1,71 @@
 ---
 export interface Props {
-	title: string;
+  title: string;
+  description: string;
 }
 
-const { title } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const { title: _title, description } = Astro.props;
+const title = `${_title} => Eons :: IO ()`;
 ---
 
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link href="/favicon.ico" rel="icon" />
+    <link
+      rel="alternate icon"
+      href="/icon-192.png"
+      sizes="192x192"
+      type="image/png"
+    />
+    <link
+      rel="alternate icon"
+      href="/icon-512.png"
+      sizes="512x512"
+      type="image/png"
+    />
+    <link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180" />
+
+    <link href="/humans.txt" rel="author" />
+    <meta content="Sondre Aasemoen" name="author" />
+
+    <link
+      as="font"
+      crossorigin="anonymous"
+      href="/Piazzolla.woff2"
+      rel="preload"
+      type="font/woff2"
+    />
+    <link
+      as="font"
+      crossorigin="anonymous"
+      href="/Inconsolata.woff2"
+      rel="preload"
+      type="font/woff2"
+    />
+
+    <title>{title}</title>
+    <meta content={description} name="description" />
+    <link href={canonicalURL} rel="canonical" />
+
+    <meta content="en" property="og:locale" />
+    <meta content="website" property="og:type" />
+    <meta content={title} property="og:title" />
+    <meta content={description} property="og:description" />
+    <meta content={canonicalURL} property="og:url" />
+    <!-- <meta property="og:image" /> -->
+    <!-- <meta content="2020-12-12" property="article:published_time" /> -->
+    <!-- <meta content="2022-01-10" property="article:modified_time" /> -->
+    <!-- <meta content="summary_large_image" name="twitter:card" /> -->
+
+    <meta content="sondr3" name="twitter:site" />
+  </head>
+  <body>
+    <slot />
+  </body>
 </html>
-<style>
-	:root {
-		--font-size-base: clamp(1rem, 0.34vw + 0.91rem, 1.19rem);
-		--font-size-lg: clamp(1.2rem, 0.7vw + 1.2rem, 1.5rem);
-		--font-size-xl: clamp(2.44rem, 2.38vw + 1.85rem, 3.75rem);
-
-		--color-text: hsl(12, 5%, 4%);
-		--color-bg: hsl(10, 21%, 95%);
-		--color-border: hsl(17, 24%, 90%);
-	}
-
-	html {
-		font-family: system-ui, sans-serif;
-		font-size: var(--font-size-base);
-		color: var(--color-text);
-		background-color: var(--color-bg);
-	}
-
-	body {
-		margin: 0;
-	}
-
-	:global(h1) {
-		font-size: var(--font-size-xl);
-	}
-
-	:global(h2) {
-		font-size: var(--font-size-lg);
-	}
-
-	:global(code) {
-		font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
-			Bitstream Vera Sans Mono, Courier New, monospace;
-	}
-</style>
