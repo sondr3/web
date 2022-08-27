@@ -1,0 +1,30 @@
+---
+import Layout from "./Layout.astro";
+
+const { frontmatter } = Astro.props;
+---
+
+<Layout title={frontmatter.title} description={frontmatter.description}>
+  <main class="relative px-4 sm:px-6 lg:px-8">
+    <article>
+      <div class="text-lg max-w-prose mx-auto">
+        <h1>
+          {
+            frontmatter.subtitle && (
+              <span class="block text-lg text-center text-indigo-600 font-semibold">
+                {frontmatter.subtitle}
+              </span>
+            )
+          }
+          <span
+            class="mt-2 block text-3xl text-center leading-8 font-bold tracking-tight text-gray-900 sm:text-4xl"
+            >{frontmatter.title}
+          </span>
+        </h1>
+      </div>
+      <div class="mt-6 prose prose-indigo prose-lg mx-auto">
+        <slot />
+      </div>
+    </article>
+  </main>
+</Layout>
