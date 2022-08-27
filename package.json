@@ -13,6 +13,7 @@
     "@astrojs/sitemap": "1.0.0",
     "@astrojs/solid-js": "1.1.0",
     "@astrojs/tailwind": "1.0.0",
+    "@sondr3/prettier": "0.6.0",
     "@tailwindcss/typography": "0.5.4",
     "astro": "^1.1.1",
     "prettier": "2.7.1",
