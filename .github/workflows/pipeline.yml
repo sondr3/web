@@ -14,52 +14,23 @@ jobs:
         with:
           version: 7
 
-      - name: Setup Haskell
-        id: setup-haskell-cabal
-        uses: haskell/actions/setup@v2
-        with:
-          ghc-version: "9.2.2"
-
       - uses: actions/setup-node@v3.4.1
         with:
           node-version: latest
           cache: "pnpm"
 
-      - name: Cache ~/.cabal/packages, ~/.cabal/store and dist-newstyle
-        uses: actions/cache@v3
-        with:
-          path: |
-            ${{ steps.setup-haskell-cabal.outputs.cabal-store }}
-            dist-newstyle
-          key: ${{ runner.os }}-ghc-${{ hashFiles('cabal.project.freeze') }}-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-ghc-${{ hashFiles('cabal.project.freeze') }}-
-            ${{ runner.os }}-ghc-
-
-      - name: Install fsatrace
-        run: |
-          git clone https://github.com/jacereda/fsatrace.git .fsatrace
-          (cd .fsatrace && make)
-          echo "${GITHUB_WORKSPACE}/.fsatrace" >> $GITHUB_PATH
-
-      - name: Configure
-        run: cabal configure
-
       - name: Install npm packages
         run: pnpm install --frozen-lockfile
 
-      - name: Compile
-        run: cabal build
-
-      - name: Run
-        run: cabal run web -- --rebuild
+      - name: Build
+        run: pnpm build
 
       - name: Deploy
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: burnett01/rsync-deployments@5.2
         with:
           switches: -avzrh --delete
-          path: build/
+          path: dist/
           remote_path: ${{ secrets.DEPLOY_PATH }}
           remote_host: ${{ secrets.DEPLOY_HOST }}
           remote_user: ${{ secrets.DEPLOY_USER }}
