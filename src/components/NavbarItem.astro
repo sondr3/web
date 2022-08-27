@@ -1,0 +1,16 @@
+---
+export interface Props {
+  title: string;
+  href: string;
+}
+
+const { title, href } = Astro.props;
+
+const path = `/${href}/`;
+const pathname = new URL(Astro.request.url).pathname;
+
+const color = pathname === path ? "text-gray-900" : "text-gray-500";
+const style = `text-base font-medium ${color} hover:text-gray-900`;
+---
+
+<a href={path} class={style}> {title}</a>

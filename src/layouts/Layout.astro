@@ -1,4 +1,6 @@
 ---
+import Navbar from "../components/Navbar.astro";
+
 export interface Props {
   title: string;
   description: string;
@@ -56,6 +58,17 @@ const title = `${_title} => Eons :: IO ()`;
     <meta content="sondr3" name="twitter:site" />
   </head>
   <body>
+    <Navbar />
     <slot />
+    <script is:inline>
+      if (
+        localStorage.theme === "dark" ||
+        (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    </script>
   </body>
 </html>
