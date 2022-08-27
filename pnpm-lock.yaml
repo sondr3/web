@@ -6,11 +6,12 @@ specifiers:
   '@astrojs/tailwind': 1.0.0
   '@sondr3/prettier': 0.6.0
   '@tailwindcss/typography': 0.5.4
-  astro: ^1.1.1
+  astro: 1.1.1
+  astro-compressor: 0.1.1
   astro-html-minifier: 0.2.0
   prettier: 2.7.1
   prettier-plugin-astro: 0.5.3
-  solid-js: ^1.5.1
+  solid-js: 1.5.1
   tailwindcss: 3.1.8
 
 devDependencies:
@@ -20,6 +21,7 @@ devDependencies:
   '@sondr3/prettier': 0.6.0_prettier@2.7.1
   '@tailwindcss/typography': 0.5.4_tailwindcss@3.1.8
   astro: 1.1.1
+  astro-compressor: 0.1.1
   astro-html-minifier: 0.2.0
   prettier: 2.7.1
   prettier-plugin-astro: 0.5.3
@@ -729,6 +731,12 @@ packages:
     engines: {node: '>=4'}
     dependencies:
       tslib: 2.4.0
+    dev: true
+
+  /astro-compressor/0.1.1:
+    resolution: {integrity: sha512-JNUbMpi2syG2A8EfO0sQrRJgk1XTtXJXHn0vdgNp0gTfMzRU4lrAkJ9hYc144U1hSRRW1/eWdO3ASfKqQGWjmg==}
+    dependencies:
+      globby: 13.1.2
     dev: true
 
   /astro-html-minifier/0.2.0:
