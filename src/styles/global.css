@@ -22,8 +22,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-body {
-  font-optical-sizing: auto;
-  font-variant-numeric: oldstyle-nums proportional-nums;
-}

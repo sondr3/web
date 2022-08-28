@@ -15,7 +15,7 @@ const title = `${_title} => Eons :: IO ()`;
 ---
 
 <!DOCTYPE html>
-<html lang="en" class="h-full">
+<html lang="en" class="h-full motion-safe:scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -60,7 +60,9 @@ const title = `${_title} => Eons :: IO ()`;
 
     <meta content="sondr3" name="twitter:site" />
   </head>
-  <body class="h-full bg-white dark:bg-black">
+  <body
+    class="[font-optical-sizing:auto] h-full bg-white dark:bg-slate-900 oldstyle-nums proportional-nums transition duration-300"
+  >
     <Navbar />
     <slot />
     <Footer />
