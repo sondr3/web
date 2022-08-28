@@ -61,7 +61,7 @@ const title = `${_title} => Eons :: IO ()`;
     <meta content="sondr3" name="twitter:site" />
   </head>
   <body
-    class="[font-optical-sizing:auto] h-full bg-white dark:bg-slate-900 oldstyle-nums proportional-nums transition duration-300"
+    class="[font-optical-sizing:auto] h-full bg-white dark:bg-slate-900 oldstyle-nums proportional-nums transition-all duration-300"
   >
     <Navbar />
     <slot />
@@ -75,6 +75,20 @@ const title = `${_title} => Eons :: IO ()`;
       } else {
         document.documentElement.classList.remove("dark");
       }
+
+      function toggle(e) {
+        if (document.documentElement.classList.contains("dark")) {
+          document.documentElement.classList.remove("dark");
+          window.localStorage.setItem("theme", "light");
+        } else {
+          document.documentElement.classList.add("dark");
+          window.localStorage.setItem("theme", "dark");
+        }
+      }
+
+      document
+        .querySelectorAll(".theme-toggle")
+        .forEach((e) => e.addEventListener("click", toggle));
     </script>
   </body>
 </html>
