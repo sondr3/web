@@ -11,6 +11,16 @@ module.exports = {
         serif: ["Piazzolla", ...fontFamily.serif],
         mono: ["Inconsolata", ...fontFamily.mono],
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            p: {
+              "text-align": "justify",
+              "text-justify": "inter-word",
+            },
+          },
+        },
+      },
     },
   },
   plugins: [require("@tailwindcss/typography")],
