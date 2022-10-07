@@ -1,0 +1,19 @@
+---
+import type { GetStaticPaths } from "astro";
+import PageLayout from "../layouts/PageLayout.astro";
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const pages = await Astro.glob(`/content/pages/**/*.mdx`);
+
+  return pages.map((page) => {
+    return {
+      params: { page: page.url?.slice(1, -1) },
+      props: { page: { ...page } },
+    };
+  });
+};
+
+const { page } = Astro.props;
+---
+
+<PageLayout page={page} />
