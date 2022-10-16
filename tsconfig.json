@@ -1,3 +1,21 @@
 {
-  "extends": "astro/tsconfigs/strictest"
+  "extends": "astro/tsconfigs/strictest",
+  "include": [
+    "src/**/*"
+  ],
+  "compilerOptions": {
+    "types": [
+      "astro/client"
+    ],
+    "baseUrl": ".",
+    "skipLibCheck": true,
+    "paths": {
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@layouts/*": [
+        "src/layouts/*"
+      ]
+    }
+  }
 }
