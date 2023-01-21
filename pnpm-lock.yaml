@@ -9,6 +9,8 @@ specifiers:
   "@sondr3/prettier": 0.6.0
   "@sondr3/tsconfig": 0.7.0
   "@tailwindcss/typography": 0.5.9
+  "@types/mdx": 2.0.3
+  "@types/node": 18.11.18
   "@typescript-eslint/eslint-plugin": 5.48.2
   "@typescript-eslint/parser": 5.48.2
   astro: 1.9.2
@@ -40,9 +42,11 @@ devDependencies:
   "@sondr3/prettier": 0.6.0_prettier@2.8.3
   "@sondr3/tsconfig": 0.7.0
   "@tailwindcss/typography": 0.5.9_tailwindcss@3.2.4
+  "@types/mdx": 2.0.3
+  "@types/node": 18.11.18
   "@typescript-eslint/eslint-plugin": 5.48.2_caon6io6stgpr7lz2rtbhekxqy
   "@typescript-eslint/parser": 5.48.2_7uibuqfxkfaozanbtbziikiqje
-  astro: 1.9.2
+  astro: 1.9.2_@types+node@18.11.18
   astro-compressor: 0.2.2
   astro-html-minifier: 0.4.0
   eslint: 8.32.0
@@ -1143,6 +1147,13 @@ packages:
       }
     dev: true
 
+  /@types/node/18.11.18:
+    resolution:
+      {
+        integrity: sha512-DHQpWGjyQKSHj3ebjFI/wRKcqQcdR+MoFBygntYOZytCqNfkd2ZC4ARDJ2DQqhjH5p85Nnd3jhUJIXrszFX/JA==,
+      }
+    dev: true
+
   /@types/parse5/6.0.3:
     resolution:
       {
@@ -1170,7 +1181,7 @@ packages:
         integrity: sha512-pSAff4IAxJjfAXUG6tFkO7dsSbTmf8CtUpfhhZ5VhkRpC4628tJhh3+V6H1E+/Gs9piSzYKT5yzHO5M4GG9jkw==,
       }
     dependencies:
-      "@types/node": 17.0.45
+      "@types/node": 18.11.18
     dev: true
 
   /@types/semver/7.3.13:
@@ -1703,7 +1714,7 @@ packages:
       "@minify-html/node": 0.10.3
     dev: true
 
-  /astro/1.9.2:
+  /astro/1.9.2_@types+node@18.11.18:
     resolution:
       {
         integrity: sha512-L+Ma0eR0Aa6QZg7RF0lEs+106Ye1/zukvtq3KtsYIogAojltlwllwU9X5CwMBzFwA55NxpNp4gSRh5US/xb+8Q==,
@@ -1770,7 +1781,7 @@ packages:
       typescript: 4.9.4
       unist-util-visit: 4.1.1
       vfile: 5.3.6
-      vite: 3.2.5
+      vite: 3.2.5_@types+node@18.11.18
       vitefu: 0.2.4_vite@3.2.5
       yargs-parser: 21.1.1
       zod: 3.20.2
@@ -7942,7 +7953,7 @@ packages:
       vfile-message: 3.1.3
     dev: true
 
-  /vite/3.2.5:
+  /vite/3.2.5_@types+node@18.11.18:
     resolution:
       {
         integrity: sha512-4mVEpXpSOgrssFZAOmGIr85wPHKvaDAcXqxVxVRZhljkJOMZi1ibLibzjLHzJvcok8BMguLc7g1W6W/GqZbLdQ==,
@@ -7970,6 +7981,7 @@ packages:
       terser:
         optional: true
     dependencies:
+      "@types/node": 18.11.18
       esbuild: 0.15.18
       postcss: 8.4.21
       resolve: 1.22.1
@@ -7989,7 +8001,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 3.2.5
+      vite: 3.2.5_@types+node@18.11.18
     dev: true
 
   /vscode-css-languageservice/6.2.1:
