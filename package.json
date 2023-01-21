@@ -7,7 +7,8 @@
     "start": "astro dev",
     "build": "astro check && tsc --noEmit && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "format": "prettier --check --plugin-search-dir=. --ignore-path=.gitignore .",
+    "format:fix": "prettier --write --plugin-search-dir=. --ignore-path=.gitignore ."
   },
   "devDependencies": {
     "@astrojs/mdx": "0.14.0",

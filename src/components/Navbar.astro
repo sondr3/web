@@ -3,15 +3,15 @@ import NavbarItem from "./NavbarItem.astro";
 ---
 
 <header class="relative">
-  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Top">
+  <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Top">
     <div
-      class="w-full py-6 flex items-center justify-between border-b border-gray-9000 lg:border-none"
+      class="border-gray-9000 flex w-full items-center justify-between border-b py-6 lg:border-none"
     >
       <div class="flex items-center">
         <a rel="prefetch" href="/" class="font-mono hover:underline dark:text-gray-300">
           EONS :: IO ()</a
         >
-        <div class="hidden ml-10 space-x-8 lg:block">
+        <div class="ml-10 hidden space-x-8 lg:block">
           <NavbarItem href="about" title="About" />
         </div>
       </div>
@@ -24,7 +24,7 @@ import NavbarItem from "./NavbarItem.astro";
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="w-6 h-6"
+            class="h-6 w-6"
           >
             <path
               stroke-linecap="round"
@@ -42,7 +42,7 @@ import NavbarItem from "./NavbarItem.astro";
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="w-6 h-6"
+            class="h-6 w-6"
           >
             <path
               stroke-linecap="round"
@@ -53,7 +53,7 @@ import NavbarItem from "./NavbarItem.astro";
         </button>
       </div>
     </div>
-    <div class="py-4 flex flex-wrap justify-center space-x-6 lg:hidden">
+    <div class="flex flex-wrap justify-center space-x-6 py-4 lg:hidden">
       <NavbarItem href="about" title="About" />
     </div>
   </nav>
