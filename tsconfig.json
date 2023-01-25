@@ -3,7 +3,6 @@
   "include": ["src/**/*"],
   "compilerOptions": {
     "importsNotUsedAsValues": "error",
-    "types": ["astro/client"],
     "baseUrl": ".",
     "skipLibCheck": true,
     "paths": {
