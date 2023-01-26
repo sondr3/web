@@ -1,41 +1,32 @@
 ---
-import type { Component } from "mdx/types";
-import type { Frontmatter } from "src/types";
-
 import Layout from "./Layout.astro";
+import type { CollectionEntry } from "astro:content";
 
-export interface Props {
-  page: {
-    Content: Component<unknown>;
-    frontmatter: Frontmatter;
-  };
-}
+export type Props = CollectionEntry<"page">["data"];
 
-const {
-  page: { Content, frontmatter },
-} = Astro.props;
+const { title, description, subtitle } = Astro.props;
 ---
 
-<Layout title={frontmatter.title} description={frontmatter.description}>
+<Layout title={title} description={description}>
   <main class="relative px-4 sm:px-6 lg:px-8">
     <article>
       <div class="mx-auto max-w-prose text-lg">
         <h1>
           {
-            frontmatter.subtitle && (
+            subtitle && (
               <span class="block text-center text-lg font-semibold text-indigo-600 dark:text-indigo-300">
-                {frontmatter.subtitle}
+                {subtitle}
               </span>
             )
           }
           <span
             class="mt-2 block text-center text-3xl font-bold leading-8 tracking-tight text-gray-900 dark:text-gray-300 sm:text-4xl"
-            >{frontmatter.title}
+            >{title}
           </span>
         </h1>
       </div>
       <div class="prose prose-lg prose-indigo mx-auto mt-6 dark:prose-invert">
-        <Content />
+        <slot />
       </div>
     </article>
   </main>

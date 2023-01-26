@@ -1,6 +1,5 @@
 {
   "extends": "astro/tsconfigs/strictest",
-  "include": ["src/**/*"],
   "compilerOptions": {
     "importsNotUsedAsValues": "error",
     "baseUrl": ".",
