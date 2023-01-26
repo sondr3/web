@@ -1,6 +1,6 @@
 ---
 import type { GetStaticPaths } from "astro";
-import { getCollection } from "astro:content";
+import { CollectionEntry, getCollection } from "astro:content";
 
 import PageLayout from "../layouts/PageLayout.astro";
 
@@ -12,6 +12,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
     props: { page },
   }));
 };
+
+type Props = { page: CollectionEntry<"page"> };
 
 const { page } = Astro.props;
 const { Content } = await page.render();

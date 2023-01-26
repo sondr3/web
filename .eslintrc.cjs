@@ -1,13 +1,18 @@
 /** @type {import('eslint').Linter.Config} */
 module.exports = {
+  extends: [
+    "@sondr3/eslint-config/base",
+    "plugin:astro/recommended",
+    "plugin:astro/jsx-a11y-strict",
+  ],
   env: {
     es2022: true,
+    browser: true,
+    node: true,
   },
-  extends: ["plugin:astro/recommended", "plugin:astro/jsx-a11y-strict"],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaVersion: "latest",
-    project: "tsconfig.json",
     sourceType: "module",
   },
   overrides: [
@@ -19,16 +24,8 @@ module.exports = {
         extraFileExtensions: [".astro"],
       },
     },
-    {
-      files: ["*.ts"],
-      parser: "@typescript-eslint/parser",
-      extends: ["@sondr3/eslint-config/typescript"],
-    },
-    {
-      // Define the configuration for `<script>` tag.
-      // Script in `<script>` is assigned a virtual file name with the `.js` extension.
-      files: ["**/*.astro/*.js", "*.astro/*.js"],
-      parser: "@typescript-eslint/parser",
-    },
   ],
+  rules: {
+    "import/no-unresolved": "off",
+  },
 };
