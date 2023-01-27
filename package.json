@@ -8,6 +8,7 @@
     "start": "astro dev",
     "build": "astro check && tsc --noEmit && astro build",
     "preview": "astro preview",
+    "test": "playwright test",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
     "lint": "eslint --cache ",

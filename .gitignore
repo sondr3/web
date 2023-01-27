@@ -146,3 +146,6 @@ dist
 
 # SvelteKit build / generate output
 .svelte-kit
+/test-results/
+/playwright-report/
+/playwright/.cache/

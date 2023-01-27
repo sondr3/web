@@ -1,7 +1,7 @@
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   {
-    files: ["src/**/*"],
+    files: ["src/**/*", "tests/**/*"],
     ignores: ["**/*.md", "**/*.mdx"],
     extends: [
       "@sondr3/eslint-config/base",
