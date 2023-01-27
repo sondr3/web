@@ -1,6 +1,7 @@
 {
   "name": "@sondr3/web",
   "private": true,
+  "type": "module",
   "scripts": {
     "prepare": "husky install",
     "dev": "astro dev",
@@ -9,8 +10,10 @@
     "preview": "astro preview",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
-    "lint": "eslint --cache src",
-    "lint:fix": "eslint --cache --fix src"
+    "lint": "eslint --cache ",
+    "lint:fix": "eslint --cache --fix",
+    "sass": "stylelint --cache src/**/*.{astro,scss}",
+    "sass:fix": "stylelint --cache --fix src/**/*.{astro,scss}"
   },
   "devDependencies": {
     "@astrojs/mdx": "0.15.2",
@@ -20,7 +23,6 @@
     "@sondr3/eslint-config": "0.7.1",
     "@sondr3/prettier": "0.6.0",
     "@sondr3/tsconfig": "0.7.0",
-    "@tailwindcss/typography": "0.5.9",
     "@types/mdx": "2.0.3",
     "@types/node": "18.11.18",
     "@typescript-eslint/eslint-plugin": "5.50.0",
@@ -38,6 +40,7 @@
     "eslint-plugin-simple-import-sort": "10.0.0",
     "husky": "^8.0.3",
     "lint-staged": "13.1.0",
+    "postcss-html": "1.5.0",
     "prettier": "2.8.3",
     "prettier-eslint": "15.0.1",
     "prettier-plugin-astro": "0.8.0",
@@ -46,8 +49,11 @@
     "typescript": "4.9.5"
   },
   "lint-staged": {
-    "*.{astro,js,cjs,md,yaml,json,ts}": [
+    "*.{astro,js,cjs,md,yaml,json,ts,scss}": [
       "prettier --write"
+    ],
+    "*.scss": [
+      "stylelint"
     ],
     "*.{ts,astro}": [
       "eslint --cache --fix"
