@@ -1,6 +1,7 @@
+/** @type {import('prettier').Config} */
 module.exports = {
   ...require("@sondr3/prettier"),
-  plugins: [require.resolve("prettier-plugin-astro"), require("prettier-plugin-tailwindcss")],
+  plugins: [require.resolve("prettier-plugin-astro")],
   overrides: [
     {
       files: "*.astro",
