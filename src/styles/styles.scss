@@ -1,5 +1,2 @@
-@use "../styles/variables" as f;
-
-body {
-  background-color: v.$background;
-}
+@use "fonts";
+@use "reset";
