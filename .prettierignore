@@ -4,3 +4,5 @@ dist/
 coverage/
 .git/
 .astro/
+test-results/
+playwright-report/
