@@ -1,5 +1,5 @@
 ---
-import "../styles/styles.scss";
+import "../styles/base.css";
 
 import Footer from "../components/Footer.astro";
 import Navbar from "../components/Navbar.astro";
@@ -61,7 +61,9 @@ const title = `${_title} => Eons :: IO ()`;
 
     <meta content="sondr3" name="twitter:site" />
   </head>
-  <body>
+  <body
+    class="h-full bg-white oldstyle-nums proportional-nums transition-colors duration-300 [font-optical-sizing:auto] dark:bg-slate-900"
+  >
     <Navbar />
     <slot />
     <Footer />

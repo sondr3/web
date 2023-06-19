@@ -2,24 +2,29 @@
 import NavbarItem from "./NavbarItem.astro";
 ---
 
-<header>
-  <nav aria-label="Top">
-    <div>
-      <div>
-        <a rel="prefetch" href="/"> EONS :: IO ()</a>
-        <div>
+<header class="relative">
+  <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Top">
+    <div
+      class="border-gray-9000 flex w-full items-center justify-between border-b py-6 lg:border-none"
+    >
+      <div class="flex items-center">
+        <a rel="prefetch" href="/" class="font-mono hover:underline dark:text-gray-300">
+          EONS :: IO ()</a
+        >
+        <div class="ml-10 hidden space-x-8 lg:block">
           <NavbarItem href="about" title="About" />
         </div>
       </div>
-      <div>
-        <button>
-          <span>Toggle dark mode</span>
+      <div class="ml-10 space-x-4 text-gray-900 dark:text-gray-300">
+        <button class="theme-toggle block dark:hidden">
+          <span class="sr-only">Toggle dark mode</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
+            class="h-6 w-6"
           >
             <path
               stroke-linecap="round"
@@ -28,8 +33,8 @@ import NavbarItem from "./NavbarItem.astro";
             ></path>
           </svg>
         </button>
-        <button>
-          <span>Toggle light mode</span>
+        <button class="theme-toggle hidden dark:block">
+          <span class="sr-only">Toggle light mode</span>
           <svg
             id="dark"
             xmlns="http://www.w3.org/2000/svg"
@@ -37,6 +42,7 @@ import NavbarItem from "./NavbarItem.astro";
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
+            class="h-6 w-6"
           >
             <path
               stroke-linecap="round"
@@ -47,7 +53,7 @@ import NavbarItem from "./NavbarItem.astro";
         </button>
       </div>
     </div>
-    <div>
+    <div class="flex flex-wrap justify-center space-x-6 py-4 lg:hidden">
       <NavbarItem href="about" title="About" />
     </div>
   </nav>
