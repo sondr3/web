@@ -70,20 +70,6 @@ const title = `${_title} => Eons :: IO ()`;
       } else {
         document.documentElement.classList.remove("dark");
       }
-
-      function toggle() {
-        if (document.documentElement.classList.contains("dark")) {
-          document.documentElement.classList.remove("dark");
-          window.localStorage.setItem("theme", "light");
-        } else {
-          document.documentElement.classList.add("dark");
-          window.localStorage.setItem("theme", "dark");
-        }
-      }
-
-      document
-        .querySelectorAll(".theme-toggle")
-        .forEach((e) => e.addEventListener("click", toggle));
     </script>
   </head>
   <body
