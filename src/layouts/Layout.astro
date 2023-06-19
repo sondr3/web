@@ -60,13 +60,7 @@ const title = `${_title} => Eons :: IO ()`;
     <!-- <meta content="summary_large_image" name="twitter:card" /> -->
 
     <meta content="sondr3" name="twitter:site" />
-  </head>
-  <body
-    class="h-full bg-white oldstyle-nums proportional-nums transition-colors duration-300 [font-optical-sizing:auto] dark:bg-slate-900"
-  >
-    <Navbar />
-    <slot />
-    <Footer />
+
     <script is:inline>
       if (
         localStorage.theme === "dark" ||
@@ -77,6 +71,28 @@ const title = `${_title} => Eons :: IO ()`;
         document.documentElement.classList.remove("dark");
       }
 
+      function toggle() {
+        if (document.documentElement.classList.contains("dark")) {
+          document.documentElement.classList.remove("dark");
+          window.localStorage.setItem("theme", "light");
+        } else {
+          document.documentElement.classList.add("dark");
+          window.localStorage.setItem("theme", "dark");
+        }
+      }
+
+      document
+        .querySelectorAll(".theme-toggle")
+        .forEach((e) => e.addEventListener("click", toggle));
+    </script>
+  </head>
+  <body
+    class="h-full bg-white oldstyle-nums proportional-nums transition-colors duration-300 [font-optical-sizing:auto] dark:bg-slate-900"
+  >
+    <Navbar />
+    <slot />
+    <Footer />
+    <script is:inline>
       function toggle() {
         if (document.documentElement.classList.contains("dark")) {
           document.documentElement.classList.remove("dark");
