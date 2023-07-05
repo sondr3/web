@@ -151,3 +151,8 @@ dist
 /test-results/
 /playwright-report/
 /playwright/.cache/
+
+
+# Added by cargo
+
+/target

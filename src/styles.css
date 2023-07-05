@@ -9,7 +9,8 @@
   font-family: Piazzolla;
   font-style: italic;
   font-weight: 100 900;
-  src: local("PiazzollaItalic"), url("/fonts/PiazzollaItalic.woff2") format("woff2");
+  src: local("PiazzollaItalic"),
+    url("/fonts/PiazzollaItalic.woff2") format("woff2");
 }
 
 @font-face {
