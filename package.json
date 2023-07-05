@@ -6,6 +6,7 @@
     "dev": "cargo run",
     "build": "cargo build",
     "preview": "serve dist/",
+    "styles": "pnpm tailwindcss -i ./src/styles.css -o ./dist/styles.css --watch",
     "test": "playwright test"
   },
   "devDependencies": {
