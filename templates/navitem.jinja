@@ -1,4 +1,4 @@
-{% macro navitem(path, name) %}
+{% macro nav_item(path, name) -%}
 <a
   rel="prefetch"
   href={{ path }}
@@ -9,4 +9,4 @@
 >
   {{ name }}
 </a>
-{% endmacro %}
+{%- endmacro %}
