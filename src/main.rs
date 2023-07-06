@@ -1,10 +1,12 @@
 use std::{
     ffi::{OsStr, OsString},
+    fs::File,
     path::{Path, PathBuf},
 };
 
 use minijinja::{context, path_loader, Environment};
 use once_cell::sync::Lazy;
+use walkdir::{DirEntry, WalkDir};
 
 const HELP_MESSAGE: &str = r#"
 web - website generator
@@ -82,6 +84,40 @@ impl AssetFile {
     }
 }
 
+fn is_hidden(entry: &DirEntry) -> bool {
+    entry
+        .file_name()
+        .to_str()
+        .map(|s| s.starts_with('.'))
+        .unwrap_or(false)
+}
+
+fn is_file(entry: &DirEntry) -> bool {
+    entry.file_type().is_file()
+}
+
+fn copy_public_files() -> Result<(), Box<dyn std::error::Error>> {
+    WalkDir::new("./src/public")
+        .into_iter()
+        .filter_entry(|e| !is_hidden(e)) // && is_file(e))
+        .filter_map(Result::ok)
+        .filter(is_file)
+        .try_for_each(|entry| {
+            let path = entry.path().to_path_buf();
+            let filename = path.strip_prefix("./src/public")?;
+
+            let file: PathBuf = ["./dist", &filename.to_string_lossy()]
+                .into_iter()
+                .collect();
+
+            std::fs::create_dir_all(file.parent().unwrap())?;
+            File::create(&file)?;
+            std::fs::copy(path, file)?;
+
+            Ok(())
+        })
+}
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let opts = dbg!(Options::from_args());
     let _verbose = opts.verbose;
@@ -107,6 +143,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     std::fs::create_dir("./dist")?;
+
+    copy_public_files()?;
+
     std::fs::write(format!("./dist/{}", styles_filename), styles.content)?;
     std::fs::write("./dist/index.html", index.render(context)?)?;
 
