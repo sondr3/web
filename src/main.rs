@@ -36,7 +36,7 @@ impl Options {
 
 static ENV: Lazy<Environment<'static>> = Lazy::new(|| {
     let mut env = Environment::new();
-    env.set_loader(path_loader("templates"));
+    env.set_loader(path_loader("./src/templates"));
     env
 });
 
