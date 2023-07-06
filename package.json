@@ -5,9 +5,11 @@
   "scripts": {
     "dev": "cargo run",
     "build": "cargo build",
+    "preview": "serve dist",
     "test": "playwright test"
   },
   "devDependencies": {
-    "@playwright/test": "1.35.1"
+    "@playwright/test": "1.35.1",
+    "serve": "14.2.0"
   }
 }
