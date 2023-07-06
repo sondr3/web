@@ -96,26 +96,28 @@ fn is_file(entry: &DirEntry) -> bool {
     entry.file_type().is_file()
 }
 
+fn copy_file(entry: DirEntry) -> Result<(), Box<dyn std::error::Error>> {
+    let path = entry.path().to_path_buf();
+    let filename = path.strip_prefix("./src/public")?;
+
+    let file: PathBuf = ["./dist", &filename.to_string_lossy()]
+        .into_iter()
+        .collect();
+
+    std::fs::create_dir_all(file.parent().unwrap())?;
+    File::create(&file)?;
+    std::fs::copy(path, file)?;
+
+    Ok(())
+}
+
 fn copy_public_files() -> Result<(), Box<dyn std::error::Error>> {
     WalkDir::new("./src/public")
         .into_iter()
         .filter_entry(|e| !is_hidden(e)) // && is_file(e))
         .filter_map(Result::ok)
         .filter(is_file)
-        .try_for_each(|entry| {
-            let path = entry.path().to_path_buf();
-            let filename = path.strip_prefix("./src/public")?;
-
-            let file: PathBuf = ["./dist", &filename.to_string_lossy()]
-                .into_iter()
-                .collect();
-
-            std::fs::create_dir_all(file.parent().unwrap())?;
-            File::create(&file)?;
-            std::fs::copy(path, file)?;
-
-            Ok(())
-        })
+        .try_for_each(copy_file)
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
