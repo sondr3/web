@@ -5,17 +5,9 @@
   "scripts": {
     "dev": "cargo run",
     "build": "cargo build",
-    "preview": "serve dist/",
-    "styles": "pnpm tailwindcss -i ./src/styles.css -o ./dist/styles.css",
     "test": "playwright test"
   },
   "devDependencies": {
-    "@playwright/test": "1.35.1",
-    "@sondr3/prettier": "0.6.0",
-    "@tailwindcss/typography": "0.5.9",
-    "@types/node": "20.3.3",
-    "prettier": "2.8.8",
-    "serve": "14.2.0",
-    "tailwindcss": "3.3.2"
+    "@playwright/test": "1.35.1"
   }
 }
