@@ -4,8 +4,10 @@ use std::{
     path::{Path, PathBuf},
 };
 
+use jotdown::Render;
 use minijinja::{context, path_loader, Environment};
 use once_cell::sync::Lazy;
+use serde::Deserialize;
 use walkdir::{DirEntry, WalkDir};
 
 const HELP_MESSAGE: &str = r#"
@@ -84,20 +86,12 @@ impl AssetFile {
     }
 }
 
-fn is_hidden(entry: &DirEntry) -> bool {
-    entry
-        .file_name()
-        .to_str()
-        .map(|s| s.starts_with('.'))
-        .unwrap_or(false)
-}
-
 fn is_file(entry: &DirEntry) -> bool {
     entry.file_type().is_file()
 }
 
-fn copy_file(entry: DirEntry) -> Result<(), Box<dyn std::error::Error>> {
-    let path = entry.path().to_path_buf();
+fn copy_file(entry: PathBuf) -> Result<(), Box<dyn std::error::Error>> {
+    let path = entry;
     let filename = path.strip_prefix("./src/public")?;
 
     let file: PathBuf = ["./dist", &filename.to_string_lossy()]
@@ -111,12 +105,79 @@ fn copy_file(entry: DirEntry) -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-fn copy_public_files() -> Result<(), Box<dyn std::error::Error>> {
-    WalkDir::new("./src/public")
+#[derive(Debug, Deserialize)]
+struct Frontmatter {
+    title: String,
+    subtitle: Option<String>,
+    description: String,
+    slug: Option<String>,
+}
+
+fn build_page(entry: PathBuf) -> Result<(), Box<dyn std::error::Error>> {
+    let file = std::fs::read_to_string(&entry)?;
+    let stem = entry.file_stem().unwrap().to_string_lossy();
+
+    match file
+        .split_terminator("+++")
+        .map(|e| e.trim())
+        .filter(|e| !e.is_empty())
+        .collect::<Vec<_>>()[..]
+    {
+        [frontmatter, content] => {
+            let frontmatter: Frontmatter = toml::from_str(frontmatter)?;
+
+            let events = jotdown::Parser::new(content);
+            let mut html = String::new();
+            jotdown::html::Renderer::default().push(events, &mut html)?;
+
+            let path: PathBuf = match frontmatter.slug {
+                Some(slug) => ["./dist", &slug, "index.html"].into_iter().collect(),
+                None => ["./dist", &stem, "index.html"].into_iter().collect(),
+            };
+
+            let template = ENV.get_template("page.jinja")?;
+            let context = context!(title => frontmatter.title, subtitle => frontmatter.subtitle, description => frontmatter.description, styles => "", content => html);
+            let output = template.render(context)?;
+
+            std::fs::create_dir_all(path.parent().unwrap())?;
+            std::fs::write(&path, output)?;
+        }
+        _ => todo!(),
+    }
+
+    Ok(())
+}
+
+fn build_pages() -> Result<(), Box<dyn std::error::Error>> {
+    find_files(Path::new("./src/content/pages"), is_file)
         .into_iter()
-        .filter_entry(|e| !is_hidden(e)) // && is_file(e))
+        .try_for_each(build_page)
+}
+
+pub fn is_visible(entry: &DirEntry) -> bool {
+    !entry
+        .file_name()
+        .to_str()
+        .map(|s| s.starts_with('.'))
+        .unwrap_or(false)
+}
+
+fn find_files<F>(directory: &Path, filter_files: F) -> Vec<PathBuf>
+where
+    F: Fn(&DirEntry) -> bool,
+{
+    WalkDir::new(directory)
+        .into_iter()
+        .filter_entry(is_visible)
         .filter_map(Result::ok)
-        .filter(is_file)
+        .filter(filter_files)
+        .map(|f| f.path().to_owned())
+        .collect()
+}
+
+fn copy_public_files() -> Result<(), Box<dyn std::error::Error>> {
+    find_files(Path::new("./src/public"), is_file)
+        .into_iter()
         .try_for_each(copy_file)
 }
 
@@ -147,6 +208,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     std::fs::create_dir("./dist")?;
 
     copy_public_files()?;
+    build_pages()?;
 
     std::fs::write(format!("./dist/{}", styles_filename), styles.content)?;
     std::fs::write("./dist/index.html", index.render(context)?)?;
