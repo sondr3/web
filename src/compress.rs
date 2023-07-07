@@ -8,8 +8,9 @@ use std::io::prelude::*;
 use std::path::Path;
 use walkdir::DirEntry;
 
-const VALID_EXTENSIONS: [&str; 10] = [
-    "html", "css", "js", "xml", "css", "cjs", "mjs", "json", "txt", "svg",
+const VALID_EXTENSIONS: [&str; 15] = [
+    "html", "css", "js", "xml", "css", "cjs", "mjs", "json", "txt", "svg", "map", "ttf", "otf",
+    "woff2", "eot",
 ];
 
 pub fn compressible_files(entry: &DirEntry) -> bool {
