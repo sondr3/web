@@ -74,8 +74,8 @@ pub fn copy_file(root: impl AsRef<Path>, prefix: &str, entry: impl Into<PathBuf>
     Ok(())
 }
 
-pub fn write_file(path: &Path, content: &str) -> Result<()> {
+pub fn write_file(path: &Path, content: impl AsRef<[u8]>) -> Result<()> {
     std::fs::create_dir_all(path.parent().unwrap())?;
-    std::fs::write(path, content)?;
+    std::fs::write::<&Path, &[u8]>(path, content.as_ref())?;
     Ok(())
 }
