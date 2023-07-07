@@ -2,6 +2,7 @@ mod asset;
 mod builder;
 mod content;
 mod site;
+mod sitemap;
 mod utils;
 
 use crate::builder::Builder;

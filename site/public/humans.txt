@@ -1,16 +1,16 @@
 /* TEAM */
 Everything Man: Sondre Aasemoen
 Site: eons.io
-Twitter: @sondr3
+Mastodon: @sondre@fosstodon.org
 Location: Norway
 
 /* THANKS */
 You
 
 /* SITE */
-Last Update: 20xx
+Last Update: 202x
 Doctype: HTML5
 Language: English
 Standards: HTML5
-Components: Astro, SolidJS, TailwindCSS
-Software: VSCode
+Components: Rust
+Software: neovim

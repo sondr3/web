@@ -5,7 +5,10 @@ use jotdown::Render;
 use minijinja::value::Value;
 use minijinja::{context, path_loader, Environment};
 use once_cell::sync::Lazy;
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
+use time::Date;
+
+use crate::utils::toml_date_deserializer;
 
 static ENV: Lazy<Environment<'static>> = Lazy::new(|| {
     let mut env = Environment::new();
@@ -13,9 +16,11 @@ static ENV: Lazy<Environment<'static>> = Lazy::new(|| {
     env
 });
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 pub struct Frontmatter {
     pub title: String,
+    #[serde(with = "toml_date_deserializer")]
+    pub last_modified: Date,
     pub subtitle: Option<String>,
     pub description: String,
     pub slug: Option<String>,
@@ -30,7 +35,8 @@ pub enum ContentType {
 
 #[derive(Debug)]
 pub struct Content {
-    pub path: PathBuf,
+    pub out_path: PathBuf,
+    pub url: String,
     pub content_type: ContentType,
     pub frontmatter: Frontmatter,
     pub content: String,
@@ -74,8 +80,14 @@ impl Content {
             None => [stem, "index.html"].into_iter().collect(),
         };
 
+        let url = match &frontmatter.slug {
+            Some(slug) => slug,
+            None => stem,
+        };
+
         Ok(Content {
-            path,
+            url: format!("{}/", url),
+            out_path: path,
             content_type: kind,
             content: content.unwrap_or_default().into(),
             frontmatter,

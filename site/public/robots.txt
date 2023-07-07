@@ -6,4 +6,4 @@ Allow: /
 Host: https://www.eons.io
 
 # Sitemaps
-Sitemap: https://www.eons.io/sitemap-index.xml
+Sitemap: https://www.eons.io/sitemap.xml

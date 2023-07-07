@@ -1,11 +1,14 @@
 use crate::asset::{BuiltAssetFile, PublicFile};
 use crate::content::Content;
+use crate::sitemap::create_sitemap;
 use crate::utils::{copy_file, write_file};
 use anyhow::Result;
 use std::path::{Path, PathBuf};
+use url::Url;
 
 #[derive(Debug)]
 pub struct Site {
+    pub url: Url,
     pub output: PathBuf,
     pub pages: Vec<Content>,
     pub public_files: Vec<PublicFile>,
@@ -25,6 +28,8 @@ impl Site {
         self.write_css()?;
         self.write_pages()?;
 
+        self.write_sitemap()?;
+
         Ok(())
     }
 
@@ -34,8 +39,16 @@ impl Site {
 
     fn write_pages(&self) -> Result<()> {
         self.pages.iter().try_for_each(|f| {
-            write_file(&self.output.join(&f.path), &f.render(&self.css.filename)?)
+            write_file(
+                &self.output.join(&f.out_path),
+                &f.render(&self.css.filename)?,
+            )
         })
+    }
+
+    fn write_sitemap(&self) -> Result<()> {
+        let sitemap = create_sitemap(&self.pages, &self.url)?;
+        write_file(&self.output.join("sitemap.xml"), &sitemap)
     }
 
     fn copy_public_files(&self) -> Result<()> {

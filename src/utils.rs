@@ -17,6 +17,26 @@ impl AppendExtension for PathBuf {
     }
 }
 
+pub mod toml_date_deserializer {
+    use serde::{self, Deserialize, Deserializer};
+    use time::{Date, Month};
+    use toml::value::Datetime;
+
+    pub fn deserialize<'de, D>(deserializer: D) -> Result<Date, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let s = Datetime::deserialize(deserializer)?;
+        let Some(date) = s.date else {
+            return Err(serde::de::Error::custom("missing date"));
+        };
+
+        let month = Month::try_from(date.month).map_err(serde::de::Error::custom)?;
+        Date::from_calendar_date(date.year as i32, month, date.day)
+            .map_err(serde::de::Error::custom)
+    }
+}
+
 pub fn is_file(entry: &DirEntry) -> bool {
     entry.file_type().is_file()
 }

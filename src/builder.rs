@@ -6,6 +6,7 @@ use crate::Options;
 use crate::content::{Content, ContentType};
 use anyhow::Result;
 use std::path::{Path, PathBuf};
+use url::Url;
 
 #[derive(Debug)]
 pub struct Builder {
@@ -26,6 +27,10 @@ impl Builder {
         pages.append(&mut self.build_posts()?);
 
         Ok(Site {
+            url: match self.options.production {
+                true => Url::parse("https://www.eons.io")?,
+                false => Url::parse("http://localhost:3000")?,
+            },
             output: PathBuf::from("./dist"),
             pages,
             public_files: self.find_public_files(),
