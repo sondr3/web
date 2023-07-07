@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+anyhow = "1.0.71"
 grass = { version = "0.12.4", default-features = false, features = ["random"] }
 jotdown = "0.3.0"
 md5 = "0.7.0"
