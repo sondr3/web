@@ -118,7 +118,7 @@ fn build_page(entry: PathBuf) -> Result<(), Box<dyn std::error::Error>> {
     let stem = entry.file_stem().unwrap().to_string_lossy();
 
     match file
-        .split_terminator("+++")
+        .split("+++")
         .map(|e| e.trim())
         .filter(|e| !e.is_empty())
         .collect::<Vec<_>>()[..]
