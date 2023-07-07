@@ -1,4 +1,6 @@
+use crate::minify::CssMinifier;
 use crate::utils::AppendExtension;
+use anyhow::Result;
 use std::path::{Path, PathBuf};
 
 #[derive(Debug)]
@@ -36,12 +38,22 @@ pub struct BuiltAssetFile {
     pub content: String,
 }
 
-impl BuiltAssetFile {
-    pub fn from_asset(asset: &AssetFile, production: bool) -> Self {
-        Self {
+pub trait OptimizeAsset {
+    fn optimize(asset: &AssetFile, production: bool) -> Result<Self>
+    where
+        Self: Sized;
+}
+
+impl OptimizeAsset for BuiltAssetFile {
+    fn optimize(asset: &AssetFile, production: bool) -> Result<Self> {
+        Ok(Self {
             filename: asset.final_filename(production),
-            content: asset.content.clone(),
-        }
+            content: if production {
+                CssMinifier::minify(&asset.content.clone())?
+            } else {
+                asset.content.clone()
+            },
+        })
     }
 }
 

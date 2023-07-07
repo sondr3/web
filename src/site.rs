@@ -1,7 +1,7 @@
 use crate::asset::{BuiltAssetFile, PublicFile};
 use crate::compress;
 use crate::content::Content;
-use crate::minify::Minifier;
+use crate::minify::HtmlMinifier;
 use crate::sitemap::create_sitemap;
 use crate::utils::{copy_file, write_file};
 use anyhow::Result;
@@ -51,7 +51,7 @@ impl Site {
     }
 
     fn write_pages(&self, production: bool) -> Result<()> {
-        let minifier = Minifier::new();
+        let minifier = HtmlMinifier::new();
 
         self.pages.iter().try_for_each(|f| {
             write_file(

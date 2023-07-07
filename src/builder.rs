@@ -1,4 +1,4 @@
-use crate::asset::{AssetFile, BuiltAssetFile, PublicFile};
+use crate::asset::{AssetFile, BuiltAssetFile, OptimizeAsset, PublicFile};
 use crate::site::Site;
 use crate::utils::{find_files, is_file};
 use crate::Options;
@@ -70,6 +70,6 @@ impl Builder {
             )?,
         };
 
-        Ok(BuiltAssetFile::from_asset(&asset, self.options.production))
+        BuiltAssetFile::optimize(&asset, self.options.production)
     }
 }
