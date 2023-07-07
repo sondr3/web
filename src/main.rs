@@ -6,10 +6,13 @@ mod minify;
 mod site;
 mod sitemap;
 mod utils;
+mod watcher;
 
 use crate::builder::Builder;
 use crate::site::write_site;
+use crate::watcher::watch_css;
 use anyhow::Result;
+use std::path::Path;
 
 const HELP_MESSAGE: &str = r#"
 web - website generator
@@ -80,10 +83,15 @@ fn main() -> Result<()> {
 
     println!("Running in {:?} mode...", opts.mode);
 
-    let builder = Builder::new(opts);
+    let source = Path::new("./site").to_owned();
+    let builder = Builder::new(source.clone(), opts);
     let site = builder.build()?;
 
     write_site(site, opts.mode)?;
+
+    if opts.mode.is_dev() {
+        watch_css(&source.join("styles"), opts.mode)?;
+    }
 
     Ok(())
 }

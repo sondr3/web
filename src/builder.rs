@@ -10,14 +10,14 @@ use url::Url;
 
 #[derive(Debug)]
 pub struct Builder {
-    source: PathBuf,
-    options: Options,
+    pub source: PathBuf,
+    pub options: Options,
 }
 
 impl Builder {
-    pub fn new(opts: Options) -> Self {
+    pub fn new(source: PathBuf, opts: Options) -> Self {
         Self {
-            source: Path::new("./site").to_owned(),
+            source,
             options: opts,
         }
     }
