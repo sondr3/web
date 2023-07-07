@@ -1,5 +1,6 @@
 mod asset;
 mod builder;
+mod compress;
 mod content;
 mod site;
 mod sitemap;
@@ -48,7 +49,7 @@ fn main() -> Result<()> {
     let builder = Builder::new(opts);
     let site = builder.build()?;
 
-    site.write()?;
+    site.write(opts.production)?;
 
     Ok(())
 }

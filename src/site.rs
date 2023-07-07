@@ -1,4 +1,5 @@
 use crate::asset::{BuiltAssetFile, PublicFile};
+use crate::compress;
 use crate::content::Content;
 use crate::sitemap::create_sitemap;
 use crate::utils::{copy_file, write_file};
@@ -16,7 +17,7 @@ pub struct Site {
 }
 
 impl Site {
-    pub fn write(self) -> Result<()> {
+    pub fn write(self, production: bool) -> Result<()> {
         let dist = Path::new("dist");
         if dist.exists() {
             std::fs::remove_dir_all("./dist")?;
@@ -29,6 +30,17 @@ impl Site {
         self.write_pages()?;
 
         self.write_sitemap()?;
+
+        if production {
+            self.compress()?;
+        }
+
+        Ok(())
+    }
+
+    fn compress(&self) -> Result<()> {
+        compress::gzip(&self.output)?;
+        compress::brotli(&self.output)?;
 
         Ok(())
     }

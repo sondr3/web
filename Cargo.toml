@@ -5,6 +5,8 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.71"
+brotli = "3.3.4"
+flate2 = "1.0.26"
 grass = { version = "0.12.4", default-features = false, features = ["random"] }
 jotdown = "0.3.0"
 md5 = "0.7.0"
