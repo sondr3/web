@@ -5,6 +5,7 @@ mod content;
 mod site;
 mod sitemap;
 mod utils;
+mod minify;
 
 use crate::builder::Builder;
 use anyhow::Result;

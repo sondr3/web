@@ -10,6 +10,7 @@ flate2 = "1.0.26"
 grass = { version = "0.12.4", default-features = false, features = ["random"] }
 jotdown = "0.3.0"
 md5 = "0.7.0"
+minify-html = "0.11.1"
 minijinja = { version = "1.0.3", features = ["loader", "speedups"] }
 once_cell = "1.18.0"
 quick-xml = { version = "0.29.0", features = ["serialize"] }

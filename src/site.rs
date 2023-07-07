@@ -1,6 +1,7 @@
 use crate::asset::{BuiltAssetFile, PublicFile};
 use crate::compress;
 use crate::content::Content;
+use crate::minify::Minifier;
 use crate::sitemap::create_sitemap;
 use crate::utils::{copy_file, write_file};
 use anyhow::Result;
@@ -27,7 +28,7 @@ impl Site {
 
         self.copy_public_files()?;
         self.write_css()?;
-        self.write_pages()?;
+        self.write_pages(production)?;
 
         self.write_sitemap()?;
 
@@ -49,18 +50,24 @@ impl Site {
         write_file(&self.output.join(&self.css.filename), &self.css.content)
     }
 
-    fn write_pages(&self) -> Result<()> {
+    fn write_pages(&self, production: bool) -> Result<()> {
+        let minifier = Minifier::new();
+
         self.pages.iter().try_for_each(|f| {
             write_file(
                 &self.output.join(&f.out_path),
-                &f.render(&self.css.filename)?,
+                if production {
+                    minifier.minify(&f.render(&self.css.filename)?)
+                } else {
+                    f.render(&self.css.filename)?.into()
+                },
             )
         })
     }
 
     fn write_sitemap(&self) -> Result<()> {
         let sitemap = create_sitemap(&self.pages, &self.url)?;
-        write_file(&self.output.join("sitemap.xml"), &sitemap)
+        write_file(&self.output.join("sitemap.xml"), sitemap)
     }
 
     fn copy_public_files(&self) -> Result<()> {
