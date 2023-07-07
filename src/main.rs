@@ -2,10 +2,10 @@ mod asset;
 mod builder;
 mod compress;
 mod content;
+mod minify;
 mod site;
 mod sitemap;
 mod utils;
-mod minify;
 
 use crate::builder::Builder;
 use anyhow::Result;
@@ -17,6 +17,9 @@ Options:
   -p, --production  Optimize output
   -v, --verbose     Verbose output
   -h, --help        This message
+  
+Environment variables:
+  ci,prod           Optimize output
 "#;
 
 #[derive(Debug, Copy, Clone)]
@@ -31,10 +34,16 @@ impl Options {
         let args: Vec<_> = std::env::args().skip(1).collect();
 
         Options {
-            production: args.iter().any(|e| e == "-p" || e == "--production"),
+            production: Options::set_is_prod(&args),
             verbose: args.iter().any(|e| e == "-v" || e == "--verbose"),
             help: args.iter().any(|e| e == "-h" || e == "--help"),
         }
+    }
+
+    fn set_is_prod(args: &[String]) -> bool {
+        std::env::var("CI").is_ok()
+            || std::env::var("PROD").is_ok()
+            || args.iter().any(|e| e == "-p" || e == "--production")
     }
 }
 
@@ -46,6 +55,11 @@ fn main() -> Result<()> {
         println!("{}", HELP_MESSAGE);
         return Ok(());
     }
+
+    println!(
+        "Running in {} mode...",
+        if opts.production { "prod" } else { "dev" }
+    );
 
     let builder = Builder::new(opts);
     let site = builder.build()?;
