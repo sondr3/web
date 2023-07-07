@@ -8,6 +8,7 @@ mod sitemap;
 mod utils;
 
 use crate::builder::Builder;
+use crate::site::write_site;
 use anyhow::Result;
 
 const HELP_MESSAGE: &str = r#"
@@ -19,12 +20,39 @@ Options:
   -h, --help        This message
   
 Environment variables:
-  ci,prod           Optimize output
+  CI,PROD           Optimize output
 "#;
 
 #[derive(Debug, Copy, Clone)]
+pub enum Mode {
+    Prod,
+    Dev,
+}
+
+impl Mode {
+    pub fn is_prod(&self) -> bool {
+        matches!(self, Self::Prod)
+    }
+
+    pub fn is_dev(&self) -> bool {
+        matches!(self, Self::Dev)
+    }
+
+    pub fn from_args(args: &[String]) -> Self {
+        if std::env::var("CI").is_ok()
+            || std::env::var("PROD").is_ok()
+            || args.iter().any(|e| e == "-p" || e == "--production")
+        {
+            Mode::Prod
+        } else {
+            Mode::Dev
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub struct Options {
-    pub production: bool,
+    pub mode: Mode,
     pub verbose: bool,
     pub help: bool,
 }
@@ -34,16 +62,10 @@ impl Options {
         let args: Vec<_> = std::env::args().skip(1).collect();
 
         Options {
-            production: Options::set_is_prod(&args),
+            mode: Mode::from_args(&args),
             verbose: args.iter().any(|e| e == "-v" || e == "--verbose"),
             help: args.iter().any(|e| e == "-h" || e == "--help"),
         }
-    }
-
-    fn set_is_prod(args: &[String]) -> bool {
-        std::env::var("CI").is_ok()
-            || std::env::var("PROD").is_ok()
-            || args.iter().any(|e| e == "-p" || e == "--production")
     }
 }
 
@@ -56,15 +78,12 @@ fn main() -> Result<()> {
         return Ok(());
     }
 
-    println!(
-        "Running in {} mode...",
-        if opts.production { "prod" } else { "dev" }
-    );
+    println!("Running in {:?} mode...", opts.mode);
 
     let builder = Builder::new(opts);
     let site = builder.build()?;
 
-    site.write(opts.production)?;
+    write_site(site, opts.mode)?;
 
     Ok(())
 }

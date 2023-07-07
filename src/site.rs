@@ -1,9 +1,9 @@
-use crate::asset::{BuiltAssetFile, PublicFile};
-use crate::compress;
+use crate::asset::{Asset, PublicFile};
 use crate::content::Content;
-use crate::minify::HtmlMinifier;
+use crate::minify::{html_minifier_config, minify_html};
 use crate::sitemap::create_sitemap;
 use crate::utils::{copy_file, write_file};
+use crate::{compress, Mode};
 use anyhow::Result;
 use std::path::{Path, PathBuf};
 use url::Url;
@@ -11,68 +11,67 @@ use url::Url;
 #[derive(Debug)]
 pub struct Site {
     pub url: Url,
-    pub output: PathBuf,
+    pub out_path: PathBuf,
     pub pages: Vec<Content>,
     pub public_files: Vec<PublicFile>,
-    pub css: BuiltAssetFile,
+    pub css: Asset,
 }
 
-impl Site {
-    pub fn write(self, production: bool) -> Result<()> {
-        let dist = Path::new("dist");
-        if dist.exists() {
-            std::fs::remove_dir_all("./dist")?;
-        }
-
-        std::fs::create_dir("./dist")?;
-
-        self.copy_public_files()?;
-        self.write_css()?;
-        self.write_pages(production)?;
-
-        self.write_sitemap()?;
-
-        if production {
-            self.compress()?;
-        }
-
-        Ok(())
+pub fn write_site(site: Site, mode: Mode) -> Result<()> {
+    let dist = Path::new("dist");
+    if dist.exists() {
+        std::fs::remove_dir_all("./dist")?;
     }
 
-    fn compress(&self) -> Result<()> {
-        compress::gzip(&self.output)?;
-        compress::brotli(&self.output)?;
+    std::fs::create_dir("./dist")?;
 
-        Ok(())
+    copy_public_files(&site.public_files, &site.out_path)?;
+    write_css(&site.out_path, &site.css)?;
+    write_pages(&site.out_path, &site.css, &site.pages, mode)?;
+
+    write_sitemap(&site.pages, &site.url, &site.out_path)?;
+
+    if mode.is_prod() {
+        compress_folder(&site.out_path)?;
     }
 
-    fn write_css(&self) -> Result<()> {
-        write_file(&self.output.join(&self.css.filename), &self.css.content)
-    }
+    Ok(())
+}
 
-    fn write_pages(&self, production: bool) -> Result<()> {
-        let minifier = HtmlMinifier::new();
+fn compress_folder(folder: &Path) -> Result<()> {
+    compress::gzip(folder)?;
+    compress::brotli(folder)?;
 
-        self.pages.iter().try_for_each(|f| {
-            write_file(
-                &self.output.join(&f.out_path),
-                if production {
-                    minifier.minify(&f.render(&self.css.filename)?)
-                } else {
-                    f.render(&self.css.filename)?.into()
-                },
-            )
-        })
-    }
+    Ok(())
+}
 
-    fn write_sitemap(&self) -> Result<()> {
-        let sitemap = create_sitemap(&self.pages, &self.url)?;
-        write_file(&self.output.join("sitemap.xml"), sitemap)
-    }
+fn write_css(dest: &Path, asset: &Asset) -> Result<()> {
+    write_file(&dest.join(&asset.filename), &asset.content)
+}
 
-    fn copy_public_files(&self) -> Result<()> {
-        self.public_files
-            .iter()
-            .try_for_each(|f| copy_file(&self.output, &f.prefix, &f.path))
-    }
+fn write_pages(dest: &Path, css: &Asset, pages: &[Content], mode: Mode) -> Result<()> {
+    let cfg = html_minifier_config();
+    let css = css.filename.display().to_string();
+
+    pages.iter().try_for_each(|f| {
+        write_file(
+            &dest.join(&f.out_path),
+            if mode.is_prod() {
+                minify_html(&f.render(&css)?, &cfg)
+            } else {
+                f.render(&css)?.into()
+            },
+        )
+    })
+}
+
+fn write_sitemap(pages: &[Content], url: &Url, dest: &Path) -> Result<()> {
+    let sitemap = create_sitemap(pages, url)?;
+    write_file(&dest.join("sitemap.xml"), sitemap)
+}
+
+fn copy_public_files(files: &[PublicFile], dest: &Path) -> Result<()> {
+    files
+        .iter()
+        .try_for_each(|f| copy_file(dest, &f.prefix, &f.path))
 }

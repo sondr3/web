@@ -1,64 +1,42 @@
-use crate::minify::CssMinifier;
+use crate::minify::minify_css;
 use crate::utils::AppendExtension;
+use crate::Mode;
 use anyhow::Result;
 use std::path::{Path, PathBuf};
-
-#[derive(Debug)]
-pub struct AssetFile {
-    pub filename: String,
-    pub extension: String,
-    pub content: String,
-}
-
-impl AssetFile {
-    pub fn final_filename(&self, production: bool) -> String {
-        if production {
-            self.hash()
-        } else {
-            format!("{}.{}", self.filename, self.extension)
-        }
-    }
-
-    fn hash(&self) -> String {
-        let digest = format!("{:x}", md5::compute(&self.content));
-        let hash = digest.split_at(8).0;
-
-        Path::new(&self.filename)
-            .to_path_buf()
-            .append_extension(hash)
-            .append_extension(&self.extension)
-            .display()
-            .to_string()
-    }
-}
-
-#[derive(Debug)]
-pub struct BuiltAssetFile {
-    pub filename: String,
-    pub content: String,
-}
-
-pub trait OptimizeAsset {
-    fn optimize(asset: &AssetFile, production: bool) -> Result<Self>
-    where
-        Self: Sized;
-}
-
-impl OptimizeAsset for BuiltAssetFile {
-    fn optimize(asset: &AssetFile, production: bool) -> Result<Self> {
-        Ok(Self {
-            filename: asset.final_filename(production),
-            content: if production {
-                CssMinifier::minify(&asset.content.clone())?
-            } else {
-                asset.content.clone()
-            },
-        })
-    }
-}
 
 #[derive(Debug)]
 pub struct PublicFile {
     pub path: PathBuf,
     pub prefix: String,
+}
+
+#[derive(Debug)]
+pub struct Asset {
+    pub filename: PathBuf,
+    pub content: String,
+}
+
+pub fn build_css(root: &Path, mode: Mode) -> Result<Asset> {
+    let filename = PathBuf::from("styles.css");
+    let content = grass::from_path(root.join("styles/styles.scss"), &grass::Options::default())?;
+
+    Ok(match mode {
+        Mode::Prod => Asset {
+            filename: digest_filename(&filename, &content),
+            content: minify_css(&content.clone())?,
+        },
+        Mode::Dev => Asset { filename, content },
+    })
+}
+
+pub fn digest_filename(filename: &Path, content: &str) -> PathBuf {
+    let digest = format!("{:x}", md5::compute(content));
+    let hash = digest.split_at(8).0;
+    let Some(extension) = filename.extension() else {
+        panic!("No extension found for {:?}", filename);
+    };
+
+    PathBuf::from(filename)
+        .with_extension(hash)
+        .append_extension(extension)
 }
