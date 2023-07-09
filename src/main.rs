@@ -90,7 +90,7 @@ fn main() -> Result<()> {
     write_site(site, opts.mode)?;
 
     if opts.mode.is_dev() {
-        file_watcher(&source.join("styles"), &opts.mode, css_watch_handler)?;
+        file_watcher(&source.join("styles"), &["scss"], css_watch_handler)?;
     }
 
     Ok(())
