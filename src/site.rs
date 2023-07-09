@@ -45,11 +45,11 @@ fn compress_folder(folder: &Path) -> Result<()> {
     Ok(())
 }
 
-fn write_css(dest: &Path, asset: &Asset) -> Result<()> {
+pub fn write_css(dest: &Path, asset: &Asset) -> Result<()> {
     write_file(&dest.join(&asset.filename), &asset.content)
 }
 
-fn write_pages(dest: &Path, css: &Asset, pages: &[Content], mode: Mode) -> Result<()> {
+pub fn write_pages(dest: &Path, css: &Asset, pages: &[Content], mode: Mode) -> Result<()> {
     let cfg = html_minifier_config();
     let css = css.filename.display().to_string();
 
@@ -65,12 +65,12 @@ fn write_pages(dest: &Path, css: &Asset, pages: &[Content], mode: Mode) -> Resul
     })
 }
 
-fn write_sitemap(pages: &[Content], url: &Url, dest: &Path) -> Result<()> {
+pub fn write_sitemap(pages: &[Content], url: &Url, dest: &Path) -> Result<()> {
     let sitemap = create_sitemap(pages, url)?;
     write_file(&dest.join("sitemap.xml"), sitemap)
 }
 
-fn copy_public_files(files: &[PublicFile], dest: &Path) -> Result<()> {
+pub fn copy_public_files(files: &[PublicFile], dest: &Path) -> Result<()> {
     files
         .iter()
         .try_for_each(|f| copy_file(dest, &f.prefix, &f.path))

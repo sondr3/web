@@ -10,7 +10,7 @@ mod watcher;
 
 use crate::builder::Builder;
 use crate::site::write_site;
-use crate::watcher::watch_css;
+use crate::watcher::{css_watch_handler, file_watcher};
 use anyhow::Result;
 use std::path::Path;
 
@@ -90,7 +90,7 @@ fn main() -> Result<()> {
     write_site(site, opts.mode)?;
 
     if opts.mode.is_dev() {
-        watch_css(&source.join("styles"), opts.mode)?;
+        file_watcher(&source.join("styles"), &opts.mode, css_watch_handler)?;
     }
 
     Ok(())
