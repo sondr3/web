@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://www.eons.io
+
+# Sitemaps
+Sitemap: https://www.eons.io/sitemap.xml
