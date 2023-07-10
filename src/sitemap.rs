@@ -93,7 +93,12 @@ pub fn create_sitemap(pages: &[Content], base: &Url) -> Result<String> {
         .map(|e| UrlEntry::from_content(e, base))
         .collect();
 
-    let mut root = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".to_string();
+    let mut root = r#"
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="/sitemap-style.xsl" type="text/xsl"?>
+    "#
+    .trim_start()
+    .to_string();
 
     let url_set = UrlSet {
         xmlns: "http://www.sitemaps.org/schemas/sitemap/0.9".to_string(),
