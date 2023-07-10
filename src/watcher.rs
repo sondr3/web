@@ -1,5 +1,6 @@
-use crate::asset::build_css;
-use crate::site::write_css;
+use crate::asset::{build_css, Asset};
+use crate::builder::{build_pages, build_posts};
+use crate::site::{write_css, write_pages};
 use crate::{Mode, Options};
 use anyhow::{Context, Result};
 use notify::event::ModifyKind;
@@ -20,29 +21,55 @@ impl LiveReload {
             options: opts,
         }
     }
+}
 
-    pub fn start(self) -> Result<()> {
-        let css = thread::spawn(move || {
-            file_watcher(&self.source.join("styles"), &["scss"], |event| {
-                self.css_watch_handler(event)
+pub fn start_live_reload(source: &Path) -> Result<()> {
+    thread::scope(|scope| {
+        let css = scope.spawn(|| {
+            let styles = source.join("styles");
+            file_watcher(&styles, &["scss"], |event| css_watch_handler(source, event))
+        });
+
+        let content = scope.spawn(|| {
+            let content = source.join("content");
+            file_watcher(&content, &["dj", "toml"], |event| {
+                content_watch_handler(source, event)
             })
         });
 
-        css.join().unwrap()?;
+        css.join().unwrap().unwrap();
+        content.join().unwrap().unwrap();
+    });
 
-        Ok(())
-    }
+    Ok(())
+}
 
-    fn css_watch_handler(&self, event: Event) -> Result<()> {
-        println!(
-            "File(s) {:?} changed, rebuilding CSS",
-            strip_prefix_paths(&self.source, &event.paths)?
-        );
-        let css = build_css(Path::new("./site/"), Mode::Dev)?;
-        write_css(Path::new("./dist/"), &css)?;
+fn css_watch_handler(source: &Path, event: Event) -> Result<()> {
+    println!(
+        "File(s) {:?} changed, rebuilding CSS",
+        strip_prefix_paths(source, &event.paths)?
+    );
+    let css = build_css(Path::new("./site/"), Mode::Dev)?;
+    write_css(Path::new("./dist/"), &css)?;
 
-        Ok(())
-    }
+    Ok(())
+}
+
+fn content_watch_handler(source: &Path, event: Event) -> Result<()> {
+    println!(
+        "File(s) {:?} changed, rebuilding site",
+        strip_prefix_paths(source, &event.paths)?
+    );
+
+    let mut pages = build_pages(Path::new("./site/"))?;
+    pages.append(&mut build_posts(Path::new("./site/"))?);
+    let css = Asset {
+        filename: PathBuf::from("styles.css"),
+        content: "".to_string(),
+    };
+    write_pages(Path::new("./dist/"), &css, &pages, Mode::Dev)?;
+
+    Ok(())
 }
 
 fn strip_prefix_paths(prefix: impl AsRef<Path>, paths: &[PathBuf]) -> Result<Vec<&Path>> {

@@ -10,7 +10,7 @@ mod watcher;
 
 use crate::builder::Builder;
 use crate::site::write_site;
-use crate::watcher::LiveReload;
+use crate::watcher::{start_live_reload, LiveReload};
 use anyhow::Result;
 use std::path::Path;
 
@@ -91,7 +91,7 @@ fn main() -> Result<()> {
 
     if opts.mode.is_dev() {
         let watcher = LiveReload::new(source, opts);
-        watcher.start()?;
+        start_live_reload(&watcher.source)?;
     }
 
     Ok(())
