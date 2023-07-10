@@ -1,28 +1,21 @@
 {%- from "navitem.jinja" import nav_item -%}
 
-<header class="relative">
-  <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Top">
-    <div
-      class="border-gray-9000 flex w-full items-center justify-between border-b py-6 lg:border-none"
-    >
-      <div class="flex items-center">
-        <a rel="prefetch" href="/" class="font-mono hover:underline dark:text-gray-300">
-          EONS :: IO ()
-        </a>
-        <div class="ml-10 hidden space-x-8 lg:block">
-          {{ nav_item("about", "About") }}
-        </div>
+<header>
+  <nav>
+    <div>
+      <div>
+        <a href="/">EONS :: IO ()</a>
+        <div>{{ nav_item("about", "About") }}</div>
       </div>
-      <div class="ml-10 space-x-4 text-gray-900 dark:text-gray-300">
-        <button class="theme-toggle block dark:hidden">
-          <span class="sr-only">Toggle dark mode</span>
+      <div>
+        <button class="theme-toggle">
+          <span>Toggle dark mode</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="h-6 w-6"
           >
             <path
               stroke-linecap="round"
@@ -31,8 +24,8 @@
             ></path>
           </svg>
         </button>
-        <button class="theme-toggle hidden dark:block">
-          <span class="sr-only">Toggle light mode</span>
+        <button>
+          <span>Toggle light mode</span>
           <svg
             id="dark"
             xmlns="http://www.w3.org/2000/svg"
@@ -40,7 +33,6 @@
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="h-6 w-6"
           >
             <path
               stroke-linecap="round"
@@ -51,8 +43,6 @@
         </button>
       </div>
     </div>
-    <div class="flex flex-wrap justify-center space-x-6 py-4 lg:hidden">
-      {{ nav_item("about", "About") }}
-    </div>
+    <div>{{ nav_item("about", "About") }}</div>
   </nav>
 </header>
