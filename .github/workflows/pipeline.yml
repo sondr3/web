@@ -94,24 +94,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
-      - uses: pnpm/action-setup@v2.2.4
-        with:
-          version: 8
-
-      - uses: actions/setup-node@v3.6.0
-        with:
-          node-version: latest
-          cache: "pnpm"
-
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
 
-      - name: Install npm packages
-        run: pnpm install --frozen-lockfile
-
       - name: Build
-        run: pnpm build
+        run: |
+          cargo build
+          cargo run
 
       - name: Deploy
         uses: burnett01/rsync-deployments@5.2
