@@ -7,18 +7,18 @@ body {
 
 :root,
 root[data-theme="light"] {
-  --background: rgb(255, 255, 255);
-  --text: rgb(0, 0, 0);
-  --heading: rgb(0, 0, 0);
-  --blue: rgb(79, 70, 229);
-  --grey: rgb(107, 114, 128);
+  --background: rgb(255 255 255);
+  --text: rgb(0 0 0);
+  --heading: rgb(0 0 0);
+  --blue: rgb(79 70 229);
+  --grey: rgb(107 114 128);
 }
 
 :root[data-theme="dark"] {
-  --background: rgb(0, 0, 0);
-  --text: rgb(156, 163, 175);
-  --heading: rgb(209, 213, 219);
-  --grey: rgb(229, 231, 235);
+  --background: rgb(0 0 0);
+  --text: rgb(156 163 175);
+  --heading: rgb(209 213 219);
+  --grey: rgb(229 231 235);
 }
 
 body {

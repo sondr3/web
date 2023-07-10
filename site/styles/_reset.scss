@@ -13,8 +13,17 @@
 html {
   line-height: 1.5;
   text-rendering: optimizelegibility;
-  font-family: Piazzolla, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  font-family:
+    Piazzolla,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    "Noto Sans",
+    sans-serif;
   font-feature-settings: normal;
   font-variant-numeric: oldstyle-nums proportional-nums;
   font-optical-sizing: auto;
@@ -61,8 +70,8 @@ code,
 kbd,
 samp,
 pre {
-  font-family: Inconsolata, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
+  font-family: Inconsolata, ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 1em;
 }
 
