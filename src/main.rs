@@ -10,7 +10,7 @@ mod watcher;
 
 use crate::builder::Builder;
 use crate::site::write_site;
-use crate::watcher::{css_watch_handler, file_watcher};
+use crate::watcher::LiveReload;
 use anyhow::Result;
 use std::path::Path;
 
@@ -83,14 +83,15 @@ fn main() -> Result<()> {
 
     println!("Running in {:?} mode...", opts.mode);
 
-    let source = Path::new("./site").to_owned();
+    let source = Path::new("./site").to_owned().canonicalize()?;
     let builder = Builder::new(source.clone(), opts);
     let site = builder.build()?;
 
     write_site(site, opts.mode)?;
 
     if opts.mode.is_dev() {
-        file_watcher(&source.join("styles"), &["scss"], css_watch_handler)?;
+        let watcher = LiveReload::new(source, opts);
+        watcher.start()?;
     }
 
     Ok(())

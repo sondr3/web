@@ -1,16 +1,61 @@
 use crate::asset::build_css;
 use crate::site::write_css;
-use crate::Mode;
-use anyhow::Result;
+use crate::{Mode, Options};
+use anyhow::{Context, Result};
 use notify::event::ModifyKind;
 use notify::{Config, Event, EventKind, RecommendedWatcher, RecursiveMode, Watcher};
-use std::path::Path;
+use std::path::{Path, PathBuf};
+use std::thread;
 
-pub fn file_watcher<F, const N: usize>(
-    path: &Path,
-    extensions: &[&str; N],
-    handler: F,
-) -> Result<()>
+#[derive(Debug)]
+pub struct LiveReload {
+    pub source: PathBuf,
+    pub options: Options,
+}
+
+impl LiveReload {
+    pub(crate) fn new(source: PathBuf, opts: Options) -> Self {
+        LiveReload {
+            source,
+            options: opts,
+        }
+    }
+
+    pub fn start(self) -> Result<()> {
+        let css = thread::spawn(move || {
+            file_watcher(&self.source.join("styles"), &["scss"], |event| {
+                self.css_watch_handler(event)
+            })
+        });
+
+        css.join().unwrap()?;
+
+        Ok(())
+    }
+
+    fn css_watch_handler(&self, event: Event) -> Result<()> {
+        println!(
+            "File(s) {:?} changed, rebuilding CSS",
+            strip_prefix_paths(&self.source, &event.paths)?
+        );
+        let css = build_css(Path::new("./site/"), Mode::Dev)?;
+        write_css(Path::new("./dist/"), &css)?;
+
+        Ok(())
+    }
+}
+
+fn strip_prefix_paths(prefix: impl AsRef<Path>, paths: &[PathBuf]) -> Result<Vec<&Path>> {
+    paths
+        .iter()
+        .map(|p| {
+            p.strip_prefix(prefix.as_ref())
+                .context("could not strip prefix")
+        })
+        .collect()
+}
+
+fn file_watcher<F, const N: usize>(path: &Path, extensions: &[&str; N], handler: F) -> Result<()>
 where
     F: Fn(Event) -> Result<()>,
 {
@@ -57,12 +102,4 @@ fn event_has_extension(event: Event, extensions: &[&str]) -> Option<Event> {
 fn path_has_extension(path: &Path, extensions: &[&str]) -> bool {
     path.extension()
         .map_or(false, |e| extensions.contains(&e.to_str().unwrap()))
-}
-
-pub fn css_watch_handler(event: Event) -> Result<()> {
-    println!("File {} changed, rebuilding CSS", event.paths[0].display());
-    let css = build_css(Path::new("./site/"), Mode::Dev)?;
-    write_css(Path::new("./dist/"), &css)?;
-
-    Ok(())
 }
