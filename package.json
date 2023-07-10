@@ -1,0 +1,27 @@
+{
+  "name": "@sondr3/web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "cargo run",
+    "build": "cargo build",
+    "preview": "serve dist",
+    "test": "playwright test",
+    "styles": "stylelint --cache './site/styles/**/*.scss'",
+    "styles:fix": "stylelint --cache './site/styles/**/*.scss' --fix"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.35.1",
+    "prettier": "3.0.0",
+    "serve": "14.2.0",
+    "stylelint": "15.10.1",
+    "stylelint-config-standard-scss": "10.0.0",
+    "stylelint-prettier": "4.0.0"
+  },
+  "stylelint": {
+    "extends": [
+      "stylelint-prettier/recommended",
+      "stylelint-config-standard-scss"
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{% extends "base.jinja" %} 
+
+{% block content %}
+  <main class="main">
+    <article>
+      <div>
+      <h1>
+        {% if subtitle %}
+          <span>{{ subtitle }}</span>
+        {% endif %}
+          <span>{{ title }}</span>
+        </h1>
+      </div>
+      <div class="prose">
+        {{ content }}
+      </div>
+    </article>
+  </main>
+{% endblock %}

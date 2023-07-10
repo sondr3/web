@@ -1,0 +1,16 @@
+/* TEAM */
+Everything Man: Sondre Aasemoen
+Site: eons.io
+Mastodon: @sondre@fosstodon.org
+Location: Norway
+
+/* THANKS */
+You
+
+/* SITE */
+Last Update: 202x
+Doctype: HTML5
+Language: English
+Standards: HTML5
+Components: Rust
+Software: neovim

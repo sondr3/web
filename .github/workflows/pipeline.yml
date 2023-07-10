@@ -1,0 +1,113 @@
+name: pipeline
+
+on: [push, pull_request]
+
+jobs:
+  tests:
+    name: tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2.2.4
+        with:
+          version: 8
+
+      - uses: actions/setup-node@v3.6.0
+        with:
+          node-version: latest
+          cache: "pnpm"
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Install npm packages
+        run: pnpm install --frozen-lockfile
+
+      - name: build
+        run: cargo test --no-run
+
+      - name: test
+        run: cargo test -- --nocapture --quiet
+
+      - name: formatting
+        run: cargo fmt --all -- --check
+
+      - name: check
+        run: cargo check
+
+      - name: clippy
+        run: cargo clippy -- -D warnings
+
+      - name: styles
+        run: pnpm run styles
+
+  e2e:
+    timeout-minutes: 60
+    runs-on: macos-latest
+    name: e2e
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2.2.4
+        with:
+          version: 8
+
+      - uses: actions/setup-node@v3.6.0
+        with:
+          node-version: latest
+          cache: "pnpm"
+
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Install npm packages
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright Browsers
+        run: pnpm dlx playwright install --with-deps
+
+      - name: Build site
+        run: |
+          cargo build
+          cargo run
+
+      - name: Run Playwright tests
+        run: pnpm test
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+  deploy:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    needs: [tests, e2e]
+    runs-on: ubuntu-latest
+    name: deploy
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Build
+        run: |
+          cargo build
+          cargo run
+
+      - name: Deploy
+        uses: burnett01/rsync-deployments@5.2
+        with:
+          switches: -avzrh --delete
+          path: dist/
+          remote_path: ${{ secrets.DEPLOY_PATH }}
+          remote_host: ${{ secrets.DEPLOY_HOST }}
+          remote_user: ${{ secrets.DEPLOY_USER }}
+          remote_key: ${{ secrets.DEPLOY_KEY }}
