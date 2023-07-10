@@ -22,6 +22,7 @@ const HELP_MESSAGE: &str = r#"
 web - website generator
 
 Options:
+  -s, --server      Disable dev server
   -p, --production  Optimize output
   -v, --verbose     Verbose output
   -h, --help        This message
@@ -61,6 +62,7 @@ impl Mode {
 pub struct Options {
     pub mode: Mode,
     pub verbose: bool,
+    pub server: bool,
     pub help: bool,
 }
 
@@ -71,6 +73,7 @@ impl Options {
         Options {
             mode: Mode::from_args(&args),
             verbose: args.iter().any(|e| e == "-v" || e == "--verbose"),
+            server: !args.iter().any(|e| e == "-s" || e == "--server"),
             help: args.iter().any(|e| e == "-h" || e == "--help"),
         }
     }
@@ -98,7 +101,7 @@ async fn main() -> Result<()> {
 
     write_site(site, opts.mode)?;
 
-    if opts.mode.is_dev() {
+    if opts.mode.is_dev() && opts.server {
         let watcher = LiveReload::new(source, opts);
         let watcher = thread::spawn(move || start_live_reload(&watcher.source).unwrap());
 
