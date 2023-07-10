@@ -8,7 +8,7 @@ anyhow = "1.0.71"
 axum = { version = "0.6.18", features = ["ws"] }
 brotli = "3.3.4"
 flate2 = "1.0.26"
-grass = { version = "0.12.4", default-features = false }
+grass = { version = "0.13.0", default-features = false }
 jotdown = "0.3.0"
 lightningcss = { version = "1.0.0-alpha.44", default-features = false, features = ["browserslist", "grid"] }
 md5 = "0.7.0"
