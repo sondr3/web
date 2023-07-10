@@ -37,8 +37,16 @@ pub fn start_live_reload(source: &Path) -> Result<()> {
             })
         });
 
+        let templates = scope.spawn(|| {
+            let content = source.join("templates");
+            file_watcher(&content, &["jinja"], |event| {
+                content_watch_handler(source, event)
+            })
+        });
+
         css.join().unwrap().unwrap();
         content.join().unwrap().unwrap();
+        templates.join().unwrap().unwrap();
     });
 
     Ok(())
