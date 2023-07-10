@@ -991,6 +991,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "minijinja-autoreload"
+version = "1.0.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "da478920dbbf1718fd9f391f690c4c24aebfca6375a767a12406103b49ea1e92"
+dependencies = [
+ "minijinja",
+ "notify 5.2.0",
+]
+
+[[package]]
 name = "minimal-lexical"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1031,6 +1041,23 @@ checksum = "d273983c5a657a70a3e8f2a01329822f3b8c8172b73826411a55751e404a0a4a"
 dependencies = [
  "memchr",
  "minimal-lexical",
+]
+
+[[package]]
+name = "notify"
+version = "5.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "729f63e1ca555a43fe3efa4f3efdf4801c479da85b432242a7b726f353c88486"
+dependencies = [
+ "bitflags 1.3.2",
+ "filetime",
+ "fsevent-sys",
+ "inotify",
+ "kqueue",
+ "libc",
+ "mio",
+ "walkdir",
+ "windows-sys 0.45.0",
 ]
 
 [[package]]
@@ -2125,7 +2152,8 @@ dependencies = [
  "md5",
  "minify-html",
  "minijinja",
- "notify",
+ "minijinja-autoreload",
+ "notify 6.0.1",
  "once_cell",
  "quick-xml",
  "serde",

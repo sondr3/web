@@ -4,16 +4,24 @@ use anyhow::{Context, Result};
 use jotdown::Render;
 use minijinja::value::Value;
 use minijinja::{context, path_loader, Environment};
+use minijinja_autoreload::AutoReloader;
 use once_cell::sync::Lazy;
 use serde::Deserialize;
 use time::Date;
 
 use crate::utils::toml_date_deserializer;
 
-static ENV: Lazy<Environment<'static>> = Lazy::new(|| {
-    let mut env = Environment::new();
-    env.set_loader(path_loader("./site/templates"));
-    env
+static RELOADER: Lazy<AutoReloader> = Lazy::new(|| {
+    AutoReloader::new(move |notifier| {
+        let template_path = PathBuf::from("./site/templates");
+        let mut env = Environment::new();
+        env.set_loader(path_loader(&template_path));
+
+        notifier.set_fast_reload(true);
+
+        notifier.watch_path(&template_path, true);
+        Ok(env)
+    })
 });
 
 #[derive(Debug, Deserialize)]
@@ -60,7 +68,8 @@ impl Content {
     }
 
     pub fn render(&self, styles: &str) -> Result<String> {
-        let template = ENV.get_template(&self.layout())?;
+        let env = RELOADER.acquire_env()?;
+        let template = env.get_template(&self.layout())?;
         let context = self.create(styles)?;
         template
             .render(context)
