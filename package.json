@@ -7,8 +7,8 @@
     "build": "cargo build",
     "preview": "serve dist",
     "test": "playwright test",
-    "styles": "stylelint './site/styles/**/*.scss'",
-    "styles:fix": "stylelint './site/styles/**/*.scss' --fix"
+    "styles": "stylelint --cache './site/styles/**/*.scss'",
+    "styles:fix": "stylelint --cache './site/styles/**/*.scss' --fix"
   },
   "devDependencies": {
     "@playwright/test": "1.35.1",
