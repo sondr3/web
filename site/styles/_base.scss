@@ -31,13 +31,8 @@ body {
   display: grid;
   gap: 10px;
   grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: fit-content(8ch) auto fit-content(8ch);
-  height: 100%;
-
-  > footer {
-    position: sticky;
-    top: 100vh;
-  }
+  grid-template-rows: auto 1fr auto;
+  min-height: 100%;
 }
 
 a {
