@@ -8,11 +8,15 @@ mod sitemap;
 mod utils;
 mod watcher;
 
-use crate::builder::Builder;
-use crate::site::write_site;
-use crate::watcher::{start_live_reload, LiveReload};
+use crate::{
+    builder::Builder,
+    site::write_site,
+    watcher::{start_live_reload, LiveReload},
+};
 use anyhow::Result;
-use std::path::Path;
+use axum::Router;
+use std::{net::SocketAddr, path::Path, thread};
+use tower_http::{services::ServeDir, trace::TraceLayer};
 
 const HELP_MESSAGE: &str = r#"
 web - website generator
@@ -72,7 +76,12 @@ impl Options {
     }
 }
 
-fn main() -> Result<()> {
+fn serve_site() -> Router {
+    Router::new().nest_service("/", ServeDir::new("dist"))
+}
+
+#[tokio::main]
+async fn main() -> Result<()> {
     let opts = Options::from_args();
     let _verbose = opts.verbose;
 
@@ -91,7 +100,21 @@ fn main() -> Result<()> {
 
     if opts.mode.is_dev() {
         let watcher = LiveReload::new(source, opts);
-        start_live_reload(&watcher.source)?;
+        let watcher = thread::spawn(move || start_live_reload(&watcher.source).unwrap());
+
+        println!("Serving site at http://localhost:3000/...");
+
+        let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
+        axum::Server::bind(&addr)
+            .serve(
+                serve_site()
+                    .layer(TraceLayer::new_for_http())
+                    .into_make_service(),
+            )
+            .await
+            .unwrap();
+
+        watcher.join().unwrap();
     }
 
     Ok(())
