@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -58,18 +58,12 @@
     <meta content="sondr3" name="twitter:site" />
 
     <script>
-      if (
-        localStorage.theme === "dark" ||
-        (!("theme" in localStorage) &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches)
-      ) {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
+      if (localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.setAttribute("data-theme", "dark");
       }
     </script>
   </head>
-  <body>
+  <body class="root">
     {% include "navbar.jinja" %}
     {% block content %}
     <p>Placeholder...</p>
@@ -77,11 +71,11 @@
     {% include "footer.jinja" %}
     <script>
       function toggle() {
-        if (document.documentElement.classList.contains("dark")) {
-          document.documentElement.classList.remove("dark");
+        if (document.documentElement.getAttribute("data-theme") === "dark") {
+          document.documentElement.setAttribute("data-theme", "light");
           window.localStorage.setItem("theme", "light");
         } else {
-          document.documentElement.classList.add("dark");
+          document.documentElement.setAttribute("data-theme", "dark");
           window.localStorage.setItem("theme", "dark");
         }
       }

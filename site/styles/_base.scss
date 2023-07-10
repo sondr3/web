@@ -1,0 +1,79 @@
+html,
+body {
+  background-color: var(--background);
+  color: var(--text);
+  height: 100%;
+}
+
+:root,
+root[data-theme="light"] {
+  --background: rgb(255, 255, 255);
+  --text: rgb(0, 0, 0);
+  --heading: rgb(0, 0, 0);
+  --blue: rgb(79, 70, 229);
+  --grey: rgb(107, 114, 128);
+}
+
+:root[data-theme="dark"] {
+  --background: rgb(0, 0, 0);
+  --text: rgb(156, 163, 175);
+  --heading: rgb(209, 213, 219);
+  --grey: rgb(229, 231, 235);
+}
+
+body {
+  transition-duration: 300ms;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.root {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: fit-content(8ch) auto fit-content(8ch);
+  height: 100%;
+
+  > footer {
+    position: sticky;
+    top: 100vh;
+  }
+}
+
+a {
+  cursor: pointer;
+  font-weight: 600;
+
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+  }
+}
+
+h1 {
+  color: var(--heading);
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--heading);
+  font-size: 1.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.prose {
+  font-size: 1.15rem;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+article {
+  font-size: 1.15rem;
+  text-align: justify;
+  text-justify: inter-word;
+}

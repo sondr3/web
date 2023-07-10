@@ -17,6 +17,7 @@ html {
     "Helvetica Neue", Arial, "Noto Sans", sans-serif;
   font-feature-settings: normal;
   font-variant-numeric: oldstyle-nums proportional-nums;
+  font-optical-sizing: auto;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -75,9 +76,9 @@ h6 {
   overflow-wrap: break-word;
 }
 
-article {
-  text-align: justify;
-  text-justify: inter-word;
+button {
+  border: none;
+  background: none;
 }
 
 /* Remove all animations, transitions and smooth scroll for people that prefer not to see them */

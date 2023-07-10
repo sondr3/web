@@ -1,0 +1,129 @@
+.header {
+  display: grid;
+  grid-area: 1 / 1 / 1 / 13;
+  grid-template: 1fr 1fr / auto;
+  padding-top: 1rem;
+
+  @media (min-width: 32em) {
+    grid-template: 1fr / repeat(12, 1fr);
+  }
+
+  > * a {
+    text-decoration: none;
+    color: var(--text);
+  }
+}
+
+.title {
+  align-self: center;
+  font-family: "Inconsolata", monospace;
+  font-size: 1.5rem;
+  grid-area: 2/3/1/8;
+  margin: 0;
+
+  @media (min-width: 32em) {
+    grid-area: 1 / 2 / 1 / 4;
+    place-self: center;
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.nav {
+  font-size: 1.5rem;
+  grid-area: 2 / 1 / 2 / 12;
+  justify-self: center;
+  padding-top: 0.4rem;
+
+  @media (min-width: 32em) {
+    font-size: 1.25rem;
+    grid-area: 1 / 6 / 1 / 8;
+    justify-self: end;
+    padding-top: 0;
+  }
+
+  &__links {
+    display: flex;
+    list-style: none;
+
+    > * a:hover {
+      color: var(--grey);
+    }
+  }
+}
+
+:root[data-theme="light"] .root .-light {
+  display: none;
+}
+
+:root[data-theme="dark"] .root .-dark {
+  display: none;
+}
+
+.theme-btn {
+  color: var(--grey);
+  cursor: pointer;
+  grid-area: 1 / 8 / 1 / 12;
+  justify-self: center;
+  padding-top: 0.2rem;
+  display: block;
+
+  @media (min-width: 32em) {
+    grid-area: 1 / 8 / 1 / 9;
+  }
+}
+
+.main {
+  grid-area: 2 / 2 / 2 / 12;
+  padding-top: 1rem;
+
+  @media (min-width: 32em) {
+    grid-area: 2 / 4 / 2 / 8;
+  }
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  color: var(--grey);
+  grid-area: 3 / 2 / 3 / 12;
+  margin: 0 auto;
+  width: 100%;
+
+  @media (min-width: 32em) {
+    grid-area: 3 / 3 / 3 / 9;
+    flex-direction: row;
+  }
+
+  &__about {
+    text-align: center;
+    padding-bottom: 1rem;
+
+    > * a {
+      color: var(--grey);
+    }
+  }
+
+  &__icons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding-bottom: 1rem;
+
+    @media (min-width: 32em) {
+      width: 20%;
+    }
+  }
+
+  &__icon {
+    color: var(--grey);
+    width: 1.5rem;
+  }
+
+  &__icon:hover, &__icon:focus {
+    color: var(--blue);
+  }
+}
