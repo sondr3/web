@@ -25,6 +25,13 @@ pub fn write_site(site: Site, mode: Mode) -> Result<()> {
 
     std::fs::create_dir("./dist")?;
 
+    copy_js(
+        &site.out_path.join("js"),
+        &Asset {
+            filename: PathBuf::from("livereload.js"),
+            content: include_str!("../site/js/livereload.js").to_string(),
+        },
+    )?;
     copy_public_files(&site.public_files, &site.out_path)?;
     write_css(&site.out_path, &site.css)?;
     write_pages(&site.out_path, &site.css, &site.pages, mode)?;
@@ -57,9 +64,9 @@ pub fn write_pages(dest: &Path, css: &Asset, pages: &[Content], mode: Mode) -> R
         write_file(
             &dest.join(&f.out_path),
             if mode.is_prod() {
-                minify_html(&f.render(&css)?, &cfg)
+                minify_html(&f.render(&css, mode)?, &cfg)
             } else {
-                f.render(&css)?.into()
+                f.render(&css, mode)?.into()
             },
         )
     })
@@ -74,4 +81,8 @@ pub fn copy_public_files(files: &[PublicFile], dest: &Path) -> Result<()> {
     files
         .iter()
         .try_for_each(|f| copy_file(dest, &f.prefix, &f.path))
+}
+
+pub fn copy_js(dest: &Path, asset: &Asset) -> Result<()> {
+    write_file(&dest.join(&asset.filename), &asset.content)
 }

@@ -1,5 +1,6 @@
 use std::path::{Path, PathBuf};
 
+use crate::Mode;
 use anyhow::{Context, Result};
 use jotdown::Render;
 use minijinja::value::Value;
@@ -67,10 +68,10 @@ impl Content {
         }
     }
 
-    pub fn render(&self, styles: &str) -> Result<String> {
+    pub fn render(&self, styles: &str, mode: Mode) -> Result<String> {
         let env = RELOADER.acquire_env()?;
         let template = env.get_template(&self.layout())?;
-        let context = self.create(styles)?;
+        let context = self.create(styles, mode)?;
         template
             .render(context)
             .context("Failed to render template")
@@ -118,13 +119,14 @@ impl Content {
         Ok(html)
     }
 
-    fn create(&self, styles: &str) -> Result<Value> {
+    fn create(&self, styles: &str, mode: Mode) -> Result<Value> {
         let content = self.content()?;
 
         Ok(context! {
             title => self.frontmatter.title.clone(),
             subtitle => self.frontmatter.subtitle.clone(),
             description => self.frontmatter.description.clone(),
+            development => mode.is_dev(),
             content => content,
             styles => styles,
         })

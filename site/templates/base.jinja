@@ -57,6 +57,10 @@
 
     <meta content="sondr3" name="twitter:site" />
 
+    {% if development %}
+    <script src="/js/livereload.js"></script>
+    {% endif %}
+
     <script>
       if (localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
         document.documentElement.setAttribute("data-theme", "dark");
