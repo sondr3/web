@@ -43,13 +43,13 @@
 
     <title>{{ title|safe }} => Eons :: IO ()</title>
     <meta content="{{ description|safe }}" name="description" />
-    <link href="{canonicalURL}" rel="canonical" />
+    <link href="{{ canonical_url }}" rel="canonical" />
 
     <meta content="en" property="og:locale" />
     <meta content="website" property="og:type" />
     <meta content="{{ title|safe  }}" property="og:title" />
     <meta content="{{ description|safe  }}" property="og:description" />
-    <meta content="{canonicalURL}" property="og:url" />
+    <meta content="{{ canonical_url }}" property="og:url" />
     <!-- <meta property="og:image" /> -->
     <!-- <meta content="2020-12-12" property="article:published_time" /> -->
     <!-- <meta content="2022-01-10" property="article:modified_time" /> -->
@@ -57,7 +57,7 @@
 
     <meta content="sondr3" name="twitter:site" />
 
-    {% if development %}
+    {% if is_dev %}
     <script src="/js/livereload.js"></script>
     {% endif %}
 

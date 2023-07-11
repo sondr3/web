@@ -34,7 +34,7 @@ pub fn write_site(site: Site, mode: Mode) -> Result<()> {
     )?;
     copy_public_files(&site.public_files, &site.out_path)?;
     write_css(&site.out_path, &site.css)?;
-    write_pages(&site.out_path, &site.css, &site.pages, mode)?;
+    write_pages(&site.out_path, &site.css, &site.pages, mode, &site.url)?;
 
     write_sitemap(&site.pages, &site.url, &site.out_path)?;
 
@@ -56,7 +56,13 @@ pub fn write_css(dest: &Path, asset: &Asset) -> Result<()> {
     write_file(&dest.join(&asset.filename), &asset.content)
 }
 
-pub fn write_pages(dest: &Path, css: &Asset, pages: &[Content], mode: Mode) -> Result<()> {
+pub fn write_pages(
+    dest: &Path,
+    css: &Asset,
+    pages: &[Content],
+    mode: Mode,
+    url: &Url,
+) -> Result<()> {
     let cfg = html_minifier_config();
     let css = css.filename.display().to_string();
 
@@ -64,9 +70,9 @@ pub fn write_pages(dest: &Path, css: &Asset, pages: &[Content], mode: Mode) -> R
         write_file(
             &dest.join(&f.out_path),
             if mode.is_prod() {
-                minify_html(&f.render(&css, mode)?, &cfg)
+                minify_html(&f.render(&css, mode, url)?, &cfg)
             } else {
-                f.render(&css, mode)?.into()
+                f.render(&css, mode, url)?.into()
             },
         )
     })

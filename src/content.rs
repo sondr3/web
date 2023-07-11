@@ -9,6 +9,7 @@ use minijinja_autoreload::AutoReloader;
 use once_cell::sync::Lazy;
 use serde::Deserialize;
 use time::Date;
+use url::Url;
 
 use crate::utils::toml_date_deserializer;
 
@@ -68,10 +69,10 @@ impl Content {
         }
     }
 
-    pub fn render(&self, styles: &str, mode: Mode) -> Result<String> {
+    pub fn render(&self, styles: &str, mode: Mode, url: &Url) -> Result<String> {
         let env = RELOADER.acquire_env()?;
         let template = env.get_template(&self.layout())?;
-        let context = self.create(styles, mode)?;
+        let context = self.create(styles, mode, url)?;
         template
             .render(context)
             .context("Failed to render template")
@@ -119,14 +120,15 @@ impl Content {
         Ok(html)
     }
 
-    fn create(&self, styles: &str, mode: Mode) -> Result<Value> {
+    fn create(&self, styles: &str, mode: Mode, url: &Url) -> Result<Value> {
         let content = self.content()?;
 
         Ok(context! {
             title => self.frontmatter.title.clone(),
             subtitle => self.frontmatter.subtitle.clone(),
             description => self.frontmatter.description.clone(),
-            development => mode.is_dev(),
+            is_dev => mode.is_dev(),
+            canonical_url => url.join(&self.url)?,
             content => content,
             styles => styles,
         })
