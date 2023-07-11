@@ -6,6 +6,6 @@ Built with my own static site generator written in God's chosen language, Rust.
 
 # License
 
-Code is licensed under MIT.
+Code is licensed under WTFPL.
 
 Content is licensed under [CC BY SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
