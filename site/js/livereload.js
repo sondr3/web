@@ -1,16 +1,16 @@
 (() => {
-  const url = "ws://localhost:3001";
+  const url = "ws://localhost:3000/ws";
   let socket = new WebSocket(url);
 
   const connect = () => {
     socket = new WebSocket(url);
 
-    socket.onopen = () => {
+    socket.addEventListener("open", (_event) => {
       console.log(`Socket connected`);
-    };
+    });
 
-    socket.onmessage = (message) => {
-      switch (message.data.trim()) {
+    socket.addEventListener("message", (event) => {
+      switch (event.data.trim()) {
         case "reload":
           location.reload();
           break;
@@ -19,21 +19,21 @@
           setTimeout(connect, 2000);
           break;
         default:
-          console.error(`Unknown websocket message: ${message}`);
+          console.error(`Unknown websocket message: ${event}`);
       }
-    };
+    });
 
-    socket.onclose = (e) => {
+    socket.addEventListener("close", (e) => {
       console.log(`Socket closed, attempting to reconnect: ${e.reason}`);
       socket = null;
 
       setTimeout(connect, 2000);
-    };
+    });
 
-    socket.onerror = (e) => {
+    socket.addEventListener("error", (e) => {
       console.error(`Socket error, closing: ${e.message}`);
       socket.close();
-    };
+    });
   };
 
   connect();
