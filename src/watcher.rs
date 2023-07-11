@@ -7,6 +7,7 @@ use notify::event::ModifyKind;
 use notify::{Config, Event, EventKind, RecommendedWatcher, RecursiveMode, Watcher};
 use std::path::{Path, PathBuf};
 use std::thread;
+use url::Url;
 
 #[derive(Debug)]
 pub struct LiveReload {
@@ -68,6 +69,7 @@ fn content_watch_handler(source: &Path, event: Event) -> Result<()> {
         "File(s) {:?} changed, rebuilding site",
         strip_prefix_paths(source, &event.paths)?
     );
+    let url = Url::parse("http://localhost:3000")?;
 
     let mut pages = build_pages(Path::new("./site/"))?;
     pages.append(&mut build_posts(Path::new("./site/"))?);
@@ -75,7 +77,7 @@ fn content_watch_handler(source: &Path, event: Event) -> Result<()> {
         filename: PathBuf::from("styles.css"),
         content: "".to_string(),
     };
-    write_pages(Path::new("./dist/"), &css, &pages, Mode::Dev)?;
+    write_pages(Path::new("./dist/"), &css, &pages, Mode::Dev, &url)?;
 
     Ok(())
 }
