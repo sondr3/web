@@ -2,9 +2,8 @@ use std::path::{Path, PathBuf};
 
 use crate::Mode;
 use anyhow::{Context, Result};
-use jotdown::Render;
-use minijinja::value::Value;
-use minijinja::{context, path_loader, Environment};
+use jotdown::{Attributes, Container, Event, Render};
+use minijinja::{context, path_loader, value::Value, Environment};
 use minijinja_autoreload::AutoReloader;
 use once_cell::sync::Lazy;
 use serde::Deserialize;
@@ -114,7 +113,7 @@ impl Content {
     }
 
     fn content(&self) -> Result<String> {
-        let events = jotdown::Parser::new(&self.content);
+        let events = jotdown::Parser::new(&self.content).map(jotdown_event_mapper);
         let mut html = String::new();
         jotdown::html::Renderer::default().push(events, &mut html)?;
         Ok(html)
@@ -132,5 +131,47 @@ impl Content {
             content => content,
             styles => styles,
         })
+    }
+}
+
+fn jotdown_event_mapper(event: jotdown::Event) -> jotdown::Event {
+    match event {
+        Event::Start(container, attrs) => jotdown_container_mapper(container, attrs).into(),
+        _ => event,
+    }
+}
+
+struct ContainerWrapper<'a>(Container<'a>, Attributes<'a>);
+
+impl<'a> From<ContainerWrapper<'a>> for jotdown::Event<'a> {
+    fn from(val: ContainerWrapper<'a>) -> Self {
+        Event::Start(val.0, val.1)
+    }
+}
+
+fn jotdown_container_mapper<'a>(
+    container: Container<'a>,
+    attrs: Attributes<'a>,
+) -> ContainerWrapper<'a> {
+    match container {
+        Container::Heading {
+            id,
+            level,
+            has_section,
+        } => ContainerWrapper(
+            Container::Heading {
+                level,
+                id: id.to_lowercase().into(),
+                has_section,
+            },
+            attrs,
+        ),
+        Container::Section { id } => ContainerWrapper(
+            Container::Section {
+                id: id.to_lowercase().into(),
+            },
+            attrs,
+        ),
+        _ => ContainerWrapper(container, attrs),
     }
 }
