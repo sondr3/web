@@ -2,6 +2,7 @@ mod asset;
 mod builder;
 mod compress;
 mod content;
+mod context;
 mod minify;
 mod server;
 mod site;
