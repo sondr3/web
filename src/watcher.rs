@@ -1,47 +1,37 @@
-use crate::asset::{build_css, Asset};
-use crate::builder::{build_pages, build_posts};
-use crate::site::{write_css, write_pages};
-use crate::{Mode, Options};
+use crate::{
+    asset::Asset,
+    constants::Paths,
+    context_builder::{collect_pages, collect_posts},
+    render::{write_asset, write_pages_iter},
+    Mode,
+};
 use anyhow::{Context, Result};
-use notify::event::ModifyKind;
-use notify::{Config, Event, EventKind, RecommendedWatcher, RecursiveMode, Watcher};
-use std::path::{Path, PathBuf};
-use std::thread;
+use notify::{
+    event::ModifyKind, Config, Event, EventKind, RecommendedWatcher, RecursiveMode, Watcher,
+};
+use std::{
+    path::{Path, PathBuf},
+    thread,
+};
 use url::Url;
 
-#[derive(Debug)]
-pub struct LiveReload {
-    pub source: PathBuf,
-    pub options: Options,
-}
-
-impl LiveReload {
-    pub(crate) fn new(source: PathBuf, opts: Options) -> Self {
-        LiveReload {
-            source,
-            options: opts,
-        }
-    }
-}
-
-pub fn start_live_reload(source: &Path) -> Result<()> {
+pub fn start_live_reload(paths: &Paths) -> Result<()> {
     thread::scope(|scope| {
         let css = scope.spawn(|| {
-            let styles = source.join("styles");
-            file_watcher(&styles, &["scss"], |event| css_watch_handler(source, event))
+            file_watcher(&paths.styles.canonicalize()?, &["scss"], |event| {
+                css_watch_handler(paths, event)
+            })
         });
 
         let content = scope.spawn(|| {
-            let content = source.join("content");
-            file_watcher(&content, &["dj", "toml"], |event| {
-                content_watch_handler(source, event)
+            file_watcher(&paths.content.canonicalize()?, &["dj", "toml"], |event| {
+                content_watch_handler(paths, event)
             })
         });
 
         let templates = scope.spawn(|| {
-            let content = source.join("templates");
-            file_watcher(&content, &["jinja"], |event| {
-                content_watch_handler(source, event)
+            file_watcher(&paths.templates.canonicalize()?, &["jinja"], |event| {
+                content_watch_handler(paths, event)
             })
         });
 
@@ -53,31 +43,26 @@ pub fn start_live_reload(source: &Path) -> Result<()> {
     Ok(())
 }
 
-fn css_watch_handler(source: &Path, event: Event) -> Result<()> {
+fn css_watch_handler(paths: &Paths, event: Event) -> Result<()> {
     println!(
         "File(s) {:?} changed, rebuilding CSS",
-        strip_prefix_paths(source, &event.paths)?
+        strip_prefix_paths(&paths.source, &event.paths)?
     );
-    let css = build_css(Path::new("./site/"), Mode::Dev)?;
-    write_css(Path::new("./dist/"), &css)?;
+    let css = Asset::build_css(paths, &Mode::Dev)?;
+    write_asset(&paths.out, &css)?;
 
     Ok(())
 }
 
-fn content_watch_handler(source: &Path, event: Event) -> Result<()> {
+fn content_watch_handler(paths: &Paths, event: Event) -> Result<()> {
     println!(
         "File(s) {:?} changed, rebuilding site",
-        strip_prefix_paths(source, &event.paths)?
+        strip_prefix_paths(&paths.source, &event.paths)?
     );
     let url = Url::parse("http://localhost:3000")?;
-
-    let mut pages = build_pages(Path::new("./site/"))?;
-    pages.append(&mut build_posts(Path::new("./site/"))?);
-    let css = Asset {
-        filename: PathBuf::from("styles.css"),
-        content: "".to_string(),
-    };
-    write_pages(Path::new("./dist/"), &css, &pages, Mode::Dev, &url)?;
+    let mut pages = collect_pages(paths)?;
+    pages.append(&mut collect_posts(paths)?);
+    write_pages_iter(&paths.out, "styles.css", Mode::Dev, &url, pages.iter())?;
 
     Ok(())
 }
@@ -86,7 +71,7 @@ fn strip_prefix_paths(prefix: impl AsRef<Path>, paths: &[PathBuf]) -> Result<Vec
     paths
         .iter()
         .map(|p| {
-            p.strip_prefix(prefix.as_ref())
+            p.strip_prefix(prefix.as_ref().canonicalize()?)
                 .context("could not strip prefix")
         })
         .collect()

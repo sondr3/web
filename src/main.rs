@@ -1,23 +1,24 @@
 mod asset;
-mod builder;
 mod compress;
+mod constants;
 mod content;
 mod context;
+mod context_builder;
 mod minify;
+mod render;
 mod server;
-mod site;
 mod sitemap;
 mod utils;
 mod watcher;
 
+use crate::compress::compress_folder;
+use crate::render::Renderer;
 use crate::{
-    builder::Builder,
-    server::create_server,
-    site::write_site,
-    watcher::{start_live_reload, LiveReload},
+    constants::Paths, context::Metadata, context_builder::ContextBuilder, server::create_server,
+    watcher::start_live_reload,
 };
 use anyhow::Result;
-use std::{path::Path, sync::Arc, thread};
+use std::{sync::Arc, thread};
 use tokio::sync::broadcast;
 
 const HELP_MESSAGE: &str = r#"
@@ -103,23 +104,26 @@ async fn main() -> Result<()> {
 
     println!("Running in {:?} mode...", opts.mode);
 
-    let source = Path::new("./site").to_owned().canonicalize()?;
-    let builder = Builder::new(source.clone(), opts);
-    let site = builder.build()?;
+    let paths = Paths::new();
 
-    write_site(site, opts.mode)?;
+    let metadata = Metadata::new(opts.mode)?;
+    let context = ContextBuilder::new(&paths, opts.mode)?.build(&paths, metadata, opts.mode);
+    let renderer = Renderer::new(&paths.out);
+
+    renderer.render_context(&context)?;
 
     if opts.mode.is_dev() && opts.server {
-        let watcher = LiveReload::new(source, opts);
-        let watcher = thread::spawn(move || start_live_reload(&watcher.source).unwrap());
-
         let (tx, _rx) = broadcast::channel(100);
+        let watcher = thread::spawn(move || start_live_reload(&paths).unwrap());
+
         let state = Arc::new(AppState { tx });
 
         println!("Serving site at http://localhost:3000/...");
         create_server(state).await?;
 
         watcher.join().unwrap();
+    } else if opts.mode.is_prod() {
+        compress_folder(&paths.out)?;
     }
 
     Ok(())

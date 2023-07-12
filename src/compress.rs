@@ -1,11 +1,8 @@
 use crate::utils::{find_files, AppendExtension};
 use anyhow::{Context, Result};
-use brotli::enc::BrotliEncoderParams;
-use brotli::CompressorWriter;
-use flate2::write::GzEncoder;
-use flate2::Compression;
-use std::io::prelude::*;
-use std::path::Path;
+use brotli::{enc::BrotliEncoderParams, CompressorWriter};
+use flate2::{write::GzEncoder, Compression};
+use std::{io::prelude::*, path::Path};
 use walkdir::DirEntry;
 
 const VALID_EXTENSIONS: [&str; 15] = [
@@ -13,7 +10,14 @@ const VALID_EXTENSIONS: [&str; 15] = [
     "woff2", "eot",
 ];
 
-pub fn compressible_files(entry: &DirEntry) -> bool {
+pub fn compress_folder(folder: &Path) -> Result<()> {
+    gzip(folder)?;
+    brotli(folder)?;
+
+    Ok(())
+}
+
+fn compressible_files(entry: &DirEntry) -> bool {
     let is_file = entry.file_type().is_file();
     let is_valid_extension = entry.path().extension().map_or(false, |ext| {
         VALID_EXTENSIONS.iter().any(|valid_ext| ext == *valid_ext)
@@ -22,7 +26,7 @@ pub fn compressible_files(entry: &DirEntry) -> bool {
     is_file && is_valid_extension
 }
 
-pub fn gzip(dir: &Path) -> Result<()> {
+fn gzip(dir: &Path) -> Result<()> {
     find_files(dir, compressible_files).try_for_each(|f| {
         let content = std::fs::read(&f)?;
         let compressed = f.append_extension("gz");
@@ -35,7 +39,7 @@ pub fn gzip(dir: &Path) -> Result<()> {
     })
 }
 
-pub fn brotli(dir: &Path) -> Result<()> {
+fn brotli(dir: &Path) -> Result<()> {
     find_files(dir, compressible_files).try_for_each(|f| {
         let content = std::fs::read(&f)?;
         let compressed = f.append_extension("br");

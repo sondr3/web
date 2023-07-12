@@ -79,3 +79,24 @@ pub fn write_file(path: &Path, content: impl AsRef<[u8]>) -> Result<()> {
     std::fs::write::<&Path, &[u8]>(path, content.as_ref())?;
     Ok(())
 }
+
+pub fn digest_filename(filename: &Path, content: &str) -> String {
+    let digest = format!("{:x}", md5::compute(content));
+    let hash = digest.split_at(8).0;
+    let Some(extension) = filename.extension() else {
+        panic!("No extension found for {:?}", filename);
+    };
+
+    PathBuf::from(filename)
+        .with_extension(hash)
+        .append_extension(extension)
+        .display()
+        .to_string()
+}
+
+pub fn filename(path: impl Into<PathBuf>) -> String {
+    match path.into().file_name() {
+        None => panic!("No filename found"),
+        Some(name) => name.to_string_lossy().to_string(),
+    }
+}
