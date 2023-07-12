@@ -1,4 +1,5 @@
 use crate::content::Content;
+use crate::context::Context;
 use anyhow::Result;
 use quick_xml::se::Serializer;
 use serde::{Deserialize, Serialize};
@@ -87,10 +88,11 @@ impl UrlEntry {
     }
 }
 
-pub fn create_sitemap(pages: &[Content], base: &Url) -> Result<String> {
-    let urls: Result<Vec<_>, _> = pages
-        .iter()
-        .map(|e| UrlEntry::from_content(e, base))
+pub fn create_sitemap(context: &Context) -> Result<String> {
+    let urls: Result<Vec<_>, _> = context
+        .pages
+        .values()
+        .map(|e| UrlEntry::from_content(e, &context.metadata.url))
         .collect();
 
     let mut root = r#"

@@ -1,5 +1,3 @@
-use std::path::{Path, PathBuf};
-
 use crate::Mode;
 use anyhow::{Context, Result};
 use jotdown::{Attributes, Container, Event, Render};
@@ -7,6 +5,7 @@ use minijinja::{context, path_loader, value::Value, Environment};
 use minijinja_autoreload::AutoReloader;
 use once_cell::sync::Lazy;
 use serde::Deserialize;
+use std::path::{Path, PathBuf};
 use time::Date;
 use url::Url;
 
@@ -44,6 +43,7 @@ pub enum ContentType {
 
 #[derive(Debug)]
 pub struct Content {
+    pub source: PathBuf,
     pub out_path: PathBuf,
     pub url: String,
     pub content_type: ContentType,
@@ -62,8 +62,10 @@ impl Content {
             .filter(|e| !e.is_empty())
             .collect::<Vec<_>>()[..]
         {
-            [frontmatter, content] => Content::from_file(&stem, kind, frontmatter, Some(content)),
-            [frontmatter] => Content::from_file(&stem, kind, frontmatter, None),
+            [frontmatter, content] => {
+                Content::from_file(path, &stem, kind, frontmatter, Some(content))
+            }
+            [frontmatter] => Content::from_file(path, &stem, kind, frontmatter, None),
             _ => todo!(),
         }
     }
@@ -78,6 +80,7 @@ impl Content {
     }
 
     fn from_file(
+        source: &Path,
         stem: &str,
         kind: ContentType,
         frontmatter: &str,
@@ -96,12 +99,20 @@ impl Content {
         };
 
         Ok(Content {
+            source: source.to_path_buf(),
             url: format!("{}/", url),
             out_path: path,
             content_type: kind,
             content: content.unwrap_or_default().into(),
             frontmatter,
         })
+    }
+
+    pub fn filename(&self) -> String {
+        match self.source.file_stem() {
+            None => panic!("No filename found"),
+            Some(name) => name.to_string_lossy().to_string(),
+        }
     }
 
     fn layout(&self) -> String {

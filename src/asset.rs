@@ -1,5 +1,6 @@
+use crate::constants::Paths;
 use crate::minify::minify_css;
-use crate::utils::AppendExtension;
+use crate::utils::{digest_filename, filename};
 use crate::Mode;
 use anyhow::Result;
 use std::path::{Path, PathBuf};
@@ -12,31 +13,32 @@ pub struct PublicFile {
 
 #[derive(Debug)]
 pub struct Asset {
-    pub filename: PathBuf,
+    pub filename: String,
     pub content: String,
 }
 
-pub fn build_css(root: &Path, mode: Mode) -> Result<Asset> {
-    let filename = PathBuf::from("styles.css");
-    let content = grass::from_path(root.join("styles/styles.scss"), &grass::Options::default())?;
+impl Asset {
+    pub fn from_path(path: &Path) -> Result<Self> {
+        let content = std::fs::read_to_string(path)?;
+        let filename = filename(path);
 
-    Ok(match mode {
-        Mode::Prod => Asset {
-            filename: digest_filename(&filename, &content),
-            content: minify_css(&content.clone())?,
-        },
-        Mode::Dev => Asset { filename, content },
-    })
-}
+        Ok(Self { filename, content })
+    }
 
-pub fn digest_filename(filename: &Path, content: &str) -> PathBuf {
-    let digest = format!("{:x}", md5::compute(content));
-    let hash = digest.split_at(8).0;
-    let Some(extension) = filename.extension() else {
-        panic!("No extension found for {:?}", filename);
-    };
+    pub fn build_css(paths: &Paths, mode: &Mode) -> Result<Self> {
+        let path = PathBuf::from("styles.css");
+        let source = paths.styles.join("styles.scss");
+        let content = grass::from_path(source, &grass::Options::default())?;
 
-    PathBuf::from(filename)
-        .with_extension(hash)
-        .append_extension(extension)
+        Ok(match mode {
+            Mode::Prod => Self {
+                filename: digest_filename(&path, &content),
+                content: minify_css(&content.clone())?,
+            },
+            Mode::Dev => Self {
+                filename: filename(path),
+                content,
+            },
+        })
+    }
 }
