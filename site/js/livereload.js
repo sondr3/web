@@ -1,6 +1,6 @@
 (() => {
   const url = "ws://localhost:3000/ws";
-  let socket = new WebSocket(url);
+  let socket = null;
 
   const connect = () => {
     socket = new WebSocket(url);
