@@ -45,7 +45,7 @@ pub fn start_live_reload(paths: &Paths, tx: Sender<crate::Event>) {
 }
 
 fn css_watch_handler(paths: &Paths, event: &Event, tx: Sender<crate::Event>) -> Result<()> {
-    println!(
+    tracing::info!(
         "File(s) {:?} changed, rebuilding CSS",
         strip_prefix_paths(&paths.source, &event.paths)?
     );
@@ -57,7 +57,7 @@ fn css_watch_handler(paths: &Paths, event: &Event, tx: Sender<crate::Event>) -> 
 }
 
 fn content_watch_handler(paths: &Paths, event: &Event, tx: Sender<crate::Event>) -> Result<()> {
-    println!(
+    tracing::info!(
         "File(s) {:?} changed, rebuilding site",
         strip_prefix_paths(&paths.source, &event.paths)?
     );
@@ -106,7 +106,7 @@ fn filter_event(res: notify::Result<Event>, extensions: &[&str]) -> Option<Event
             _ => None,
         },
         Err(e) => {
-            println!("watch error: {e:?}");
+            tracing::error!("watch error: {e:?}");
             None
         }
     }

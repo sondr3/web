@@ -14,7 +14,11 @@ mod watcher;
 use std::{sync::Arc, thread};
 
 use anyhow::Result;
+use time::UtcOffset;
 use tokio::sync::broadcast;
+use tracing_subscriber::{
+    fmt::time::OffsetTime, layer::SubscriberExt, util::SubscriberInitExt, EnvFilter,
+};
 
 use crate::{
     constants::Paths, context::Metadata, context_builder::ContextBuilder, render::Renderer,
@@ -99,15 +103,25 @@ pub struct AppState {
 async fn main() -> Result<()> {
     let opts = Options::from_args();
 
+    let offset = UtcOffset::current_local_offset()?;
+    let format = time::format_description::parse("[hour]:[minute]:[second]")?;
+    let timer = OffsetTime::new(offset, format);
+    let fmt = tracing_subscriber::fmt::layer()
+        .with_target(false)
+        .with_timer(timer);
+    let filter = EnvFilter::try_from_default_env()
+        .unwrap_or_else(|_| format!("web={}", if opts.verbose { "debug" } else { "info" }).into());
+
+    tracing_subscriber::registry().with(filter).with(fmt).init();
+
     if opts.help {
         println!("{HELP_MESSAGE}");
         return Ok(());
     }
 
-    println!("Running in {:?} mode...", opts.mode);
+    tracing::info!("Running in {:?} mode...", opts.mode);
 
     let paths = Paths::new();
-
     let metadata = Metadata::new(opts.mode)?;
     let context = ContextBuilder::new(&paths, opts.mode)?.build(&paths, metadata, opts.mode);
     let renderer = Renderer::new(&paths.out);
@@ -119,7 +133,7 @@ async fn main() -> Result<()> {
         let state = Arc::new(AppState { tx: tx.clone() });
         let watcher = thread::spawn(move || start_live_reload(&paths, tx));
 
-        println!("Serving site at http://localhost:3000/...");
+        tracing::info!("Serving site at http://localhost:3000/...");
         server::create(state).await?;
 
         watcher.join().unwrap();
