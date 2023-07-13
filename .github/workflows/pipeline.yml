@@ -3,7 +3,7 @@ name: pipeline
 on: [push, pull_request]
 
 jobs:
-  tests:
+  build:
     name: tests
     runs-on: ubuntu-latest
 
@@ -28,12 +28,6 @@ jobs:
       - name: Install npm packages
         run: pnpm install --frozen-lockfile
 
-      - name: build
-        run: cargo test --no-run
-
-      - name: test
-        run: cargo test -- --nocapture --quiet
-
       - name: formatting
         run: cargo fmt --all -- --check
 
@@ -43,11 +37,25 @@ jobs:
       - name: clippy
         run: cargo clippy -- -D warnings
 
+      - name: build
+        run: cargo build --tests --bins
+
+      - name: test
+        run: cargo test -- --nocapture --quiet
+
       - name: styles
         run: pnpm run styles
 
+      - name: build
+        run: cargo run
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: ./dist
+          retention-days: 1
+
   e2e:
-    timeout-minutes: 60
     runs-on: ubuntu-latest
     name: e2e
 
@@ -71,7 +79,7 @@ jobs:
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
 
-      - name: Build site
+      - name: build
         run: |
           cargo build
           cargo run
@@ -88,19 +96,15 @@ jobs:
 
   deploy:
     if: ${{ github.ref == 'refs/heads/main' }}
-    needs: [tests, e2e]
+    needs: [build, e2e]
     runs-on: ubuntu-latest
     name: deploy
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
-
-      - name: Build
-        run: |
-          cargo build
-          cargo run
+      - uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: ./dist
 
       - name: Deploy
         uses: burnett01/rsync-deployments@5.2
