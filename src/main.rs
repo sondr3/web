@@ -116,9 +116,8 @@ async fn main() -> Result<()> {
 
     if opts.mode.is_dev() && opts.server {
         let (tx, _rx) = broadcast::channel(100);
-        let watcher = thread::spawn(move || start_live_reload(&paths));
-
-        let state = Arc::new(AppState { tx });
+        let state = Arc::new(AppState { tx: tx.clone() });
+        let watcher = thread::spawn(move || start_live_reload(&paths, tx));
 
         println!("Serving site at http://localhost:3000/...");
         server::create(state).await?;
