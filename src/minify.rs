@@ -16,13 +16,13 @@ pub fn html_minifier_config() -> Cfg {
     }
 }
 
-pub fn minify_html(html: &str, cfg: &Cfg) -> Vec<u8> {
-    minify_html::minify(html.as_bytes(), cfg)
+pub fn html(content: &str, cfg: &Cfg) -> Vec<u8> {
+    minify_html::minify(content.as_bytes(), cfg)
 }
 
-pub fn minify_css(css: &str) -> Result<String> {
-    let mut stylesheet =
-        StyleSheet::parse(css, ParserOptions::default()).map_err(|e| anyhow::anyhow!("{:?}", e))?;
+pub fn css(content: &str) -> Result<String> {
+    let mut stylesheet = StyleSheet::parse(content, ParserOptions::default())
+        .map_err(|e| anyhow::anyhow!("{:?}", e))?;
 
     let targets = Targets {
         browsers: Browsers::from_browserslist(["> .5% and last 5 versions"])?,

@@ -10,7 +10,7 @@ const VALID_EXTENSIONS: [&str; 15] = [
     "woff2", "eot",
 ];
 
-pub fn compress_folder(folder: &Path) -> Result<()> {
+pub fn folder(folder: &Path) -> Result<()> {
     gzip(folder)?;
     brotli(folder)?;
 

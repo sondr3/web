@@ -1,9 +1,10 @@
-use crate::content::Content;
 use crate::{
     asset::{Asset, PublicFile},
+    content::Content,
     context::Context,
-    minify::{html_minifier_config, minify_html},
-    sitemap::create_sitemap,
+    minify,
+    minify::html_minifier_config,
+    sitemap,
     utils::{copy_file, write_file},
     Mode,
 };
@@ -81,7 +82,7 @@ where
         write_file(
             &dest.join(&f.out_path),
             if mode.is_prod() {
-                minify_html(&f.render(css, mode, url)?, &cfg)
+                minify::html(&f.render(css, mode, url)?, &cfg)
             } else {
                 f.render(css, mode, url)?.into()
             },
@@ -90,7 +91,7 @@ where
 }
 
 pub fn write_sitemap(dest: &Path, context: &Context) -> Result<()> {
-    let sitemap = create_sitemap(context)?;
+    let sitemap = sitemap::create(context)?;
     write_file(&dest.join("sitemap.xml"), sitemap)
 }
 

@@ -1,7 +1,7 @@
 use crate::{
     asset::{Asset, PublicFile},
     constants::Paths,
-    content::{Content, ContentType},
+    content::{Content, Type},
     context::{Context, Metadata},
     utils::{find_files, is_file},
     Mode,
@@ -21,18 +21,17 @@ impl ContextBuilder {
         pages.append(&mut collect_posts(paths)?);
 
         let mut assets = AHashMap::new();
-        assets.insert("styles.css".to_string(), Asset::build_css(paths, &mode)?);
+        assets.insert("styles.css".to_string(), Asset::build_css(paths, mode)?);
         collect_js(paths)?.into_iter().for_each(|a| {
             assets.insert(a.filename.clone(), a);
         });
 
         let public_files = collect_public_files(paths);
-        let pages: Vec<_> = pages.into_iter().map(|p| (p.filename(), p)).collect();
-        let pages: AHashMap<String, Content> = pages.into_iter().collect();
+        let pages: AHashMap<_, _> = pages.into_iter().map(|p| (p.filename(), p)).collect();
 
         Ok(ContextBuilder {
-            pages,
             assets,
+            pages,
             public_files,
         })
     }
@@ -57,13 +56,13 @@ fn collect_js(paths: &Paths) -> Result<Vec<Asset>> {
 
 pub fn collect_pages(paths: &Paths) -> Result<Vec<Content>> {
     find_files(&paths.pages, is_file)
-        .map(|f| Content::from_path(&f, ContentType::Page))
+        .map(|f| Content::from_path(&f, Type::Page))
         .collect()
 }
 
 pub fn collect_posts(paths: &Paths) -> Result<Vec<Content>> {
     find_files(&paths.posts, is_file)
-        .map(|f| Content::from_path(&f, ContentType::Post))
+        .map(|f| Content::from_path(&f, Type::Post))
         .collect()
 }
 

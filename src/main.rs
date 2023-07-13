@@ -11,10 +11,8 @@ mod sitemap;
 mod utils;
 mod watcher;
 
-use crate::compress::compress_folder;
-use crate::render::Renderer;
 use crate::{
-    constants::Paths, context::Metadata, context_builder::ContextBuilder, server::create_server,
+    constants::Paths, context::Metadata, context_builder::ContextBuilder, render::Renderer,
     watcher::start_live_reload,
 };
 use anyhow::Result;
@@ -41,14 +39,17 @@ pub enum Mode {
 }
 
 impl Mode {
-    pub fn is_prod(&self) -> bool {
+    #[must_use]
+    pub const fn is_prod(&self) -> bool {
         matches!(self, Self::Prod)
     }
 
-    pub fn is_dev(&self) -> bool {
+    #[must_use]
+    pub const fn is_dev(&self) -> bool {
         matches!(self, Self::Dev)
     }
 
+    #[must_use]
     pub fn from_args(args: &[String]) -> Self {
         if std::env::var("CI").is_ok()
             || std::env::var("PROD").is_ok()
@@ -73,7 +74,7 @@ impl Options {
     fn from_args() -> Self {
         let args: Vec<_> = std::env::args().skip(1).collect();
 
-        Options {
+        Self {
             mode: Mode::from_args(&args),
             verbose: args.iter().any(|e| e == "-v" || e == "--verbose"),
             server: !args.iter().any(|e| e == "-s" || e == "--server"),
@@ -95,10 +96,9 @@ pub struct AppState {
 #[tokio::main]
 async fn main() -> Result<()> {
     let opts = Options::from_args();
-    let _verbose = opts.verbose;
 
     if opts.help {
-        println!("{}", HELP_MESSAGE);
+        println!("{HELP_MESSAGE}");
         return Ok(());
     }
 
@@ -114,16 +114,16 @@ async fn main() -> Result<()> {
 
     if opts.mode.is_dev() && opts.server {
         let (tx, _rx) = broadcast::channel(100);
-        let watcher = thread::spawn(move || start_live_reload(&paths).unwrap());
+        let watcher = thread::spawn(move || start_live_reload(&paths));
 
         let state = Arc::new(AppState { tx });
 
         println!("Serving site at http://localhost:3000/...");
-        create_server(state).await?;
+        server::create(state).await?;
 
         watcher.join().unwrap();
     } else if opts.mode.is_prod() {
-        compress_folder(&paths.out)?;
+        compress::folder(&paths.out)?;
     }
 
     Ok(())
