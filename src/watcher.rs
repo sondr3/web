@@ -15,23 +15,23 @@ use std::{
 };
 use url::Url;
 
-pub fn start_live_reload(paths: &Paths) -> Result<()> {
+pub fn start_live_reload(paths: &Paths) {
     thread::scope(|scope| {
         let css = scope.spawn(|| {
             file_watcher(&paths.styles.canonicalize()?, &["scss"], |event| {
-                css_watch_handler(paths, event)
+                css_watch_handler(paths, &event)
             })
         });
 
         let content = scope.spawn(|| {
             file_watcher(&paths.content.canonicalize()?, &["dj", "toml"], |event| {
-                content_watch_handler(paths, event)
+                content_watch_handler(paths, &event)
             })
         });
 
         let templates = scope.spawn(|| {
             file_watcher(&paths.templates.canonicalize()?, &["jinja"], |event| {
-                content_watch_handler(paths, event)
+                content_watch_handler(paths, &event)
             })
         });
 
@@ -39,22 +39,20 @@ pub fn start_live_reload(paths: &Paths) -> Result<()> {
         content.join().unwrap().unwrap();
         templates.join().unwrap().unwrap();
     });
-
-    Ok(())
 }
 
-fn css_watch_handler(paths: &Paths, event: Event) -> Result<()> {
+fn css_watch_handler(paths: &Paths, event: &Event) -> Result<()> {
     println!(
         "File(s) {:?} changed, rebuilding CSS",
         strip_prefix_paths(&paths.source, &event.paths)?
     );
-    let css = Asset::build_css(paths, &Mode::Dev)?;
+    let css = Asset::build_css(paths, Mode::Dev)?;
     write_asset(&paths.out, &css)?;
 
     Ok(())
 }
 
-fn content_watch_handler(paths: &Paths, event: Event) -> Result<()> {
+fn content_watch_handler(paths: &Paths, event: &Event) -> Result<()> {
     println!(
         "File(s) {:?} changed, rebuilding site",
         strip_prefix_paths(&paths.source, &event.paths)?
@@ -103,7 +101,7 @@ fn filter_event(res: notify::Result<Event>, extensions: &[&str]) -> Option<Event
             _ => None,
         },
         Err(e) => {
-            println!("watch error: {:?}", e);
+            println!("watch error: {e:?}");
             None
         }
     }

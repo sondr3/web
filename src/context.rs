@@ -1,6 +1,6 @@
 use crate::{
     asset::{Asset, PublicFile},
-    constants::*,
+    constants::{Paths, OUT_PATH},
     content::Content,
     Mode,
 };

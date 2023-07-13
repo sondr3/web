@@ -1,7 +1,9 @@
-use crate::constants::Paths;
-use crate::minify::minify_css;
-use crate::utils::{digest_filename, filename};
-use crate::Mode;
+use crate::{
+    constants::Paths,
+    minify,
+    utils::{digest_filename, filename},
+    Mode,
+};
 use anyhow::Result;
 use std::path::{Path, PathBuf};
 
@@ -25,7 +27,7 @@ impl Asset {
         Ok(Self { filename, content })
     }
 
-    pub fn build_css(paths: &Paths, mode: &Mode) -> Result<Self> {
+    pub fn build_css(paths: &Paths, mode: Mode) -> Result<Self> {
         let path = PathBuf::from("styles.css");
         let source = paths.styles.join("styles.scss");
         let content = grass::from_path(source, &grass::Options::default())?;
@@ -33,7 +35,7 @@ impl Asset {
         Ok(match mode {
             Mode::Prod => Self {
                 filename: digest_filename(&path, &content),
-                content: minify_css(&content.clone())?,
+                content: minify::css(&content.clone())?,
             },
             Mode::Dev => Self {
                 filename: filename(path),

@@ -32,7 +32,7 @@ pub mod toml_date_deserializer {
         };
 
         let month = Month::try_from(date.month).map_err(serde::de::Error::custom)?;
-        Date::from_calendar_date(date.year as i32, month, date.day)
+        Date::from_calendar_date(i32::from(date.year), month, date.day)
             .map_err(serde::de::Error::custom)
     }
 }
@@ -45,8 +45,7 @@ pub fn is_visible(entry: &DirEntry) -> bool {
     !entry
         .file_name()
         .to_str()
-        .map(|s| s.starts_with('.'))
-        .unwrap_or(false)
+        .map_or(false, |s| s.starts_with('.'))
 }
 
 pub fn find_files<F>(directory: &Path, filter_files: F) -> impl Iterator<Item = PathBuf>
@@ -84,7 +83,7 @@ pub fn digest_filename(filename: &Path, content: &str) -> String {
     let digest = format!("{:x}", md5::compute(content));
     let hash = digest.split_at(8).0;
     let Some(extension) = filename.extension() else {
-        panic!("No extension found for {:?}", filename);
+        panic!("No extension found for {filename:?}");
     };
 
     PathBuf::from(filename)
@@ -95,8 +94,8 @@ pub fn digest_filename(filename: &Path, content: &str) -> String {
 }
 
 pub fn filename(path: impl Into<PathBuf>) -> String {
-    match path.into().file_name() {
-        None => panic!("No filename found"),
-        Some(name) => name.to_string_lossy().to_string(),
-    }
+    path.into().file_name().map_or_else(
+        || panic!("No filename found"),
+        |name| name.to_string_lossy().to_string(),
+    )
 }

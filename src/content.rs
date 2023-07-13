@@ -36,7 +36,7 @@ pub struct Frontmatter {
 }
 
 #[derive(Debug, Copy, Clone)]
-pub enum ContentType {
+pub enum Type {
     Page,
     Post,
 }
@@ -46,19 +46,19 @@ pub struct Content {
     pub source: PathBuf,
     pub out_path: PathBuf,
     pub url: String,
-    pub content_type: ContentType,
+    pub content_type: Type,
     pub frontmatter: Frontmatter,
     pub content: String,
 }
 
 impl Content {
-    pub fn from_path(path: &Path, kind: ContentType) -> Result<Content> {
+    pub fn from_path(path: &Path, kind: Type) -> Result<Content> {
         let file = std::fs::read_to_string(path)?;
         let stem = path.file_stem().unwrap().to_string_lossy();
 
         match file
             .split("+++")
-            .map(|e| e.trim())
+            .map(str::trim)
             .filter(|e| !e.is_empty())
             .collect::<Vec<_>>()[..]
         {
@@ -82,7 +82,7 @@ impl Content {
     fn from_file(
         source: &Path,
         stem: &str,
-        kind: ContentType,
+        kind: Type,
         frontmatter: &str,
         content: Option<&str>,
     ) -> Result<Self> {
@@ -93,14 +93,11 @@ impl Content {
             None => [stem, "index.html"].into_iter().collect(),
         };
 
-        let url = match &frontmatter.slug {
-            Some(slug) => slug,
-            None => stem,
-        };
+        let url = frontmatter.slug.as_ref().map_or(stem, |s| s);
 
         Ok(Content {
             source: source.to_path_buf(),
-            url: format!("{}/", url),
+            url: format!("{url}/"),
             out_path: path,
             content_type: kind,
             content: content.unwrap_or_default().into(),
@@ -109,17 +106,17 @@ impl Content {
     }
 
     pub fn filename(&self) -> String {
-        match self.source.file_stem() {
-            None => panic!("No filename found"),
-            Some(name) => name.to_string_lossy().to_string(),
-        }
+        self.source.file_stem().map_or_else(
+            || panic!("No filename found"),
+            |name| name.to_string_lossy().to_string(),
+        )
     }
 
     fn layout(&self) -> String {
         match (self.content_type, &self.frontmatter.layout) {
-            (_, Some(layout)) => format!("{}.jinja", layout),
-            (ContentType::Page, None) => "page.jinja".to_string(),
-            (ContentType::Post, None) => "post.jinja".to_string(),
+            (_, Some(layout)) => format!("{layout}.jinja"),
+            (Type::Page, None) => "page.jinja".to_string(),
+            (Type::Post, None) => "post.jinja".to_string(),
         }
     }
 

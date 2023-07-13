@@ -66,7 +66,7 @@ impl UrlEntry {
         change_freq: Option<ChangeFreq>,
         priority: Option<f32>,
     ) -> Self {
-        assert!(priority.map(|e| (0.0..=1.0).contains(&e)).unwrap_or(true));
+        assert!(priority.map_or(true, |e| (0.0..=1.0).contains(&e)));
 
         Self {
             loc,
@@ -88,7 +88,7 @@ impl UrlEntry {
     }
 }
 
-pub fn create_sitemap(context: &Context) -> Result<String> {
+pub fn create(context: &Context) -> Result<String> {
     let urls: Result<Vec<_>, _> = context
         .pages
         .values()

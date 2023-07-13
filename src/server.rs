@@ -1,3 +1,5 @@
+#![allow(clippy::unused_async)]
+
 use crate::{AppState, Event};
 use anyhow::{Context, Result};
 use axum::{
@@ -15,7 +17,7 @@ use std::{
 };
 use tower_http::{services::ServeDir, trace::TraceLayer};
 
-pub async fn create_server(state: Arc<AppState>) -> Result<()> {
+pub async fn create(state: Arc<AppState>) -> Result<()> {
     let addr = SocketAddr::from((Ipv4Addr::LOCALHOST, 3000));
     axum::Server::bind(&addr)
         .serve(
@@ -43,7 +45,7 @@ async fn ws_handler(
 }
 
 async fn handle_socket(mut socket: WebSocket, state: Arc<AppState>, addr: SocketAddr) {
-    println!("{} connected", addr);
+    println!("{addr} connected");
     let mut rx = state.tx.subscribe();
 
     while let Ok(event) = rx.recv().await {
