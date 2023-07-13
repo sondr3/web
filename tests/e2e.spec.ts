@@ -1,5 +1,9 @@
 import { test, expect } from "@playwright/test";
 
+test.beforeEach(async ({}, testInfo) => {
+  testInfo.snapshotSuffix = "";
+});
+
 test("landing", async ({ page }) => {
   await page.goto("/");
   await expect(page).toHaveTitle("Home => Eons :: IO ()");
