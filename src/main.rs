@@ -103,7 +103,7 @@ pub struct AppState {
 async fn main() -> Result<()> {
     let opts = Options::from_args();
 
-    let offset = UtcOffset::current_local_offset()?;
+    let offset = UtcOffset::current_local_offset().map_or(UtcOffset::UTC, |o| o);
     let format = time::format_description::parse("[hour]:[minute]:[second]")?;
     let timer = OffsetTime::new(offset, format);
     let fmt = tracing_subscriber::fmt::layer()
