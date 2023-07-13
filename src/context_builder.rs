@@ -1,3 +1,6 @@
+use ahash::AHashMap;
+use anyhow::Result;
+
 use crate::{
     asset::{Asset, PublicFile},
     constants::Paths,
@@ -6,8 +9,6 @@ use crate::{
     utils::{find_files, is_file},
     Mode,
 };
-use ahash::AHashMap;
-use anyhow::Result;
 
 pub struct ContextBuilder {
     pub assets: AHashMap<String, Asset>,

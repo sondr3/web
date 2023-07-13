@@ -1,7 +1,9 @@
 use anyhow::Result;
-use lightningcss::printer::PrinterOptions;
-use lightningcss::stylesheet::{MinifyOptions, ParserOptions, StyleSheet};
-use lightningcss::targets::{Browsers, Targets};
+use lightningcss::{
+    printer::PrinterOptions,
+    stylesheet::{MinifyOptions, ParserOptions, StyleSheet},
+    targets::{Browsers, Targets},
+};
 use minify_html::Cfg;
 
 pub fn html_minifier_config() -> Cfg {

@@ -1,6 +1,10 @@
 #![allow(clippy::unused_async)]
 
-use crate::{AppState, Event};
+use std::{
+    net::{Ipv4Addr, SocketAddr},
+    sync::Arc,
+};
+
 use anyhow::{Context, Result};
 use axum::{
     extract::{
@@ -11,11 +15,9 @@ use axum::{
     routing::get,
     Router,
 };
-use std::{
-    net::{Ipv4Addr, SocketAddr},
-    sync::Arc,
-};
 use tower_http::{services::ServeDir, trace::TraceLayer};
+
+use crate::{AppState, Event};
 
 pub async fn create(state: Arc<AppState>) -> Result<()> {
     let addr = SocketAddr::from((Ipv4Addr::LOCALHOST, 3000));

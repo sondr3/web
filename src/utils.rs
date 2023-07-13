@@ -1,7 +1,10 @@
+use std::{
+    ffi::{OsStr, OsString},
+    fs::File,
+    path::{Path, PathBuf},
+};
+
 use anyhow::Result;
-use std::ffi::{OsStr, OsString};
-use std::fs::File;
-use std::path::{Path, PathBuf};
 use walkdir::{DirEntry, WalkDir};
 
 pub trait AppendExtension {

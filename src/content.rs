@@ -1,15 +1,15 @@
-use crate::Mode;
+use std::path::{Path, PathBuf};
+
 use anyhow::{Context, Result};
 use jotdown::{Attributes, Container, Event, Render};
 use minijinja::{context, path_loader, value::Value, Environment};
 use minijinja_autoreload::AutoReloader;
 use once_cell::sync::Lazy;
 use serde::Deserialize;
-use std::path::{Path, PathBuf};
 use time::Date;
 use url::Url;
 
-use crate::utils::toml_date_deserializer;
+use crate::{utils::toml_date_deserializer, Mode};
 
 static RELOADER: Lazy<AutoReloader> = Lazy::new(|| {
     AutoReloader::new(move |notifier| {

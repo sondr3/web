@@ -11,13 +11,15 @@ mod sitemap;
 mod utils;
 mod watcher;
 
+use std::{sync::Arc, thread};
+
+use anyhow::Result;
+use tokio::sync::broadcast;
+
 use crate::{
     constants::Paths, context::Metadata, context_builder::ContextBuilder, render::Renderer,
     watcher::start_live_reload,
 };
-use anyhow::Result;
-use std::{sync::Arc, thread};
-use tokio::sync::broadcast;
 
 const HELP_MESSAGE: &str = r#"
 web - website generator

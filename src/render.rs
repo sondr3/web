@@ -1,3 +1,8 @@
+use std::path::{Path, PathBuf};
+
+use anyhow::Result;
+use url::Url;
+
 use crate::{
     asset::{Asset, PublicFile},
     content::Content,
@@ -8,9 +13,6 @@ use crate::{
     utils::{copy_file, write_file},
     Mode,
 };
-use anyhow::Result;
-use std::path::{Path, PathBuf};
-use url::Url;
 
 pub struct Renderer {
     pub dest: PathBuf,

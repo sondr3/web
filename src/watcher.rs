@@ -1,3 +1,14 @@
+use std::{
+    path::{Path, PathBuf},
+    thread,
+};
+
+use anyhow::{Context, Result};
+use notify::{
+    event::ModifyKind, Config, Event, EventKind, RecommendedWatcher, RecursiveMode, Watcher,
+};
+use url::Url;
+
 use crate::{
     asset::Asset,
     constants::Paths,
@@ -5,15 +16,6 @@ use crate::{
     render::{write_asset, write_pages_iter},
     Mode,
 };
-use anyhow::{Context, Result};
-use notify::{
-    event::ModifyKind, Config, Event, EventKind, RecommendedWatcher, RecursiveMode, Watcher,
-};
-use std::{
-    path::{Path, PathBuf},
-    thread,
-};
-use url::Url;
 
 pub fn start_live_reload(paths: &Paths) {
     thread::scope(|scope| {

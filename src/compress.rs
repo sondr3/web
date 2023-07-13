@@ -1,9 +1,11 @@
-use crate::utils::{find_files, AppendExtension};
+use std::{io::prelude::*, path::Path};
+
 use anyhow::{Context, Result};
 use brotli::{enc::BrotliEncoderParams, CompressorWriter};
 use flate2::{write::GzEncoder, Compression};
-use std::{io::prelude::*, path::Path};
 use walkdir::DirEntry;
+
+use crate::utils::{find_files, AppendExtension};
 
 const VALID_EXTENSIONS: [&str; 15] = [
     "html", "css", "js", "xml", "css", "cjs", "mjs", "json", "txt", "svg", "map", "ttf", "otf",
