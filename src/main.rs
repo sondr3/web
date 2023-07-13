@@ -11,7 +11,7 @@ mod sitemap;
 mod utils;
 mod watcher;
 
-use std::{sync::Arc, thread};
+use std::{sync::Arc, thread, time::Instant};
 
 use anyhow::Result;
 use time::UtcOffset;
@@ -121,12 +121,21 @@ async fn main() -> Result<()> {
 
     tracing::info!("Running in {:?} mode...", opts.mode);
 
+    let now = Instant::now();
+
     let paths = Paths::new();
     let metadata = Metadata::new(opts.mode)?;
     let context = ContextBuilder::new(&paths, opts.mode)?.build(&paths, metadata, opts.mode);
     let renderer = Renderer::new(&paths.out);
 
     renderer.render_context(&context)?;
+
+    let done = now.elapsed();
+    tracing::info!(
+        "Built {} pages in {:?}ms",
+        context.pages.len(),
+        done.as_millis()
+    );
 
     if opts.mode.is_dev() && opts.server {
         let (tx, _rx) = broadcast::channel(100);
