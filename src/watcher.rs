@@ -13,28 +13,29 @@ use url::Url;
 use crate::{
     asset::Asset,
     constants::Paths,
+    context::Context as AppContext,
     context_builder::{collect_pages, collect_posts},
     render::{write_asset, write_pages_iter},
     Mode,
 };
 
-pub fn start_live_reload(paths: &Paths, tx: Sender<crate::Event>) {
+pub fn start_live_reload(paths: &Paths, context: AppContext, tx: &Sender<crate::Event>) {
     thread::scope(|scope| {
         let css = scope.spawn(|| {
             file_watcher(&paths.styles.canonicalize()?, &["scss"], |event| {
-                css_watch_handler(paths, &event, tx.clone())
+                css_watch_handler(paths, &event, tx)
             })
         });
 
         let content = scope.spawn(|| {
             file_watcher(&paths.content.canonicalize()?, &["dj", "toml"], |event| {
-                content_watch_handler(paths, &event, tx.clone())
+                content_watch_handler(paths, &event, &context, tx)
             })
         });
 
         let templates = scope.spawn(|| {
             file_watcher(&paths.templates.canonicalize()?, &["jinja"], |event| {
-                content_watch_handler(paths, &event, tx.clone())
+                content_watch_handler(paths, &event, &context, tx)
             })
         });
 
@@ -44,7 +45,7 @@ pub fn start_live_reload(paths: &Paths, tx: Sender<crate::Event>) {
     });
 }
 
-fn css_watch_handler(paths: &Paths, event: &Event, tx: Sender<crate::Event>) -> Result<()> {
+fn css_watch_handler(paths: &Paths, event: &Event, tx: &Sender<crate::Event>) -> Result<()> {
     tracing::info!(
         "File(s) {:?} changed, rebuilding CSS",
         strip_prefix_paths(&paths.source, &event.paths)?
@@ -56,7 +57,12 @@ fn css_watch_handler(paths: &Paths, event: &Event, tx: Sender<crate::Event>) -> 
     Ok(())
 }
 
-fn content_watch_handler(paths: &Paths, event: &Event, tx: Sender<crate::Event>) -> Result<()> {
+fn content_watch_handler(
+    paths: &Paths,
+    event: &Event,
+    context: &AppContext,
+    tx: &Sender<crate::Event>,
+) -> Result<()> {
     tracing::info!(
         "File(s) {:?} changed, rebuilding site",
         strip_prefix_paths(&paths.source, &event.paths)?
@@ -64,7 +70,14 @@ fn content_watch_handler(paths: &Paths, event: &Event, tx: Sender<crate::Event>)
     let url = Url::parse("http://localhost:3000")?;
     let mut pages = collect_pages(paths)?;
     pages.append(&mut collect_posts(paths)?);
-    write_pages_iter(&paths.out, "styles.css", Mode::Dev, &url, pages.iter())?;
+    write_pages_iter(
+        &paths.out,
+        "styles.css",
+        Mode::Dev,
+        &url,
+        &context.templates,
+        pages.iter(),
+    )?;
     tx.send(crate::Event::Reload)?;
 
     Ok(())
