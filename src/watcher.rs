@@ -7,6 +7,7 @@ use anyhow::{Context, Result};
 use notify::{
     event::ModifyKind, Config, Event, EventKind, RecommendedWatcher, RecursiveMode, Watcher,
 };
+use tokio::sync::broadcast::Sender;
 use url::Url;
 
 use crate::{
@@ -17,23 +18,23 @@ use crate::{
     Mode,
 };
 
-pub fn start_live_reload(paths: &Paths) {
+pub fn start_live_reload(paths: &Paths, tx: Sender<crate::Event>) {
     thread::scope(|scope| {
         let css = scope.spawn(|| {
             file_watcher(&paths.styles.canonicalize()?, &["scss"], |event| {
-                css_watch_handler(paths, &event)
+                css_watch_handler(paths, &event, tx.clone())
             })
         });
 
         let content = scope.spawn(|| {
             file_watcher(&paths.content.canonicalize()?, &["dj", "toml"], |event| {
-                content_watch_handler(paths, &event)
+                content_watch_handler(paths, &event, tx.clone())
             })
         });
 
         let templates = scope.spawn(|| {
             file_watcher(&paths.templates.canonicalize()?, &["jinja"], |event| {
-                content_watch_handler(paths, &event)
+                content_watch_handler(paths, &event, tx.clone())
             })
         });
 
@@ -43,18 +44,19 @@ pub fn start_live_reload(paths: &Paths) {
     });
 }
 
-fn css_watch_handler(paths: &Paths, event: &Event) -> Result<()> {
+fn css_watch_handler(paths: &Paths, event: &Event, tx: Sender<crate::Event>) -> Result<()> {
     println!(
         "File(s) {:?} changed, rebuilding CSS",
         strip_prefix_paths(&paths.source, &event.paths)?
     );
     let css = Asset::build_css(paths, Mode::Dev)?;
     write_asset(&paths.out, &css)?;
+    tx.send(crate::Event::Reload)?;
 
     Ok(())
 }
 
-fn content_watch_handler(paths: &Paths, event: &Event) -> Result<()> {
+fn content_watch_handler(paths: &Paths, event: &Event, tx: Sender<crate::Event>) -> Result<()> {
     println!(
         "File(s) {:?} changed, rebuilding site",
         strip_prefix_paths(&paths.source, &event.paths)?
@@ -63,6 +65,7 @@ fn content_watch_handler(paths: &Paths, event: &Event) -> Result<()> {
     let mut pages = collect_pages(paths)?;
     pages.append(&mut collect_posts(paths)?);
     write_pages_iter(&paths.out, "styles.css", Mode::Dev, &url, pages.iter())?;
+    tx.send(crate::Event::Reload)?;
 
     Ok(())
 }
