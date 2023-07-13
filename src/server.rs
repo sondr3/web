@@ -47,7 +47,7 @@ async fn ws_handler(
 }
 
 async fn handle_socket(mut socket: WebSocket, state: Arc<AppState>, addr: SocketAddr) {
-    println!("{addr} connected");
+    tracing::debug!("{addr} connected");
     let mut rx = state.tx.subscribe();
 
     while let Ok(event) = rx.recv().await {
