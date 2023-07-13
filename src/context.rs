@@ -1,15 +1,17 @@
+use std::path::PathBuf;
+
+use ahash::AHashMap;
+use anyhow::Result;
+use minijinja::{path_loader, Environment};
+use minijinja_autoreload::AutoReloader;
+use url::Url;
+
 use crate::{
     asset::{Asset, PublicFile},
     constants::{Paths, OUT_PATH},
     content::Content,
     Mode,
 };
-use ahash::AHashMap;
-use anyhow::Result;
-use minijinja::{path_loader, Environment};
-use minijinja_autoreload::AutoReloader;
-use std::path::PathBuf;
-use url::Url;
 
 #[derive(Debug)]
 pub struct Metadata {

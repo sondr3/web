@@ -1,11 +1,13 @@
+use std::path::{Path, PathBuf};
+
+use anyhow::Result;
+
 use crate::{
     constants::Paths,
     minify,
     utils::{digest_filename, filename},
     Mode,
 };
-use anyhow::Result;
-use std::path::{Path, PathBuf};
 
 #[derive(Debug)]
 pub struct PublicFile {

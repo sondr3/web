@@ -1,11 +1,12 @@
-use crate::content::Content;
-use crate::context::Context;
+use std::fmt::{self, Display, Formatter};
+
 use anyhow::Result;
 use quick_xml::se::Serializer;
 use serde::{Deserialize, Serialize};
-use std::fmt::{self, Display, Formatter};
 use time::Date;
 use url::Url;
+
+use crate::{content::Content, context::Context};
 
 #[derive(Debug, Deserialize, Serialize, Copy, Clone, Ord, PartialOrd, Eq, PartialEq)]
 #[serde(rename_all = "lowercase")]

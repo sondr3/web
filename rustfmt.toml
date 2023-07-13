@@ -1,0 +1,6 @@
+# enable whenever you need
+#imports_granularity = "crate"
+#group_imports = "StdExternalCrate"
+#use_field_init_shorthand = true
+
+reorder_impl_items = true
