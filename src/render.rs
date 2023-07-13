@@ -1,6 +1,7 @@
 use std::path::{Path, PathBuf};
 
 use anyhow::Result;
+use minijinja_autoreload::AutoReloader;
 use url::Url;
 
 use crate::{
@@ -64,6 +65,7 @@ pub fn write_pages(dest: &Path, context: &Context) -> Result<()> {
         css,
         context.mode,
         &context.metadata.url,
+        &context.templates,
         context.pages.values(),
     )
 }
@@ -73,6 +75,7 @@ pub fn write_pages_iter<'a, F>(
     css: &str,
     mode: Mode,
     url: &Url,
+    templates: &AutoReloader,
     pages: F,
 ) -> Result<()>
 where
@@ -84,9 +87,9 @@ where
         write_file(
             &dest.join(&f.out_path),
             if mode.is_prod() {
-                minify::html(&f.render(css, mode, url)?, &cfg)
+                minify::html(&f.render(css, mode, url, templates)?, &cfg)
             } else {
-                f.render(css, mode, url)?.into()
+                f.render(css, mode, url, templates)?.into()
             },
         )
     })

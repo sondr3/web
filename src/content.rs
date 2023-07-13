@@ -2,27 +2,13 @@ use std::path::{Path, PathBuf};
 
 use anyhow::{Context, Result};
 use jotdown::{Attributes, Container, Event, Render};
-use minijinja::{context, path_loader, value::Value, Environment};
+use minijinja::{context, value::Value};
 use minijinja_autoreload::AutoReloader;
-use once_cell::sync::Lazy;
 use serde::Deserialize;
 use time::Date;
 use url::Url;
 
 use crate::{utils::toml_date_deserializer, Mode};
-
-static RELOADER: Lazy<AutoReloader> = Lazy::new(|| {
-    AutoReloader::new(move |notifier| {
-        let template_path = PathBuf::from("./site/templates");
-        let mut env = Environment::new();
-        env.set_loader(path_loader(&template_path));
-
-        notifier.set_fast_reload(true);
-
-        notifier.watch_path(&template_path, true);
-        Ok(env)
-    })
-});
 
 #[derive(Debug, Deserialize)]
 pub struct Frontmatter {
@@ -52,7 +38,7 @@ pub struct Content {
 }
 
 impl Content {
-    pub fn from_path(path: &Path, kind: Type) -> Result<Content> {
+    pub fn from_path(path: &Path, kind: Type) -> Result<Self> {
         let file = std::fs::read_to_string(path)?;
         let stem = path.file_stem().unwrap().to_string_lossy();
 
@@ -70,8 +56,14 @@ impl Content {
         }
     }
 
-    pub fn render(&self, styles: &str, mode: Mode, url: &Url) -> Result<String> {
-        let env = RELOADER.acquire_env()?;
+    pub fn render(
+        &self,
+        styles: &str,
+        mode: Mode,
+        url: &Url,
+        templates: &AutoReloader,
+    ) -> Result<String> {
+        let env = templates.acquire_env()?;
         let template = env.get_template(&self.layout())?;
         let context = self.create(styles, mode, url)?;
         template
