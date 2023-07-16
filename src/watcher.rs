@@ -19,7 +19,7 @@ use crate::{
     Mode,
 };
 
-pub fn start_live_reload(paths: &Paths, context: AppContext, tx: &Sender<crate::Event>) {
+pub fn start_live_reload(paths: &Paths, context: &AppContext, tx: &Sender<crate::Event>) {
     thread::scope(|scope| {
         let css = scope.spawn(|| {
             file_watcher(&paths.styles.canonicalize()?, &["scss"], |event| {
@@ -29,13 +29,13 @@ pub fn start_live_reload(paths: &Paths, context: AppContext, tx: &Sender<crate::
 
         let content = scope.spawn(|| {
             file_watcher(&paths.content.canonicalize()?, &["dj", "toml"], |event| {
-                content_watch_handler(paths, &event, &context, tx)
+                content_watch_handler(paths, &event, context, tx)
             })
         });
 
         let templates = scope.spawn(|| {
             file_watcher(&paths.templates.canonicalize()?, &["jinja"], |event| {
-                content_watch_handler(paths, &event, &context, tx)
+                content_watch_handler(paths, &event, context, tx)
             })
         });
 
