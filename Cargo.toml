@@ -13,7 +13,6 @@ grass = { version = "0.13.0", default-features = false }
 jotdown = "0.3.0"
 lightningcss = { version = "1.0.0-alpha.44", default-features = false, features = ["browserslist", "grid"] }
 md5 = "0.7.0"
-mime_guess = { version = "2.0.4", default-features = false }
 minify-html = "0.11.1"
 minijinja = { version = "1.0.4", features = ["loader", "speedups"] }
 minijinja-autoreload = "1.0.4"
