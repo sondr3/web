@@ -670,10 +670,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "aec276c09560ce4447087aaefc19eb0c18d97e31bd05ebac38881c4723400c40"
 
 [[package]]
-name = "minify-html"
+name = "minify-html-onepass"
 version = "0.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fc4d9147754a49e80557df835eb59e743eab1bf75410a134f55dc4b9dbb692ad"
+checksum = "9900724f0fd87b52c26130040e1eaa834eacf73ffba26ea326e85a71c2325740"
 dependencies = [
  "aho-corasick 0.7.20",
  "css-minify",
@@ -1607,7 +1607,7 @@ dependencies = [
  "grass",
  "jotdown",
  "lightningcss",
- "minify-html",
+ "minify-html-onepass",
  "minijinja",
  "minijinja-autoreload",
  "notify 6.0.1",

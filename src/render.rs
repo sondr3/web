@@ -87,7 +87,7 @@ where
         write_file(
             &dest.join(&f.out_path),
             if mode.is_prod() {
-                minify::html(&f.render(css, mode, url, templates)?, &cfg)
+                minify::html(f.render(css, mode, url, templates)?.as_ref(), &cfg)?
             } else {
                 f.render(css, mode, url, templates)?.into()
             },
