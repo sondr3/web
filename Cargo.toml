@@ -13,7 +13,6 @@ flate2 = "1.0.26"
 grass = { version = "0.13.0", default-features = false }
 jotdown = "0.3.0"
 lightningcss = { version = "1.0.0-alpha.44", default-features = false, features = ["browserslist", "grid"] }
-md5 = "0.7.0"
 minify-html = "0.11.1"
 minijinja = { version = "1.0.4", features = ["loader", "speedups"] }
 minijinja-autoreload = "1.0.4"
@@ -21,7 +20,7 @@ notify = "6.0.1"
 once_cell = "1.18.0"
 quick-xml = { version = "0.29.0", features = ["serialize"] }
 serde = { version = "1.0.166", features = ["derive"] }
-sha1_smol = "1.0.0"
+sha1_smol = { version = "1.0.0", features = ["std"] }
 time = { version = "0.3.22", features = ["serde-human-readable", "local-offset"] }
 tiny_http = { version = "0.12.0", default-features = false }
 toml = "0.7.6"
