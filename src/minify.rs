@@ -4,22 +4,17 @@ use lightningcss::{
     stylesheet::{MinifyOptions, ParserOptions, StyleSheet},
     targets::{Browsers, Targets},
 };
-use minify_html::Cfg;
+use minify_html_onepass::Cfg;
 
 pub fn html_minifier_config() -> Cfg {
     Cfg {
         minify_js: true,
         minify_css: true,
-        keep_comments: false,
-        keep_html_and_head_opening_tags: true,
-        remove_bangs: false,
-        remove_processing_instructions: false,
-        ..Cfg::spec_compliant()
     }
 }
 
-pub fn html(content: &str, cfg: &Cfg) -> Vec<u8> {
-    minify_html::minify(content.as_bytes(), cfg)
+pub fn html(content: &[u8], cfg: &Cfg) -> Result<Vec<u8>> {
+    minify_html_onepass::copy(content, cfg).map_err(|e| anyhow::anyhow!("{:?}", e))
 }
 
 pub fn css(content: &str) -> Result<String> {
