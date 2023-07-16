@@ -1205,6 +1205,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "sha1_smol"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ae1a47186c03a32177042e55dbc5fd5aee900b8e0069a8d70fba96a9375cd012"
+
+[[package]]
 name = "sharded-slab"
 version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1602,6 +1608,7 @@ dependencies = [
  "anyhow",
  "brotli",
  "crossbeam-channel",
+ "data-encoding",
  "flate2",
  "grass",
  "jotdown",
@@ -1614,6 +1621,7 @@ dependencies = [
  "once_cell",
  "quick-xml",
  "serde",
+ "sha1_smol",
  "time 0.3.23",
  "tiny_http",
  "toml",

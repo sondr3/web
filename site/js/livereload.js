@@ -12,6 +12,7 @@
     socket.addEventListener("message", (event) => {
       switch (event.data.trim()) {
         case "reload":
+          console.info("Reloading page");
           location.reload();
           break;
         case "shutdown":
@@ -19,7 +20,7 @@
           setTimeout(connect, 2000);
           break;
         default:
-          console.error(`Unknown websocket message: ${event}`);
+          console.error(`Unknown websocket message: ${event.data}`);
       }
     });
 

@@ -11,10 +11,9 @@ mod sitemap;
 mod utils;
 mod watcher;
 
-use std::{sync::Arc, thread, time::Instant};
+use std::{thread, time::Instant};
 
 use anyhow::Result;
-use crossbeam_channel::Sender;
 use time::UtcOffset;
 use tracing_subscriber::{
     fmt::time::OffsetTime, layer::SubscriberExt, util::SubscriberInitExt, EnvFilter,
@@ -95,10 +94,6 @@ pub enum Event {
     Shutdown,
 }
 
-pub struct AppState {
-    _tx: Sender<Event>,
-}
-
 fn main() -> Result<()> {
     let opts = Options::from_args();
 
@@ -137,13 +132,12 @@ fn main() -> Result<()> {
     );
 
     if opts.mode.is_dev() && opts.server {
-        let (tx, _rx) = crossbeam_channel::unbounded();
-        let _state = Arc::new(AppState { _tx: tx.clone() });
+        let (tx, rx) = crossbeam_channel::unbounded();
         let root = paths.out.clone();
-        let watcher = thread::spawn(move || start_live_reload(&paths, context, &tx));
+        let watcher = thread::spawn(move || start_live_reload(&paths, &context, &tx));
 
         tracing::info!("Serving site at http://localhost:3000/...");
-        server::create_sync(&root)?;
+        server::create_sync(&root, &rx)?;
 
         watcher.join().unwrap();
     } else if opts.mode.is_prod() {
