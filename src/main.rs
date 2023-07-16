@@ -14,8 +14,8 @@ mod watcher;
 use std::{sync::Arc, thread, time::Instant};
 
 use anyhow::Result;
+use crossbeam_channel::Sender;
 use time::UtcOffset;
-use tokio::sync::broadcast;
 use tracing_subscriber::{
     fmt::time::OffsetTime, layer::SubscriberExt, util::SubscriberInitExt, EnvFilter,
 };
@@ -96,11 +96,10 @@ pub enum Event {
 }
 
 pub struct AppState {
-    tx: broadcast::Sender<Event>,
+    _tx: Sender<Event>,
 }
 
-#[tokio::main]
-async fn main() -> Result<()> {
+fn main() -> Result<()> {
     let opts = Options::from_args();
 
     let offset = UtcOffset::current_local_offset().map_or(UtcOffset::UTC, |o| o);
@@ -138,12 +137,13 @@ async fn main() -> Result<()> {
     );
 
     if opts.mode.is_dev() && opts.server {
-        let (tx, _rx) = broadcast::channel(100);
-        let state = Arc::new(AppState { tx: tx.clone() });
+        let (tx, _rx) = crossbeam_channel::unbounded();
+        let _state = Arc::new(AppState { _tx: tx.clone() });
+        let root = paths.out.clone();
         let watcher = thread::spawn(move || start_live_reload(&paths, context, &tx));
 
         tracing::info!("Serving site at http://localhost:3000/...");
-        server::create(state).await?;
+        server::create_sync(&root)?;
 
         watcher.join().unwrap();
     } else if opts.mode.is_prod() {
