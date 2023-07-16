@@ -131,8 +131,9 @@ fn main() -> Result<()> {
         done.as_millis()
     );
 
-    if opts.mode.is_dev() && opts.server {
+    if opts.server {
         let (tx, rx) = crossbeam_channel::unbounded();
+        let paths = paths.clone();
         let root = paths.out.clone();
         let watcher = thread::spawn(move || start_live_reload(&paths, &context, &tx));
 
@@ -140,8 +141,16 @@ fn main() -> Result<()> {
         server::create_sync(&root, &rx)?;
 
         watcher.join().unwrap();
-    } else if opts.mode.is_prod() {
+    }
+
+    if opts.mode.is_prod() {
+        let now = Instant::now();
+
+        minify::html(&paths.out)?;
         compress::folder(&paths.out)?;
+
+        let done = now.elapsed();
+        tracing::info!("Finished optimizing output in {:?}ms", done.as_millis());
     }
 
     Ok(())
