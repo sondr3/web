@@ -1,4 +1,5 @@
 use std::{
+    ffi::OsStr,
     net::{Ipv4Addr, SocketAddr},
     str::FromStr,
 };
@@ -36,12 +37,11 @@ fn handle_static_file(root: &std::path::Path, req: Request) -> Result<()> {
     if serve_path.exists() {
         let content = std::fs::File::open(&serve_path)?;
         let mut res = tiny_http::Response::from_file(content);
-        if let Some(mime) = mime_guess::from_path(&serve_path).first_raw() {
-            let content_type = format!("Content-Type: {mime}");
-            let content_type = tiny_http::Header::from_str(&content_type)
-                .map_err(|_| anyhow!("Invalid header"))?;
-            res.add_header(content_type);
-        }
+        let mime = match_extension(serve_path.extension());
+        let content_type = format!("Content-Type: {mime}");
+        let content_type =
+            tiny_http::Header::from_str(&content_type).map_err(|_| anyhow!("Invalid header"))?;
+        res.add_header(content_type);
 
         req.respond(res)?;
     } else {
@@ -49,4 +49,35 @@ fn handle_static_file(root: &std::path::Path, req: Request) -> Result<()> {
     }
 
     Ok(())
+}
+
+fn match_extension(extension: Option<&OsStr>) -> &'static str {
+    let extension = extension.and_then(OsStr::to_str);
+    match extension {
+        Some("atom") => "application/atom+xml",
+        Some("css") => "text/css; charset=utf8",
+        Some("csv") => "text/csv; charset=utf8",
+        Some("gif") => "image/gif",
+        Some("gz") => "application/x-gzip",
+        Some("html") => "text/html; charset=utf8",
+        Some("ico") => "image/x-icon",
+        Some("jpeg") => "image/jpeg",
+        Some("jpg") => "image/jpeg",
+        Some("js") => "application/javascript",
+        Some("json") => "application/json",
+        Some("mjs") => "application/javascript",
+        Some("mp4") => "video/mp4",
+        Some("mpeg") => "video/mpeg",
+        Some("mpg") => "video/mpeg",
+        Some("png") => "image/png",
+        Some("sitemap") => "application/xml",
+        Some("svg") => "image/svg+xml",
+        Some("txt") => "text/plain; charset=utf8",
+        Some("woff") => "application/font-woff",
+        Some("woff2") => "application/font-woff2",
+        Some("xml") => "application/xml",
+        Some("xsl") => "application/xml",
+        Some("xss") => "application/xml",
+        _ => "application/octet-stream",
+    }
 }
