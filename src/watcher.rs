@@ -4,10 +4,10 @@ use std::{
 };
 
 use anyhow::{Context, Result};
+use crossbeam_channel::Sender;
 use notify::{
     event::ModifyKind, Config, Event, EventKind, RecommendedWatcher, RecursiveMode, Watcher,
 };
-use tokio::sync::broadcast::Sender;
 use url::Url;
 
 use crate::{
