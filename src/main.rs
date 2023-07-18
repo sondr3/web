@@ -8,6 +8,7 @@ mod minify;
 mod render;
 mod server;
 mod sitemap;
+mod sse;
 mod utils;
 mod watcher;
 
@@ -137,7 +138,7 @@ fn main() -> Result<()> {
         let watcher = thread::spawn(move || start_live_reload(&paths, &context, &tx));
 
         tracing::info!("Serving site at http://localhost:3000/...");
-        server::create_sync(&root, &rx)?;
+        thread::spawn(move || server::create(&root, rx));
 
         watcher.join().unwrap();
     } else if opts.mode.is_prod() {

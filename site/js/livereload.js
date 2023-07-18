@@ -1,39 +1,34 @@
 (() => {
-  const url = "ws://localhost:3000/ws";
-  let socket = null;
+  const url = "/sse";
+  let sse = null;
 
   const connect = () => {
-    socket = new WebSocket(url);
+    sse = new EventSource(url);
 
-    socket.addEventListener("open", (_event) => {
+    sse.addEventListener("reload", (_event) => {
+      console.info("Reloading page");
+      location.reload();
+    });
+
+    sse.addEventListener("shutdown", (_event) => {
+      sse.close();
+      setTimeout(connect, 2000);
+    })
+
+    sse.addEventListener("open", (_event) => {
       console.log(`Socket connected`);
     });
 
-    socket.addEventListener("message", (event) => {
-      switch (event.data.trim()) {
-        case "reload":
-          console.info("Reloading page");
-          location.reload();
-          break;
-        case "shutdown":
-          socket.close(1000, "Waiting for server to restart");
-          setTimeout(connect, 2000);
-          break;
-        default:
-          console.error(`Unknown websocket message: ${event.data}`);
-      }
-    });
-
-    socket.addEventListener("close", (e) => {
+    sse.addEventListener("close", (e) => {
       console.log(`Socket closed, attempting to reconnect: ${e.reason}`);
-      socket = null;
+      sse = null;
 
       setTimeout(connect, 2000);
     });
 
-    socket.addEventListener("error", (e) => {
+    sse.addEventListener("error", (e) => {
       console.error(`Socket error, closing: ${e.message}`);
-      socket.close();
+      sse.close();
     });
   };
 
