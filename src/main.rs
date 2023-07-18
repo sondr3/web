@@ -8,7 +8,6 @@ mod minify;
 mod render;
 mod server;
 mod sitemap;
-mod sse;
 mod utils;
 mod watcher;
 
@@ -16,6 +15,7 @@ use std::{thread, time::Instant};
 
 use anyhow::Result;
 use time::UtcOffset;
+use tokio::sync::broadcast;
 use tracing_subscriber::{
     fmt::time::OffsetTime, layer::SubscriberExt, util::SubscriberInitExt, EnvFilter,
 };
@@ -95,7 +95,8 @@ pub enum Event {
     Shutdown,
 }
 
-fn main() -> Result<()> {
+#[tokio::main]
+async fn main() -> Result<()> {
     let opts = Options::from_args();
 
     let offset = UtcOffset::current_local_offset().map_or(UtcOffset::UTC, |o| o);
@@ -133,12 +134,13 @@ fn main() -> Result<()> {
     );
 
     if opts.mode.is_dev() && opts.server {
-        let (tx, rx) = crossbeam_channel::unbounded();
+        let (tx, _rx) = broadcast::channel(100);
         let root = paths.out.clone();
-        let watcher = thread::spawn(move || start_live_reload(&paths, &context, &tx));
+        let watcher_tx = tx.clone();
+        let watcher = thread::spawn(move || start_live_reload(&paths, &context, &watcher_tx));
 
         tracing::info!("Serving site at http://localhost:3000/...");
-        thread::spawn(move || server::create(&root, rx));
+        server::create(&root, tx).await?;
 
         watcher.join().unwrap();
     } else if opts.mode.is_prod() {
