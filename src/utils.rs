@@ -5,7 +5,6 @@ use std::{
 };
 
 use anyhow::Result;
-use sha1_smol::Sha1;
 use walkdir::{DirEntry, WalkDir};
 
 pub trait AppendExtension {
@@ -84,7 +83,7 @@ pub fn write_file(path: &Path, content: impl AsRef<[u8]>) -> Result<()> {
 }
 
 pub fn digest_filename(filename: &Path, content: &str) -> String {
-    let digest = Sha1::from(content).hexdigest();
+    let digest = format!("{:x}", md5::compute(content));
     let hash = digest.split_at(8).0;
     let Some(extension) = filename.extension() else {
         panic!("No extension found for {filename:?}");
