@@ -93,6 +93,7 @@ pub fn create(context: &Context) -> Result<String> {
     let urls: Result<Vec<_>, _> = context
         .pages
         .values()
+        .filter(|p| !p.frontmatter.special)
         .map(|e| UrlEntry::from_content(e, &context.metadata.url))
         .collect();
 

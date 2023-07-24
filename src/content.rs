@@ -19,6 +19,8 @@ pub struct Frontmatter {
     pub description: String,
     pub slug: Option<String>,
     pub layout: Option<String>,
+    #[serde(default)]
+    pub special: bool,
 }
 
 #[derive(Debug, Copy, Clone)]
