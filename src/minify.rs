@@ -6,24 +6,32 @@ use lightningcss::{
     stylesheet::{MinifyOptions, ParserOptions, StyleSheet},
     targets::{Browsers, Targets},
 };
-use minify_html_onepass::Cfg;
+use minify_html::Cfg;
 use walkdir::DirEntry;
 
 use crate::utils::find_files;
 
 pub fn html(root: &Path) -> Result<()> {
-    let cfg = Cfg {
-        minify_js: true,
-        minify_css: true,
-    };
+    let cfg = html_minifier_config();
 
     find_files(root, is_html_file).try_for_each(|f| {
-        let mut content = std::fs::read(&f)?;
-        minify_html_onepass::in_place(&mut content, &cfg)
-            .map_err(|e| anyhow::anyhow!("{:?}", e))?;
+        let content = std::fs::read(&f)?;
+        let content = minify_html::minify(&content, &cfg);
         std::fs::write(&f, content)?;
         Ok(())
     })
+}
+
+pub fn html_minifier_config() -> Cfg {
+    Cfg {
+        minify_js: true,
+        minify_css: true,
+        keep_comments: false,
+        keep_html_and_head_opening_tags: true,
+        remove_bangs: true,
+        remove_processing_instructions: true,
+        ..Cfg::spec_compliant()
+    }
 }
 
 fn is_html_file(entry: &DirEntry) -> bool {
