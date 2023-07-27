@@ -237,25 +237,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "crossbeam-channel"
-version = "0.5.8"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a33c2bf77f2df06183c3aa30d1e96c0695a313d4f9c453cc3762a6db39f99200"
-dependencies = [
- "cfg-if",
- "crossbeam-utils",
-]
-
-[[package]]
-name = "crossbeam-utils"
-version = "0.8.16"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5a22b2d63d4d1dc0b7f1b6b2747dd0088008a9be28b6ddf0b1e7d335e3037294"
-dependencies = [
- "cfg-if",
-]
-
-[[package]]
 name = "css-minify"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -700,7 +681,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "da1be5fc3154018fcb5a3f1876f05a248f469981f45c7340887f146600d22c70"
 dependencies = [
  "minijinja",
- "notify 5.2.0",
+ "notify",
 ]
 
 [[package]]
@@ -753,24 +734,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "729f63e1ca555a43fe3efa4f3efdf4801c479da85b432242a7b726f353c88486"
 dependencies = [
  "bitflags 1.3.2",
- "filetime",
- "fsevent-sys",
- "inotify",
- "kqueue",
- "libc",
- "mio",
- "walkdir",
- "windows-sys 0.45.0",
-]
-
-[[package]]
-name = "notify"
-version = "6.0.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5738a2795d57ea20abec2d6d76c6081186709c0024187cd5977265eda6598b51"
-dependencies = [
- "bitflags 1.3.2",
- "crossbeam-channel",
  "filetime",
  "fsevent-sys",
  "inotify",
@@ -1579,8 +1542,6 @@ dependencies = [
  "minify-html",
  "minijinja",
  "minijinja-autoreload",
- "notify 6.0.1",
- "once_cell",
  "quick-xml",
  "serde",
  "time 0.3.23",
