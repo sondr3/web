@@ -10,7 +10,7 @@ const res = await stylelint.lint({
     ],
   },
   files: "./site/styles/**/*.scss",
-  fix: true,
+  fix: !Deno.env.has("CI"),
   cache: true,
   formatter: "string",
 });
