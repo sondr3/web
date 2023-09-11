@@ -11,12 +11,12 @@
     "styles:fix": "stylelint --cache './site/styles/**/*.scss' --fix"
   },
   "devDependencies": {
-    "@playwright/test": "1.36.2",
-    "prettier": "3.0.0",
-    "serve": "14.2.0",
-    "stylelint": "15.10.2",
-    "stylelint-config-standard-scss": "10.0.0",
-    "stylelint-prettier": "4.0.0"
+    "@playwright/test": "1.37.1",
+    "prettier": "3.0.3",
+    "serve": "14.2.1",
+    "stylelint": "15.10.3",
+    "stylelint-config-standard-scss": "11.0.0",
+    "stylelint-prettier": "4.0.2"
   },
   "stylelint": {
     "extends": [
