@@ -1,12 +1,13 @@
 import { parse } from "std/path/parse.ts";
-import { Asset, PublicFile } from "./asset.ts";
+import { Asset, buildCSS, PublicFile } from "./asset.ts";
 import { PATHS, Paths } from "./constants.ts";
 import { Content, contentFromPath } from "./content.ts";
+import { walk } from "std/fs/walk.ts";
 
 export type Mode = "prod" | "dev";
 
 export interface Metadata {
-  url: string;
+  url: URL;
   out: string;
 }
 
@@ -20,7 +21,7 @@ export interface Context {
 
 export const create_metadata = (mode: Mode): Metadata => {
   return {
-    url: mode == "prod" ? "https://www.eons.io" : "http://localhost:3000",
+    url: new URL(mode == "prod" ? "https://www.eons.io" : "http://localhost:3000"),
     out: PATHS.out,
   };
 };
@@ -29,7 +30,6 @@ const collectPages = async (paths: Paths): Promise<Array<Content>> => {
   const pages = new Array<Content>();
 
   for await (const entry of Deno.readDir(paths.pages)) {
-    console.log(entry);
     const path = `${paths.pages}/${entry.name}`;
     const content = await contentFromPath(path, "page");
     pages.push(content);
@@ -38,17 +38,24 @@ const collectPages = async (paths: Paths): Promise<Array<Content>> => {
   return pages;
 };
 
+const collectPublicFiles = async (paths: Paths): Promise<Array<PublicFile>> => {
+  const public_files = new Array<PublicFile>();
+  for await (const entry of walk(paths.public, { includeDirs: false })) {
+    public_files.push({ path: entry.path, prefix: paths.public });
+  }
+
+  return public_files;
+};
+
 export const createContext = async (paths: Paths, mode: Mode): Promise<Context> => {
   const metadata = create_metadata(mode);
   const assets = new Map<string, Asset>();
-  const pages = new Map<string, Content>();
-  const public_files = new Array<PublicFile>();
+  const public_files = await collectPublicFiles(paths);
 
-  const collectedPages = await Promise.allSettled([collectPages(paths)]);
+  assets.set("styles.css", await buildCSS(paths, mode));
 
-  (await collectPages(paths)).forEach((page) => {
-    pages.set(parse(page.source).name, page);
-  });
+  const collectedPages = await Promise.all([collectPages(paths)]);
+  const pages = new Map(collectedPages.flat().map((page) => [parse(page.source).name, page]));
 
   return {
     metadata,

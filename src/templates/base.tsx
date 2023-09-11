@@ -2,6 +2,7 @@ import type { JSX } from "preact";
 import { type Frontmatter } from "../content.ts";
 import { Footer } from "./footer.tsx";
 import { Navbar } from "./navbar.tsx";
+import { Asset } from "../asset.ts";
 
 const THEME_LOCALSTORAGE_SCRIPT = `
 if (localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
@@ -25,13 +26,18 @@ document
   .forEach((e) => e.addEventListener("click", toggle));
 `.trim();
 
-export interface Props {
+export interface BaseProps {
+  assets: Map<string, Asset>;
+}
+
+export interface Props extends BaseProps {
   fm: Frontmatter;
   children: JSX.Element;
 }
 
-export const Base = ({ fm, children }: Props) => {
+export const Base = ({ fm, children, assets }: Props) => {
   const title = `${fm.title} => Eons :: IO ()`;
+  const css = assets.get("styles.css");
 
   return (
     <html lang="en" data-theme="light">
@@ -55,7 +61,7 @@ export const Base = ({ fm, children }: Props) => {
         />
         <link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180" />
 
-        <link href="/{{ styles }}" rel="stylesheet" />
+        <link href={`/${css?.filename}`} rel="stylesheet" />
 
         <link href="/humans.txt" rel="author" />
         <meta content="Sondre Aasemoen" name="author" />

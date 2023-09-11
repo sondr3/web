@@ -1,9 +1,10 @@
 import { parse } from "std/toml/mod.ts";
 import { createExtractor, Format, Parser } from "std/front_matter/mod.ts";
 import { z } from "zod";
-import { dirname } from "std/path/dirname.ts";
+import * as path from "std/path/mod.ts";
 import djot from "djot";
 import { renderTemplate } from "./render.tsx";
+import { Asset } from "./asset.ts";
 
 export const Frontmatter = z.object({
   title: z.string(),
@@ -29,37 +30,38 @@ export interface Content {
 
 const extractToml = createExtractor({ [Format.TOML]: parse as Parser });
 
-export const contentFromPath = async (path: string, kind: "page" | "post"): Promise<Content> => {
-  const source = await Deno.readTextFile(path);
+export const contentFromPath = async (filePath: string, kind: "page" | "post"): Promise<Content> => {
+  const source = await Deno.readTextFile(filePath);
   const { attrs, body } = extractToml(source);
   const frontmatter = Frontmatter.safeParse(attrs);
 
   if (!frontmatter.success) {
     console.error(frontmatter.error);
-    throw new Error(`Failed to parse frontmatter for ${path}`);
+    throw new Error(`Failed to parse frontmatter for ${filePath}`);
   }
 
+  const stem = path.parse(filePath).name;
   let outPath: string;
-  if (!frontmatter.data.slug) {
-    outPath = dirname(path);
+  if (frontmatter.data.slug === undefined) {
+    outPath = path.join(stem, "index.html");
   } else {
-    outPath = frontmatter.data.slug;
+    outPath = path.join(frontmatter.data.slug, "index.html");
   }
 
-  const url = frontmatter.data.slug ?? path;
+  const outUrl = path.join(frontmatter.data.slug ?? stem, "/");
 
   return {
-    source: path,
-    url: url,
+    source: filePath,
+    url: outUrl,
     outPath: outPath,
     contentType: kind,
     frontmatter: frontmatter.data,
-    content: body ?? "",
+    content: body,
   };
 };
 
-export const renderContent = (content: Content): string => {
+export const renderContent = (content: Content, assets: Map<string, Asset>): string => {
   const html = djot.renderHTML(djot.parse(content.content));
-  const rendered = renderTemplate(content.frontmatter, html);
+  const rendered = renderTemplate(content.frontmatter, html, assets);
   return rendered;
 };

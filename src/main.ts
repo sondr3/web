@@ -1,21 +1,26 @@
-import { walk } from "std/fs/mod.ts";
-import { contentFromPath, renderContent } from "./content.ts";
 import { brotli, gzip } from "./compress.ts";
-import { buildCSS } from "./asset.ts";
 import { PATHS } from "./constants.ts";
-import { minifyHTML } from "./minify.ts";
 import { createContext } from "./context.ts";
+import { buildPages, copyPublicFiles, writeAssets } from "./build.ts";
+import { handleHttp } from "./server.ts";
+
+try {
+  await Deno.remove(PATHS.out, { recursive: true });
+} catch { /* noop */ }
 
 const context = await createContext(PATHS, "dev");
-console.log(context);
 
-const css = await buildCSS(PATHS, "prod");
+await buildPages(context.pages, context.mode, context.assets);
+await writeAssets(context.assets);
+await copyPublicFiles(context.public_files);
 
-for await (const entry of walk("./site/content/pages", { includeDirs: false })) {
-  const content = await contentFromPath(entry.path, "page");
-  const rendered = renderContent(content);
-  const minified = await minifyHTML(rendered);
-  // console.log(minified);
+if (context.mode === "dev") {
+  const server = Deno.listen({ port: 3000 });
+  console.log("File server running on http://localhost:3000/");
+
+  for await (const conn of server) {
+    handleHttp(conn).catch(console.error);
+  }
 }
 
 await gzip("./dist");

@@ -1,13 +1,13 @@
 import { Frontmatter } from "../content.ts";
-import { Base } from "./base.tsx";
+import { Base, BaseProps } from "./base.tsx";
 
-interface Props {
+interface Props extends BaseProps {
   fm: Frontmatter;
 }
 
-export const Index = ({ fm }: Props) => {
+export const Index = ({ fm, assets }: Props) => {
   return (
-    <Base fm={fm}>
+    <Base fm={fm} assets={assets}>
       <main class="main">
         <section>
           <h1 id="hello">

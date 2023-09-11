@@ -1,7 +1,7 @@
 import { Frontmatter } from "../content.ts";
-import { Base } from "./base.tsx";
+import { Base, BaseProps } from "./base.tsx";
 
-interface Props {
+interface Props extends BaseProps {
   fm: Frontmatter;
   content: string;
 }
@@ -12,9 +12,9 @@ const renderContent = (fm: Frontmatter, content: string) => {
   };
 };
 
-export const Page = ({ fm, content }: Props) => {
+export const Page = ({ fm, content, assets }: Props) => {
   return (
-    <Base fm={fm}>
+    <Base fm={fm} assets={assets}>
       <main class="main">
         <article dangerouslySetInnerHTML={renderContent(fm, content)} />
       </main>
