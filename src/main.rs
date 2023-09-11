@@ -6,25 +6,30 @@ mod context;
 mod context_builder;
 mod minify;
 mod render;
+mod server;
 mod sitemap;
 mod utils;
+mod watcher;
 
-use std::time::Instant;
+use std::{thread, time::Instant};
 
 use anyhow::Result;
 use time::UtcOffset;
+use tokio::sync::broadcast;
 use tracing_subscriber::{
     fmt::time::OffsetTime, layer::SubscriberExt, util::SubscriberInitExt, EnvFilter,
 };
 
 use crate::{
     constants::Paths, context::Metadata, context_builder::ContextBuilder, render::Renderer,
+    watcher::start_live_reload,
 };
 
 const HELP_MESSAGE: &str = r#"
 web - website generator
 
 Options:
+  -s, --server Disable dev server
   -p, --production  Optimize output
   -v, --verbose     Verbose output
   -h, --help        This message
@@ -65,6 +70,7 @@ impl Mode {
 
 #[derive(Debug, Copy, Clone)]
 pub struct Options {
+    pub server: bool,
     pub mode: Mode,
     pub verbose: bool,
     pub help: bool,
@@ -75,6 +81,7 @@ impl Options {
         let args: Vec<_> = std::env::args().skip(1).collect();
 
         Self {
+            server: !args.iter().any(|e| e == "-s" || e == "--server"),
             mode: Mode::from_args(&args),
             verbose: args.iter().any(|e| e == "-v" || e == "--verbose"),
             help: args.iter().any(|e| e == "-h" || e == "--help"),
@@ -88,7 +95,8 @@ pub enum Event {
     Shutdown,
 }
 
-fn main() -> Result<()> {
+#[tokio::main]
+async fn main() -> Result<()> {
     let opts = Options::from_args();
 
     let offset = UtcOffset::current_local_offset().map_or(UtcOffset::UTC, |o| o);
@@ -125,7 +133,17 @@ fn main() -> Result<()> {
         done.as_millis()
     );
 
-    if opts.mode.is_prod() {
+    if opts.mode.is_dev() && opts.server {
+        let (tx, _rx) = broadcast::channel(100);
+        let root = paths.out.clone();
+        let watcher_tx = tx.clone();
+        let watcher = thread::spawn(move || start_live_reload(&paths, &context, &watcher_tx));
+
+        tracing::info!("Serving site at http://localhost:3000/...");
+        server::create(&root, tx).await?;
+
+        watcher.join().unwrap();
+    } else if opts.mode.is_prod() {
         let now = Instant::now();
 
         minify::html(&paths.out)?;
