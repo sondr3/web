@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::{fmt::Debug, path::PathBuf};
 
 use ahash::AHashMap;
 use anyhow::Result;
@@ -38,6 +38,18 @@ pub struct Context {
     pub templates: AutoReloader,
     pub public_files: Vec<PublicFile>,
     pub mode: Mode,
+}
+
+impl Debug for Context {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Context")
+            .field("metadata", &self.metadata)
+            .field("assets", &self.assets)
+            .field("pages", &self.pages)
+            .field("public_files", &self.public_files)
+            .field("mode", &self.mode)
+            .finish()
+    }
 }
 
 impl Context {

@@ -133,6 +133,8 @@ async fn main() -> Result<()> {
     let context = ContextBuilder::new(&paths, opts.mode)?.build(&paths, metadata, opts.mode);
     let renderer = Renderer::new(&paths.out);
 
+    println!("{:#?}", context);
+
     renderer.render_context(&context)?;
 
     let done = now.elapsed();

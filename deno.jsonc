@@ -16,7 +16,7 @@
     "htmlnano": "npm:htmlnano@^2.0.4",
     "terser": "npm:terser@^5.19.4",
     "svgo": "npm:svgo@^3.0.2",
-    "std/": "https://deno.land/std@0.200.0/",
+    "std/": "https://deno.land/std@0.201.0/",
     "stylelint": "npm:stylelint@^15.10",
     "stylelint-prettier": "npm:stylelint-prettier@^4",
     "stylelint-scss": "npm:stylelint-config-standard-scss@^10"
