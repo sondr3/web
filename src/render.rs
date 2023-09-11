@@ -8,6 +8,7 @@ use crate::{
     asset::{Asset, PublicFile},
     content::Content,
     context::Context,
+    minify::{self, html_minifier_config},
     sitemap,
     utils::{copy_file, write_file},
     Mode,
@@ -79,10 +80,16 @@ pub fn write_pages_iter<'a, F>(
 where
     F: Iterator<Item = &'a Content>,
 {
+    let cfg = html_minifier_config();
+
     pages.into_iter().try_for_each(|f| {
         write_file(
             &dest.join(&f.out_path),
-            f.render(css, mode, url, templates)?,
+            if mode.is_prod() {
+                minify::html(f.render(css, mode, url, templates)?.as_ref(), &cfg)
+            } else {
+                f.render(css, mode, url, templates)?.into()
+            },
         )
     })
 }

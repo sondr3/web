@@ -146,11 +146,10 @@ async fn main() -> Result<()> {
     } else if opts.mode.is_prod() {
         let now = Instant::now();
 
-        minify::html(&paths.out)?;
         compress::folder(&paths.out)?;
 
         let done = now.elapsed();
-        tracing::info!("Finished optimizing output in {:?}ms", done.as_millis());
+        tracing::info!("Finished compressing output in {:?}ms", done.as_millis());
     }
 
     Ok(())

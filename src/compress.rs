@@ -13,10 +13,23 @@ const VALID_EXTENSIONS: [&str; 15] = [
 ];
 
 pub fn folder(folder: &Path) -> Result<()> {
-    gzip(folder)?;
-    brotli(folder)?;
+    find_files(folder, compressible_files).try_for_each(|f| {
+        let content = std::fs::read(&f)?;
+        let gzip = f.append_extension("gz");
 
-    Ok(())
+        let mut gzip_encoder = GzEncoder::new(Vec::new(), Compression::best());
+        gzip_encoder.write_all(&content)?;
+        let gzipped = gzip_encoder.finish()?;
+
+        let brotli = f.append_extension("br");
+        let brotli_params = BrotliEncoderParams::default();
+        let mut brotli_encoder = CompressorWriter::with_params(Vec::new(), 4096, &brotli_params);
+        brotli_encoder.write_all(&content)?;
+
+        std::fs::write(gzip, gzipped).context("Failed to write compressed file")?;
+        std::fs::write(brotli, brotli_encoder.into_inner())
+            .context("Failed to write compressed file")
+    })
 }
 
 fn compressible_files(entry: &DirEntry) -> bool {
@@ -26,31 +39,4 @@ fn compressible_files(entry: &DirEntry) -> bool {
     });
 
     is_file && is_valid_extension
-}
-
-fn gzip(dir: &Path) -> Result<()> {
-    find_files(dir, compressible_files).try_for_each(|f| {
-        let content = std::fs::read(&f)?;
-        let compressed = f.append_extension("gz");
-
-        let mut encoder = GzEncoder::new(Vec::new(), Compression::best());
-        encoder.write_all(&content)?;
-        let res = encoder.finish()?;
-
-        std::fs::write(compressed, res).context("Failed to write compressed file")
-    })
-}
-
-fn brotli(dir: &Path) -> Result<()> {
-    find_files(dir, compressible_files).try_for_each(|f| {
-        let content = std::fs::read(&f)?;
-        let compressed = f.append_extension("br");
-
-        let params = BrotliEncoderParams::default();
-        let mut compressor = CompressorWriter::with_params(Vec::new(), 4096, &params);
-        compressor.write_all(&content)?;
-
-        std::fs::write(compressed, compressor.into_inner())
-            .context("Failed to write compressed file")
-    })
 }
