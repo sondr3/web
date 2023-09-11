@@ -29,7 +29,7 @@ const HELP_MESSAGE: &str = r#"
 web - website generator
 
 Options:
-  -s, --server Disable dev server
+  -s, --server      Disable dev server
   -p, --production  Optimize output
   -v, --verbose     Verbose output
   -h, --help        This message
