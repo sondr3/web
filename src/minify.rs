@@ -1,5 +1,3 @@
-use std::path::Path;
-
 use anyhow::Result;
 use lightningcss::{
     printer::PrinterOptions,
@@ -7,19 +5,9 @@ use lightningcss::{
     targets::{Browsers, Targets},
 };
 use minify_html::Cfg;
-use walkdir::DirEntry;
 
-use crate::utils::find_files;
-
-pub fn html(root: &Path) -> Result<()> {
-    let cfg = html_minifier_config();
-
-    find_files(root, is_html_file).try_for_each(|f| {
-        let content = std::fs::read(&f)?;
-        let content = minify_html::minify(&content, &cfg);
-        std::fs::write(&f, content)?;
-        Ok(())
-    })
+pub fn html(content: &[u8], cfg: &Cfg) -> Vec<u8> {
+    minify_html::minify(content, cfg)
 }
 
 pub fn html_minifier_config() -> Cfg {
@@ -32,13 +20,6 @@ pub fn html_minifier_config() -> Cfg {
         remove_processing_instructions: true,
         ..Cfg::spec_compliant()
     }
-}
-
-fn is_html_file(entry: &DirEntry) -> bool {
-    let is_file = entry.file_type().is_file();
-    let is_valid_extension = entry.path().extension().map_or(false, |e| e == "html");
-
-    is_file && is_valid_extension
 }
 
 pub fn css(content: &str) -> Result<String> {
