@@ -1,6 +1,8 @@
 {
   "tasks": {
-    "dev": "deno run --watch main.ts"
+    "build": "deno run -A src/main.ts -p",
+    "dev": "deno run --watch -A src/main.ts",
+    "stylelint": "deno run -A scripts/stylelint.ts"
   },
   "compilerOptions": {
     "jsx": "react-jsx",

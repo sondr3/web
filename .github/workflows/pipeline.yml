@@ -19,35 +19,32 @@ jobs:
           node-version: latest
           cache: "pnpm"
 
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: denoland/setup-deno@v1
         with:
-          components: rustfmt, clippy
-
-      - uses: Swatinem/rust-cache@v2
+          deno-version: v1.x
 
       - name: Install npm packages
         run: pnpm install --frozen-lockfile
 
-      - name: formatting
-        run: cargo fmt --all -- --check
+      - name: Cache
+        run: deno cache src/main.ts
 
-      - name: check
-        run: cargo check
+      - name: Formatting
+        run: deno fmt --check src/**/*.{ts,tsx}
 
-      - name: clippy
-        run: cargo clippy -- -D warnings
+      - name: Linting
+        run: deno lint src/**/*.{ts,tsx}
 
-      - name: build
-        run: cargo build --tests --bins
+      - name: Type check
+        run: |
+          deno check src/**/*.ts
+          deno check src/**/*.tsx
 
-      - name: test
-        run: cargo test -- --nocapture --quiet
+      - name: Stylelint
+        run: deno task stylelint
 
-      - name: styles
-        run: pnpm run styles
-
-      - name: build
-        run: cargo run
+      - name: Build
+        run: deno task build
 
       - uses: actions/upload-artifact@v3
         with:
@@ -70,8 +67,9 @@ jobs:
           node-version: latest
           cache: "pnpm"
 
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
 
       - name: Install npm packages
         run: pnpm install --frozen-lockfile
@@ -80,9 +78,7 @@ jobs:
         run: pnpm exec playwright install --with-deps
 
       - name: build
-        run: |
-          cargo build
-          cargo run
+        run: deno task build
 
       - name: Run Playwright tests
         run: pnpm exec playwright test
