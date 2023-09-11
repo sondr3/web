@@ -11,7 +11,7 @@ mod sitemap;
 mod utils;
 mod watcher;
 
-use std::{thread, time::Instant};
+use std::{fmt::Display, thread, time::Instant};
 
 use anyhow::Result;
 use time::UtcOffset;
@@ -42,6 +42,15 @@ Environment variables:
 pub enum Mode {
     Prod,
     Dev,
+}
+
+impl Display for Mode {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Mode::Prod => write!(f, "prod"),
+            Mode::Dev => write!(f, "dev"),
+        }
+    }
 }
 
 impl Mode {
@@ -115,7 +124,7 @@ async fn main() -> Result<()> {
         return Ok(());
     }
 
-    tracing::info!("Running in {:?} mode...", opts.mode);
+    tracing::info!("Running in {} mode...", opts.mode);
 
     let now = Instant::now();
 
