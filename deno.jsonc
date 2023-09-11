@@ -2,8 +2,20 @@
   "tasks": {
     "dev": "deno run --watch main.ts"
   },
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "https://esm.sh/preact@10.17.1"
+  },
   "imports": {
     "djot": "npm:@djot/djot@^0.2",
+    "zod": "https://deno.land/x/zod@v3.22.2/mod.ts",
+    "preact": "https://esm.sh/preact@10.17.1",
+    "preact-ssr": "https://esm.sh/preact-render-to-string@6.2.1/jsx",
+    "sass": "npm:sass@^1.66",
+    "lightningcss": "npm:lightningcss@^1.21.8",
+    "htmlnano": "npm:htmlnano@^2.0.4",
+    "terser": "npm:terser@^5.19.4",
+    "svgo": "npm:svgo@^3.0.2",
     "std/": "https://deno.land/std@0.200.0/",
     "stylelint": "npm:stylelint@^15.10",
     "stylelint-prettier": "npm:stylelint-prettier@^4",
