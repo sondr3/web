@@ -37,8 +37,8 @@ jobs:
 
       - name: Type check
         run: |
-          deno check src/**/*.ts
-          deno check src/**/*.tsx
+          deno check --unstable "src/**/*.ts"
+          deno check --unstable "src/**/*.tsx"
 
       - name: Stylelint
         run: deno task stylelint
