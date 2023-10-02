@@ -1,6 +1,6 @@
-import stylelint from "stylelint";
-import "stylelint-prettier";
-import "stylelint-scss";
+import stylelint from "npm:stylelint@^15.10";
+import "npm:stylelint-prettier@^4";
+import "npm:stylelint-config-standard-scss@^1";
 
 const res = await stylelint.lint({
   config: {
