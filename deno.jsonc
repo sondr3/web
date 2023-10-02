@@ -2,6 +2,7 @@
   "tasks": {
     "build": "deno run -A src/main.ts -p",
     "dev": "deno run --watch -A src/main.ts",
+    "check": "deno check **/*.ts && deno check **/*.tsx",
     "stylelint": "deno run -A scripts/stylelint.ts"
   },
   "compilerOptions": {

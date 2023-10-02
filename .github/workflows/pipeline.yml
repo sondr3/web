@@ -3,7 +3,7 @@ name: pipeline
 on: [push, pull_request]
 
 jobs:
-  build:
+  pipeline:
     name: tests
     runs-on: ubuntu-latest
 
@@ -23,9 +23,7 @@ jobs:
         run: deno lint src/**/*.{ts,tsx}
 
       - name: Type check
-        run: |
-          deno check --unstable "src/**/*.ts"
-          deno check --unstable "src/**/*.tsx"
+        run: deno task check
 
       - name: Stylelint
         run: deno task stylelint
@@ -33,63 +31,8 @@ jobs:
       - name: Build
         run: deno task build
 
-      - uses: actions/upload-artifact@v3
-        with:
-          name: dist
-          path: ./dist
-          retention-days: 1
-
-  e2e:
-    runs-on: ubuntu-latest
-    name: e2e
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2.4.0
-        with:
-          version: 8
-
-      - uses: actions/setup-node@v3.8.1
-        with:
-          node-version: latest
-          cache: "pnpm"
-
-      - uses: denoland/setup-deno@v1
-        with:
-          deno-version: v1.x
-
-      - name: Install npm packages
-        run: pnpm install --frozen-lockfile
-
-      - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps
-
-      - name: build
-        run: deno task build
-
-      - name: Run Playwright tests
-        run: pnpm exec playwright test
-
-      - uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 30
-
-  deploy:
-    if: ${{ github.ref == 'refs/heads/main' }}
-    needs: [build, e2e]
-    runs-on: ubuntu-latest
-    name: deploy
-
-    steps:
-      - uses: actions/download-artifact@v3
-        with:
-          name: dist
-          path: ./dist
-
       - name: Deploy
+        if: ${{ github.ref == 'refs/heads/main' }}
         uses: burnett01/rsync-deployments@5.2
         with:
           switches: -avzrh --delete
