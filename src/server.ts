@@ -26,7 +26,8 @@ export async function handleHttp(conn: Deno.Conn) {
       continue;
     }
 
-    const notFoundResponse = new Response("404 Not Found", { status: 404 });
+    const notFound = await Deno.open(path.join(PATHS.out, "404", "index.html"), { read: true });
+    const notFoundResponse = new Response(notFound.readable, { status: 404 });
     await requestEvent.respondWith(notFoundResponse);
   }
 }
