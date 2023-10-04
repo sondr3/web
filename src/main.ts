@@ -3,7 +3,7 @@ import { Args, parse } from "std/flags/mod.ts";
 import { PATHS } from "./constants.ts";
 import { createContext } from "./context.ts";
 import { buildPages, copyPublicFiles, writeAssets } from "./build.ts";
-import { handleHttp } from "./server.ts";
+import { httpServer, websocketServer } from "./server.ts";
 
 const HELP = `
 web - website generator
@@ -47,12 +47,8 @@ await writeAssets(context.assets);
 await copyPublicFiles(context.public_files);
 
 if (flags.server) {
-  const server = Deno.listen({ port: 3000 });
-  console.log("File server running on http://localhost:3000/");
-
-  for await (const conn of server) {
-    handleHttp(conn).catch(console.error);
-  }
+  void httpServer();
+  void websocketServer();
 }
 
 await gzip("./dist");
