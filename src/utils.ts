@@ -24,3 +24,11 @@ export const fileExists = async (filePath: string): Promise<boolean> => {
     return false;
   }
 };
+
+export async function asyncToArray<T>(gen: AsyncIterable<T>): Promise<T[]> {
+  const out: T[] = [];
+  for await (const x of gen) {
+    out.push(x);
+  }
+  return out;
+}

@@ -1,8 +1,9 @@
 import { parse } from "std/path/parse.ts";
-import { Asset, buildCSS, PublicFile } from "./asset.ts";
+import { Asset, assetFromPath, buildCSS, PublicFile } from "./asset.ts";
 import { PATHS, Paths } from "./constants.ts";
 import { Content, contentFromPath } from "./content.ts";
 import { walk } from "std/fs/walk.ts";
+import { asyncToArray } from "./utils.ts";
 
 export type Mode = "prod" | "dev";
 
@@ -25,6 +26,13 @@ export const create_metadata = (mode: Mode): Metadata => {
     out: PATHS.out,
   };
 };
+
+async function* collectJs(paths: Paths): AsyncGenerator<Asset> {
+  for await (const entry of Deno.readDir(paths.js)) {
+    const path = `${paths.js}/${entry.name}`;
+    yield assetFromPath(path);
+  }
+}
 
 const collectPages = async (paths: Paths): Promise<Array<Content>> => {
   const pages = new Array<Content>();
@@ -53,6 +61,7 @@ export const createContext = async (paths: Paths, mode: Mode): Promise<Context> 
   const public_files = await collectPublicFiles(paths);
 
   assets.set("styles.css", await buildCSS(paths, mode));
+  (await asyncToArray(collectJs(paths))).map((a) => assets.set(a.filename, a));
 
   const collectedPages = await Promise.all([collectPages(paths)]);
   const pages = new Map(collectedPages.flat().map((page) => [parse(page.source).name, page]));
