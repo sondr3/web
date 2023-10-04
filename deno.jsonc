@@ -3,7 +3,8 @@
     "build": "deno run -A src/main.ts -p",
     "dev": "deno run --watch -A src/main.ts",
     "check": "deno check **/*.ts && deno check **/*.tsx",
-    "stylelint": "deno run --vendor -A scripts/stylelint.ts"
+    "stylelint": "deno run --vendor -A scripts/stylelint.ts",
+    "serve": "pnpx serve dist"
   },
   "compilerOptions": {
     "jsx": "react-jsx",

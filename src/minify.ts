@@ -29,6 +29,6 @@ export const minifyHTML = async (html: string): Promise<string> => {
     minifyCss: false,
   };
 
-  const res = await htmlnano.process(html, config, htmlnano.presets.max);
+  const res = await htmlnano.process(html, config, htmlnano.presets.safe);
   return res.html;
 };

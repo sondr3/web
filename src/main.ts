@@ -46,7 +46,7 @@ await buildPages(context.pages, context.mode, context.assets);
 await writeAssets(context.assets);
 await copyPublicFiles(context.public_files);
 
-if (flags.server) {
+if (flags.server && !flags.production) {
   void httpServer();
   void websocketServer();
 }
