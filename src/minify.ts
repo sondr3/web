@@ -1,4 +1,4 @@
-import { transform } from "lightningcss";
+import { browserslistToTargets, transform } from "lightningcss";
 import htmlnano from "htmlnano";
 import "terser";
 import "svgo";
@@ -18,6 +18,7 @@ export const minifyCSS = (css: string): string => {
     filename: "styles.css",
     code: new TextEncoder().encode(css),
     minify: true,
+    targets: browserslistToTargets(["> .5% and last 5 versions"]),
   });
 
   return new TextDecoder().decode(code);
