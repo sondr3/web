@@ -1,6 +1,7 @@
 import * as path from "std/path/mod.ts";
 import { PATHS } from "./constants.ts";
 import { fileExists } from "./utils.ts";
+import { extname } from "std/path/mod.ts";
 
 export function httpServer() {
   const server = Deno.listen({ port: 3000 });
@@ -27,7 +28,11 @@ const respondWithFile = async (req: Deno.RequestEvent, path: string): Promise<bo
   if (!(await fileExists(path))) return false;
   const file = await Deno.open(path, { read: true });
   const readableStream = file.readable;
-  const response = new Response(readableStream);
+  const response = new Response(readableStream, {
+    headers: new Headers({
+      "Content-Type": matchExtension(path),
+    }),
+  });
   await req.respondWith(response);
 
   return true;
@@ -67,5 +72,56 @@ export async function handleWebsocket(conn: Deno.Conn) {
     });
 
     req.respondWith(response);
+  }
+}
+
+function matchExtension(extension: string | null): string {
+  const normalizedExtension = extension ? extname(extension).slice(1) : null;
+  switch (normalizedExtension) {
+    case "atom":
+      return "application/atom+xml";
+    case "css":
+      return "text/css; charset=utf8";
+    case "csv":
+      return "text/csv; charset=utf8";
+    case "gif":
+      return "image/gif";
+    case "gz":
+      return "application/x-gzip";
+    case "html":
+      return "text/html; charset=utf8";
+    case "ico":
+      return "image/x-icon";
+    case "jpeg":
+    case "jpg":
+      return "image/jpeg";
+    case "js":
+    case "cjs":
+    case "mjs":
+      return "application/javascript";
+    case "json":
+      return "application/json";
+    case "mp4":
+      return "video/mp4";
+    case "mpeg":
+    case "mpg":
+      return "video/mpeg";
+    case "png":
+      return "image/png";
+    case "svg":
+      return "image/svg+xml";
+    case "txt":
+      return "text/plain; charset=utf8";
+    case "woff":
+      return "application/font-woff";
+    case "woff2":
+      return "application/font-woff2";
+    case "sitemap":
+    case "xml":
+    case "xsl":
+    case "xss":
+      return "application/xml";
+    default:
+      return "application/octet-stream";
   }
 }
