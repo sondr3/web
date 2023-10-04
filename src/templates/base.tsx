@@ -98,7 +98,7 @@ export const Base = ({ fm, children, assets }: Props) => {
 
         <meta content="sondr3" name="twitter:site" />
 
-        <script src="livereload.js"></script>
+        <script src="/livereload.js"></script>
         <script dangerouslySetInnerHTML={{ __html: THEME_LOCALSTORAGE_SCRIPT }} />
       </head>
       <body class="root">
