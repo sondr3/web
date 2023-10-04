@@ -10,6 +10,7 @@ export type Mode = "prod" | "dev";
 export interface Metadata {
   url: URL;
   out: string;
+  mode: Mode;
 }
 
 export interface Context {
@@ -24,6 +25,7 @@ export const create_metadata = (mode: Mode): Metadata => {
   return {
     url: new URL(mode == "prod" ? "https://www.eons.io" : "http://localhost:3000"),
     out: PATHS.out,
+    mode,
   };
 };
 

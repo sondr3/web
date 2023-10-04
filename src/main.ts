@@ -4,6 +4,7 @@ import { PATHS } from "./constants.ts";
 import { createContext } from "./context.ts";
 import { buildPages, copyPublicFiles, writeAssets } from "./build.ts";
 import { httpServer, websocketServer } from "./server.ts";
+import { createSitemap } from "./sitemap.ts";
 
 const HELP = `
 web - website generator
@@ -51,5 +52,6 @@ if (flags.server && !flags.production) {
   void websocketServer();
 }
 
+await createSitemap(context);
 await gzip("./dist");
 await brotli("./dist");
