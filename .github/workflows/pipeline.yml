@@ -28,6 +28,9 @@ jobs:
       - name: Stylelint
         run: deno task stylelint
 
+      - name: Test
+        run: deno test
+
       - name: Build
         run: deno task build
 
