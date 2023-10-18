@@ -33,7 +33,9 @@ const respondWithFile = async (req: Deno.RequestEvent, path: string): Promise<bo
       "Content-Type": matchExtension(path),
     }),
   });
-  await req.respondWith(response);
+  try {
+    await req.respondWith(response);
+  } catch { /* noop */ }
 
   return true;
 };
