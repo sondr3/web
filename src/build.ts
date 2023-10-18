@@ -18,12 +18,14 @@ export const copyPublicFiles = async (files: Array<PublicFile>): Promise<void> =
 
 export const writeAssets = async (assets: Map<string, Asset>): Promise<void> => {
   await Promise.allSettled(
-    Array.from(assets.values()).map(async (asset) => {
-      const out = path.join(PATHS.out, asset.filename);
-      await ensureDir(path.dirname(out));
-      await Deno.writeTextFile(out, asset.content);
-    }),
+    Array.from(assets.values()).map(async (asset) => await writeAsset(asset)),
   );
+};
+
+export const writeAsset = async (asset: Asset): Promise<void> => {
+  const out = path.join(PATHS.out, asset.filename);
+  await ensureDir(path.dirname(out));
+  await Deno.writeTextFile(out, asset.content);
 };
 
 export const buildPages = async (
@@ -32,16 +34,18 @@ export const buildPages = async (
   assets: Map<string, Asset>,
 ): Promise<void> => {
   await Promise.allSettled(
-    Array.from(pages.values()).map(async (page) => {
-      const out = path.join(PATHS.out, page.outPath);
-      await ensureDir(path.dirname(out));
-      let rendered = renderContent(page, assets);
-
-      if (mode === "prod") {
-        rendered = await minifyHTML(rendered);
-      }
-
-      await Deno.writeTextFile(out, rendered);
-    }),
+    Array.from(pages.values()).map(async (page) => await buildPage(page, mode, assets)),
   );
+};
+
+export const buildPage = async (page: Content, mode: Mode, assets: Map<string, Asset>): Promise<void> => {
+  const out = path.join(PATHS.out, page.outPath);
+  await ensureDir(path.dirname(out));
+  let rendered = renderContent(page, assets);
+
+  if (mode === "prod") {
+    rendered = await minifyHTML(rendered);
+  }
+
+  await Deno.writeTextFile(out, rendered);
 };

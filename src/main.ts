@@ -5,6 +5,7 @@ import { createContext } from "./context.ts";
 import { buildPages, copyPublicFiles, writeAssets } from "./build.ts";
 import { httpServer, websocketServer } from "./server.ts";
 import { createSitemap } from "./sitemap.ts";
+import { startWatcher } from "./watcher.ts";
 
 const HELP = `
 web - website generator
@@ -32,14 +33,14 @@ const flags = parse(Deno.args, {
   alias: { s: "server", v: "verbose", p: "production", h: "help" },
 }) as Flags;
 
-try {
-  await Deno.remove(PATHS.out, { recursive: true });
-} catch { /* noop */ }
-
 if (flags.help) {
   console.log(HELP);
   Deno.exit(0);
 }
+
+try {
+  await Deno.remove(PATHS.out, { recursive: true });
+} catch { /* noop */ }
 
 const context = await createContext(PATHS, flags.production ? "prod" : "dev");
 
@@ -48,8 +49,10 @@ await writeAssets(context.assets);
 await copyPublicFiles(context.public_files);
 
 if (flags.server && !flags.production) {
+  const tx = new BroadcastChannel("tx");
+  void startWatcher(context, tx);
   void httpServer();
-  void websocketServer();
+  void websocketServer(tx);
 }
 
 await createSitemap(context);
