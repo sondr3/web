@@ -14,13 +14,13 @@
     "djot": "npm:@djot/djot@^0.2.4",
     "htmlnano": "npm:htmlnano@^2.0.4",
     "lightningcss": "npm:lightningcss@^1.22.0",
-    "preact-ssr": "https://esm.sh/preact-render-to-string@6.2.1/jsx",
+    "preact-ssr": "https://esm.sh/preact-render-to-string@6.2.2/jsx",
     "preact": "https://esm.sh/preact@10.18.1",
-    "sass": "npm:sass@^1.68",
+    "sass": "npm:sass@^1.69",
     "std/": "https://deno.land/std@0.203.0/",
     "svgo": "npm:svgo@^3.0.2",
-    "terser": "npm:terser@^5.20.0",
-    "zod": "https://deno.land/x/zod@v3.22.2/mod.ts"
+    "terser": "npm:terser@^5.22.0",
+    "zod": "https://deno.land/x/zod@v3.22.4/mod.ts"
   },
   "fmt": {
     "lineWidth": 120
