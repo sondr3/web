@@ -14,12 +14,12 @@ export function httpServer() {
   })();
 }
 
-export function websocketServer() {
+export function websocketServer(tx: BroadcastChannel) {
   const webSocketServer = Deno.listen({ port: 3001 });
   console.log("Websocket server running on ws://localhost:3001/");
   (async () => {
     for await (const conn of webSocketServer) {
-      void handleWebsocket(conn);
+      void handleWebsocket(tx, conn);
     }
   })();
 }
@@ -58,7 +58,7 @@ export async function handleHttp(conn: Deno.Conn) {
   }
 }
 
-export async function handleWebsocket(conn: Deno.Conn) {
+export async function handleWebsocket(tx: BroadcastChannel, conn: Deno.Conn) {
   const wsConn = Deno.serveHttp(conn);
   for await (const req of wsConn) {
     if (req.request.headers.get("upgrade") != "websocket") {
@@ -70,6 +70,12 @@ export async function handleWebsocket(conn: Deno.Conn) {
         socket.send("pong");
       }
     });
+
+    tx.onmessage = (event) => {
+      if (event.data.type === "reload" && socket.readyState === WebSocket.OPEN) {
+        socket.send("reload");
+      }
+    };
 
     req.respondWith(response);
   }

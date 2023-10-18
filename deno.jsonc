@@ -1,8 +1,8 @@
 {
   "tasks": {
-    "build": "deno run -A src/main.ts -p",
-    "dev": "deno run --watch -A src/main.ts",
-    "check": "deno check **/*.ts && deno check **/*.tsx",
+    "build": "deno run --unstable -A src/main.ts -p",
+    "dev": "deno run --unstable --watch -A src/main.ts",
+    "check": "deno check --unstable **/*.ts && deno check **/*.tsx",
     "stylelint": "deno run --vendor -A scripts/stylelint.ts",
     "serve": "pnpx serve dist"
   },
@@ -11,7 +11,7 @@
     "jsxImportSource": "https://esm.sh/preact@10.18.1"
   },
   "imports": {
-    "djot": "npm:@djot/djot@^0.2",
+    "djot": "npm:@djot/djot@^0.2.4",
     "htmlnano": "npm:htmlnano@^2.0.4",
     "lightningcss": "npm:lightningcss@^1.22.0",
     "preact-ssr": "https://esm.sh/preact-render-to-string@6.2.1/jsx",

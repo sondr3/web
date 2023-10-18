@@ -36,7 +36,7 @@ async function* collectJs(paths: Paths): AsyncGenerator<Asset> {
   }
 }
 
-const collectPages = async (paths: Paths): Promise<Array<Content>> => {
+export const collectPages = async (paths: Paths): Promise<Map<string, Content>> => {
   const pages = new Array<Content>();
 
   for await (const entry of Deno.readDir(paths.pages)) {
@@ -45,7 +45,7 @@ const collectPages = async (paths: Paths): Promise<Array<Content>> => {
     pages.push(content);
   }
 
-  return pages;
+  return new Map(pages.flat().map((page) => [parse(page.source).name, page]));
 };
 
 const collectPublicFiles = async (paths: Paths): Promise<Array<PublicFile>> => {
@@ -65,8 +65,7 @@ export const createContext = async (paths: Paths, mode: Mode): Promise<Context> 
   assets.set("styles.css", await buildCSS(paths, mode));
   (await asyncToArray(collectJs(paths))).map((a) => assets.set(a.filename, a));
 
-  const collectedPages = await Promise.all([collectPages(paths)]);
-  const pages = new Map(collectedPages.flat().map((page) => [parse(page.source).name, page]));
+  const pages = await collectPages(paths);
 
   return {
     metadata,
