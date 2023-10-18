@@ -5,7 +5,7 @@ import * as path from "std/path/mod.ts";
 import { PATHS } from "./constants.ts";
 import { copy } from "std/fs/copy.ts";
 import { Content, renderContent } from "./content.ts";
-import { Mode } from "./context.ts";
+import { Context } from "./context.ts";
 import { minifyHTML } from "./minify.ts";
 
 export const copyPublicFiles = async (files: Array<PublicFile>): Promise<void> => {
@@ -30,20 +30,19 @@ export const writeAsset = async (asset: Asset): Promise<void> => {
 
 export const buildPages = async (
   pages: Map<string, Content>,
-  mode: Mode,
-  assets: Map<string, Asset>,
+  context: Context,
 ): Promise<void> => {
   await Promise.allSettled(
-    Array.from(pages.values()).map(async (page) => await buildPage(page, mode, assets)),
+    Array.from(pages.values()).map(async (page) => await buildPage(page, context)),
   );
 };
 
-export const buildPage = async (page: Content, mode: Mode, assets: Map<string, Asset>): Promise<void> => {
+export const buildPage = async (page: Content, context: Context): Promise<void> => {
   const out = path.join(PATHS.out, page.outPath);
   await ensureDir(path.dirname(out));
-  let rendered = renderContent(page, assets);
+  let rendered = renderContent(page, context);
 
-  if (mode === "prod") {
+  if (context.metadata.mode === "prod") {
     rendered = await minifyHTML(rendered);
   }
 

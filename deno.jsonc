@@ -2,7 +2,7 @@
   "tasks": {
     "build": "deno run --unstable -A src/main.ts -p",
     "dev": "deno run --unstable --watch -A src/main.ts",
-    "check": "deno check --unstable **/*.ts && deno check **/*.tsx",
+    "check": "deno check --unstable src/**/*.ts && deno check --unstable src/**/*.tsx",
     "stylelint": "deno run --vendor -A scripts/stylelint.ts",
     "serve": "pnpx serve dist"
   },

@@ -44,7 +44,7 @@ try {
 
 const context = await createContext(PATHS, flags.production ? "prod" : "dev");
 
-await buildPages(context.pages, context.mode, context.assets);
+await buildPages(context.pages, context);
 await writeAssets(context.assets);
 await copyPublicFiles(context.public_files);
 

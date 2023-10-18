@@ -14,7 +14,7 @@ const contentWatcher = async (context: Context, tx: BroadcastChannel): Promise<v
     const pages = await collectPages(PATHS);
     context.pages = pages;
 
-    await buildPages(pages, context.mode, context.assets);
+    await buildPages(pages, context);
     tx.dispatchEvent(new MessageEvent("message", { data: { type: "reload" } }));
   }
 };

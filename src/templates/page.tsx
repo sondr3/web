@@ -1,10 +1,5 @@
 import { Frontmatter } from "../content.ts";
-import { Base, BaseProps } from "./base.tsx";
-
-interface Props extends BaseProps {
-  fm: Frontmatter;
-  content: string;
-}
+import { Base, TemplateProps } from "./base.tsx";
 
 const renderContent = (fm: Frontmatter, content: string) => {
   return {
@@ -12,11 +7,11 @@ const renderContent = (fm: Frontmatter, content: string) => {
   };
 };
 
-export const Page = ({ fm, content, assets }: Props) => {
+export const Page = ({ content, context }: TemplateProps) => {
   return (
-    <Base fm={fm} assets={assets}>
+    <Base content={content} context={context}>
       <main class="main">
-        <article dangerouslySetInnerHTML={renderContent(fm, content)} />
+        <article dangerouslySetInnerHTML={renderContent(content.frontmatter, content.rendered)} />
       </main>
     </Base>
   );

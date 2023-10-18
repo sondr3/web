@@ -4,7 +4,7 @@ import { z } from "zod";
 import * as path from "std/path/mod.ts";
 import djot from "djot";
 import { renderTemplate } from "./render.tsx";
-import { Asset } from "./asset.ts";
+import { Context } from "./context.ts";
 
 export const Frontmatter = z.object({
   title: z.string(),
@@ -26,6 +26,7 @@ export interface Content {
   contentType: "page" | "post";
   frontmatter: Frontmatter;
   content: string;
+  rendered: string;
 }
 
 const extractToml = createExtractor({ [Format.TOML]: parse as Parser });
@@ -57,11 +58,11 @@ export const contentFromPath = async (filePath: string, kind: "page" | "post"): 
     contentType: kind,
     frontmatter: frontmatter.data,
     content: body,
+    rendered: djot.renderHTML(djot.parse(body)),
   };
 };
 
-export const renderContent = (content: Content, assets: Map<string, Asset>): string => {
-  const html = djot.renderHTML(djot.parse(content.content));
-  const rendered = renderTemplate(content.frontmatter, html, assets);
+export const renderContent = (content: Content, context: Context): string => {
+  const rendered = renderTemplate(content, context);
   return rendered;
 };
