@@ -2,9 +2,6 @@
 
 # build output
 dist/
-.output/
-old/
-.astro/
 
 ### Created by https://www.gitignore.io
 ### Node ###
@@ -151,8 +148,3 @@ dist
 /test-results/
 /playwright-report/
 /playwright/.cache/
-
-
-# Added by cargo
-
-/target
