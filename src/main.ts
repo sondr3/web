@@ -54,7 +54,7 @@ const site = await Site.create(flags.production ? "prod" : "dev");
 await buildPages(site.content, site);
 await writeAssets(site.assets);
 await copyPublicFiles(site.staticFiles);
-await createSitemap(site);
+await createSitemap(site.content.values());
 
 if (flags.server && !flags.production) {
   const tx = new BroadcastChannel("tx");

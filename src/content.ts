@@ -6,8 +6,13 @@ import djot from "djot";
 import { renderTemplate } from "./render.tsx";
 import { Site } from "./site.ts";
 import * as log from "std/log/mod.ts";
+import { Path } from "./paths.ts";
+import { PATHS } from "./constants.ts";
+import { ensureDir } from "std/fs/mod.ts";
+import { minifyHTML } from "./minify.ts";
 
 const logger = log.getLogger();
+const extractToml = createExtractor({ [Format.TOML]: parse as Parser });
 
 export const Frontmatter = z.object({
   title: z.string(),
@@ -22,47 +27,74 @@ export const Frontmatter = z.object({
 
 export type Frontmatter = z.infer<typeof Frontmatter>;
 
-export interface Content {
-  source: string;
-  outPath: string;
-  url: string;
-  contentType: "page" | "post";
-  frontmatter: Frontmatter;
-  content: string;
-  rendered: string;
+export class Content {
+  public sourcePath: Path;
+  public url: URL;
+  public contentType: "page" | "post";
+  public frontmatter: Frontmatter;
+
+  private sourceContent: string;
+
+  private constructor(
+    source: Path,
+    url: URL,
+    contentType: "page" | "post",
+    frontmatter: Frontmatter,
+    body: string,
+  ) {
+    this.sourcePath = source;
+    this.url = url;
+    this.contentType = contentType;
+    this.frontmatter = frontmatter;
+    this.sourceContent = body;
+  }
+
+  public get outPath(): Path {
+    if (this.frontmatter.slug === undefined) {
+      return new Path(path.join(PATHS.out, this.sourcePath.stem, "index.html"));
+    } else {
+      return new Path(path.join(PATHS.out, this.frontmatter.slug, "index.html"));
+    }
+  }
+
+  public get content() {
+    return djot.renderHTML(djot.parse(this.sourceContent));
+  }
+
+  public render(site: Site) {
+    return renderTemplate(this, site);
+  }
+
+  public async write(site: Site) {
+    await ensureDir(path.dirname(this.outPath.asAbsolute()));
+    let rendered = this.render(site);
+
+    if (site.isProd()) {
+      rendered = await minifyHTML(rendered);
+    }
+
+    await Deno.writeTextFile(this.outPath.asAbsolute(), rendered);
+  }
+
+  public static async fromPath(filePath: string, kind: "page" | "post", baseURL: URL): Promise<Content> {
+    const source = await Deno.readTextFile(filePath);
+    const { attrs, body } = extractToml(source);
+    const frontmatter = Frontmatter.safeParse(attrs);
+
+    if (!frontmatter.success) {
+      logger.error(frontmatter.error);
+      throw new Error(`Failed to parse frontmatter for ${filePath}`);
+    }
+
+    const stem = path.parse(filePath).name;
+    const url = new URL(frontmatter.data.slug ?? stem, baseURL);
+
+    return new Content(
+      new Path(filePath),
+      url,
+      kind,
+      frontmatter.data,
+      body,
+    );
+  }
 }
-
-const extractToml = createExtractor({ [Format.TOML]: parse as Parser });
-
-export const contentFromPath = async (filePath: string, kind: "page" | "post"): Promise<Content> => {
-  const source = await Deno.readTextFile(filePath);
-  const { attrs, body } = extractToml(source);
-  const frontmatter = Frontmatter.safeParse(attrs);
-
-  if (!frontmatter.success) {
-    logger.error(frontmatter.error);
-    throw new Error(`Failed to parse frontmatter for ${filePath}`);
-  }
-
-  const stem = path.parse(filePath).name;
-  let outPath: string;
-  if (frontmatter.data.slug === undefined) {
-    outPath = path.join(stem, "index.html");
-  } else {
-    outPath = path.join(frontmatter.data.slug, "index.html");
-  }
-
-  const outUrl = path.join(frontmatter.data.slug ?? stem, "/");
-
-  return {
-    source: filePath,
-    url: outUrl,
-    outPath: outPath,
-    contentType: kind,
-    frontmatter: frontmatter.data,
-    content: body,
-    rendered: djot.renderHTML(djot.parse(body)),
-  };
-};
-
-export const renderContent = (content: Content, site: Site): string => renderTemplate(content, site);

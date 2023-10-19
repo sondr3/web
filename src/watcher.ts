@@ -1,9 +1,9 @@
-import { buildPage, buildPages, writeAssets } from "./build.ts";
+import { writeAssets } from "./build.ts";
 import { PATHS } from "./constants.ts";
 import { Site } from "./site.ts";
 import * as log from "std/log/mod.ts";
 import { debounce } from "std/async/debounce.ts";
-import { contentFromPath } from "./content.ts";
+import { Content } from "./content.ts";
 import { firstFilename } from "./utils.ts";
 
 async function* createWatcher(path: string): AsyncGenerator<Deno.FsEvent> {
@@ -57,9 +57,9 @@ export class Watcher {
 
   private handleContent = debounce(async (event: Deno.FsEvent) => {
     this.logger.info(`Rebuilding page ${firstFilename(event)}`);
-    const content = await contentFromPath(event.paths[0], "page");
+    const content = await Content.fromPath(event.paths[0], "page", this.site.url);
     this.site.collectContent(content);
-    await buildPage(content, this.site);
+    await content.write(this.site);
 
     this.tx.dispatchEvent(new MessageEvent("message", { data: { type: "reload" } }));
   }, 200);

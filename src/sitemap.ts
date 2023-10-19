@@ -1,6 +1,5 @@
 import { PATHS } from "./constants.ts";
 import { Content } from "./content.ts";
-import { Site } from "./site.ts";
 import * as fs from "std/fs/mod.ts";
 
 export type ChangeFreq = "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
@@ -12,11 +11,9 @@ export interface UrlEntry {
   priority?: number;
 }
 
-export const urlFromContent = ({ url, frontmatter, contentType }: Content, base: URL): UrlEntry => {
-  const loc = new URL(url, base);
-
+export const urlFromContent = ({ frontmatter, contentType, url }: Content): UrlEntry => {
   return {
-    loc,
+    loc: url,
     lastmod: frontmatter.lastModified.toISOString(),
     changefreq: contentType === "page" ? "yearly" : "monthly",
     priority: contentType === "page" ? 0.8 : 0.5,
@@ -36,10 +33,10 @@ export const renderUrlEntry = (entry: UrlEntry): string => {
     .trim();
 };
 
-export const createSitemap = async (site: Site): Promise<void> => {
-  const urls = [...site.content.values()]
+export const createSitemap = async (content: Iterable<Content>): Promise<void> => {
+  const urls = Array.from(content)
     .filter((p) => !p.frontmatter.special)
-    .map((page) => urlFromContent(page, site.url));
+    .map((page) => urlFromContent(page));
 
   const sitemap = `
 <?xml version="1.0" encoding="UTF-8"?>

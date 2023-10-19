@@ -11,7 +11,7 @@ export const Page = ({ content, site }: TemplateProps) => {
   return (
     <Base content={content} site={site}>
       <main class="main">
-        <article className="prose" dangerouslySetInnerHTML={renderContent(content.frontmatter, content.rendered)} />
+        <article className="prose" dangerouslySetInnerHTML={renderContent(content.frontmatter, content.content)} />
       </main>
     </Base>
   );

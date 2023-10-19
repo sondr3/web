@@ -1,7 +1,6 @@
-import { parse } from "std/path/parse.ts";
 import { Asset, StaticAsset } from "./asset.ts";
 import { PATHS } from "./constants.ts";
-import { Content, contentFromPath } from "./content.ts";
+import { Content } from "./content.ts";
 import { walk } from "std/fs/walk.ts";
 import * as log from "std/log/mod.ts";
 
@@ -59,13 +58,13 @@ export class Site {
   }
 
   public collectContent(content: Content): void {
-    this.content.set(content.source, content);
+    this.content.set(content.sourcePath.filename, content);
   }
 
   public async collectContents(): Promise<void> {
     for await (const entry of Deno.readDir(PATHS.pages)) {
       const path = `${PATHS.pages}/${entry.name}`;
-      const content = await contentFromPath(path, "page");
+      const content = await Content.fromPath(path, "page", this.url);
       this.collectContent(content);
     }
   }

@@ -1,9 +1,11 @@
 import { parse } from "std/path/parse.ts";
-import { Paths } from "./constants.ts";
+import { PATHS, Paths } from "./constants.ts";
 import { Mode } from "./site.ts";
 import * as sass from "sass";
 import { digestFilename } from "./utils.ts";
 import { minifyCSS } from "./minify.ts";
+import * as path from "std/path/mod.ts";
+import { ensureDir } from "std/fs/ensure_dir.ts";
 
 export interface StaticAsset {
   path: string;
@@ -19,6 +21,12 @@ export class Asset {
     this.content = content;
   }
 
+  public async write() {
+    const out = path.join(PATHS.out, this.filename);
+    await ensureDir(path.dirname(out));
+    await Deno.writeTextFile(out, this.content);
+  }
+
   static async fromPath(path: string): Promise<Asset> {
     const content = await Deno.readTextFile(path);
     const filename = parse(path).base;
@@ -31,7 +39,7 @@ export class Asset {
     const res = sass.compile(`${paths.styles}/styles.scss`);
 
     if (mode === "dev") {
-      return { filename: outPath, content: res.css };
+      return new Asset(outPath, res.css);
     }
 
     const digest = await digestFilename(outPath, res.css);
