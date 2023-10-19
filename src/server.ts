@@ -3,6 +3,19 @@ import * as fs from "std/fs/mod.ts";
 import { PATHS } from "./constants.ts";
 import { extname } from "std/path/mod.ts";
 
+export class Server {
+  private tx: BroadcastChannel;
+
+  constructor(tx: BroadcastChannel) {
+    this.tx = tx;
+  }
+
+  public start = (): void => {
+    void httpServer();
+    void websocketServer(this.tx);
+  };
+}
+
 export function httpServer() {
   const server = Deno.listen({ port: 3000 });
   console.log(`File server running on http://localhost:3000/`);
@@ -40,7 +53,7 @@ const respondWithFile = async (req: Deno.RequestEvent, path: string): Promise<bo
   return true;
 };
 
-export async function handleHttp(conn: Deno.Conn) {
+async function handleHttp(conn: Deno.Conn) {
   const httpConn = Deno.serveHttp(conn);
   for await (const requestEvent of httpConn) {
     const url = new URL(requestEvent.request.url);
@@ -60,7 +73,7 @@ export async function handleHttp(conn: Deno.Conn) {
   }
 }
 
-export async function handleWebsocket(tx: BroadcastChannel, conn: Deno.Conn) {
+async function handleWebsocket(tx: BroadcastChannel, conn: Deno.Conn) {
   const wsConn = Deno.serveHttp(conn);
   for await (const req of wsConn) {
     if (req.request.headers.get("upgrade") != "websocket") {

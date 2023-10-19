@@ -3,7 +3,7 @@ import { Args, parse } from "std/flags/mod.ts";
 import { PATHS } from "./constants.ts";
 import { Site } from "./site.ts";
 import { buildPages, copyPublicFiles, writeAssets } from "./build.ts";
-import { httpServer, websocketServer } from "./server.ts";
+import { Server } from "./server.ts";
 import { createSitemap } from "./sitemap.ts";
 import { Watcher } from "./watcher.ts";
 
@@ -51,8 +51,7 @@ await copyPublicFiles(site.staticFiles);
 if (flags.server && !flags.production) {
   const tx = new BroadcastChannel("tx");
   void new Watcher(site, tx).start();
-  void httpServer();
-  void websocketServer(tx);
+  void new Server(tx).start();
 }
 
 await createSitemap(site);
