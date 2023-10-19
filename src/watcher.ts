@@ -2,29 +2,6 @@ import { buildPages, writeAssets } from "./build.ts";
 import { PATHS } from "./constants.ts";
 import { Site } from "./site.ts";
 
-export const startWatcher = (site: Site, tx: BroadcastChannel): void => {
-  (async () => await contentWatcher(site, tx))();
-  (async () => await scssWatcher(site, tx))();
-};
-
-const contentWatcher = async (site: Site, tx: BroadcastChannel): Promise<void> => {
-  const watcher = createWatcher(PATHS.content);
-  for await (const _event of watcher) {
-    await site.collectPages();
-    await buildPages(site.pages, site);
-    tx.dispatchEvent(new MessageEvent("message", { data: { type: "reload" } }));
-  }
-};
-
-const scssWatcher = async (site: Site, tx: BroadcastChannel): Promise<void> => {
-  const watcher = createWatcher(PATHS.styles);
-  for await (const _event of watcher) {
-    await site.collectCSS();
-    await writeAssets(site.assets);
-    tx.dispatchEvent(new MessageEvent("message", { data: { type: "reload" } }));
-  }
-};
-
 async function* createWatcher(path: string): AsyncGenerator<Deno.FsEvent> {
   const watcher = Deno.watchFs(path, { recursive: true });
   for await (const event of watcher) {
@@ -39,3 +16,36 @@ async function* createWatcher(path: string): AsyncGenerator<Deno.FsEvent> {
 const filterEvent = ({ kind }: Deno.FsEvent): boolean => {
   return kind === "create" || kind === "modify" || kind === "remove";
 };
+
+export class Watcher {
+  private site: Site;
+  private tx: BroadcastChannel;
+
+  constructor(site: Site, tx: BroadcastChannel) {
+    this.site = site;
+    this.tx = tx;
+  }
+
+  public start = (): void => {
+    (async () => await this.watchContent())();
+    (async () => await this.watchSCSS())();
+  };
+
+  private async watchSCSS() {
+    const watcher = createWatcher(PATHS.styles);
+    for await (const _event of watcher) {
+      await this.site.collectCSS();
+      await writeAssets(this.site.assets);
+      this.tx.dispatchEvent(new MessageEvent("message", { data: { type: "reload" } }));
+    }
+  }
+
+  private async watchContent() {
+    const watcher = createWatcher(PATHS.content);
+    for await (const _event of watcher) {
+      await this.site.collectContents();
+      await buildPages(this.site.content, this.site);
+      this.tx.dispatchEvent(new MessageEvent("message", { data: { type: "reload" } }));
+    }
+  }
+}

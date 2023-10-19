@@ -5,7 +5,7 @@ import { Site } from "./site.ts";
 import { buildPages, copyPublicFiles, writeAssets } from "./build.ts";
 import { httpServer, websocketServer } from "./server.ts";
 import { createSitemap } from "./sitemap.ts";
-import { startWatcher } from "./watcher.ts";
+import { Watcher } from "./watcher.ts";
 
 const HELP = `
 web - website generator
@@ -42,15 +42,15 @@ try {
   await Deno.remove(PATHS.out, { recursive: true });
 } catch { /* noop */ }
 
-const site = await Site.build(flags.production ? "prod" : "dev");
+const site = await Site.create(flags.production ? "prod" : "dev");
 
-await buildPages(site.pages, site);
+await buildPages(site.content, site);
 await writeAssets(site.assets);
 await copyPublicFiles(site.staticFiles);
 
 if (flags.server && !flags.production) {
   const tx = new BroadcastChannel("tx");
-  void startWatcher(site, tx);
+  void new Watcher(site, tx).start();
   void httpServer();
   void websocketServer(tx);
 }

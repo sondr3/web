@@ -37,7 +37,7 @@ export const renderUrlEntry = (entry: UrlEntry): string => {
 };
 
 export const createSitemap = async (site: Site): Promise<void> => {
-  const urls = [...site.pages.values()]
+  const urls = [...site.content.values()]
     .filter((p) => !p.frontmatter.special)
     .map((page) => urlFromContent(page, site.url));
 

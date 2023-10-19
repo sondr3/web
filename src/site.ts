@@ -8,7 +8,7 @@ export type Mode = "prod" | "dev";
 
 export class Site {
   public assets: Map<string, Asset> = new Map();
-  public pages: Map<string, Content> = new Map();
+  public content: Map<string, Content> = new Map();
   public staticFiles: Array<StaticAsset> = [];
   public mode: Mode;
   public url: URL;
@@ -18,13 +18,13 @@ export class Site {
     this.url = new URL(mode == "prod" ? "https://www.eons.io" : "http://localhost:3000");
   }
 
-  public static async build(mode: Mode): Promise<Site> {
+  public static async create(mode: Mode): Promise<Site> {
     const site = new Site(mode);
 
     await site.collectAssets();
     await site.collectCSS();
     await site.collectStaticFiles();
-    await site.collectPages();
+    await site.collectContents();
 
     return site;
   }
@@ -50,11 +50,15 @@ export class Site {
     }
   }
 
-  public async collectPages(): Promise<void> {
+  public collectContent(content: Content): void {
+    this.content.set(parse(content.source).name, content);
+  }
+
+  public async collectContents(): Promise<void> {
     for await (const entry of Deno.readDir(PATHS.pages)) {
       const path = `${PATHS.pages}/${entry.name}`;
       const content = await contentFromPath(path, "page");
-      this.pages.set(parse(content.source).name, content);
+      this.collectContent(content);
     }
   }
 }
