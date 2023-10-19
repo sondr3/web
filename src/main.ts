@@ -1,4 +1,4 @@
-import { brotli, gzip } from "./compress.ts";
+import { compressFolder } from "./compress.ts";
 import { Args, parse } from "std/flags/mod.ts";
 import * as log from "std/log/mod.ts";
 import { PATHS } from "./constants.ts";
@@ -54,6 +54,7 @@ const site = await Site.create(flags.production ? "prod" : "dev");
 await buildPages(site.content, site);
 await writeAssets(site.assets);
 await copyPublicFiles(site.staticFiles);
+await createSitemap(site);
 
 if (flags.server && !flags.production) {
   const tx = new BroadcastChannel("tx");
@@ -61,6 +62,6 @@ if (flags.server && !flags.production) {
   void new Server(tx).start();
 }
 
-await createSitemap(site);
-await gzip("./dist");
-await brotli("./dist");
+if (site.isProd()) {
+  await compressFolder(PATHS.out);
+}

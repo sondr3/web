@@ -1,6 +1,9 @@
 import { extname } from "std/path/extname.ts";
 import { walk, WalkEntry } from "std/fs/walk.ts";
 import { brotliCompressSync } from "node:zlib";
+import * as log from "std/log/mod.ts";
+
+const logger = log.getLogger();
 
 const VALID_EXTENSIONS: Array<string> = [
   ".html",
@@ -20,18 +23,23 @@ const VALID_EXTENSIONS: Array<string> = [
   ".eot",
 ];
 
-const is_compressible = (file: WalkEntry): boolean => {
+const isCompressible = (file: WalkEntry): boolean => {
   return VALID_EXTENSIONS.some((e) => e == extname(file.name));
 };
 
-export const compress_folder = async (dir: string): Promise<void> => {
+export const compressFolder = async (dir: string): Promise<void> => {
+  const start = performance.now();
+
   await gzip(dir);
   await brotli(dir);
+
+  const end = performance.now();
+  logger.info(`Compression took ${(end - start).toFixed(0)}ms`);
 };
 
-export const gzip = async (dir: string): Promise<void> => {
+const gzip = async (dir: string): Promise<void> => {
   for await (const file of walk(dir, { includeDirs: false })) {
-    if (!is_compressible(file)) continue;
+    if (!isCompressible(file)) continue;
 
     const source = await Deno.open(file.path, { read: true });
     const dest = await Deno.open(`${file.path}.gz`, { create: true, truncate: true, write: true });
@@ -55,9 +63,9 @@ class BrotliCompressionStream extends TransformStream {
   }
 }
 
-export const brotli = async (dir: string): Promise<void> => {
+const brotli = async (dir: string): Promise<void> => {
   for await (const file of walk(dir, { includeDirs: false })) {
-    if (!is_compressible(file)) continue;
+    if (!isCompressible(file)) continue;
 
     const source = await Deno.open(file.path, { read: true });
     const dest = await Deno.open(`${file.path}.br`, { create: true, truncate: true, write: true });
