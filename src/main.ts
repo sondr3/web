@@ -1,5 +1,6 @@
 import { brotli, gzip } from "./compress.ts";
 import { Args, parse } from "std/flags/mod.ts";
+import * as log from "std/log/mod.ts";
 import { PATHS } from "./constants.ts";
 import { Site } from "./site.ts";
 import { buildPages, copyPublicFiles, writeAssets } from "./build.ts";
@@ -41,6 +42,12 @@ if (flags.help) {
 try {
   await Deno.remove(PATHS.out, { recursive: true });
 } catch { /* noop */ }
+
+log.setup({
+  handlers: {
+    console: new log.handlers.ConsoleHandler(flags.verbose ? "DEBUG" : "INFO"),
+  },
+});
 
 const site = await Site.create(flags.production ? "prod" : "dev");
 

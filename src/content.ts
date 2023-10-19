@@ -5,6 +5,9 @@ import * as path from "std/path/mod.ts";
 import djot from "djot";
 import { renderTemplate } from "./render.tsx";
 import { Site } from "./site.ts";
+import * as log from "std/log/mod.ts";
+
+const logger = log.getLogger();
 
 export const Frontmatter = z.object({
   title: z.string(),
@@ -37,7 +40,7 @@ export const contentFromPath = async (filePath: string, kind: "page" | "post"): 
   const frontmatter = Frontmatter.safeParse(attrs);
 
   if (!frontmatter.success) {
-    console.error(frontmatter.error);
+    logger.error(frontmatter.error);
     throw new Error(`Failed to parse frontmatter for ${filePath}`);
   }
 

@@ -2,6 +2,9 @@ import * as path from "std/path/mod.ts";
 import * as fs from "std/fs/mod.ts";
 import { PATHS } from "./constants.ts";
 import { extname } from "std/path/mod.ts";
+import * as log from "std/log/mod.ts";
+
+const logger = log.getLogger();
 
 export class Server {
   private tx: BroadcastChannel;
@@ -18,7 +21,7 @@ export class Server {
 
 export function httpServer() {
   const server = Deno.listen({ port: 3000 });
-  console.log(`File server running on http://localhost:3000/`);
+  logger.info(`File server running on http://localhost:3000/`);
 
   (async () => {
     for await (const conn of server) {
@@ -29,7 +32,7 @@ export function httpServer() {
 
 export function websocketServer(tx: BroadcastChannel) {
   const webSocketServer = Deno.listen({ port: 3001 });
-  console.log("Websocket server running on ws://localhost:3001/");
+  logger.info("Websocket server running on ws://localhost:3001/");
   (async () => {
     for await (const conn of webSocketServer) {
       void handleWebsocket(tx, conn);
