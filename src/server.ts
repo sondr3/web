@@ -1,6 +1,6 @@
 import * as path from "std/path/mod.ts";
+import * as fs from "std/fs/mod.ts";
 import { PATHS } from "./constants.ts";
-import { fileExists } from "./utils.ts";
 import { extname } from "std/path/mod.ts";
 
 export function httpServer() {
@@ -83,7 +83,15 @@ export async function handleWebsocket(tx: BroadcastChannel, conn: Deno.Conn) {
   }
 }
 
-function matchExtension(extension: string | null): string {
+const fileExists = async (filePath: string): Promise<boolean> => {
+  try {
+    return await fs.exists(filePath, { isFile: true });
+  } catch (_e) {
+    return false;
+  }
+};
+
+const matchExtension = (extension: string | null): string => {
   const normalizedExtension = extension ? extname(extension).slice(1) : null;
   switch (normalizedExtension) {
     case "atom":
@@ -132,4 +140,4 @@ function matchExtension(extension: string | null): string {
     default:
       return "application/octet-stream";
   }
-}
+};

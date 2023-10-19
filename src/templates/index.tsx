@@ -1,8 +1,8 @@
 import { Base, TemplateProps } from "./base.tsx";
 
-export const Index = ({ content, context }: TemplateProps) => {
+export const Index = ({ content, site }: TemplateProps) => {
   return (
-    <Base content={content} context={context}>
+    <Base content={content} site={site}>
       <main class="main">
         <section>
           <h1 id="hello">

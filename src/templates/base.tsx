@@ -2,7 +2,7 @@ import type { JSX } from "preact";
 import { Content } from "../content.ts";
 import { Footer } from "./footer.tsx";
 import { Navbar } from "./navbar.tsx";
-import { Context } from "../context.ts";
+import { Site } from "../site.ts";
 
 const THEME_LOCALSTORAGE_SCRIPT = `
 if (localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
@@ -28,17 +28,17 @@ document
 
 export interface TemplateProps {
   content: Content;
-  context: Context;
+  site: Site;
 }
 
 interface Props extends TemplateProps {
   children: JSX.Element;
 }
 
-export const Base = ({ content, context, children }: Props) => {
+export const Base = ({ content, site, children }: Props) => {
   const title = `${content.frontmatter.title} => Eons :: IO ()`;
-  const css = context.assets.get("styles.css");
-  const canonicalUrl = new URL(content.url, context.metadata.url).toString();
+  const css = site.assets.get("styles.css");
+  const canonicalUrl = new URL(content.url, site.url).toString();
 
   return (
     <html lang="en" data-theme="light">
@@ -98,7 +98,7 @@ export const Base = ({ content, context, children }: Props) => {
         {/* <!-- <meta content="2022-01-10" property="article:modified_time" /> --> */}
         {/* <!-- <meta content="summary_large_image" name="twitter:card" /> --> */}
 
-        {context.metadata.mode === "dev" && <script src="/livereload.js"></script>}
+        {site.isDev() && <script src="/livereload.js"></script>}
         <script dangerouslySetInnerHTML={{ __html: THEME_LOCALSTORAGE_SCRIPT }} />
       </head>
       <body class="root">

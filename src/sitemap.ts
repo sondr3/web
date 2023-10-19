@@ -1,5 +1,6 @@
+import { PATHS } from "./constants.ts";
 import { Content } from "./content.ts";
-import { Context } from "./context.ts";
+import { Site } from "./site.ts";
 import * as fs from "std/fs/mod.ts";
 
 export type ChangeFreq = "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
@@ -35,10 +36,10 @@ export const renderUrlEntry = (entry: UrlEntry): string => {
     .trim();
 };
 
-export const createSitemap = async (context: Context): Promise<void> => {
-  const urls = [...context.pages.values()]
+export const createSitemap = async (site: Site): Promise<void> => {
+  const urls = [...site.pages.values()]
     .filter((p) => !p.frontmatter.special)
-    .map((page) => urlFromContent(page, context.metadata.url));
+    .map((page) => urlFromContent(page, site.url));
 
   const sitemap = `
 <?xml version="1.0" encoding="UTF-8"?>
@@ -48,6 +49,6 @@ export const createSitemap = async (context: Context): Promise<void> => {
 </urlset>
 `.trimStart();
 
-  await fs.ensureDir(context.metadata.out);
-  await Deno.writeTextFile(`${context.metadata.out}/sitemap.xml`, sitemap);
+  await fs.ensureDir(PATHS.out);
+  await Deno.writeTextFile(`${PATHS.out}/sitemap.xml`, sitemap);
 };

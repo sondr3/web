@@ -1,8 +1,8 @@
 import { Base, TemplateProps } from "./base.tsx";
 
-export const FourOhFour = ({ content, context }: TemplateProps) => {
+export const FourOhFour = ({ content, site }: TemplateProps) => {
   return (
-    <Base content={content} context={context}>
+    <Base content={content} site={site}>
       <main class="main">
         <section class="four-oh-four">
           <h1>Page not found</h1>

@@ -1,7 +1,7 @@
 import { brotli, gzip } from "./compress.ts";
 import { Args, parse } from "std/flags/mod.ts";
 import { PATHS } from "./constants.ts";
-import { createContext } from "./context.ts";
+import { Site } from "./site.ts";
 import { buildPages, copyPublicFiles, writeAssets } from "./build.ts";
 import { httpServer, websocketServer } from "./server.ts";
 import { createSitemap } from "./sitemap.ts";
@@ -42,19 +42,19 @@ try {
   await Deno.remove(PATHS.out, { recursive: true });
 } catch { /* noop */ }
 
-const context = await createContext(PATHS, flags.production ? "prod" : "dev");
+const site = await Site.build(flags.production ? "prod" : "dev");
 
-await buildPages(context.pages, context);
-await writeAssets(context.assets);
-await copyPublicFiles(context.public_files);
+await buildPages(site.pages, site);
+await writeAssets(site.assets);
+await copyPublicFiles(site.staticFiles);
 
 if (flags.server && !flags.production) {
   const tx = new BroadcastChannel("tx");
-  void startWatcher(context, tx);
+  void startWatcher(site, tx);
   void httpServer();
   void websocketServer(tx);
 }
 
-await createSitemap(context);
+await createSitemap(site);
 await gzip("./dist");
 await brotli("./dist");

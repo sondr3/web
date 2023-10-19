@@ -7,9 +7,9 @@ const renderContent = (fm: Frontmatter, content: string) => {
   };
 };
 
-export const Page = ({ content, context }: TemplateProps) => {
+export const Page = ({ content, site }: TemplateProps) => {
   return (
-    <Base content={content} context={context}>
+    <Base content={content} site={site}>
       <main class="main">
         <article className="prose" dangerouslySetInnerHTML={renderContent(content.frontmatter, content.rendered)} />
       </main>

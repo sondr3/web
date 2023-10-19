@@ -4,7 +4,7 @@ import { z } from "zod";
 import * as path from "std/path/mod.ts";
 import djot from "djot";
 import { renderTemplate } from "./render.tsx";
-import { Context } from "./context.ts";
+import { Site } from "./site.ts";
 
 export const Frontmatter = z.object({
   title: z.string(),
@@ -62,7 +62,4 @@ export const contentFromPath = async (filePath: string, kind: "page" | "post"): 
   };
 };
 
-export const renderContent = (content: Content, context: Context): string => {
-  const rendered = renderTemplate(content, context);
-  return rendered;
-};
+export const renderContent = (content: Content, site: Site): string => renderTemplate(content, site);
