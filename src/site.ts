@@ -59,7 +59,7 @@ export class Site {
   }
 
   public collectContent(content: Content): void {
-    this.content.set(parse(content.source).name, content);
+    this.content.set(content.source, content);
   }
 
   public async collectContents(): Promise<void> {
