@@ -1,6 +1,8 @@
 import { PATHS } from "./constants.ts";
 import { Content } from "./content.ts";
 import * as fs from "std/fs/mod.ts";
+import { WriteFromSite } from "./writeable.ts";
+import { Site } from "./site.ts";
 
 export type ChangeFreq = "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
 
@@ -11,7 +13,7 @@ export interface UrlEntry {
   priority?: number;
 }
 
-export const urlFromContent = ({ frontmatter, contentType, url }: Content): UrlEntry => {
+const urlFromContent = ({ frontmatter, contentType, url }: Content): UrlEntry => {
   return {
     loc: url,
     lastmod: frontmatter.lastModified.toISOString(),
@@ -20,7 +22,7 @@ export const urlFromContent = ({ frontmatter, contentType, url }: Content): UrlE
   };
 };
 
-export const renderUrlEntry = (entry: UrlEntry): string => {
+const renderUrlEntry = (entry: UrlEntry): string => {
   return `
 <url>
   <loc>${entry.loc.toString()}</loc>
@@ -33,19 +35,25 @@ export const renderUrlEntry = (entry: UrlEntry): string => {
     .trim();
 };
 
-export const createSitemap = async (content: Iterable<Content>): Promise<void> => {
-  const urls = Array.from(content)
-    .filter((p) => !p.frontmatter.special)
-    .map((page) => urlFromContent(page));
+export class Sitemap implements WriteFromSite {
+  public entries: Array<UrlEntry>;
 
-  const sitemap = `
+  public constructor(content: Iterable<Content>) {
+    this.entries = Array.from(content)
+      .filter((p) => !p.frontmatter.special)
+      .map((page) => urlFromContent(page));
+  }
+
+  public async write(_site: Site) {
+    const sitemap = `
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet href="/sitemap-style.xsl" type="text/xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-	${urls.map(renderUrlEntry).join("\n")}
+	${this.entries.map(renderUrlEntry).join("\n")}
 </urlset>
 `.trimStart();
 
-  await fs.ensureDir(PATHS.out);
-  await Deno.writeTextFile(`${PATHS.out}/sitemap.xml`, sitemap);
-};
+    await fs.ensureDir(PATHS.out);
+    await Deno.writeTextFile(`${PATHS.out}/sitemap.xml`, sitemap);
+  }
+}

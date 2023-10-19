@@ -4,7 +4,6 @@ import * as log from "std/log/mod.ts";
 import { PATHS } from "./constants.ts";
 import { Site } from "./site.ts";
 import { Server } from "./server.ts";
-import { createSitemap } from "./sitemap.ts";
 import { Watcher } from "./watcher.ts";
 
 const HELP = `
@@ -49,9 +48,7 @@ log.setup({
 });
 
 const site = await Site.create(flags.production ? "prod" : "dev");
-
 await site.write();
-await createSitemap(site.content.values());
 
 if (flags.server && !flags.production) {
   const tx = new BroadcastChannel("tx");

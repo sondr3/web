@@ -8,6 +8,7 @@ import { write } from "./writeable.ts";
 import { ensureDir } from "std/fs/ensure_dir.ts";
 import { stripPrefix } from "./utils.ts";
 import { copy } from "std/fs/mod.ts";
+import { Sitemap } from "./sitemap.ts";
 
 const logger = log.getLogger();
 
@@ -48,6 +49,8 @@ export class Site {
     await this.copyStaticAssets();
     await this.writeAssets();
     await this.writeContent();
+
+    await new Sitemap(this.content.values()).write(this);
   }
 
   public async collectCSS(): Promise<Asset> {
