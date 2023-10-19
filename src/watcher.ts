@@ -18,6 +18,11 @@ const filterEvent = ({ kind }: Deno.FsEvent): boolean => {
   return kind === "create" || kind === "modify" || kind === "remove";
 };
 
+const debounceHandler = debounce(async (fn: () => Promise<void>, tx: BroadcastChannel) => {
+  await fn();
+  tx.dispatchEvent(new MessageEvent("message", { data: { type: "reload" } }));
+}, 200);
+
 export class Watcher {
   private site: Site;
   private tx: BroadcastChannel;
@@ -35,31 +40,24 @@ export class Watcher {
 
   private async watchSCSS() {
     const watcher = createWatcher(PATHS.styles);
-    for await (const event of watcher) {
-      this.handleScss(event);
+    for await (const _event of watcher) {
+      debounceHandler(async () => {
+        this.logger.info("Rebuilding CSS");
+        const asset = await this.site.collectCSS();
+        await asset.write(this.site);
+      }, this.tx);
     }
   }
 
   private async watchContent() {
     const watcher = createWatcher(PATHS.content);
     for await (const event of watcher) {
-      this.handleContent(event);
+      debounceHandler(async () => {
+        this.logger.info(`Rebuilding page ${firstFilename(event)}`);
+        const content = await Content.fromPath(event.paths[0], "page", this.site.url);
+        await content.write(this.site);
+        this.site.collectContent(content);
+      }, this.tx);
     }
   }
-
-  private handleScss = debounce(async (_event: Deno.FsEvent) => {
-    this.logger.info("Rebuilding CSS");
-    const asset = await this.site.collectCSS();
-    await asset.write(this.site);
-    this.tx.dispatchEvent(new MessageEvent("message", { data: { type: "reload" } }));
-  }, 200);
-
-  private handleContent = debounce(async (event: Deno.FsEvent) => {
-    this.logger.info(`Rebuilding page ${firstFilename(event)}`);
-    const content = await Content.fromPath(event.paths[0], "page", this.site.url);
-    this.site.collectContent(content);
-    await content.write(this.site);
-
-    this.tx.dispatchEvent(new MessageEvent("message", { data: { type: "reload" } }));
-  }, 200);
 }
