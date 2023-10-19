@@ -70,7 +70,7 @@ export class Content implements WriteFromSite {
     await ensureDir(path.dirname(this.outPath.asAbsolute()));
     let rendered = this.render(site);
 
-    if (site.isProd()) {
+    if (site.isProd) {
       rendered = await minifyHTML(rendered);
     }
 

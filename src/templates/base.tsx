@@ -98,7 +98,7 @@ export const Base = ({ content, site, children }: Props) => {
         {/* <!-- <meta content="2022-01-10" property="article:modified_time" /> --> */}
         {/* <!-- <meta content="summary_large_image" name="twitter:card" /> --> */}
 
-        {site.isDev() && <script src="/livereload.js"></script>}
+        {site.isDev && <script src="/livereload.js"></script>}
         <script dangerouslySetInnerHTML={{ __html: THEME_LOCALSTORAGE_SCRIPT }} />
       </head>
       <body class="root">

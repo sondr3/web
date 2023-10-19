@@ -56,6 +56,6 @@ if (flags.server && !flags.production) {
   void new Server(tx).start();
 }
 
-if (site.isProd()) {
+if (site.isProd) {
   await compressFolder(PATHS.out);
 }

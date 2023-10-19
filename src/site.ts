@@ -9,6 +9,7 @@ import { ensureDir } from "std/fs/ensure_dir.ts";
 import { stripPrefix } from "./utils.ts";
 import { copy } from "std/fs/mod.ts";
 import { Sitemap } from "./sitemap.ts";
+import { URL } from "https://deno.land/std@0.174.0/node/url.ts";
 
 const logger = log.getLogger();
 
@@ -42,8 +43,13 @@ export class Site {
     return site;
   }
 
-  public isProd = (): boolean => this.mode === "prod";
-  public isDev = (): boolean => this.mode === "dev";
+  public get isProd(): boolean {
+    return this.mode === "prod";
+  }
+
+  public get isDev(): boolean {
+    return this.mode === "dev";
+  }
 
   public async write(): Promise<void> {
     await this.copyStaticAssets();

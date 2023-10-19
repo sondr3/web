@@ -8,7 +8,7 @@ import { Index } from "./templates/index.tsx";
 import { Site } from "./site.ts";
 
 const renderPretty = (elem: JSX.Element, site: Site) => {
-  const rendered = site.isProd() ? render(elem) : renderToStringPretty(elem, {}, { pretty: true });
+  const rendered = site.isProd ? render(elem) : renderToStringPretty(elem, {}, { pretty: true });
   return `<!DOCTYPE html>\n${rendered}`;
 };
 
