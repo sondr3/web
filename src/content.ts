@@ -10,6 +10,7 @@ import { Path } from "./paths.ts";
 import { PATHS } from "./constants.ts";
 import { ensureDir } from "std/fs/mod.ts";
 import { minifyHTML } from "./minify.ts";
+import { WriteFromSite } from "./writeable.ts";
 
 const logger = log.getLogger();
 const extractToml = createExtractor({ [Format.TOML]: parse as Parser });
@@ -27,7 +28,7 @@ export const Frontmatter = z.object({
 
 export type Frontmatter = z.infer<typeof Frontmatter>;
 
-export class Content {
+export class Content implements WriteFromSite {
   public sourcePath: Path;
   public url: URL;
   public contentType: "page" | "post";

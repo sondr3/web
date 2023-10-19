@@ -1,4 +1,3 @@
-import { writeAssets } from "./build.ts";
 import { PATHS } from "./constants.ts";
 import { Site } from "./site.ts";
 import * as log from "std/log/mod.ts";
@@ -50,8 +49,8 @@ export class Watcher {
 
   private handleScss = debounce(async (_event: Deno.FsEvent) => {
     this.logger.info("Rebuilding CSS");
-    await this.site.collectCSS();
-    await writeAssets(this.site.assets);
+    const asset = await this.site.collectCSS();
+    await asset.write(this.site);
     this.tx.dispatchEvent(new MessageEvent("message", { data: { type: "reload" } }));
   }, 200);
 

@@ -3,6 +3,11 @@ import { PATHS } from "./constants.ts";
 import { Content } from "./content.ts";
 import { walk } from "std/fs/walk.ts";
 import * as log from "std/log/mod.ts";
+import * as path from "std/path/mod.ts";
+import { write } from "./writeable.ts";
+import { ensureDir } from "std/fs/ensure_dir.ts";
+import { stripPrefix } from "./utils.ts";
+import { copy } from "std/fs/mod.ts";
 
 const logger = log.getLogger();
 
@@ -39,7 +44,23 @@ export class Site {
   public isProd = (): boolean => this.mode === "prod";
   public isDev = (): boolean => this.mode === "dev";
 
-  public async collectAssets(): Promise<void> {
+  public async write(): Promise<void> {
+    await this.copyStaticAssets();
+    await this.writeAssets();
+    await this.writeContent();
+  }
+
+  public async collectCSS(): Promise<Asset> {
+    const asset = await Asset.buildCSS(PATHS, this.mode);
+    this.assets.set("styles.css", asset);
+    return asset;
+  }
+
+  public async writeAssets(): Promise<void> {
+    return await write(this.assets, this);
+  }
+
+  private async collectAssets(): Promise<void> {
     for await (const entry of Deno.readDir(PATHS.js)) {
       const path = `${PATHS.js}/${entry.name}`;
       const asset = await Asset.fromPath(path);
@@ -47,11 +68,7 @@ export class Site {
     }
   }
 
-  public async collectCSS(): Promise<void> {
-    this.assets.set("styles.css", await Asset.buildCSS(PATHS, this.mode));
-  }
-
-  public async collectStaticFiles(): Promise<void> {
+  private async collectStaticFiles(): Promise<void> {
     for await (const entry of walk(PATHS.public, { includeDirs: false })) {
       this.staticFiles.push({ path: entry.path, prefix: PATHS.public });
     }
@@ -61,11 +78,23 @@ export class Site {
     this.content.set(content.sourcePath.filename, content);
   }
 
-  public async collectContents(): Promise<void> {
+  public async writeContent(): Promise<void> {
+    return await write(this.content, this);
+  }
+
+  private async collectContents(): Promise<void> {
     for await (const entry of Deno.readDir(PATHS.pages)) {
       const path = `${PATHS.pages}/${entry.name}`;
       const content = await Content.fromPath(path, "page", this.url);
       this.collectContent(content);
     }
   }
+
+  public copyStaticAssets = async (): Promise<void> => {
+    await Promise.allSettled(this.staticFiles.map(async (file) => {
+      const out = path.join(PATHS.out, stripPrefix(file.prefix, file.path));
+      await ensureDir(path.dirname(out));
+      await copy(file.path, out, { overwrite: true });
+    }));
+  };
 }

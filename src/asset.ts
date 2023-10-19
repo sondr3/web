@@ -1,18 +1,19 @@
 import { parse } from "std/path/parse.ts";
 import { PATHS, Paths } from "./constants.ts";
-import { Mode } from "./site.ts";
+import { Mode, Site } from "./site.ts";
 import * as sass from "sass";
 import { digestFilename } from "./utils.ts";
 import { minifyCSS } from "./minify.ts";
 import * as path from "std/path/mod.ts";
 import { ensureDir } from "std/fs/ensure_dir.ts";
+import { WriteFromSite } from "./writeable.ts";
 
 export interface StaticAsset {
   path: string;
   prefix: string;
 }
 
-export class Asset {
+export class Asset implements WriteFromSite {
   public filename: string;
   public content: string;
 
@@ -21,7 +22,7 @@ export class Asset {
     this.content = content;
   }
 
-  public async write() {
+  public async write(_site: Site) {
     const out = path.join(PATHS.out, this.filename);
     await ensureDir(path.dirname(out));
     await Deno.writeTextFile(out, this.content);
