@@ -12,16 +12,16 @@
     "jsxImportSource": "https://esm.sh/preact@10.18.1"
   },
   "imports": {
-    "djot": "npm:@djot/djot@^0.2.4",
-    "htmlnano": "npm:htmlnano@^2.0.4",
-    "lightningcss": "npm:lightningcss@^1.22.0",
+    "djot": "npm:@djot/djot@0.2.4",
+    "htmlnano": "npm:htmlnano@2.0.4",
+    "lightningcss": "npm:lightningcss@1.22.0",
     "preact-pretty": "https://esm.sh/preact-render-to-string@6.2.2/jsx",
     "preact-render": "https://esm.sh/preact-render-to-string@6.2.2",
     "preact": "https://esm.sh/preact@10.18.1",
-    "sass": "npm:sass@^1.69",
+    "sass": "npm:sass@1.69",
     "std/": "https://deno.land/std@0.203.0/",
-    "svgo": "npm:svgo@^3.0.2",
-    "terser": "npm:terser@^5.22.0",
+    "svgo": "npm:svgo@3.0.2",
+    "terser": "npm:terser@5.22.0",
     "zod": "https://deno.land/x/zod@v3.22.4/mod.ts"
   },
   "fmt": {
