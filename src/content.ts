@@ -87,7 +87,7 @@ export class Content implements WriteFromSite {
       throw new Error(`Failed to parse frontmatter for ${filePath}`);
     }
 
-    const stem = path.parse(filePath).name;
+    const stem = path.parse(filePath).name + "/";
     const url = new URL(frontmatter.data.slug ?? stem, baseURL);
 
     return new Content(
