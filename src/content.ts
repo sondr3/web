@@ -1,4 +1,4 @@
-import { createExtractor, Format, Parser } from "std/front_matter/mod.ts";
+import { createExtractor, Parser } from "std/front_matter/mod.ts";
 import { ensureDir } from "std/fs/mod.ts";
 import * as log from "std/log/mod.ts";
 import * as path from "std/path/mod.ts";
@@ -14,7 +14,7 @@ import { renderTemplate } from "./templates/render.ts";
 import { WriteFromSite } from "./writeable.ts";
 
 const logger = log.getLogger();
-const extractToml = createExtractor({ [Format.TOML]: parse as Parser });
+const extractToml = createExtractor({ "toml": parse as Parser });
 
 export const Frontmatter = z.object({
   title: z.string(),
