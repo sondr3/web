@@ -27,7 +27,7 @@
                 </a>
                 <span class="updated">
                   Last updated:
-                  <xsl:value-of select="substring(sitemap:lastmod, 0, 11)" />
+                  <xsl:value-of select="substring-before(sitemap:lastmod, 'T')" />
                 </span>
               </li>
             </xsl:for-each>
