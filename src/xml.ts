@@ -1,3 +1,5 @@
+import { StringBuilder } from "./string_builder.ts";
+
 interface XmlEntity {
   getChildren(): Array<XmlEntity>;
   toString(indent: number): string;
@@ -11,7 +13,7 @@ export class XmlValue implements XmlEntity {
   }
 
   getChildren(): XmlEntity[] {
-    return [];
+    return [this];
   }
 
   toString(_indent: number): string {
@@ -38,11 +40,17 @@ export class XmlProperty implements XmlEntity {
   }
 
   getChildren(): XmlEntity[] {
-    return [];
+    return [this];
   }
 
   toString(_indent: number): string {
-    return `<?${this.name} ${Array.from(this.values.entries()).map(([key, value]) => `${key}="${value}"`).join(" ")}?>`;
+    const sb = new StringBuilder();
+    sb.push("<?", this.name);
+
+    Array.from(this.values.entries()).forEach(([key, value]) => sb.append(` ${key}="${value}"`));
+    sb.append("?>");
+
+    return sb.toString();
   }
 }
 
