@@ -4,6 +4,7 @@ import { PATHS } from "./constants.ts";
 import { Content } from "./content.ts";
 import { Site } from "./site.ts";
 import { firstFilename } from "./utils.ts";
+import { Asset } from "./asset.ts";
 
 async function* createWatcher(path: string): AsyncGenerator<Deno.FsEvent> {
   const watcher = Deno.watchFs(path, { recursive: true });
@@ -36,6 +37,7 @@ export class Watcher {
   public start = (): void => {
     (async () => await this.watchContent())();
     (async () => await this.watchSCSS())();
+    (async () => await this.watchJS())();
     (async () => await this.watchPublic())();
   };
 
@@ -45,6 +47,18 @@ export class Watcher {
       debounceHandler(async () => {
         this.logger.info("Rebuilding CSS");
         const asset = await this.site.collectCSS();
+        await asset.write(this.site);
+      }, this.tx);
+    }
+  }
+
+  private async watchJS() {
+    const watcher = createWatcher(PATHS.js);
+    for await (const event of watcher) {
+      debounceHandler(async () => {
+        this.logger.info(`Rebuilding JS ${firstFilename(event)}`);
+        const asset = await Asset.fromPath(event.paths[0]);
+        this.site.collectAsset(asset);
         await asset.write(this.site);
       }, this.tx);
     }

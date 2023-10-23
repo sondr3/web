@@ -67,12 +67,16 @@ export class Site {
     return await write(this.assets, this);
   }
 
-  private async collectAssets(): Promise<void> {
+  public async collectAssets(): Promise<void> {
     for await (const entry of Deno.readDir(PATHS.js)) {
       const path = `${PATHS.js}/${entry.name}`;
       const asset = await Asset.fromPath(path);
-      this.assets.set(asset.path.filename, asset);
+      this.collectAsset(asset);
     }
+  }
+
+  public collectAsset(asset: Asset): void {
+    this.assets.set(asset.path.filename, asset);
   }
 
   public async collectStaticFiles(): Promise<void> {
