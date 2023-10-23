@@ -24,6 +24,7 @@ export const Frontmatter = z.object({
   slug: z.string().optional(),
   layout: z.enum(["page", "index", "404"]).default("page"),
   special: z.boolean().default(false),
+  draft: z.boolean().default(false),
 })
   .transform(({ last_modified, ...rest }) => ({ ...rest, lastModified: last_modified }));
 

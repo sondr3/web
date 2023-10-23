@@ -93,6 +93,9 @@ export class Site {
     for await (const entry of Deno.readDir(PATHS.pages)) {
       const path = `${PATHS.pages}/${entry.name}`;
       const content = await Content.fromPath(path, "page", this.url);
+
+      if (content.frontmatter.draft && this.isProd) continue;
+
       this.collectContent(content);
     }
   }
