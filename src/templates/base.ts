@@ -128,8 +128,7 @@ export const base = (layout: Layout, site: Site): string => {
     <footer class="footer">
       <section class="footer__about prose">
         <p>
-          &copy; Sondre Aasemoen, content licensed under{" "}
-          <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="grey">CC BY-SA 4.0</a>
+          &copy; Sondre Aasemoen, content licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="grey">CC BY-SA 4.0</a>
         </p>
       </section>
       <section class="footer__icons">
