@@ -6,7 +6,7 @@ import djot from "djot";
 import { renderTemplate } from "./render.tsx";
 import { Site } from "./site.ts";
 import * as log from "std/log/mod.ts";
-import { Path } from "./paths.ts";
+import { Path } from "./path.ts";
 import { PATHS } from "./constants.ts";
 import { ensureDir } from "std/fs/mod.ts";
 import { minifyHTML } from "./minify.ts";
@@ -67,14 +67,14 @@ export class Content implements WriteFromSite {
   }
 
   public async write(site: Site) {
-    await ensureDir(path.dirname(this.outPath.asAbsolute()));
+    await ensureDir(path.dirname(this.outPath.absolute));
     let rendered = this.render(site);
 
     if (site.isProd) {
       rendered = await minifyHTML(rendered);
     }
 
-    await Deno.writeTextFile(this.outPath.asAbsolute(), rendered);
+    await Deno.writeTextFile(this.outPath.absolute, rendered);
   }
 
   public static async fromPath(filePath: string, kind: "page" | "post", baseURL: URL): Promise<Content> {

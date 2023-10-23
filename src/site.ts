@@ -6,10 +6,10 @@ import * as log from "std/log/mod.ts";
 import * as path from "std/path/mod.ts";
 import { write } from "./writeable.ts";
 import { ensureDir } from "std/fs/ensure_dir.ts";
-import { stripPrefix } from "./utils.ts";
 import { copy } from "std/fs/mod.ts";
 import { Sitemap, UrlEntry } from "./sitemap.ts";
 import { URL } from "https://deno.land/std@0.174.0/node/url.ts";
+import { Path } from "./path.ts";
 
 const logger = log.getLogger();
 
@@ -72,13 +72,13 @@ export class Site {
     for await (const entry of Deno.readDir(PATHS.js)) {
       const path = `${PATHS.js}/${entry.name}`;
       const asset = await Asset.fromPath(path);
-      this.assets.set(asset.filename, asset);
+      this.assets.set(asset.path.filename, asset);
     }
   }
 
   private async collectStaticFiles(): Promise<void> {
     for await (const entry of walk(PATHS.public, { includeDirs: false })) {
-      this.staticFiles.push({ path: entry.path, prefix: PATHS.public });
+      this.staticFiles.push({ path: new Path(entry.path), prefix: PATHS.public });
     }
   }
 
@@ -100,9 +100,9 @@ export class Site {
 
   public copyStaticAssets = async (): Promise<void> => {
     await Promise.allSettled(this.staticFiles.map(async (file) => {
-      const out = path.join(PATHS.out, stripPrefix(file.prefix, file.path));
+      const out = path.join(PATHS.out, file.path.common(file.prefix));
       await ensureDir(path.dirname(out));
-      await copy(file.path, out, { overwrite: true });
+      await copy(file.path.absolute, out, { overwrite: true });
     }));
   };
 

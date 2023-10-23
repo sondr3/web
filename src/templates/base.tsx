@@ -62,7 +62,7 @@ export const Base = ({ content, site, children }: Props) => {
         />
         <link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180" />
 
-        <link href={`/${css?.filename}`} rel="stylesheet" />
+        <link href={`/${css?.path.filename}`} rel="stylesheet" />
 
         <link href="/humans.txt" rel="author" />
         <meta content="Sondre Aasemoen" name="author" />
