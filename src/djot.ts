@@ -8,10 +8,8 @@ const shiki = await getHighlighter({
 
 export class Djot {
   public static render(content: string) {
-    const res = djot.renderHTML(
-      djot.parse(content, { warn: (message) => console.warn(message) }),
-      this.renderOptions,
-    );
+    const parsed = djot.parse(content, { warn: (message) => console.warn(message) });
+    const res = djot.renderHTML(parsed, this.renderOptions);
 
     return res;
   }
@@ -19,6 +17,13 @@ export class Djot {
   private static get renderOptions(): HTMLRenderer["options"] {
     return {
       overrides: {
+        section: (node, renderer) => {
+          if (node?.attributes?.id) {
+            const id = node.attributes["id"].toLowerCase();
+            node.attributes = { ...node.attributes, id: id };
+          }
+          return renderer.renderAstNodeDefault(node);
+        },
         code_block: (node, _renderer) => {
           const html = shiki.codeToHtml(node.text.trim(), { lang: node.lang ?? "text", theme: "nord" });
           return html;
