@@ -2,8 +2,6 @@ import { parse } from "std/toml/mod.ts";
 import { createExtractor, Format, Parser } from "std/front_matter/mod.ts";
 import { z } from "zod";
 import * as path from "std/path/mod.ts";
-import djot from "djot";
-import { renderTemplate } from "./render.tsx";
 import { Site } from "./site.ts";
 import * as log from "std/log/mod.ts";
 import { Path } from "./path.ts";
@@ -11,6 +9,9 @@ import { PATHS } from "./constants.ts";
 import { ensureDir } from "std/fs/mod.ts";
 import { minifyHTML } from "./minify.ts";
 import { WriteFromSite } from "./writeable.ts";
+import { Djot } from "./djot.ts";
+import { renderTemplate } from "./templates/render.ts";
+import { base } from "./templates/base.ts";
 
 const logger = log.getLogger();
 const extractToml = createExtractor({ [Format.TOML]: parse as Parser });
@@ -59,16 +60,17 @@ export class Content implements WriteFromSite {
   }
 
   public get content() {
-    return djot.renderHTML(djot.parse(this.sourceContent));
+    return Djot.render(this.sourceContent);
   }
 
-  public render(site: Site) {
-    return renderTemplate(this, site);
+  public render() {
+    return renderTemplate(this);
   }
 
   public async write(site: Site) {
     await ensureDir(path.dirname(this.outPath.absolute));
-    let rendered = this.render(site);
+    const layout = this.render();
+    let rendered = base(layout, site);
 
     if (site.isProd) {
       rendered = await minifyHTML(rendered);
