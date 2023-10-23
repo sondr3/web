@@ -1,53 +1,37 @@
 import { StringBuilder } from "./string_builder.ts";
 
 interface XmlEntity {
-  getChildren(): Array<XmlEntity>;
   toString(indent: number): string;
 }
 
-export class XmlValue implements XmlEntity {
+export class XmlContent implements XmlEntity {
   private value: string;
 
   constructor(value: string) {
     this.value = value;
   }
 
-  getChildren(): XmlEntity[] {
-    return [this];
-  }
-
-  toString(_indent: number): string {
-    return this.value;
+  toString(indent: number): string {
+    const sb = new StringBuilder();
+    sb.append(" ".repeat(indent));
+    sb.appendLine(this.value);
+    return sb.toString();
   }
 }
 
-interface XmlPropertyConstructor {
-  name: string;
-  values?: Map<string, string>;
-}
-
-export class XmlProperty implements XmlEntity {
+export class XmlProcessingInstruction {
   private name: string;
-  private values: Map<string, string>;
+  private value: string;
 
-  constructor({ name, values }: XmlPropertyConstructor) {
+  constructor({ name, value }: { name: string; value: string }) {
     this.name = name;
-    this.values = new Map(values ?? []);
-  }
-
-  addValue(key: string, value: string): void {
-    this.values.set(key, value);
-  }
-
-  getChildren(): XmlEntity[] {
-    return [this];
+    this.value = value;
   }
 
   toString(_indent: number): string {
     const sb = new StringBuilder();
     sb.push("<?", this.name);
-
-    Array.from(this.values.entries()).forEach(([key, value]) => sb.append(` ${key}="${value}"`));
+    sb.push(" ", this.value);
     sb.append("?>");
 
     return sb.toString();
@@ -55,26 +39,19 @@ export class XmlProperty implements XmlEntity {
 }
 
 interface XmlNodeConstructor {
-  name: string;
-  value?: string;
-  properties?: Map<string, string>;
+  tag: string;
+  attributes?: Map<string, string>;
 }
 
 export class XmlNode implements XmlEntity {
   private children: Array<XmlEntity>;
-  private name: string;
-  private value: XmlValue | null;
-  private properties: Map<string, string>;
+  private tag: string;
+  private attributes: Map<string, string>;
 
-  constructor({ name, value, properties }: XmlNodeConstructor) {
-    this.name = name;
-    this.value = value ? new XmlValue(value) : null;
+  constructor({ tag, attributes }: XmlNodeConstructor) {
+    this.tag = tag;
     this.children = [];
-    this.properties = properties ?? new Map();
-  }
-
-  setValue(value: string) {
-    this.value = new XmlValue(value);
+    this.attributes = attributes ?? new Map();
   }
 
   addChild(child: XmlEntity | null): void {
@@ -82,58 +59,48 @@ export class XmlNode implements XmlEntity {
     this.children.push(child);
   }
 
-  addProperty(key: string, value: string): void {
-    this.properties.set(key, value);
-  }
-
-  getChildren(): XmlEntity[] {
-    return this.children;
-  }
-
-  private property(indent: number): [string, string] {
-    const start = `${" ".repeat(indent)}<${this.name}`;
-
-    const properties = Array.from(this.properties.entries()).map(([key, value]) => `${key}="${value}"`).join(" ");
-    const spacing = properties.length > 0 ? " " : "";
-
-    const opening = `${start}${spacing}${properties}>`;
-    const closing = `${this.value !== null ? "" : " ".repeat(indent)}</${this.name}>`;
-
-    return [opening, closing];
+  addAttribute(key: string, value: string): void {
+    this.attributes.set(key, value);
   }
 
   toString(indent: number): string {
-    const [opening, closing] = this.property(indent);
+    const sb = new StringBuilder();
+    sb.append(" ".repeat(indent));
+    sb.push("<", this.tag);
 
-    const [indentChildren, children] = this.value !== null
-      ? [false, this.value.toString(0)]
-      : [true, this.getChildren().map((c) => c.toString(indent + 2)).join("\n")];
+    for (const [key, value] of this.attributes.entries()) {
+      sb.append(` ${key}="${value}"`);
+    }
 
-    const childString = indentChildren ? `\n${children}\n` : children;
+    sb.appendLine(">");
 
-    return `${opening}${childString}${closing}`;
+    sb.push(...this.children.map((c) => c.toString(indent + 2)));
+    sb.push(" ".repeat(indent), "</", this.tag, ">");
+    sb.push(`\n`);
+
+    return sb.toString();
   }
 }
 
 export class XmlNodeBuilder {
   private node: XmlNode;
 
-  constructor(name: string) {
-    this.node = new XmlNode({ name });
+  constructor(tag: string) {
+    this.node = new XmlNode({ tag });
   }
 
-  public setValue(value: string): XmlNodeBuilder {
-    this.node.setValue(value);
+  public withAttribute(key: string, value: string): XmlNodeBuilder {
+    this.node.addAttribute(key, value);
     return this;
   }
 
-  public addProperty(key: string, value: string): XmlNodeBuilder {
-    this.node.addProperty(key, value);
-    return this;
-  }
-
-  public addChild(child: XmlEntity | null): XmlNodeBuilder {
+  public withChild(child: XmlEntity | null): XmlNodeBuilder {
     this.node.addChild(child);
+    return this;
+  }
+
+  public withChildren(children: Array<XmlEntity | null>): XmlNodeBuilder {
+    children.forEach((c) => this.node.addChild(c));
     return this;
   }
 
@@ -143,18 +110,18 @@ export class XmlNodeBuilder {
 }
 
 export class XmlDocument {
-  private header: string;
-  private properties: Array<XmlProperty>;
+  private header: XmlProcessingInstruction;
+  private processingInstructions: Array<XmlProcessingInstruction>;
   private children: Array<XmlEntity>;
 
-  constructor(header?: string) {
-    this.header = header ?? `<?xml version="1.0" encoding="UTF-8"?>`;
-    this.properties = new Array<XmlProperty>();
+  constructor(header?: XmlProcessingInstruction) {
+    this.header = header ?? new XmlProcessingInstruction({ name: `xml`, value: `version="1.0" encoding="UTF-8"` });
+    this.processingInstructions = new Array<XmlProcessingInstruction>();
     this.children = new Array<XmlEntity>();
   }
 
-  public addProperty(property: XmlProperty): void {
-    this.properties.push(property);
+  public addProcessingInstruction(property: XmlProcessingInstruction): void {
+    this.processingInstructions.push(property);
   }
 
   public addChild(child: XmlEntity): void {
@@ -163,8 +130,35 @@ export class XmlDocument {
 
   public render(): string {
     return `${this.header}
-${this.properties.map((p) => p.toString(0)).join("\n")}
+${this.processingInstructions.map((p) => p.toString(0)).join("\n")}
 ${this.children.map((c) => c.toString(0)).join("\n")}
 `.trim();
+  }
+}
+
+export class XmlDocumentBuilder {
+  private document: XmlDocument;
+
+  constructor() {
+    this.document = new XmlDocument();
+  }
+
+  public withHeader(header: XmlProcessingInstruction): XmlDocumentBuilder {
+    this.document = new XmlDocument(header);
+    return this;
+  }
+
+  public withProcessingInstruction(property: XmlProcessingInstruction): XmlDocumentBuilder {
+    this.document.addProcessingInstruction(property);
+    return this;
+  }
+
+  public withChild(child: XmlEntity): XmlDocumentBuilder {
+    this.document.addChild(child);
+    return this;
+  }
+
+  public build(): XmlDocument {
+    return this.document;
   }
 }
