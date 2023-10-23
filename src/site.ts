@@ -75,7 +75,7 @@ export class Site {
     }
   }
 
-  private async collectStaticFiles(): Promise<void> {
+  public async collectStaticFiles(): Promise<void> {
     for await (const entry of walk(PATHS.public, { includeDirs: false })) {
       this.staticFiles.push({ path: new Path(entry.path), prefix: PATHS.public });
     }
@@ -108,7 +108,7 @@ export class Site {
     }));
   };
 
-  private async writeSitemap(): Promise<void> {
+  public async writeSitemap(): Promise<void> {
     const entries = Array.from(this.content.values())
       .filter((p) => !p.frontmatter.special)
       .map((page) => UrlEntry.fromContent(page));

@@ -36,6 +36,7 @@ export class Watcher {
   public start = (): void => {
     (async () => await this.watchContent())();
     (async () => await this.watchSCSS())();
+    (async () => await this.watchPublic())();
   };
 
   private async watchSCSS() {
@@ -57,6 +58,18 @@ export class Watcher {
         const content = await Content.fromPath(event.paths[0], "page", this.site.url);
         await content.write(this.site);
         this.site.collectContent(content);
+        this.site.writeSitemap();
+      }, this.tx);
+    }
+  }
+
+  private async watchPublic() {
+    const watcher = createWatcher(PATHS.public);
+    for await (const event of watcher) {
+      debounceHandler(async () => {
+        this.logger.info(`Rebuilding static file ${firstFilename(event)}`);
+        await this.site.collectStaticFiles();
+        await this.site.copyStaticAssets();
       }, this.tx);
     }
   }
