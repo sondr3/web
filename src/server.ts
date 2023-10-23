@@ -1,8 +1,8 @@
-import * as path from "std/path/mod.ts";
 import * as fs from "std/fs/mod.ts";
-import { PATHS } from "./constants.ts";
-import { extname } from "std/path/mod.ts";
 import * as log from "std/log/mod.ts";
+import * as path from "std/path/mod.ts";
+import { extname } from "std/path/mod.ts";
+import { PATHS } from "./constants.ts";
 
 const logger = log.getLogger();
 

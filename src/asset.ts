@@ -1,11 +1,11 @@
-import { PATHS } from "./constants.ts";
-import { Mode, Site } from "./site.ts";
 import * as sass from "sass";
-import { minifyCSS } from "./minify.ts";
-import * as path from "std/path/mod.ts";
 import { ensureDir } from "std/fs/ensure_dir.ts";
-import { WriteFromSite } from "./writeable.ts";
+import * as path from "std/path/mod.ts";
+import { PATHS } from "./constants.ts";
+import { minifyCSS } from "./minify.ts";
 import { Path } from "./path.ts";
+import { Mode, Site } from "./site.ts";
+import { WriteFromSite } from "./writeable.ts";
 
 export interface StaticAsset {
   path: Path;

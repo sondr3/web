@@ -1,17 +1,17 @@
-import { parse } from "std/toml/mod.ts";
 import { createExtractor, Format, Parser } from "std/front_matter/mod.ts";
-import { z } from "zod";
-import * as path from "std/path/mod.ts";
-import { Site } from "./site.ts";
-import * as log from "std/log/mod.ts";
-import { Path } from "./path.ts";
-import { PATHS } from "./constants.ts";
 import { ensureDir } from "std/fs/mod.ts";
-import { minifyHTML } from "./minify.ts";
-import { WriteFromSite } from "./writeable.ts";
+import * as log from "std/log/mod.ts";
+import * as path from "std/path/mod.ts";
+import { parse } from "std/toml/mod.ts";
+import { z } from "zod";
+import { PATHS } from "./constants.ts";
 import { Djot } from "./djot.ts";
-import { renderTemplate } from "./templates/render.ts";
+import { minifyHTML } from "./minify.ts";
+import { Path } from "./path.ts";
+import { Site } from "./site.ts";
 import { base } from "./templates/base.ts";
+import { renderTemplate } from "./templates/render.ts";
+import { WriteFromSite } from "./writeable.ts";
 
 const logger = log.getLogger();
 const extractToml = createExtractor({ [Format.TOML]: parse as Parser });

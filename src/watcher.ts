@@ -1,8 +1,8 @@
-import { PATHS } from "./constants.ts";
-import { Site } from "./site.ts";
-import * as log from "std/log/mod.ts";
 import { debounce } from "std/async/debounce.ts";
+import * as log from "std/log/mod.ts";
+import { PATHS } from "./constants.ts";
 import { Content } from "./content.ts";
+import { Site } from "./site.ts";
 import { firstFilename } from "./utils.ts";
 
 async function* createWatcher(path: string): AsyncGenerator<Deno.FsEvent> {

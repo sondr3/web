@@ -1,7 +1,7 @@
-import { extname } from "std/path/extname.ts";
-import { walk, WalkEntry } from "std/fs/walk.ts";
 import { brotliCompressSync } from "node:zlib";
+import { walk, WalkEntry } from "std/fs/walk.ts";
 import * as log from "std/log/mod.ts";
+import { extname } from "std/path/extname.ts";
 
 const logger = log.getLogger();
 

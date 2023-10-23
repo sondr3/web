@@ -1,8 +1,8 @@
+import * as fs from "std/fs/mod.ts";
 import { PATHS } from "./constants.ts";
 import { Content } from "./content.ts";
-import * as fs from "std/fs/mod.ts";
-import { WriteFromSite } from "./writeable.ts";
 import { Site } from "./site.ts";
+import { WriteFromSite } from "./writeable.ts";
 import {
   XmlContent,
   XmlDocument,

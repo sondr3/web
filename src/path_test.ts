@@ -1,7 +1,7 @@
 import { assertEquals } from "std/assert/mod.ts";
 import * as path from "std/path/mod.ts";
-import { Path } from "./path.ts";
 import { PATHS } from "./constants.ts";
+import { Path } from "./path.ts";
 
 Deno.test("path.common", () => {
   const it = new Path(path.join(PATHS.public, "./fonts/Piazolla.woff2"));

@@ -1,7 +1,7 @@
-import { encodeHex } from "std/encoding/hex.ts";
 import { crypto } from "std/crypto/mod.ts";
-import { parse, toFileUrl } from "std/path/mod.ts";
+import { encodeHex } from "std/encoding/hex.ts";
 import * as path from "std/path/mod.ts";
+import { parse, toFileUrl } from "std/path/mod.ts";
 
 export class Path {
   private path: URL;

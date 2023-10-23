@@ -1,15 +1,14 @@
-import { Asset, StaticAsset } from "./asset.ts";
-import { PATHS } from "./constants.ts";
-import { Content } from "./content.ts";
+import { ensureDir } from "std/fs/ensure_dir.ts";
+import { copy } from "std/fs/mod.ts";
 import { walk } from "std/fs/walk.ts";
 import * as log from "std/log/mod.ts";
 import * as path from "std/path/mod.ts";
-import { write } from "./writeable.ts";
-import { ensureDir } from "std/fs/ensure_dir.ts";
-import { copy } from "std/fs/mod.ts";
-import { Sitemap, UrlEntry } from "./sitemap.ts";
-import { URL } from "https://deno.land/std@0.174.0/node/url.ts";
+import { Asset, StaticAsset } from "./asset.ts";
+import { PATHS } from "./constants.ts";
+import { Content } from "./content.ts";
 import { Path } from "./path.ts";
+import { Sitemap, UrlEntry } from "./sitemap.ts";
+import { write } from "./writeable.ts";
 
 const logger = log.getLogger();
 

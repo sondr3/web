@@ -1,7 +1,7 @@
-import { browserslistToTargets, transform } from "lightningcss";
 import htmlnano from "htmlnano";
-import "terser";
+import { browserslistToTargets, transform } from "lightningcss";
 import "svgo";
+import "terser";
 
 declare module "htmlnano" {
   let presets: Presets;

@@ -1,9 +1,9 @@
-import { compressFolder } from "./compress.ts";
 import { Args, parse } from "std/flags/mod.ts";
 import * as log from "std/log/mod.ts";
+import { compressFolder } from "./compress.ts";
 import { PATHS } from "./constants.ts";
-import { Site } from "./site.ts";
 import { Server } from "./server.ts";
+import { Site } from "./site.ts";
 import { Watcher } from "./watcher.ts";
 
 const HELP = `

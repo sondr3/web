@@ -1,6 +1,6 @@
+import { assertEquals } from "std/assert/mod.ts";
 import { Sitemap, UrlEntry } from "./sitemap.ts";
 import { XmlDocument } from "./xml.ts";
-import { assertEquals } from "std/assert/mod.ts";
 
 const sitemap = (): XmlDocument => {
   const sitemap = new Sitemap([
