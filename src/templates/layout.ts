@@ -49,8 +49,7 @@ export class IndexLayout extends BaseLayout {
     return html`
 <section>
   <h1 id="hello">
-    <span>Hello! I'm</span>
-    <span class="blue">Sondre</span>
+    <span>Hello! I'm</span> <span class="blue">Sondre</span>
   </h1>
   <p class="me prose">
     I am a full time nerd with a passion for programming languages, mechanical keyboards, hoarding side-projects
