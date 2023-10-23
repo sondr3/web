@@ -59,7 +59,7 @@ export class Site {
   }
 
   public async collectCSS(): Promise<Asset> {
-    const asset = await Asset.buildCSS(PATHS, this.mode);
+    const asset = await Asset.buildCSS(this.mode);
     this.assets.set("styles.css", asset);
     return asset;
   }

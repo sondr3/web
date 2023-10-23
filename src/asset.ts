@@ -1,5 +1,5 @@
 import { parse } from "std/path/parse.ts";
-import { PATHS, Paths } from "./constants.ts";
+import { PATHS } from "./constants.ts";
 import { Mode, Site } from "./site.ts";
 import * as sass from "sass";
 import { digestFilename } from "./utils.ts";
@@ -35,9 +35,9 @@ export class Asset implements WriteFromSite {
     return new Asset(filename, content);
   }
 
-  static async buildCSS(paths: Paths, mode: Mode): Promise<Asset> {
+  static async buildCSS(mode: Mode): Promise<Asset> {
     const outPath = `styles.css`;
-    const res = sass.compile(`${paths.styles}/styles.scss`);
+    const res = sass.compile(`${PATHS.styles}/styles.scss`);
 
     if (mode === "dev") {
       return new Asset(outPath, res.css);

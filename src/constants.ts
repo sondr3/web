@@ -1,6 +1,6 @@
 import { resolve } from "std/path/mod.ts";
 
-export interface Paths {
+interface Paths {
   out: string;
   source: string;
   templates: string;
