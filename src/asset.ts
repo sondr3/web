@@ -28,7 +28,6 @@ export class Asset implements WriteFromSite {
   }
 
   static async fromPath(path: string): Promise<Asset> {
-    console.log(path);
     const content = await Deno.readTextFile(path);
 
     return new Asset(new Path(path), content);
