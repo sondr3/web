@@ -8,7 +8,7 @@ import { write } from "./writeable.ts";
 import { ensureDir } from "std/fs/ensure_dir.ts";
 import { stripPrefix } from "./utils.ts";
 import { copy } from "std/fs/mod.ts";
-import { Sitemap } from "./sitemap.ts";
+import { Sitemap, UrlEntry } from "./sitemap.ts";
 import { URL } from "https://deno.land/std@0.174.0/node/url.ts";
 
 const logger = log.getLogger();
@@ -55,8 +55,7 @@ export class Site {
     await this.copyStaticAssets();
     await this.writeAssets();
     await this.writeContent();
-
-    await new Sitemap(this.content.values()).write(this);
+    await this.writeSitemap();
   }
 
   public async collectCSS(): Promise<Asset> {
@@ -106,4 +105,12 @@ export class Site {
       await copy(file.path, out, { overwrite: true });
     }));
   };
+
+  private async writeSitemap(): Promise<void> {
+    const entries = Array.from(this.content.values())
+      .filter((p) => !p.frontmatter.special)
+      .map((page) => UrlEntry.fromContent(page));
+
+    await new Sitemap(entries).write(this);
+  }
 }
