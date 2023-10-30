@@ -3,12 +3,13 @@ import { copy } from "std/fs/mod.ts";
 import { walk } from "std/fs/walk.ts";
 import * as log from "std/log/mod.ts";
 import * as path from "std/path/mod.ts";
-import { Asset, StaticAsset } from "./asset.ts";
-import { PATHS } from "./constants.ts";
+import { Asset, CssAsset, JavaScriptAsset, StaticAsset } from "./asset.ts";
+import { JS_FILES, PATHS, SCSS_FILES } from "./constants.ts";
 import { Content } from "./content.ts";
 import { Path } from "./path.ts";
 import { Sitemap, UrlEntry } from "./sitemap.ts";
 import { write } from "./writeable.ts";
+import { fromAsyncIterable } from "./utils.ts";
 
 const logger = log.getLogger();
 
@@ -32,7 +33,7 @@ export class Site {
     const start = performance.now();
 
     await site.collectAssets();
-    await site.collectCSS();
+    await fromAsyncIterable(site.collectCSS());
     await site.collectStaticFiles();
     await site.collectContents();
 
@@ -57,10 +58,12 @@ export class Site {
     await this.writeSitemap();
   }
 
-  public async collectCSS(): Promise<Asset> {
-    const asset = await Asset.buildCSS(this.mode);
-    this.assets.set("styles.css", asset);
-    return asset;
+  public async *collectCSS(): AsyncGenerator<Asset> {
+    for await (const entry of Object.values(SCSS_FILES)) {
+      const asset = new CssAsset(entry.source, entry.dest);
+      this.assets.set(entry.dest.filename, asset);
+      yield asset;
+    }
   }
 
   public async writeAssets(): Promise<void> {
@@ -68,15 +71,14 @@ export class Site {
   }
 
   public async collectAssets(): Promise<void> {
-    for await (const entry of Deno.readDir(PATHS.js)) {
-      const path = `${PATHS.js}/${entry.name}`;
-      const asset = await Asset.fromPath(path);
+    for await (const entry of Object.values(JS_FILES)) {
+      const asset = new JavaScriptAsset(entry.source, entry.dest);
       this.collectAsset(asset);
     }
   }
 
   public collectAsset(asset: Asset): void {
-    this.assets.set(asset.path.filename, asset);
+    this.assets.set(asset.source.filename, asset);
   }
 
   public async collectStaticFiles(): Promise<void> {

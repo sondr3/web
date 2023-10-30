@@ -1,10 +1,10 @@
 import { debounce } from "std/async/debounce.ts";
 import * as log from "std/log/mod.ts";
-import { PATHS } from "./constants.ts";
+import { JS_FILES, PATHS } from "./constants.ts";
 import { Content } from "./content.ts";
 import { Site } from "./site.ts";
 import { firstFilename } from "./utils.ts";
-import { Asset } from "./asset.ts";
+import { JavaScriptAsset } from "./asset.ts";
 
 async function* createWatcher(path: string): AsyncGenerator<Deno.FsEvent> {
   const watcher = Deno.watchFs(path, { recursive: true });
@@ -46,8 +46,9 @@ export class Watcher {
     for await (const _event of watcher) {
       debounceHandler(async () => {
         this.logger.info("Rebuilding CSS");
-        const asset = await this.site.collectCSS();
-        await asset.write(this.site);
+        for await (const asset of this.site.collectCSS()) {
+          await asset.write(this.site);
+        }
       }, this.tx);
     }
   }
@@ -57,7 +58,8 @@ export class Watcher {
     for await (const event of watcher) {
       debounceHandler(async () => {
         this.logger.info(`Rebuilding JS ${firstFilename(event)}`);
-        const asset = await Asset.fromPath(event.paths[0]);
+        const item = JS_FILES[firstFilename(event) as keyof typeof JS_FILES];
+        const asset = new JavaScriptAsset(item.source, item.dest);
         this.site.collectAsset(asset);
         await asset.write(this.site);
       }, this.tx);

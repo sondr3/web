@@ -1,3 +1,10 @@
+import { Site } from "../site.ts";
+import { html } from "./html.ts";
+
+export const sitemapStyle = (site: Site): string => {
+  const styles = site.assets.get("sitemap.css");
+
+  return html`
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:sitemap="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -9,7 +16,7 @@
         <meta charset="utf-8"/>
         <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <link rel="stylesheet" href="/sitemap.css" />
+        <link rel="stylesheet" href="${styles?.dest.filename}" />
       </head>
       <body>
         <main>
@@ -37,3 +44,5 @@
     </html>
   </xsl:template>
 </xsl:stylesheet>
+	`.trim();
+};

@@ -7,3 +7,11 @@ export const firstFilename = ({ paths }: Deno.FsEvent): string => {
 
   return path.parse(paths[0]).base;
 };
+
+export async function fromAsyncIterable<T>(gen: AsyncIterable<T>): Promise<Array<T>> {
+  const out: Array<T> = [];
+  for await (const x of gen) {
+    out.push(x);
+  }
+  return out;
+}

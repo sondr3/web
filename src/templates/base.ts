@@ -31,7 +31,7 @@ export const base = (layout: Layout, site: Site): string => {
     />
     <link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180" />
 
-    <link href="/${css?.path.filename}" rel="stylesheet" />
+    <link href="/${css?.dest.filename}" rel="stylesheet" />
 
     <link href="/humans.txt" rel="author" />
     <meta content="Sondre Aasemoen" name="author" />
