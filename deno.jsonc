@@ -3,6 +3,7 @@
     "build": "deno run --check --unstable -A src/main.ts -p",
     "dev": "deno run --check --unstable --watch -A src/main.ts",
     "check": "deno check --unstable src/**/*.ts",
+    "lint": "deno lint --unstable src",
     "test": "deno test --unstable -A --doc --no-check",
     "stylelint": "deno run --vendor -A scripts/stylelint.ts",
     "serve": "pnpx serve dist"

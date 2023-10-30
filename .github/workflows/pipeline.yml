@@ -20,7 +20,7 @@ jobs:
         run: deno fmt --check src/**/*.{ts,tsx}
 
       - name: Linting
-        run: deno lint src/**/*.{ts,tsx}
+        run: deno task lint
 
       - name: Type check
         run: deno task check
