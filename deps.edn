@@ -1,7 +1,7 @@
 {:paths ["src/main", "src/test"]
- :deps 
- {thheller/shadow-cljs {:mvn/version "2.26.0"}
-  org.clojure/clojure {:mvn/version "1.11.1"}
+ :deps
+ {org.clojure/clojure {:mvn/version "1.11.1"}
+  com.github.pkpkpk/cljs-node-io {:mvn/version "2.0.339"}
   io.github.clj-kondo/config-rum-rum {:mvn/version "1.0.0"}
   rum/rum {:mvn/version "0.12.1" :exclusions [cljsjs/react cljsjs/react-dom]}}
- :aliases {}}
+ :aliases {:cljs  {:extra-deps {thheller/shadow-cljs {:mvn/version "2.26.0"}}}}}

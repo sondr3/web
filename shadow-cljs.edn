@@ -1,10 +1,4 @@
-;; shadow-cljs configuration
-{:deps true
-;;  :source-paths
-;;  ["src/dev"
-;;   "src/main"
-;;   "src/test"]
-
+{:deps {:aliases [:cljs]}
  :builds
  {:web {:target :node-script
         :main web.app/-main
