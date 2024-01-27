@@ -1,5 +1,0 @@
-{:deps {:aliases [:cljs]}
- :builds
- {:web {:target :node-script
-        :main web.app/-main
-        :output-to ".app/index.js"}}}

@@ -1,41 +1,7 @@
 .vscode/
-.app/
-/target
-/checkouts
-/src/gen
-.calva/
-old/
-
-pom.xml
-pom.xml.asc
-*.iml
-*.jar
-*.log
-.shadow-cljs
-.idea
-.lein-*
-.nrepl-*
-.DS_Store
 
 # build output
 dist/
-
-### Created by https://www.gitignore.io
-### Clojure ###
-pom.xml
-pom.xml.asc
-*.jar
-*.class
-/lib/
-/classes/
-/target/
-/checkouts/
-.lein-deps-sum
-.lein-repl-history
-.lein-plugins/
-.lein-failures
-.nrepl-port
-.cpcache/
 
 ### Created by https://www.gitignore.io
 ### Node ###

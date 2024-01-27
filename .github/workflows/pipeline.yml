@@ -9,60 +9,30 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v2
-        name: Install pnpm
+      - uses: denoland/setup-deno@v1
         with:
-          version: 8
-          run_install: false
+          deno-version: v1.x
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 21
-          cache: pnpm
-
-      - uses: actions/setup-java@v3
-        with:
-          distribution: "zulu"
-          java-version: "11"
-
-      - uses: DeLaGuardo/setup-clojure@12.1
-        with:
-          cli: 1.11.1.1413
-          clj-kondo: 2023.10.20
-          cljfmt: 0.11.2
-
-      - name: Cache clojure dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.m2/repository
-            ~/.gitlibs
-            ~/.deps.clj
-          key: ${{ runner.os }}-cljdeps-${{ hashFiles('deps.edn') }}
-          restore-keys: cljdeps-
-
-      - name: Shadow-cljs cache
-        uses: actions/cache@v3
-        with:
-          path: .shadow-cljs
-          key: ${{ runner.os }}-shadow-cljs-${{ hashFiles('deps.edn') }}
-          restore-keys: ${{ runner.os }}-shadow-cljs-
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Cache
+        run: deno cache src/main.ts
 
       - name: Formatting
-        run: cljfmt check src
+        run: deno fmt --check src/**/*.{ts,tsx}
 
       - name: Linting
-        run: clj-kondo --parallel --lint src
+        run: deno task lint
 
-      - name: Compile
-        run: pnpm cljs release web
+      - name: Type check
+        run: deno task check
+
+      - name: Stylelint
+        run: deno task stylelint
+
+      - name: Test
+        run: deno task test
 
       - name: Build
-        run: node .app/index.js
+        run: deno task build
 
       - name: Deploy
         if: ${{ github.ref == 'refs/heads/main' }}
