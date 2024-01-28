@@ -136,7 +136,7 @@ impl Content {
     }
 }
 
-fn jotdown_event_mapper(event: jotdown::Event) -> jotdown::Event {
+fn jotdown_event_mapper(event: Event) -> Event {
     match event {
         Event::Start(container, attrs) => jotdown_container_mapper(container, attrs).into(),
         _ => event,
@@ -145,7 +145,7 @@ fn jotdown_event_mapper(event: jotdown::Event) -> jotdown::Event {
 
 struct ContainerWrapper<'a>(Container<'a>, Attributes<'a>);
 
-impl<'a> From<ContainerWrapper<'a>> for jotdown::Event<'a> {
+impl<'a> From<ContainerWrapper<'a>> for Event<'a> {
     fn from(val: ContainerWrapper<'a>) -> Self {
         Event::Start(val.0, val.1)
     }
