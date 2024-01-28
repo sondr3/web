@@ -6,17 +6,15 @@
     "dev": "cargo run",
     "build": "cargo build",
     "preview": "serve dist",
-    "test": "playwright test",
     "styles": "stylelint --cache './site/styles/**/*.scss'",
     "styles:fix": "stylelint --cache './site/styles/**/*.scss' --fix"
   },
   "devDependencies": {
-    "@playwright/test": "1.37.1",
-    "prettier": "3.0.3",
+    "prettier": "3.2.4",
     "serve": "14.2.1",
-    "stylelint": "15.10.3",
-    "stylelint-config-standard-scss": "11.0.0",
-    "stylelint-prettier": "4.0.2"
+    "stylelint": "16.2.0",
+    "stylelint-config-standard-scss": "13.0.0",
+    "stylelint-prettier": "5.0.0"
   },
   "stylelint": {
     "extends": [

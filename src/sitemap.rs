@@ -1,6 +1,7 @@
 use std::fmt::{self, Display, Formatter};
 
-use anyhow::Result;
+use anyhow::{anyhow, Result};
+use minijinja::context;
 use quick_xml::se::Serializer;
 use serde::{Deserialize, Serialize};
 use time::Date;
@@ -87,6 +88,20 @@ impl UrlEntry {
             None,
         ))
     }
+}
+
+pub fn create_styles(context: &Context) -> Result<String> {
+    let css = context
+        .assets
+        .get("sitemap.css")
+        .ok_or(anyhow!("No sitemap.css"))?;
+    let template_context = context! {
+        styles => css.filename
+    };
+    let template = context.templates.acquire_env()?;
+    let template = template.get_template("sitemap_style.jinja")?;
+
+    Ok(template.render(&template_context)?)
 }
 
 pub fn create(context: &Context) -> Result<String> {

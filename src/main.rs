@@ -25,7 +25,7 @@ use crate::{
     watcher::start_live_reload,
 };
 
-const HELP_MESSAGE: &str = r#"
+const HELP_MESSAGE: &str = "
 web - website generator
 
 Options:
@@ -36,7 +36,7 @@ Options:
   
 Environment variables:
   CI,PROD           Optimize output
-"#;
+";
 
 #[derive(Debug, Copy, Clone)]
 pub enum Mode {

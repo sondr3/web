@@ -22,7 +22,14 @@ impl ContextBuilder {
         pages.append(&mut collect_posts(paths)?);
 
         let mut assets = AHashMap::new();
-        assets.insert("styles.css".to_string(), Asset::build_css(paths, mode)?);
+        assets.insert(
+            "styles.css".to_string(),
+            Asset::build_css("styles.css", "styles.scss", paths, mode)?,
+        );
+        assets.insert(
+            "sitemap.css".to_string(),
+            Asset::build_css("sitemap.css", "sitemap.scss", paths, mode)?,
+        );
         collect_js(paths)?.into_iter().for_each(|a| {
             assets.insert(a.filename.clone(), a);
         });

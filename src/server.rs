@@ -15,21 +15,22 @@ use axum::{
     routing::get,
     Router,
 };
-use tokio::sync::broadcast::Sender;
+use tokio::{net::TcpListener, sync::broadcast::Sender};
 use tower_http::{services::ServeDir, trace::TraceLayer};
 
 use crate::Event;
 
 pub async fn create(root: &Path, tx: Sender<Event>) -> Result<()> {
     let addr = SocketAddr::from((Ipv4Addr::LOCALHOST, 3000));
-    axum::Server::bind(&addr)
-        .serve(
-            router(root, tx)
-                .layer(TraceLayer::new_for_http())
-                .into_make_service_with_connect_info::<SocketAddr>(),
-        )
-        .await
-        .context("Failed to start server")
+    let listener = TcpListener::bind(&addr).await?;
+    axum::serve(
+        listener,
+        router(root, tx)
+            .layer(TraceLayer::new_for_http())
+            .into_make_service_with_connect_info::<SocketAddr>(),
+    )
+    .await
+    .context("Failed to start server")
 }
 
 fn router(root: &Path, tx: Sender<Event>) -> Router {
@@ -48,7 +49,7 @@ async fn ws_handler(
 }
 
 async fn handle_socket(mut socket: WebSocket, tx: Sender<Event>, addr: SocketAddr) {
-    tracing::info!("{addr} connected");
+    tracing::debug!("{addr} connected");
     let mut rx = tx.subscribe();
 
     while let Ok(event) = rx.recv().await {

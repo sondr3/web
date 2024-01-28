@@ -95,6 +95,8 @@ where
 }
 
 pub fn write_sitemap(dest: &Path, context: &Context) -> Result<()> {
+    let sitemap_styles = sitemap::create_styles(context)?;
+    write_file(&dest.join("sitemap-style.xsl"), sitemap_styles)?;
     let sitemap = sitemap::create(context)?;
     write_file(&dest.join("sitemap.xml"), sitemap)
 }

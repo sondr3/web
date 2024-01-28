@@ -29,9 +29,9 @@ impl Asset {
         Ok(Self { filename, content })
     }
 
-    pub fn build_css(paths: &Paths, mode: Mode) -> Result<Self> {
-        let path = PathBuf::from("styles.css");
-        let source = paths.styles.join("styles.scss");
+    pub fn build_css(out_file: &str, in_file: &str, paths: &Paths, mode: Mode) -> Result<Self> {
+        let path = PathBuf::from(out_file);
+        let source = paths.styles.join(in_file);
         let content = grass::from_path(source, &grass::Options::default())?;
 
         Ok(match mode {

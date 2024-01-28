@@ -50,7 +50,9 @@ fn css_watch_handler(paths: &Paths, event: &Event, tx: &Sender<crate::Event>) ->
         "File(s) {:?} changed, rebuilding CSS",
         strip_prefix_paths(&paths.source, &event.paths)?
     );
-    let css = Asset::build_css(paths, Mode::Dev)?;
+    let css = Asset::build_css("styles.css", "styles.scss", paths, Mode::Dev)?;
+    write_asset(&paths.out, &css)?;
+    let css = Asset::build_css("sitemap.css", "sitemap.scss", paths, Mode::Dev)?;
     write_asset(&paths.out, &css)?;
     tx.send(crate::Event::Reload)?;
 
