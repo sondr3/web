@@ -5,6 +5,7 @@ use jotdown::{Attributes, Container, Event, Render};
 use minijinja::{context, value::Value};
 use minijinja_autoreload::AutoReloader;
 use serde::Deserialize;
+use syntect::{easy::HighlightLines, highlighting::ThemeSet, parsing::SyntaxSet};
 use time::Date;
 use url::Url;
 
@@ -143,11 +144,14 @@ fn jotdown_event_mapper(event: Event) -> Event {
     }
 }
 
-struct ContainerWrapper<'a>(Container<'a>, Attributes<'a>);
+struct ContainerWrapper<'a> {
+    container: Container<'a>,
+    attrs: Attributes<'a>,
+}
 
 impl<'a> From<ContainerWrapper<'a>> for Event<'a> {
     fn from(val: ContainerWrapper<'a>) -> Self {
-        Event::Start(val.0, val.1)
+        Event::Start(val.container, val.attrs)
     }
 }
 
@@ -155,25 +159,36 @@ fn jotdown_container_mapper<'a>(
     container: Container<'a>,
     attrs: Attributes<'a>,
 ) -> ContainerWrapper<'a> {
+    let ps = SyntaxSet::load_defaults_newlines();
+    let ts = ThemeSet::load_defaults();
+
     match container {
         Container::Heading {
             id,
             level,
             has_section,
-        } => ContainerWrapper(
-            Container::Heading {
+        } => ContainerWrapper {
+            container: Container::Heading {
                 level,
                 id: id.to_lowercase().into(),
                 has_section,
             },
             attrs,
-        ),
-        Container::Section { id } => ContainerWrapper(
-            Container::Section {
+        },
+        Container::Section { id } => ContainerWrapper {
+            container: Container::Section {
                 id: id.to_lowercase().into(),
             },
             attrs,
-        ),
-        _ => ContainerWrapper(container, attrs),
+        },
+        Container::CodeBlock { language } => {
+            let syntax = ps.find_syntax_by_name("JavaScript").unwrap();
+            let theme = &ts.themes["InspiredGitHub"];
+            ContainerWrapper {
+                container: Container::CodeBlock { language },
+                attrs,
+            }
+        }
+        _ => ContainerWrapper { container, attrs },
     }
 }
