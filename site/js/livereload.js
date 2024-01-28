@@ -1,5 +1,5 @@
 (() => {
-  const url = "ws://localhost:3001";
+  const url = "ws://localhost:3000/ws";
   let socket = null;
 
   const connect = () => {

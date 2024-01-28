@@ -12,5 +12,5 @@ Last Update: 202x
 Doctype: HTML5
 Language: English
 Standards: HTML5
-Components: Deno, TSX, SASS
+Components: Rust
 Software: neovim

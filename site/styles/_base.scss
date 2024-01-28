@@ -10,7 +10,6 @@ root[data-theme="light"] {
   --background: rgb(255 255 255);
   --text: rgb(0 0 0);
   --heading: rgb(0 0 0);
-  --link: rgb(79 70 229);
   --blue: rgb(79 70 229);
   --grey: rgb(107 114 128);
 }
@@ -20,11 +19,9 @@ root[data-theme="light"] {
   --text: rgb(156 163 175);
   --heading: rgb(209 213 219);
   --grey: rgb(229 231 235);
-  --link: rgb(229 231 235);
 }
 
 body {
-  font-optical-sizing: auto;
   transition-duration: 300ms;
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -41,7 +38,6 @@ body {
 a {
   cursor: pointer;
   font-weight: 600;
-  color: var(--link);
 
   &:hover,
   &:focus {
@@ -66,6 +62,12 @@ h6 {
 }
 
 .prose {
+  font-size: 1.15rem;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+article {
   font-size: 1.15rem;
   text-align: justify;
   text-justify: inter-word;
