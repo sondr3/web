@@ -11,7 +11,7 @@ import {
   XmlNodeBuilder,
   XmlProcessingInstruction,
 } from "./xml.ts";
-import { sitemapStyle } from "./templates/sitemap.ts";
+import { compile } from "./templating.ts";
 
 export type ChangeFreq = "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
 
@@ -105,7 +105,9 @@ export class Sitemap implements WriteFromSite {
     await fs.ensureDir(PATHS.out);
     await Deno.writeTextFile(`${PATHS.out}/sitemap.xml`, sitemap);
 
-    const xsl = sitemapStyle(site);
-    await Deno.writeTextFile(`${PATHS.out}/sitemap-style.xsl`, xsl);
+    const xsl = await Deno.readTextFile(`${PATHS.templates}/sitemap-style.xsl`);
+    const template = compile(xsl);
+    const rendered = template({ css: site.assets.get("sitemap.css") });
+    await Deno.writeTextFile(`${PATHS.out}/sitemap-style.xsl`, rendered);
   }
 }

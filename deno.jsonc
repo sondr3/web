@@ -6,7 +6,9 @@
     "lint": "deno lint src",
     "test": "deno test -A --doc --no-check",
     "stylelint": "deno run --vendor -A scripts/stylelint.ts",
-    "serve": "pnpx serve dist"
+    "serve": "pnpx serve dist",
+    "html-format": "npx -y prettier@latest --write --print-width=120 ./site/templates/*.html",
+    "html-check": "npx -y prettier@latest --check --print-width=120 ./site/templates/*.html"
   },
   "imports": {
     "djot": "npm:@djot/djot@0.2.5",

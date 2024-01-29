@@ -25,6 +25,9 @@ jobs:
       - name: Type check
         run: deno task check
 
+      - name: Check HTML
+        run: deno task html-check
+
       - name: Stylelint
         run: deno task stylelint
 

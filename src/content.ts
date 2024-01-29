@@ -9,9 +9,8 @@ import { Djot } from "./djot.ts";
 import { minifyHTML } from "./minify.ts";
 import { Path } from "./path.ts";
 import { Site } from "./site.ts";
-import { base } from "./templates/base.ts";
-import { renderTemplate } from "./templates/render.ts";
 import { WriteFromSite } from "./writeable.ts";
+import { render } from "./templating.ts";
 
 const logger = log.getLogger();
 const extractToml = createExtractor({ "toml": parse as Parser });
@@ -64,14 +63,21 @@ export class Content implements WriteFromSite {
     return Djot.render(this.sourceContent);
   }
 
-  public render() {
-    return renderTemplate(this);
+  public context(site: Site) {
+    return {
+      title: `${this.frontmatter.title} => Eons :: IO ()`,
+      canonicalUrl: new URL(this.url, site.url).toString(),
+      css: site.assets.get("styles.css"),
+      isDev: !site.isProd,
+      content: this.content,
+      frontmatter: this.frontmatter,
+      pubDate: this.frontmatter.lastModified?.toISOString(),
+    };
   }
 
   public async write(site: Site) {
     await ensureDir(path.dirname(this.outPath.absolute));
-    const layout = this.render();
-    let rendered = base(layout, site);
+    let rendered = await render(this.frontmatter.layout, this.context(site));
 
     if (site.isProd) {
       rendered = minifyHTML(rendered);
