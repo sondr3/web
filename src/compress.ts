@@ -17,10 +17,6 @@ const VALID_EXTENSIONS: Array<string> = [
   ".txt",
   ".svg",
   ".map",
-  ".ttf",
-  ".otf",
-  ".woff2",
-  ".eot",
 ];
 
 const isCompressible = (file: WalkEntry): boolean => {
@@ -42,7 +38,7 @@ const gzip = async (dir: string): Promise<void> => {
     if (!isCompressible(file)) continue;
 
     const source = await Deno.open(file.path, { read: true });
-    const dest = await Deno.open(`${file.path}.gz`, { create: true, truncate: true, write: true });
+    const dest = await Deno.open(`${file.path}.gz`, { create: true, write: true });
 
     source.readable
       .pipeThrough(new CompressionStream("gzip"))
@@ -68,7 +64,7 @@ const brotli = async (dir: string): Promise<void> => {
     if (!isCompressible(file)) continue;
 
     const source = await Deno.open(file.path, { read: true });
-    const dest = await Deno.open(`${file.path}.br`, { create: true, truncate: true, write: true });
+    const dest = await Deno.open(`${file.path}.br`, { create: true, write: true });
 
     source.readable
       .pipeThrough(new BrotliCompressionStream())
