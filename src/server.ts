@@ -20,28 +20,17 @@ export class Server {
 }
 
 export function httpServer() {
-  const server = Deno.listen({ port: 3000 });
   logger.info(`File server running on http://localhost:3000/`);
-
-  (async () => {
-    for await (const conn of server) {
-      void handleHttp(conn);
-    }
-  })();
+  Deno.serve({ port: 3000 }, httpHandler);
 }
 
 export function websocketServer(tx: BroadcastChannel) {
-  const webSocketServer = Deno.listen({ port: 3001 });
   logger.info("Websocket server running on ws://localhost:3001/");
-  (async () => {
-    for await (const conn of webSocketServer) {
-      void handleWebsocket(tx, conn);
-    }
-  })();
+  Deno.serve({ port: 3001 }, (req) => wsHandler(req, tx));
 }
 
-const respondWithFile = async (req: Deno.RequestEvent, path: string): Promise<boolean> => {
-  if (!(await fileExists(path))) return false;
+const respondWithFile = async (_req: Request, path: string): Promise<Response | null> => {
+  if (!(await fileExists(path))) return null;
   const file = await Deno.open(path, { read: true });
   const readableStream = file.readable;
   const response = new Response(readableStream, {
@@ -49,54 +38,46 @@ const respondWithFile = async (req: Deno.RequestEvent, path: string): Promise<bo
       "Content-Type": matchExtension(path),
     }),
   });
-  try {
-    await req.respondWith(response);
-  } catch { /* noop */ }
 
-  return true;
+  return response;
 };
 
-async function handleHttp(conn: Deno.Conn) {
-  const httpConn = Deno.serveHttp(conn);
-  for await (const requestEvent of httpConn) {
-    const url = new URL(requestEvent.request.url);
-    const filepath = decodeURIComponent(url.pathname);
+async function httpHandler(req: Request): Promise<Response> {
+  const url = new URL(req.url);
+  const filepath = decodeURIComponent(url.pathname);
 
-    if (await respondWithFile(requestEvent, path.join(PATHS.out, filepath, "index.html"))) {
-      continue;
-    }
-
-    if (await respondWithFile(requestEvent, path.join(PATHS.out, filepath))) {
-      continue;
-    }
-
-    const notFound = await Deno.open(path.join(PATHS.out, "404", "index.html"), { read: true });
-    const notFoundResponse = new Response(notFound.readable, { status: 404 });
-    await requestEvent.respondWith(notFoundResponse);
+  const html = await respondWithFile(req, path.join(PATHS.out, filepath, "index.html"));
+  if (html !== null) {
+    return html;
   }
+
+  const file = await respondWithFile(req, path.join(PATHS.out, filepath));
+  if (file !== null) {
+    return file;
+  }
+
+  const notFound = await Deno.open(path.join(PATHS.out, "404", "index.html"), { read: true });
+  return new Response(notFound.readable, { status: 404 });
 }
 
-async function handleWebsocket(tx: BroadcastChannel, conn: Deno.Conn) {
-  const wsConn = Deno.serveHttp(conn);
-  for await (const req of wsConn) {
-    if (req.request.headers.get("upgrade") != "websocket") {
-      return new Response(null, { status: 501 });
-    }
-    const { socket, response } = Deno.upgradeWebSocket(req.request);
-    socket.addEventListener("message", (event) => {
-      if (event.data === "ping") {
-        socket.send("pong");
-      }
-    });
-
-    tx.onmessage = (event) => {
-      if (event.data.type === "reload" && socket.readyState === WebSocket.OPEN) {
-        socket.send("reload");
-      }
-    };
-
-    req.respondWith(response);
+function wsHandler(req: Request, tx: BroadcastChannel): Response {
+  if (req.headers.get("upgrade") != "websocket") {
+    return new Response(null, { status: 501 });
   }
+  const { socket, response } = Deno.upgradeWebSocket(req);
+  socket.addEventListener("message", (event) => {
+    if (event.data === "ping") {
+      socket.send("pong");
+    }
+  });
+
+  tx.onmessage = (event) => {
+    if (event.data.type === "reload" && socket.readyState === WebSocket.OPEN) {
+      socket.send("reload");
+    }
+  };
+
+  return response;
 }
 
 const fileExists = async (filePath: string): Promise<boolean> => {

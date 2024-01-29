@@ -74,7 +74,7 @@ export class Content implements WriteFromSite {
     let rendered = base(layout, site);
 
     if (site.isProd) {
-      rendered = await minifyHTML(rendered);
+      rendered = minifyHTML(rendered);
     }
 
     await Deno.writeTextFile(this.outPath.absolute, rendered);

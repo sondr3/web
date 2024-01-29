@@ -1,4 +1,4 @@
-import { Args, parse } from "std/flags/mod.ts";
+import { Args, parseArgs } from "std/cli/mod.ts";
 import * as log from "std/log/mod.ts";
 import { compressFolder } from "./compress.ts";
 import { PATHS } from "./constants.ts";
@@ -26,7 +26,7 @@ interface Flags extends Args {
   help: boolean;
 }
 
-const flags = parse(Deno.args, {
+const flags = parseArgs(Deno.args, {
   boolean: ["server", "production", "verbose", "help"],
   default: { server: !Deno.env.has("CI"), production: Deno.env.has("CI"), verbose: false, help: false },
   alias: { s: "server", v: "verbose", p: "production", h: "help" },
@@ -43,7 +43,7 @@ try {
 
 log.setup({
   handlers: {
-    console: new log.handlers.ConsoleHandler(flags.verbose ? "DEBUG" : "INFO"),
+    console: new log.ConsoleHandler(flags.verbose ? "DEBUG" : "INFO"),
   },
 });
 
