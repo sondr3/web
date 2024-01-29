@@ -3,71 +3,39 @@ name: pipeline
 on: [push, pull_request]
 
 jobs:
-  build:
-    name: build
+  pipeline:
+    name: tests
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v2.4.0
+      - uses: denoland/setup-deno@v1
         with:
-          version: 8
+          deno-version: v1.x
 
-      - uses: actions/setup-node@v3.8.1
-        with:
-          node-version: latest
-          cache: "pnpm"
+      - name: Cache
+        run: deno cache src/main.ts
 
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          components: rustfmt, clippy
+      - name: Formatting
+        run: deno fmt --check src/**/*.{ts,tsx}
 
-      - uses: Swatinem/rust-cache@v2
+      - name: Linting
+        run: deno task lint
 
-      - name: Install npm packages
-        run: pnpm install --frozen-lockfile
+      - name: Type check
+        run: deno task check
 
-      - name: build
-        run: cargo test --no-run
+      - name: Stylelint
+        run: deno task stylelint
 
-      - name: test
-        run: cargo test -- --nocapture --quiet
+      - name: Test
+        run: deno task test
 
-      - name: formatting
-        run: cargo fmt --all -- --check
-
-      - name: check
-        run: cargo check
-
-      - name: clippy
-        run: cargo clippy -- -D warnings
-
-      - name: styles
-        run: pnpm run styles
-
-      - name: build
-        run: cargo run
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: dist
-          path: ./dist
-          retention-days: 1
-
-  deploy:
-    if: ${{ github.ref == 'refs/heads/main' }}
-    needs: [build]
-    runs-on: ubuntu-latest
-    name: deploy
-
-    steps:
-      - uses: actions/download-artifact@v3
-        with:
-          name: dist
-          path: ./dist
+      - name: Build
+        run: deno task build
 
       - name: Deploy
+        if: ${{ github.ref == 'refs/heads/main' }}
         uses: burnett01/rsync-deployments@5.2
         with:
           switches: -avzrh --delete
