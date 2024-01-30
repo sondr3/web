@@ -7,7 +7,7 @@ import { Asset, CssAsset, JavaScriptAsset, StaticAsset } from "./asset.ts";
 import { JS_FILES, PATHS, SCSS_FILES } from "./constants.ts";
 import { Content } from "./content.ts";
 import { Path } from "./path.ts";
-import { Sitemap, UrlEntry } from "./sitemap.ts";
+import { urlEntry, write_sitemap } from "./sitemap.ts";
 import { write } from "./writeable.ts";
 import { fromAsyncIterable } from "./utils.ts";
 
@@ -117,8 +117,8 @@ export class Site {
   public async writeSitemap(): Promise<void> {
     const entries = Array.from(this.content.values())
       .filter((p) => !p.frontmatter.special)
-      .map((page) => UrlEntry.fromContent(page));
+      .map((page) => urlEntry(page));
 
-    await new Sitemap(entries).write(this);
+    await write_sitemap(entries, this);
   }
 }
