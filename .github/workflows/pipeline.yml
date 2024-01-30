@@ -45,8 +45,6 @@ jobs:
   e2e:
     name: e2e
     runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/playwright:v1.41.1-jammy
 
     steps:
       - uses: actions/checkout@v4
@@ -62,13 +60,14 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
+
       - name: Build
         run: pnpm build
 
       - name: Run Playwright tests
         run: pnpm exec playwright test
-        env:
-          HOME: /root
 
       - uses: actions/upload-artifact@v3
         if: always()
@@ -98,3 +97,28 @@ jobs:
           remote_host: ${{ secrets.DEPLOY_HOST }}
           remote_user: ${{ secrets.DEPLOY_USER }}
           remote_key: ${{ secrets.DEPLOY_KEY }}
+
+  prod-e2e:
+    name: prod-e2e
+    needs: [deploy]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install
+        run: pnpm exec playwright install-deps
+
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: pnpm exec playwright test
+        env:
+          PLAYWRIGHT_BASE_URL: "https://www.eons.io"
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30

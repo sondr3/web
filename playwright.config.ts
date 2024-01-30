@@ -1,5 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const HAS_BASE_URL = process.env.PLAYWRIGHT_BASE_URL !== undefined;
+
 export default defineConfig({
 	testDir: "./tests",
 	fullyParallel: true,
@@ -8,7 +10,7 @@ export default defineConfig({
 	workers: process.env.CI ? 1 : undefined,
 	reporter: "html",
 	use: {
-		baseURL: "http://127.0.0.1:3000",
+		baseURL: HAS_BASE_URL ? process.env.PLAYWRIGHT_BASE_URL : "http://127.0.0.1:3000",
 		trace: "on-first-retry",
 	},
 	projects: [
