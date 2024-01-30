@@ -1,74 +1,46 @@
-import init, { minify } from "minify-html";
+import htmlnano, { type HtmlnanoOptions } from "htmlnano";
 import { browserslistToTargets, transform } from "lightningcss";
 
-await init();
-
-interface MinifyOptions {
-  /** Allow unquoted attribute values in the output to contain characters prohibited by the [WHATWG specification](https://html.spec.whatwg.org/multipage/syntax.html#attributes-2). These will still be parsed correctly by almost all browsers. */
-  allow_noncompliant_unquoted_attribute_values?: boolean;
-  /** Allow some minifications around entities that may not pass validation, but will still be parsed correctly by almost all browsers. */
-  allow_optimal_entities?: boolean;
-  /** Allow removing_spaces between attributes when possible, which may not be spec compliant. These will still be parsed correctly by almost all browsers. */
-  allow_removing_spaces_between_attributes?: boolean;
-  /** Do not omit closing tags when possible. */
-  keep_closing_tags?: boolean;
-  /** Keep all comments. */
-  keep_comments?: boolean;
-  /** Do not omit `<html>` and `<head>` opening tags when they don't have attributes. */
-  keep_html_and_head_opening_tags?: boolean;
-  /** Keep `type=text` attribute name and value on `<input>` elements. */
-  keep_input_type_text_attr?: boolean;
-  /** Keep SSI comments. */
-  keep_ssi_comments?: boolean;
-  /** Minify CSS in `<style>` tags and `style` attributes using [https://github.com/parcel-bundler/lightningcss](lightningcss). */
-  minify_css?: boolean;
-  /** Minify DOCTYPEs. Minified DOCTYPEs may not be spec compliant, but will still be parsed correctly by almost all browsers. */
-  minify_doctype?: boolean;
-  /** Minify JavaScript in `<script>` tags using [minify-js](https://github.com/wilsonzlin/minify-js). */
-  minify_js?: boolean;
-  /** When `{{`, `{#`, or `{%` are seen in content, all source code until the subsequent matching closing `}}`, `#}`, or `%}` respectively gets piped through untouched. */
-  preserve_brace_template_syntax?: boolean;
-  /** When `<%` is seen in content, all source code until the subsequent matching closing `%>` gets piped through untouched. */
-  preserve_chevron_percent_template_syntax?: boolean;
-  /** Remove all bangs. */
-  remove_bangs?: boolean;
-  /** Remove all processing instructions. */
-  remove_processing_instructions?: boolean;
-}
-
 export const minifyCSS = (css: string): string => {
-  const { code } = transform({
-    filename: "styles.css",
-    code: new TextEncoder().encode(css),
-    minify: true,
-    targets: browserslistToTargets(["> .5% and last 5 versions"]),
-  });
+	const { code } = transform({
+		filename: "styles.css",
+		code: new TextEncoder().encode(css),
+		minify: true,
+		targets: browserslistToTargets(["> .5% and last 5 versions"]),
+	});
 
-  return new TextDecoder().decode(code);
+	return new TextDecoder().decode(code);
 };
 
-export const minifyHTML = (html: string): string => {
-  const encoder = new TextEncoder();
-  const decoder = new TextDecoder();
+export const minifyHTML = async (html: string): Promise<string> => {
+	const options: HtmlnanoOptions = {
+		skipConfigLoading: true,
+		minifyCss: false,
+		minifyJs: true,
+	};
 
-  const cfg: Partial<MinifyOptions> = {
-    allow_noncompliant_unquoted_attribute_values: true,
-    allow_optimal_entities: true,
-    allow_removing_spaces_between_attributes: false,
-    keep_closing_tags: true,
-    keep_comments: false,
-    keep_html_and_head_opening_tags: true,
-    keep_input_type_text_attr: true,
-    keep_ssi_comments: false,
-    minify_css: true,
-    minify_doctype: false,
-    minify_js: true,
-    preserve_brace_template_syntax: false,
-    preserve_chevron_percent_template_syntax: false,
-    remove_bangs: true,
-    remove_processing_instructions: true,
-  };
-
-  const minified = decoder.decode(minify(encoder.encode(html), cfg));
-  return minified;
+	const res = await htmlnano.process<string>(html, options, htmlnano.presets.safe);
+	return res.html;
 };
+
+// TODO: re-enable when minify-html works on Apple Silicon
+// export const minifyHTML = (html: string): Buffer => {
+// 	const minified = minify(Buffer.from(html), {
+// 		ensure_spec_compliant_unquoted_attribute_values: true,
+// 		keep_spaces_between_attributes: true,
+// 		keep_closing_tags: true,
+// 		keep_comments: false,
+// 		keep_html_and_head_opening_tags: true,
+// 		// keep_input_type_text_attr: true,
+// 		keep_ssi_comments: false,
+// 		minify_css: true,
+// 		do_not_minify_doctype: true,
+// 		minify_js: true,
+// 		preserve_brace_template_syntax: false,
+// 		preserve_chevron_percent_template_syntax: false,
+// 		remove_bangs: true,
+// 		remove_processing_instructions: true,
+// 	});
+
+// 	return minified;
+// };

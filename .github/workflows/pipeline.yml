@@ -9,33 +9,32 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: denoland/setup-deno@v1
+
+      - uses: pnpm/action-setup@v2.4.0
         with:
-          deno-version: v1.x
+          version: 8.x.x
 
-      - name: Cache
-        run: deno cache src/main.ts
+      - uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          cache: "pnpm"
 
-      - name: Formatting
-        run: deno fmt --check src/**/*.{ts,tsx}
+      - name: Install and build
+        run: pnpm install --frozen-lockfile
 
       - name: Linting
-        run: deno task lint
+        run: pnpm biome
 
-      - name: Type check
-        run: deno task check
-
-      - name: Check HTML
-        run: deno task html-check
-
-      - name: Stylelint
-        run: deno task stylelint
+      - name: Formatting
+        run: |
+          pnpm html
+          pnpm stylelint
 
       - name: Test
-        run: deno task test
+        run: pnpm test
 
       - name: Build
-        run: deno task build
+        run: pnpm build
 
       - name: Deploy
         if: ${{ github.ref == 'refs/heads/main' }}

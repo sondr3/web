@@ -1,73 +1,60 @@
-import { brotliCompressSync } from "node:zlib";
-import { walk, WalkEntry } from "std/fs/walk.ts";
-import * as log from "std/log/mod.ts";
-import { extname } from "std/path/extname.ts";
+import { createReadStream, createWriteStream } from "node:fs";
+import { extname } from "node:path";
+import { performance } from "node:perf_hooks";
+import { pipeline } from "node:stream/promises";
+import { createBrotliCompress, createGzip } from "node:zlib";
 
-const logger = log.getLogger();
+import log from "loglevel";
+import { walkDir } from "./utils.js";
 
 const VALID_EXTENSIONS: Array<string> = [
-  ".html",
-  ".css",
-  ".js",
-  ".xml",
-  ".css",
-  ".cjs",
-  ".mjs",
-  ".json",
-  ".txt",
-  ".svg",
-  ".map",
+	".html",
+	".css",
+	".js",
+	".xml",
+	".css",
+	".cjs",
+	".mjs",
+	".json",
+	".txt",
+	".svg",
+	".map",
 ];
 
-const isCompressible = (file: WalkEntry): boolean => {
-  return VALID_EXTENSIONS.some((e) => e == extname(file.name));
+const isCompressible = (file: string): boolean => {
+	return VALID_EXTENSIONS.some((e) => e === extname(file));
 };
 
 export const compressFolder = async (dir: string): Promise<void> => {
-  const start = performance.now();
+	const start = performance.now();
 
-  await gzip(dir);
-  await brotli(dir);
+	await gzip(dir);
+	await brotli(dir);
 
-  const end = performance.now();
-  logger.info(`Compression took ${(end - start).toFixed(0)}ms`);
+	const end = performance.now();
+	log.info(`Compression took ${(end - start).toFixed(0)}ms`);
 };
 
 const gzip = async (dir: string): Promise<void> => {
-  for await (const file of walk(dir, { includeDirs: false })) {
-    if (!isCompressible(file)) continue;
+	for await (const file of walkDir(dir)) {
+		if (!isCompressible(file)) continue;
 
-    const source = await Deno.open(file.path, { read: true });
-    const dest = await Deno.open(`${file.path}.gz`, { create: true, write: true });
+		const gzip = createGzip();
+		const source = createReadStream(file);
+		const dest = createWriteStream(`${file}.gz`);
 
-    source.readable
-      .pipeThrough(new CompressionStream("gzip"))
-      .pipeTo(dest.writable);
-  }
+		await pipeline(source, gzip, dest);
+	}
 };
-
-const transformer = {
-  start() {},
-  transform(chunk: Uint8Array, controller: TransformStreamDefaultController) {
-    controller.enqueue(brotliCompressSync(chunk));
-  },
-};
-
-class BrotliCompressionStream extends TransformStream {
-  constructor() {
-    super({ ...transformer });
-  }
-}
 
 const brotli = async (dir: string): Promise<void> => {
-  for await (const file of walk(dir, { includeDirs: false })) {
-    if (!isCompressible(file)) continue;
+	for await (const file of walkDir(dir)) {
+		if (!isCompressible(file)) continue;
 
-    const source = await Deno.open(file.path, { read: true });
-    const dest = await Deno.open(`${file.path}.br`, { create: true, write: true });
+		const brotli = createBrotliCompress();
+		const source = createReadStream(file);
+		const dest = createWriteStream(`${file}.br`);
 
-    source.readable
-      .pipeThrough(new BrotliCompressionStream())
-      .pipeTo(dest.writable);
-  }
+		await pipeline(source, brotli, dest);
+	}
 };

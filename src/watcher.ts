@@ -1,105 +1,101 @@
-import { debounce } from "std/async/debounce.ts";
-import * as log from "std/log/mod.ts";
-import { JS_FILES, PATHS } from "./constants.ts";
-import { Content } from "./content.ts";
-import { Site } from "./site.ts";
-import { firstFilename } from "./utils.ts";
-import { JavaScriptAsset } from "./asset.ts";
+import EventEmitter from "node:events";
+import { parse } from "node:path";
+import { subscribe } from "@parcel/watcher";
+import debounce from "debounce";
+import log from "loglevel";
+import { JavaScriptAsset } from "./asset.js";
+import { JS_FILES, PATHS } from "./constants.js";
+import { Content } from "./content.js";
+import { Site } from "./site.js";
 
-async function* createWatcher(path: string): AsyncGenerator<Deno.FsEvent> {
-  const watcher = Deno.watchFs(path, { recursive: true });
-  for await (const event of watcher) {
-    if (filterEvent(event)) yield event;
-  }
+export class FsEmitter extends EventEmitter {}
 
-  watcher.close();
-}
-
-const filterEvent = ({ kind }: Deno.FsEvent): boolean => {
-  return kind === "create" || kind === "modify" || kind === "remove";
-};
-
-const debounceHandler = debounce(async (fn: () => Promise<void>, tx: BroadcastChannel) => {
-  await fn();
-  tx.dispatchEvent(new MessageEvent("message", { data: { type: "reload" } }));
+const debounceHandler = debounce(async (fn: () => Promise<void>, tx: FsEmitter) => {
+	await fn();
+	tx.emit("update");
 }, 200);
 
 export class Watcher {
-  private site: Site;
-  private tx: BroadcastChannel;
-  private logger = log.getLogger();
+	private site: Site;
+	private tx: FsEmitter;
 
-  constructor(site: Site, tx: BroadcastChannel) {
-    this.site = site;
-    this.tx = tx;
-  }
+	constructor(site: Site, tx: FsEmitter) {
+		this.site = site;
+		this.tx = tx;
+	}
 
-  public start = (): void => {
-    (async () => await this.watchTemplates())();
-    (async () => await this.watchContent())();
-    (async () => await this.watchSCSS())();
-    (async () => await this.watchJS())();
-    (async () => await this.watchPublic())();
-  };
+	public start = (): void => {
+		void this.watchTemplates();
+		void this.watchContent();
+		void this.watchSCSS();
+		void this.watchJS();
+		void this.watchPublic();
+	};
 
-  private async watchSCSS() {
-    const watcher = createWatcher(PATHS.styles);
-    for await (const _event of watcher) {
-      debounceHandler(async () => {
-        this.logger.info("Rebuilding CSS");
-        for await (const asset of this.site.collectCSS()) {
-          await asset.write(this.site);
-        }
-      }, this.tx);
-    }
-  }
+	private async watchSCSS() {
+		void subscribe(PATHS.styles, (_, events) => {
+			console.log(`scss changed: ${events}`);
+			for (const _event of events) {
+				debounceHandler(async () => {
+					log.info("Rebuilding CSS");
+					for await (const asset of this.site.collectCSS()) {
+						await asset.write(this.site);
+					}
+				}, this.tx);
+			}
+		});
+	}
 
-  private async watchJS() {
-    const watcher = createWatcher(PATHS.js);
-    for await (const event of watcher) {
-      debounceHandler(async () => {
-        this.logger.info(`Rebuilding JS ${firstFilename(event)}`);
-        const item = JS_FILES[firstFilename(event) as keyof typeof JS_FILES];
-        const asset = new JavaScriptAsset(item.source, item.dest);
-        this.site.collectAsset(asset);
-        await asset.write(this.site);
-      }, this.tx);
-    }
-  }
+	private async watchJS() {
+		void subscribe(PATHS.js, (_, events) => {
+			for (const event of events) {
+				debounceHandler(async () => {
+					log.info(`Rebuilding JS ${parse(event.path).base}`);
+					const item = JS_FILES[event.path as keyof typeof JS_FILES];
+					const asset = new JavaScriptAsset(item.source, item.dest);
+					this.site.collectAsset(asset);
+					await asset.write(this.site);
+				}, this.tx);
+			}
+		});
+	}
 
-  private async watchTemplates() {
-    const watcher = createWatcher(PATHS.templates);
-    for await (const event of watcher) {
-      debounceHandler(async () => {
-        this.logger.info(`Template ${firstFilename(event)} chaged, rebuilding`);
-        await this.site.collectContents();
-        await this.site.writeContent();
-        await this.site.writeSitemap();
-      }, this.tx);
-    }
-  }
+	private async watchTemplates() {
+		void subscribe(PATHS.templates, (_, events) => {
+			for (const event of events) {
+				debounceHandler(async () => {
+					log.info(`Template ${parse(event.path).base} chaged, rebuilding`);
+					await this.site.collectContents();
+					await this.site.writeContent();
+					await this.site.writeSitemap();
+				}, this.tx);
+			}
+		});
+	}
 
-  private async watchContent() {
-    const watcher = createWatcher(PATHS.content);
-    for await (const event of watcher) {
-      debounceHandler(async () => {
-        this.logger.info(`Rebuilding page ${firstFilename(event)}`);
-        const content = await Content.fromPath(event.paths[0], "page", this.site.url);
-        await content.write(this.site);
-        this.site.collectContent(content);
-        this.site.writeSitemap();
-      }, this.tx);
-    }
-  }
+	private async watchContent() {
+		void subscribe(PATHS.content, (_err, events) => {
+			for (const event of events) {
+				debounceHandler(async () => {
+					log.info(`Rebuilding page ${parse(event.path).base}`);
+					const content = await Content.fromPath(event.path, "page", this.site.url);
+					await content.write(this.site);
+					this.site.collectContent(content);
+					this.site.writeSitemap();
+				}, this.tx);
+			}
+		});
+	}
 
-  private async watchPublic() {
-    const watcher = createWatcher(PATHS.public);
-    for await (const event of watcher) {
-      debounceHandler(async () => {
-        this.logger.info(`Rebuilding static file ${firstFilename(event)}`);
-        await this.site.collectStaticFiles();
-        await this.site.copyStaticAssets();
-      }, this.tx);
-    }
-  }
+	private async watchPublic() {
+		void subscribe(PATHS.public, (_, events) => {
+			for (const event of events) {
+				debounceHandler(async () => {
+					log.info(`Rebuilding static file ${parse(event.path).base}`);
+					await this.site.collectStaticFiles();
+					await this.site.copyStaticAssets();
+				}, this.tx);
+			}
+		});
+	}
 }

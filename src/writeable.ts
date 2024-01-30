@@ -1,4 +1,4 @@
-import { Site } from "./site.ts";
+import { Site } from "./site.js";
 
 /**
  * Interface for objects that can write data from a site.
@@ -10,7 +10,7 @@ import { Site } from "./site.ts";
  * @throws An error if the write operation fails.
  */
 export interface WriteFromSite {
-  write(site: Site): Promise<void>;
+	write(site: Site): Promise<void>;
 }
 
 /**
@@ -19,11 +19,6 @@ export interface WriteFromSite {
  * @param site - The site to write the items to.
  * @returns A Promise that resolves when all items have been written.
  */
-export const write = async (
-  items: Map<string, WriteFromSite>,
-  site: Site,
-): Promise<void> => {
-  await Promise.allSettled(
-    Array.from(items.values()).map(async (item) => await item.write(site)),
-  );
+export const write = async (items: Map<string, WriteFromSite>, site: Site): Promise<void> => {
+	await Promise.all(Array.from(items.values()).map(async (item) => await item.write(site)));
 };
