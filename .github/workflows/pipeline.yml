@@ -45,6 +45,8 @@ jobs:
   e2e:
     name: e2e
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.41.1-jammy
 
     steps:
       - uses: actions/checkout@v4
@@ -60,32 +62,13 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
-      - name: Store Playwright's Version
-        run: |
-          PLAYWRIGHT_VERSION=$(pnpm ls @playwright/test --json | jq -r '.[0].devDependencies["@playwright/test"].version')
-          echo "Playwright's Version: $PLAYWRIGHT_VERSION"
-          echo "PLAYWRIGHT_VERSION=$PLAYWRIGHT_VERSION" >> $GITHUB_ENV
-
-      - name: Cache Playwright Browsers for Playwright's Version
-        id: cache-playwright-browsers
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-browsers-${{ env.PLAYWRIGHT_VERSION }}
-
-      - name: Install Playwright Browsers
-        if: steps.cache-playwright-browsers.outputs.cache-hit != 'true'
-        run: pnpm exec playwright install --with-deps
-
-      - name: Install Playwright deps
-        if: steps.cache-playwright-browsers.outputs.cache-hit == 'true'
-        run: npx playwright install-deps
-
       - name: Build
         run: pnpm build
 
       - name: Run Playwright tests
         run: pnpm exec playwright test
+        env:
+          HOME: /root
 
       - uses: actions/upload-artifact@v3
         if: always()
