@@ -1,6 +1,6 @@
-import { createServer } from "node:http";
+import { App } from "@tinyhttp/app";
 import log from "loglevel";
-import handler from "serve-handler";
+import sirv from "sirv";
 import WebSocket, { WebSocketServer } from "ws";
 import { PATHS } from "./constants.js";
 import type { FsEmitter } from "./watcher.js";
@@ -20,8 +20,7 @@ export class Server {
 
 export function httpServer() {
 	log.info("File server running on http://localhost:3000/");
-	const server = createServer((req, res) => handler(req, res, { public: PATHS.out }));
-	void server.listen(3000);
+	new App().use("/", sirv(PATHS.out)).listen(3000);
 }
 
 export function websocketServer(tx: FsEmitter) {
