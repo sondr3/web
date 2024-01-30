@@ -95,7 +95,7 @@ export class Site {
     return await write(this.content, this);
   }
 
-  private async collectContents(): Promise<void> {
+  public async collectContents(): Promise<void> {
     for await (const entry of Deno.readDir(PATHS.pages)) {
       const path = `${PATHS.pages}/${entry.name}`;
       const content = await Content.fromPath(path, "page", this.url);

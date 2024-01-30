@@ -35,6 +35,7 @@ export class Watcher {
   }
 
   public start = (): void => {
+    (async () => await this.watchTemplates())();
     (async () => await this.watchContent())();
     (async () => await this.watchSCSS())();
     (async () => await this.watchJS())();
@@ -62,6 +63,18 @@ export class Watcher {
         const asset = new JavaScriptAsset(item.source, item.dest);
         this.site.collectAsset(asset);
         await asset.write(this.site);
+      }, this.tx);
+    }
+  }
+
+  private async watchTemplates() {
+    const watcher = createWatcher(PATHS.templates);
+    for await (const event of watcher) {
+      debounceHandler(async () => {
+        this.logger.info(`Template ${firstFilename(event)} chaged, rebuilding`);
+        await this.site.collectContents();
+        await this.site.writeContent();
+        await this.site.writeSitemap();
       }, this.tx);
     }
   }
