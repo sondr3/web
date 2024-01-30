@@ -1,6 +1,15 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const HAS_BASE_URL = process.env.PLAYWRIGHT_BASE_URL !== undefined;
+const baseURL = HAS_BASE_URL ? process.env.PLAYWRIGHT_BASE_URL : "http://127.0.0.1:3000";
+
+const webServer = HAS_BASE_URL
+	? undefined
+	: {
+			command: "pnpm tsx tests/server.ts",
+			url: "http://127.0.0.1:3000",
+			reuseExistingServer: !process.env.CI,
+	  };
 
 export default defineConfig({
 	testDir: "./tests",
@@ -10,7 +19,7 @@ export default defineConfig({
 	workers: process.env.CI ? 1 : undefined,
 	reporter: "html",
 	use: {
-		baseURL: HAS_BASE_URL ? process.env.PLAYWRIGHT_BASE_URL : "http://127.0.0.1:3000",
+		baseURL,
 		trace: "on-first-retry",
 	},
 	projects: [
@@ -41,9 +50,5 @@ export default defineConfig({
 	],
 
 	/* Run your local dev server before starting the tests */
-	webServer: {
-		command: "pnpm tsx tests/server.ts",
-		url: "http://127.0.0.1:3000",
-		reuseExistingServer: !process.env.CI,
-	},
+	webServer,
 });
