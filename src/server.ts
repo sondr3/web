@@ -1,11 +1,11 @@
-import log from "loglevel";
 import fs from "node:fs";
-import sirv, { type Options } from "sirv";
+import path from "node:path";
+import log from "loglevel";
 import polka from "polka";
+import sirv, { type Options } from "sirv";
 import WebSocket, { WebSocketServer } from "ws";
 import { PATHS } from "./constants.js";
 import type { FsEmitter } from "./watcher.js";
-import path from "node:path";
 
 export class Server {
 	private tx: FsEmitter;
