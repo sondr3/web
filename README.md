@@ -2,7 +2,8 @@
 
 This is my website, held together by tears, glue and a healthy dose of `eh, good enough`.
 
-Built with my own static site generator written in Deno using React, SASS and Djot.
+Built with my own static site generator written in Node using my own hacky templating engine, SASS and whatever
+rope I could use to hold it together.
 
 # License
 
