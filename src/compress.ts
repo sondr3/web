@@ -4,8 +4,10 @@ import { performance } from "node:perf_hooks";
 import { pipeline } from "node:stream/promises";
 import { createBrotliCompress, createGzip } from "node:zlib";
 
-import log from "loglevel";
+import { logConfig } from "./logger.js";
 import { walkDir } from "./utils.js";
+
+const logger = logConfig.getLogger("compress");
 
 const VALID_EXTENSIONS: Array<string> = [
 	".html",
@@ -32,7 +34,7 @@ export const compressFolder = async (dir: string): Promise<void> => {
 	await brotli(dir);
 
 	const end = performance.now();
-	log.info(`Compression took ${(end - start).toFixed(0)}ms`);
+	logger.info(`Compression took ${(end - start).toFixed(0)}ms`);
 };
 
 const gzip = async (dir: string): Promise<void> => {

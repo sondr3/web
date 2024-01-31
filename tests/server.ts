@@ -1,5 +1,5 @@
-import log from "loglevel";
+import { logConfig } from "../src/logger.js";
 import { httpServer } from "../src/server.js";
 
-log.setDefaultLevel("info");
+logConfig.level = "info";
 httpServer();

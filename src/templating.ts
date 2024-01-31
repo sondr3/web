@@ -1,7 +1,9 @@
 import * as fs from "node:fs/promises";
-import log from "loglevel";
 import { PATHS } from "./constants.js";
 import type { Frontmatter } from "./content.js";
+import { logConfig } from "./logger.js";
+
+const logger = logConfig.getLogger("templating");
 
 export function compile(template: string): (args: Record<string, unknown>) => string {
 	return new Function("args", `with (args) { return \`${template}\`; }`) as unknown as (
@@ -38,7 +40,7 @@ export const render = async (template: Frontmatter["layout"], context: Record<st
 
 		return rendered;
 	} catch (e) {
-		log.error(e);
+		logger.error(e);
 		throw e;
 	}
 };

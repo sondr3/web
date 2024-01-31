@@ -1,10 +1,10 @@
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
-import log from "loglevel";
 import { parse } from "smol-toml";
 import { z } from "zod";
 import { PATHS } from "./constants.js";
 import { render_djot } from "./djot.js";
+import { logConfig } from "./logger.js";
 import { minifyHTML } from "./minify.js";
 import { Path } from "./path.js";
 import { Site } from "./site.js";
@@ -12,6 +12,7 @@ import { render } from "./templating.js";
 import { ensureDir } from "./utils.js";
 import type { WriteFromSite } from "./writeable.js";
 
+const logger = logConfig.getLogger("content");
 const FRONTMATTER_DELIMITER = "+++";
 
 export const Frontmatter = z
@@ -92,7 +93,7 @@ export class Content implements WriteFromSite {
 		const frontmatter = Frontmatter.safeParse(toml);
 
 		if (!frontmatter.success) {
-			log.error(frontmatter.error);
+			logger.error(frontmatter.error);
 			throw new Error(`Failed to parse frontmatter for ${filePath}`);
 		}
 

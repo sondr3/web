@@ -1,5 +1,4 @@
 import * as fs from "node:fs/promises";
-import log from "loglevel";
 // @ts-ignore: needs `node16` module resolution to not complain
 import meow from "meow";
 import { compressFolder } from "./compress.js";
@@ -7,8 +6,6 @@ import { PATHS } from "./constants.js";
 import { Server } from "./server.js";
 import { Site } from "./site.js";
 import { FsEmitter, Watcher } from "./watcher.js";
-
-log.setDefaultLevel("info");
 
 const cli = meow(
 	`

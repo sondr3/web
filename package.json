@@ -34,7 +34,7 @@
     "debounce": "2.0.0",
     "htmlnano": "2.1.0",
     "lightningcss": "1.23.0",
-    "loglevel": "1.9.1",
+    "log4js": "6.9.1",
     "meow": "13.1.0",
     "polka": "0.5.2",
     "sass": "1.70.0",

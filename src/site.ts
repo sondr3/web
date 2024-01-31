@@ -1,14 +1,15 @@
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
-import log from "loglevel";
 import { type Asset, CssAsset, JavaScriptAsset, type StaticAsset } from "./asset.js";
 import { JS_FILES, PATHS, SCSS_FILES } from "./constants.js";
 import { Content } from "./content.js";
+import { logConfig } from "./logger.js";
 import { Path } from "./path.js";
 import { urlEntry, write_sitemap } from "./sitemap.js";
 import { ensureDir, fromAsyncIterable, walkDir } from "./utils.js";
 import { write } from "./writeable.js";
 
+const logger = logConfig.getLogger("site");
 export type Mode = "prod" | "dev";
 
 export class Site {
@@ -34,7 +35,7 @@ export class Site {
 		await site.collectContents();
 
 		const end = performance.now();
-		log.info(`Site creation took ${(end - start).toFixed(0)}ms`);
+		logger.info(`Site creation took ${(end - start).toFixed(0)}ms`);
 
 		return site;
 	}
@@ -70,7 +71,7 @@ export class Site {
 		for await (const entry of Object.values(JS_FILES)) {
 			const asset = new JavaScriptAsset(entry.source, entry.dest);
 			this.collectAsset(asset);
-			log.debug(`Collected asset ${asset.source.filename}`);
+			logger.debug(`Collected asset ${asset.source.filename}`);
 		}
 	}
 
@@ -81,7 +82,7 @@ export class Site {
 	public async collectStaticFiles(): Promise<void> {
 		for await (const entry of walkDir(PATHS.public)) {
 			this.staticFiles.push({ path: new Path(entry), prefix: PATHS.public });
-			log.debug(`Collected static file ${entry}`);
+			logger.debug(`Collected static file ${entry}`);
 		}
 	}
 
@@ -101,7 +102,7 @@ export class Site {
 			if (content.frontmatter.draft && this.isProd) continue;
 
 			this.collectContent(content);
-			log.debug(`Collected content ${content.sourcePath.filename}`);
+			logger.debug(`Collected content ${content.sourcePath.filename}`);
 		}
 	}
 
