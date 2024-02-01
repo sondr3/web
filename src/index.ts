@@ -3,9 +3,9 @@ import * as fs from "node:fs/promises";
 import meow from "meow";
 import { compressFolder } from "./compress.js";
 import { PATHS } from "./constants.js";
-import { Server } from "./server.js";
+import { startServer } from "./server.js";
 import { Site } from "./site.js";
-import { FsEmitter, Watcher } from "./watcher.js";
+import { FsEmitter, startWatcher } from "./watcher.js";
 
 const cli = meow(
 	`
@@ -63,8 +63,8 @@ await site.write();
 
 if (cli.flags.server && !cli.flags.production) {
 	const tx = new FsEmitter();
-	void new Watcher(site, tx).start();
-	void new Server(tx).start();
+	void startWatcher(site, tx);
+	void startServer(tx);
 }
 
 if (site.isProd) {

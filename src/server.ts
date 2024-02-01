@@ -9,18 +9,10 @@ import type { FsEmitter } from "./watcher.js";
 
 const logger = logConfig.getLogger("server");
 
-export class Server {
-	private tx: FsEmitter;
-
-	constructor(tx: FsEmitter) {
-		this.tx = tx;
-	}
-
-	public start = (): void => {
-		void httpServer();
-		void websocketServer(this.tx);
-	};
-}
+export const startServer = (tx: FsEmitter): void => {
+	void httpServer();
+	void websocketServer(tx);
+};
 
 export function httpServer() {
 	const opts: Options = {

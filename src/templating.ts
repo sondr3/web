@@ -14,10 +14,7 @@ export function compile(template: string): (args: Record<string, unknown>) => st
 export const createContext = (context: Record<string, unknown>): Record<string, unknown> => {
 	return new Proxy(context, {
 		has(_target, key) {
-			if (key in globalThis) {
-				return false;
-			}
-			return true;
+			return !(key in globalThis);
 		},
 		get(target: Record<string, unknown>, key: string): unknown {
 			return target[key];
@@ -36,9 +33,7 @@ export const render = async (template: Frontmatter["layout"], context: Record<st
 		const ctx = createContext(context);
 
 		const inner = child(ctx);
-		const rendered = base({ ...ctx, content: inner });
-
-		return rendered;
+		return base({ ...ctx, content: inner });
 	} catch (e) {
 		logger.error(e);
 		throw e;

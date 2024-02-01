@@ -9,16 +9,16 @@ export type ChangeFreq = "always" | "hourly" | "daily" | "weekly" | "monthly" | 
 
 export interface UrlEntry {
 	loc: URL;
-	lastmod: string;
-	changefreq: ChangeFreq;
+	lastModified: string;
+	changeFreq: ChangeFreq;
 	priority: number;
 }
 
 export const urlEntry = (content: Content): UrlEntry => {
 	return {
 		loc: content.url,
-		lastmod: content.frontmatter.lastModified.toISOString(),
-		changefreq: content.contentType === "page" ? "yearly" : "monthly",
+		lastModified: content.frontmatter.lastModified.toISOString(),
+		changeFreq: content.contentType === "page" ? "yearly" : "monthly",
 		priority: content.contentType === "page" ? 0.8 : 0.5,
 	};
 };

@@ -9,6 +9,7 @@ import { logConfig } from "./logger.js";
 import { Site } from "./site.js";
 
 const logger = logConfig.getLogger("watcher");
+
 export class FsEmitter extends EventEmitter {}
 
 const debounceHandler = debounce(async (fn: () => Promise<void>, tx: FsEmitter) => {
@@ -16,87 +17,77 @@ const debounceHandler = debounce(async (fn: () => Promise<void>, tx: FsEmitter) 
 	tx.emit("update");
 }, 200);
 
-export class Watcher {
-	private site: Site;
-	private tx: FsEmitter;
+export const startWatcher = (site: Site, tx: FsEmitter): void => {
+	void watchTemplates(site, tx);
+	void watchContent(site, tx);
+	void watchSCSS(site, tx);
+	void watchJS(site, tx);
+	void watchPublic(site, tx);
+};
 
-	constructor(site: Site, tx: FsEmitter) {
-		this.site = site;
-		this.tx = tx;
-	}
+const watchSCSS = async (site: Site, tx: FsEmitter): Promise<void> => {
+	void subscribe(PATHS.styles, (_, events) => {
+		console.log(`scss changed: ${events}`);
+		for (const _event of events) {
+			debounceHandler(async () => {
+				logger.info("Rebuilding CSS");
+				for await (const asset of site.collectCSS()) {
+					await asset.write(site);
+				}
+			}, tx);
+		}
+	});
+};
 
-	public start = (): void => {
-		void this.watchTemplates();
-		void this.watchContent();
-		void this.watchSCSS();
-		void this.watchJS();
-		void this.watchPublic();
-	};
+const watchJS = async (site: Site, tx: FsEmitter): Promise<void> => {
+	void subscribe(PATHS.js, (_, events) => {
+		for (const event of events) {
+			debounceHandler(async () => {
+				logger.info(`Rebuilding JS ${parse(event.path).base}`);
+				const item = JS_FILES[event.path as keyof typeof JS_FILES];
+				const asset = new JavaScriptAsset(item.source, item.dest);
+				site.collectAsset(asset);
+				await asset.write(site);
+			}, tx);
+		}
+	});
+};
 
-	private async watchSCSS() {
-		void subscribe(PATHS.styles, (_, events) => {
-			console.log(`scss changed: ${events}`);
-			for (const _event of events) {
-				debounceHandler(async () => {
-					logger.info("Rebuilding CSS");
-					for await (const asset of this.site.collectCSS()) {
-						await asset.write(this.site);
-					}
-				}, this.tx);
-			}
-		});
-	}
+const watchTemplates = async (site: Site, tx: FsEmitter): Promise<void> => {
+	void subscribe(PATHS.templates, (_, events) => {
+		for (const event of events) {
+			debounceHandler(async () => {
+				logger.info(`Template ${parse(event.path).base} changed, rebuilding`);
+				await site.collectContents();
+				await site.writeContent();
+				await site.writeSitemap();
+			}, tx);
+		}
+	});
+};
 
-	private async watchJS() {
-		void subscribe(PATHS.js, (_, events) => {
-			for (const event of events) {
-				debounceHandler(async () => {
-					logger.info(`Rebuilding JS ${parse(event.path).base}`);
-					const item = JS_FILES[event.path as keyof typeof JS_FILES];
-					const asset = new JavaScriptAsset(item.source, item.dest);
-					this.site.collectAsset(asset);
-					await asset.write(this.site);
-				}, this.tx);
-			}
-		});
-	}
+const watchContent = async (site: Site, tx: FsEmitter): Promise<void> => {
+	void subscribe(PATHS.content, (_err, events) => {
+		for (const event of events) {
+			debounceHandler(async () => {
+				logger.info(`Rebuilding page ${parse(event.path).base}`);
+				const content = await Content.fromPath(event.path, "page", site.url);
+				await content.write(site);
+				site.collectContent(content);
+				await site.writeSitemap();
+			}, tx);
+		}
+	});
+};
 
-	private async watchTemplates() {
-		void subscribe(PATHS.templates, (_, events) => {
-			for (const event of events) {
-				debounceHandler(async () => {
-					logger.info(`Template ${parse(event.path).base} chaged, rebuilding`);
-					await this.site.collectContents();
-					await this.site.writeContent();
-					await this.site.writeSitemap();
-				}, this.tx);
-			}
-		});
-	}
-
-	private async watchContent() {
-		void subscribe(PATHS.content, (_err, events) => {
-			for (const event of events) {
-				debounceHandler(async () => {
-					logger.info(`Rebuilding page ${parse(event.path).base}`);
-					const content = await Content.fromPath(event.path, "page", this.site.url);
-					await content.write(this.site);
-					this.site.collectContent(content);
-					this.site.writeSitemap();
-				}, this.tx);
-			}
-		});
-	}
-
-	private async watchPublic() {
-		void subscribe(PATHS.public, (_, events) => {
-			for (const event of events) {
-				debounceHandler(async () => {
-					logger.info(`Rebuilding static file ${parse(event.path).base}`);
-					await this.site.collectStaticFiles();
-					await this.site.copyStaticAssets();
-				}, this.tx);
-			}
-		});
-	}
-}
+const watchPublic = async (site: Site, tx: FsEmitter): Promise<void> => {
+	void subscribe(PATHS.public, (_, events) => {
+		for (const event of events) {
+			debounceHandler(async () => {
+				logger.info(`Rebuilding static file ${parse(event.path).base}`);
+				await site.collectStaticFiles();
+				await site.copyStaticAssets();
+			}, tx);
+		}
+	});
+};

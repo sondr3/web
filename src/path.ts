@@ -6,11 +6,7 @@ export class Path {
 	private path: URL;
 
 	constructor(path: string | URL) {
-		if (typeof path === "string") {
-			this.path = pathToFileURL(path);
-		} else {
-			this.path = path;
-		}
+		this.path = typeof path === "string" ? pathToFileURL(path) : path;
 	}
 
 	get inner() {

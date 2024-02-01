@@ -9,9 +9,7 @@ const shiki = await getHighlighter({
 
 export const render_djot = (content: string) => {
 	const parsed = djot.parse(content, { warn: (message) => console.warn(message) });
-	const res = djot.renderHTML(parsed, renderOptions);
-
-	return res;
+	return djot.renderHTML(parsed, renderOptions);
 };
 
 const renderOptions: HTMLRenderOptions = {

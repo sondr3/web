@@ -6,8 +6,8 @@
   ${entries.map(entry => `
     <url>
       <loc>${entry.loc}</loc>
-      <lastmod>${entry.lastmod}</lastmod>
-      <changefreq>${entry.changefreq}</changefreq>
+      <lastmod>${entry.lastModified}</lastmod>
+      <changefreq>${entry.changeFreq}</changefreq>
       <priority>${entry.priority}</priority>
     </url>
   `).join("")}
