@@ -67,6 +67,9 @@ devDependencies:
   '@playwright/test':
     specifier: 1.41.1
     version: 1.41.1
+  '@total-typescript/ts-reset':
+    specifier: 0.5.1
+    version: 0.5.1
   '@types/node':
     specifier: 20.11.13
     version: 20.11.13
@@ -720,6 +723,10 @@ packages:
   /@shikijs/core@1.0.0-beta.1:
     resolution: {integrity: sha512-z3gdznaRj/DJSLQdR2Gdx6AB3e5+Il/kSGdLTGHI7HnalgPL15RbGgBSdLHW8rKAz4+dezAcTdnxm8z6YTu7nA==}
     dev: false
+
+  /@total-typescript/ts-reset@0.5.1:
+    resolution: {integrity: sha512-AqlrT8YA1o7Ff5wPfMOL0pvL+1X+sw60NN6CcOCqs658emD6RfiXhF7Gu9QcfKBH7ELY2nInLhKSCWVoNL70MQ==}
+    dev: true
 
   /@trysound/sax@0.2.0:
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
