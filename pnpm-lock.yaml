@@ -4,13 +4,15 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  '@djot/djot@0.2.5':
+    hash: lta3tpb5ieguglu6x3zlq6ueqy
+    path: patches/@djot__djot@0.2.5.patch
+
 dependencies:
   '@djot/djot':
     specifier: 0.2.5
-    version: 0.2.5
-  '@minify-html/node':
-    specifier: 0.15.0
-    version: 0.15.0
+    version: 0.2.5(patch_hash=lta3tpb5ieguglu6x3zlq6ueqy)
   '@parcel/watcher':
     specifier: 2.4.0
     version: 2.4.0
@@ -249,11 +251,12 @@ packages:
       postcss-selector-parser: 6.0.15
     dev: true
 
-  /@djot/djot@0.2.5:
+  /@djot/djot@0.2.5(patch_hash=lta3tpb5ieguglu6x3zlq6ueqy):
     resolution: {integrity: sha512-nbb/evUmhoCm5H7yt6haqf1Rw7NYiMwYoARoGVLXbf1+pVEDtaIQLf6nB7mvJKdg8IP1+/23e4pZxQceMaOdvA==}
     engines: {node: '>=17.0.0'}
     hasBin: true
     dev: false
+    patched: true
 
   /@esbuild/aix-ppc64@0.19.12:
     resolution: {integrity: sha512-bmoCYyWdEL3wDQIVbcyzRyeKLgk2WtWLTWz1ZIAZF/EGbNOwSA6ew3PftJ1PqMiOOGu0OyFMzG53L0zqIpPeNA==}
@@ -509,40 +512,6 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
-    dev: false
-
-  /@minify-html/node-darwin-x64@0.15.0:
-    resolution: {integrity: sha512-D9M9UDku/8I5VEMS0gTLFFQK1DFXK8io+QZvR5cbya4u8NmdDQix/t3EyCR4Wgv/Gfk86gwIS+zfMSvuKcpb5A==}
-    cpu: [x64]
-    os: [darwin]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@minify-html/node-linux-x64@0.15.0:
-    resolution: {integrity: sha512-cO893EV6O9ZHUFX+2Yge546OCo/eCiatjzJDmUmrPP56fQ7pzTRquHs4ko3t8Rg6tMKG7RT49mBuF09JWPnrgg==}
-    cpu: [x64]
-    os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@minify-html/node-win32-x64@0.15.0:
-    resolution: {integrity: sha512-n92IFdtntchlUtyrq13pRI8TT3sOddbzuo4EPTSeocuTJMXaR77v0JYDu0fIjxXNawgGq6nBEeicxAcH4CbvUQ==}
-    cpu: [x64]
-    os: [win32]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@minify-html/node@0.15.0:
-    resolution: {integrity: sha512-ANzt6ZBiqtwrepVXRfa0Qn/woCkINFBjQEKiXyBmg7+51mIFQHVAUbAm6UHRrT0L3xoPG0BX0/XI3NqtjK8Vyg==}
-    engines: {node: '>= 8.6.0'}
-    hasBin: true
-    optionalDependencies:
-      '@minify-html/node-darwin-x64': 0.15.0
-      '@minify-html/node-linux-x64': 0.15.0
-      '@minify-html/node-win32-x64': 0.15.0
     dev: false
 
   /@nodelib/fs.scandir@2.1.5:

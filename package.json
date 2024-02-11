@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "tsx src/index.ts -p",
+    "check": "tsc --noEmit ",
     "dev": "tsx watch src/index.ts",
     "test": "tsx --test --experimental-test-coverage",
     "test:e2e": "pnpm exec playwright test",
@@ -28,7 +29,6 @@
   },
   "dependencies": {
     "@djot/djot": "0.2.5",
-    "@minify-html/node": "0.15.0",
     "@parcel/watcher": "2.4.0",
     "date-fns": "3.3.1",
     "debounce": "2.0.0",
@@ -60,5 +60,10 @@
     "stylelint-prettier": "5.0.0",
     "tsx": "4.7.0",
     "typescript": "5.3.3"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@djot/djot@0.2.5": "patches/@djot__djot@0.2.5.patch"
+    }
   }
 }

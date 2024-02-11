@@ -1,5 +1,4 @@
-import djot from "@djot/djot";
-import type { HTMLRenderOptions } from "@djot/djot/types/html";
+import djot, { type HTMLRenderer } from "@djot/djot";
 import { getHighlighter } from "shiki";
 
 const shiki = await getHighlighter({
@@ -12,7 +11,7 @@ export const render_djot = (content: string) => {
 	return djot.renderHTML(parsed, renderOptions);
 };
 
-const renderOptions: HTMLRenderOptions = {
+const renderOptions: HTMLRenderer["options"] = {
 	overrides: {
 		section: (node, renderer) => {
 			if (node?.attributes?.["id"]) {

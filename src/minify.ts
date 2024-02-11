@@ -1,4 +1,4 @@
-import htmlnano, { type HtmlnanoOptions } from "htmlnano";
+import htmlnano /*, { type HtmlnanoOptions } */ from "htmlnano";
 import { browserslistToTargets, transform } from "lightningcss";
 
 export const minifyCSS = (css: string): string => {
@@ -13,7 +13,7 @@ export const minifyCSS = (css: string): string => {
 };
 
 export const minifyHTML = async (html: string): Promise<string> => {
-	const options: HtmlnanoOptions = {
+	const options /* : HtmlnanoOptions */ = {
 		skipConfigLoading: true,
 		minifyCss: false,
 		minifyJs: true,
