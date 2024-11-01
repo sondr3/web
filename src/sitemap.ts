@@ -1,7 +1,10 @@
 import * as fs from "node:fs/promises";
+import { renderSitemap } from "@sondr3/radiant/sitemap";
 import { PATHS } from "./constants.js";
 import { Content } from "./content.js";
 import { Site } from "./site.js";
+import { sitemapStyle } from "./templates/sitemap-style.js";
+import { sitemap } from "./templates/sitemap.js";
 import { compile } from "./templating.js";
 import { ensureDir } from "./utils.js";
 
@@ -9,7 +12,7 @@ export type ChangeFreq = "always" | "hourly" | "daily" | "weekly" | "monthly" | 
 
 export interface UrlEntry {
 	loc: URL;
-	lastModified: string;
+	lastModified: Date;
 	changeFreq: ChangeFreq;
 	priority: number;
 }
@@ -17,7 +20,7 @@ export interface UrlEntry {
 export const urlEntry = (content: Content): UrlEntry => {
 	return {
 		loc: content.url,
-		lastModified: content.frontmatter.lastModified.toISOString(),
+		lastModified: content.frontmatter.lastModified,
 		changeFreq: content.contentType === "page" ? "yearly" : "monthly",
 		priority: content.contentType === "page" ? 0.8 : 0.5,
 	};
@@ -26,13 +29,6 @@ export const urlEntry = (content: Content): UrlEntry => {
 export const write_sitemap = async (entries: Array<UrlEntry>, site: Site) => {
 	await ensureDir(PATHS.out);
 
-	const sitemap = await fs.readFile(`${PATHS.templates}/sitemap.xml`, "utf-8");
-	const sitemap_template = compile(sitemap);
-	const sitemap_rendered = sitemap_template({ entries });
-	await fs.writeFile(`${PATHS.out}/sitemap.xml`, sitemap_rendered);
-
-	const xsl = await fs.readFile(`${PATHS.templates}/sitemap-style.xsl`, "utf-8");
-	const xsl_template = compile(xsl);
-	const xsl_rendered = xsl_template({ css: site.assets.get("sitemap.css") });
-	await fs.writeFile(`${PATHS.out}/sitemap-style.xsl`, xsl_rendered);
+	await fs.writeFile(`${PATHS.out}/sitemap.xml`, renderSitemap(sitemap(entries), { pretty: site.isDev }));
+	await fs.writeFile(`${PATHS.out}/sitema-style.xsl`, sitemapStyle(site.assets.get("sitemap.css")));
 };

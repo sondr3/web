@@ -2,6 +2,7 @@ import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import { parse } from "smol-toml";
 import { z } from "zod";
+import type { Asset } from "./asset.js";
 import { PATHS } from "./constants.js";
 import { render_djot } from "./djot.js";
 import { logConfig } from "./logger.js";
@@ -29,6 +30,16 @@ export const Frontmatter = z
 	.transform(({ last_modified, ...rest }) => ({ ...rest, lastModified: last_modified }));
 
 export type Frontmatter = z.infer<typeof Frontmatter>;
+
+export type Context = {
+	title: string;
+	canonicalUrl: string;
+	css: Asset | undefined;
+	isDev: boolean;
+	content: string;
+	frontmatter: Frontmatter;
+	pubDate?: Date;
+};
 
 export class Content implements WriteFromSite {
 	public sourcePath: Path;
@@ -58,7 +69,7 @@ export class Content implements WriteFromSite {
 		return render_djot(this.sourceContent);
 	}
 
-	public context(site: Site) {
+	public context(site: Site): Context {
 		return {
 			title: `${this.frontmatter.title} => Eons :: IO ()`,
 			canonicalUrl: new URL(this.url.toString(), site.url).toString(),
@@ -66,7 +77,7 @@ export class Content implements WriteFromSite {
 			isDev: !site.isProd,
 			content: this.content,
 			frontmatter: this.frontmatter,
-			pubDate: this.frontmatter.lastModified?.toISOString(),
+			pubDate: this.frontmatter.lastModified ?? null,
 		};
 	}
 

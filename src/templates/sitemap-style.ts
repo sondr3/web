@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+import type { Asset } from "../asset.js";
+
+export const sitemapStyle = (css: Asset | undefined) => `<?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:sitemap="http://www.sitemaps.org/schemas/sitemap/0.9">
   <xsl:output method="html" version="1.0" encoding="UTF-8" indent="yes"/>
@@ -37,3 +39,4 @@
     </html>
   </xsl:template>
 </xsl:stylesheet>
+`;
