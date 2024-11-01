@@ -5,7 +5,6 @@ import { Content } from "./content.js";
 import { Site } from "./site.js";
 import { sitemapStyle } from "./templates/sitemap-style.js";
 import { sitemap } from "./templates/sitemap.js";
-import { compile } from "./templating.js";
 import { ensureDir } from "./utils.js";
 
 export type ChangeFreq = "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";

@@ -1,6 +1,4 @@
-import * as fs from "node:fs/promises";
-import { type ChildrenOf, type HTMLElement, type HTMLTag, renderDocument } from "@sondr3/radiant";
-import { PATHS } from "./constants.js";
+import { type ChildrenOf, renderDocument } from "@sondr3/radiant";
 import type { Context, Frontmatter } from "./content.js";
 import { logConfig } from "./logger.js";
 import { base } from "./templates/base.js";
@@ -9,23 +7,6 @@ import { home } from "./templates/home.js";
 import { notFound } from "./templates/not_found.js";
 
 const logger = logConfig.getLogger("templating");
-
-export function compile(template: string): (args: Record<string, unknown>) => string {
-	return new Function("args", `with (args) { return \`${template}\`; }`) as unknown as (
-		args: Record<string, unknown>,
-	) => string;
-}
-
-export const createContext = (context: Record<string, unknown>): Record<string, unknown> => {
-	return new Proxy(context, {
-		has(_target, key) {
-			return !(key in globalThis);
-		},
-		get(target: Record<string, unknown>, key: string): unknown {
-			return target[key];
-		},
-	});
-};
 
 export const render = async (template: Frontmatter["layout"], context: Context): Promise<string> => {
 	try {
