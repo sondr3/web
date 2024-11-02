@@ -25,9 +25,7 @@ jobs:
         run: pnpm biome
 
       - name: Formatting
-        run: |
-          pnpm html
-          pnpm stylelint
+        run: pnpm stylelint
 
       - name: Test
         run: pnpm test

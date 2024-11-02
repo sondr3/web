@@ -12,9 +12,7 @@
     "biome": "biome check src tests",
     "biome:fix": "biome check --write src tests",
     "stylelint": "stylelint --cache ./site/styles/**/*",
-    "stylelint:fix": "stylelint --fix --cache ./site/styles/**/*",
-    "html": "prettier --cache --check ./site/templates/*.html",
-    "html:fix": "prettier --cache --write ./site/templates/*.html"
+    "stylelint:fix": "stylelint --fix --cache ./site/styles/**/*"
   },
   "author": "Sondre Aasemoen <sondre@eons.io>",
   "license": "WTFPL",
