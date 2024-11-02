@@ -29,7 +29,7 @@ export const sitemapStyle = (css: Asset | undefined) => `<?xml version="1.0" enc
                 </a>
                 <span class="updated">
                   Last updated:
-                  <xsl:value-of select="substring-before(sitemap:lastmod, 'T')" />
+                  <xsl:value-of select="sitemap:lastmod" />
                 </span>
               </li>
             </xsl:for-each>
