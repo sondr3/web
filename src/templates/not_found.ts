@@ -1,6 +1,6 @@
-import { type ELEMENT_MAP, h } from "@sondr3/radiant";
+import { h } from "@sondr3/radiant";
 
-export const notFound = (): ELEMENT_MAP["section"] =>
+export const notFound = () =>
 	h.section(
 		{ class: "four-oh-four" },
 		h.h1("Page not found"),

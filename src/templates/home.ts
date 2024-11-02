@@ -1,6 +1,6 @@
-import { type ELEMENT_MAP, h } from "@sondr3/radiant";
+import { h } from "@sondr3/radiant";
 
-export const home = (): ELEMENT_MAP["section"] =>
+export const home = () =>
 	h.section(
 		h.h1({ id: "hello" }, h.span("Hello! I'm"), " ", h.span({ class: "blue" }, "Sondre")),
 		h.p(

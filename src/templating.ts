@@ -28,7 +28,7 @@ export const render = async (template: Frontmatter["layout"], context: Context):
 				throw new Error(`Unknown template: ${template}`);
 			}
 		}
-		return renderDocument(base(context, inner));
+		return renderDocument(base(context, inner), { pretty: context.isDev });
 	} catch (e) {
 		logger.error(e);
 		throw e;
