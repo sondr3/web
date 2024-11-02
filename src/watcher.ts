@@ -6,7 +6,7 @@ import { JavaScriptAsset } from "./asset.js";
 import { JS_FILES, PATHS } from "./constants.js";
 import { Content } from "./content.js";
 import { logConfig } from "./logger.js";
-import { Site } from "./site.js";
+import type { Site } from "./site.js";
 
 const logger = logConfig.getLogger("watcher");
 
@@ -18,7 +18,6 @@ const debounceHandler = debounce(async (fn: () => Promise<void>, tx: FsEmitter) 
 }, 200);
 
 export const startWatcher = (site: Site, tx: FsEmitter): void => {
-	void watchTemplates(site, tx);
 	void watchContent(site, tx);
 	void watchSCSS(site, tx);
 	void watchJS(site, tx);
@@ -48,19 +47,6 @@ const watchJS = async (site: Site, tx: FsEmitter): Promise<void> => {
 				const asset = new JavaScriptAsset(item.source, item.dest);
 				site.collectAsset(asset);
 				await asset.write(site);
-			}, tx);
-		}
-	});
-};
-
-const watchTemplates = async (site: Site, tx: FsEmitter): Promise<void> => {
-	void subscribe(PATHS.templates, (_, events) => {
-		for (const event of events) {
-			debounceHandler(async () => {
-				logger.info(`Template ${parse(event.path).base} changed, rebuilding`);
-				await site.collectContents();
-				await site.writeContent();
-				await site.writeSitemap();
 			}, tx);
 		}
 	});

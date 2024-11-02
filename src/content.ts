@@ -8,7 +8,7 @@ import { render_djot } from "./djot.js";
 import { logConfig } from "./logger.js";
 import { minifyHTML } from "./minify.js";
 import { Path } from "./path.js";
-import { Site } from "./site.js";
+import type { Site } from "./site.js";
 import { render } from "./templating.js";
 import { ensureDir } from "./utils.js";
 import type { WriteFromSite } from "./writeable.js";

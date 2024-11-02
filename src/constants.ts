@@ -4,7 +4,6 @@ import { Path } from "./path.js";
 interface Paths {
 	out: string;
 	source: string;
-	templates: string;
 	public: string;
 	styles: string;
 	js: string;
@@ -16,7 +15,6 @@ interface Paths {
 export const PATHS: Paths = {
 	out: resolve(process.cwd(), "dist"),
 	source: resolve(process.cwd(), "site"),
-	templates: resolve(process.cwd(), "site/templates"),
 	public: resolve(process.cwd(), "site/public"),
 	styles: resolve(process.cwd(), "site/styles"),
 	js: resolve(process.cwd(), "site/js"),

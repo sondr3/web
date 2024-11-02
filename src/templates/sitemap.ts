@@ -1,4 +1,4 @@
-import { Sitemap, s } from "@sondr3/radiant/sitemap";
+import { type Sitemap, s } from "@sondr3/radiant/sitemap";
 import type { UrlEntry } from "../sitemap.js";
 
 export const sitemap = (entries: Array<UrlEntry>): Sitemap =>

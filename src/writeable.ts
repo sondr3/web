@@ -1,4 +1,4 @@
-import { Site } from "./site.js";
+import type { Site } from "./site.js";
 
 /**
  * Interface for objects that can write data from a site.

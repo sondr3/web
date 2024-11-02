@@ -1,8 +1,8 @@
 import * as fs from "node:fs/promises";
 import { renderSitemap } from "@sondr3/radiant/sitemap";
 import { PATHS } from "./constants.js";
-import { Content } from "./content.js";
-import { Site } from "./site.js";
+import type { Content } from "./content.js";
+import type { Site } from "./site.js";
 import { sitemapStyle } from "./templates/sitemap-style.js";
 import { sitemap } from "./templates/sitemap.js";
 import { ensureDir } from "./utils.js";
