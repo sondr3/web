@@ -29,5 +29,5 @@ export const write_sitemap = async (entries: Array<UrlEntry>, site: Site) => {
 	await ensureDir(PATHS.out);
 
 	await fs.writeFile(`${PATHS.out}/sitemap.xml`, renderSitemap(sitemap(entries), { pretty: site.isDev }));
-	await fs.writeFile(`${PATHS.out}/sitema-style.xsl`, sitemapStyle(site.assets.get("sitemap.css")));
+	await fs.writeFile(`${PATHS.out}/sitemap-style.xsl`, sitemapStyle(site.assets.get("sitemap.css")));
 };
