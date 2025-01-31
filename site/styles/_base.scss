@@ -5,11 +5,22 @@ body {
   height: 100%;
 }
 
+:root {
+  --font-size-sm: clamp(0.8rem, 0.25vw + 0.74rem, 0.94rem);
+  --font-size-base: clamp(1rem, 0.45vw + 0.89rem, 1.25rem);
+  --font-size-md: clamp(1.25rem, 0.76vw + 1.06rem, 1.67rem);
+  --font-size-lg: clamp(1.56rem, 1.2vw + 1.26rem, 2.22rem);
+  --font-size-xl: clamp(1.95rem, 1.83vw + 1.5rem, 2.96rem);
+  --font-size-xxl: clamp(2.44rem, 2.74vw + 1.76rem, 3.95rem);
+  --font-size-xxxl: clamp(3.05rem, 4.02vw + 2.05rem, 5.26rem);
+}
+
 :root,
 root[data-theme="light"] {
   --background: rgb(255 255 255);
   --text: rgb(0 0 0);
   --heading: rgb(0 0 0);
+  --link: rgb(79 70 229);
   --blue: rgb(79 70 229);
   --grey: rgb(107 114 128);
 }
@@ -19,9 +30,11 @@ root[data-theme="light"] {
   --text: rgb(156 163 175);
   --heading: rgb(209 213 219);
   --grey: rgb(229 231 235);
+  --link: rgb(229 231 235);
 }
 
 body {
+  font-optical-sizing: auto;
   transition-duration: 300ms;
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -38,6 +51,7 @@ body {
 a {
   cursor: pointer;
   font-weight: 600;
+  color: var(--link);
 
   &:hover,
   &:focus {
@@ -62,12 +76,6 @@ h6 {
 }
 
 .prose {
-  font-size: 1.15rem;
-  text-align: justify;
-  text-justify: inter-word;
-}
-
-article {
   font-size: 1.15rem;
   text-align: justify;
   text-justify: inter-word;

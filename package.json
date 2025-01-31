@@ -1,27 +1,64 @@
 {
-  "name": "@sondr3/web",
+  "name": "web",
   "private": true,
+  "description": "My website",
   "type": "module",
   "scripts": {
-    "dev": "cargo run",
-    "build": "cargo build",
-    "preview": "serve dist",
-    "test": "playwright test",
-    "styles": "stylelint --cache './site/styles/**/*.scss'",
-    "styles:fix": "stylelint --cache './site/styles/**/*.scss' --fix"
+    "build": "tsx src/index.ts -p",
+    "check": "tsc --noEmit ",
+    "dev": "tsx watch src/index.ts",
+    "test": "tsx --test --experimental-test-coverage",
+    "test:e2e": "pnpm exec playwright test",
+    "biome": "biome check src tests",
+    "biome:fix": "biome check --write src tests",
+    "stylelint": "stylelint --cache ./site/styles/**/*",
+    "stylelint:fix": "stylelint --fix --cache ./site/styles/**/*"
   },
-  "devDependencies": {
-    "@playwright/test": "1.35.1",
-    "prettier": "3.0.0",
-    "serve": "14.2.0",
-    "stylelint": "15.10.1",
-    "stylelint-config-standard-scss": "10.0.0",
-    "stylelint-prettier": "4.0.0"
+  "author": "Sondre Aasemoen <sondre@eons.io>",
+  "license": "WTFPL",
+  "prettier": {
+    "printWidth": 120
   },
   "stylelint": {
     "extends": [
       "stylelint-prettier/recommended",
       "stylelint-config-standard-scss"
     ]
-  }
+  },
+  "dependencies": {
+    "@djot/djot": "0.3.1",
+    "@parcel/watcher": "2.4.1",
+    "@sondr3/radiant": "0.4.0-alpha.1",
+    "date-fns": "4.1.0",
+    "debounce": "2.2.0",
+    "htmlnano": "2.1.1",
+    "lightningcss": "1.27.0",
+    "log4js": "6.9.1",
+    "meow": "13.2.0",
+    "polka": "0.5.2",
+    "sass": "1.80.6",
+    "shiki": "1.22.2",
+    "sirv": "3.0.0",
+    "smol-toml": "1.3.0",
+    "svgo": "3.3.2",
+    "terser": "5.36.0",
+    "ws": "8.18.0",
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@playwright/test": "1.48.2",
+    "@total-typescript/ts-reset": "0.6.1",
+    "@types/node": "22.8.6",
+    "@types/polka": "0.5.7",
+    "@types/serve-handler": "6.1.4",
+    "@types/ws": "8.5.12",
+    "prettier": "3.3.3",
+    "stylelint": "16.10.0",
+    "stylelint-config-standard-scss": "13.1.0",
+    "stylelint-prettier": "5.0.2",
+    "tsx": "4.19.2",
+    "typescript": "5.6.3"
+  },
+  "packageManager": "pnpm@9.8.0+sha512.8e4c3550fb500e808dbc30bb0ce4dd1eb614e30b1c55245f211591ec2cdf9c611cabd34e1364b42f564bd54b3945ed0f49d61d1bbf2ec9bd74b866fcdc723276"
 }

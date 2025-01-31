@@ -3,83 +3,67 @@ name: pipeline
 on: [push, pull_request]
 
 jobs:
-  tests:
-    name: tests
+  build:
+    name: pipeline
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-
-      - uses: pnpm/action-setup@v2.2.4
-        with:
-          version: 8
-
-      - uses: actions/setup-node@v3.6.0
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4.0.0
+      - uses: actions/setup-node@v4
         with:
           node-version: latest
           cache: "pnpm"
 
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          components: rustfmt, clippy
-
-      - uses: Swatinem/rust-cache@v2
-
-      - name: Install npm packages
+      - name: Install
         run: pnpm install --frozen-lockfile
 
-      - name: build
-        run: cargo test --no-run
+      - name: Type check
+        run: pnpm check
 
-      - name: test
-        run: cargo test -- --nocapture --quiet
+      - name: Linting
+        run: pnpm biome
 
-      - name: formatting
-        run: cargo fmt --all -- --check
+      - name: Formatting
+        run: pnpm stylelint
 
-      - name: check
-        run: cargo check
+      - name: Test
+        run: pnpm test
 
-      - name: clippy
-        run: cargo clippy -- -D warnings
+      - name: Build
+        run: pnpm build
 
-      - name: styles
-        run: pnpm run styles
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: ./dist
+          retention-days: 1
 
   e2e:
-    timeout-minutes: 60
-    runs-on: macos-latest
     name: e2e
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2.2.4
-        with:
-          version: 8
-
-      - uses: actions/setup-node@v3.6.0
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4.0.0
+      - uses: actions/setup-node@v4
         with:
           node-version: latest
           cache: "pnpm"
 
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
-
-      - name: Install npm packages
+      - name: Install
         run: pnpm install --frozen-lockfile
 
       - name: Install Playwright Browsers
-        run: pnpm dlx playwright install --with-deps
+        run: pnpm exec playwright install --with-deps
 
-      - name: Build site
-        run: |
-          cargo build
-          cargo run
+      - name: Build
+        run: pnpm build
 
       - name: Run Playwright tests
-        run: pnpm test
+        run: pnpm exec playwright test
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report
@@ -88,19 +72,15 @@ jobs:
 
   deploy:
     if: ${{ github.ref == 'refs/heads/main' }}
-    needs: [tests, e2e]
+    needs: [build, e2e]
     runs-on: ubuntu-latest
     name: deploy
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
-
-      - name: Build
-        run: |
-          cargo build
-          cargo run
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: ./dist
 
       - name: Deploy
         uses: burnett01/rsync-deployments@5.2
@@ -111,3 +91,37 @@ jobs:
           remote_host: ${{ secrets.DEPLOY_HOST }}
           remote_user: ${{ secrets.DEPLOY_USER }}
           remote_key: ${{ secrets.DEPLOY_KEY }}
+
+  prod-e2e:
+    name: prod-e2e
+    needs: [deploy]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4.0.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          cache: "pnpm"
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Install
+        run: pnpm exec playwright install-deps
+
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: pnpm exec playwright test
+        env:
+          PLAYWRIGHT_BASE_URL: "https://www.eons.io"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-prod
+          path: playwright-report/
+          retention-days: 30
