@@ -1,0 +1,18 @@
++++
+title = "About me"
+description = "Hello, I'm Sondre! I make things."
+lastMod = 2022-08-01
+layout = '../layouts/Page.astro'
++++
+
+I am working at [Aritma](https://www.aritma.com/) as a senior software engineer
+with a masters degree in algorithms from the University of Bergen. I struggle
+with having too many side projects that are in various stages of done. I'm a
+big fan of strongly typed languages with strict type systems, especially Rust
+and Haskell. In my spare time I love running, cooking, baking, brewing, fermenting
+and last but not least, eating said food. I also enjoy spending time with my pets,
+a ginger cat and a Mini American Shepherd.
+
+## Contact me
+
+If you want to reach out, my email is `my-first-name` at this domain.

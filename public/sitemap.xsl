@@ -1,6 +1,4 @@
-import type { Asset } from "../asset.js";
-
-export const sitemapStyle = (css: Asset | undefined) => `<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:sitemap="http://www.sitemaps.org/schemas/sitemap/0.9">
   <xsl:output method="html" version="1.0" encoding="UTF-8" indent="yes"/>
@@ -11,7 +9,7 @@ export const sitemapStyle = (css: Asset | undefined) => `<?xml version="1.0" enc
         <meta charset="utf-8"/>
         <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <link rel="stylesheet" href="${css?.dest.filename}" />
+        <link rel="stylesheet" href="/sitemap.css" />
       </head>
       <body>
         <main>
@@ -29,7 +27,7 @@ export const sitemapStyle = (css: Asset | undefined) => `<?xml version="1.0" enc
                 </a>
                 <span class="updated">
                   Last updated:
-                  <xsl:value-of select="sitemap:lastmod" />
+                  <xsl:value-of select="substring-before(sitemap:lastmod, 'T')" />
                 </span>
               </li>
             </xsl:for-each>
@@ -39,4 +37,3 @@ export const sitemapStyle = (css: Asset | undefined) => `<?xml version="1.0" enc
     </html>
   </xsl:template>
 </xsl:stylesheet>
-`;

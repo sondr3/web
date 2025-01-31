@@ -150,3 +150,10 @@ dist
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+
+### Created by https://www.gitignore.io
+### Astro ###
+# Gitignore template for Astro projects
+# Ignore content collection generated files
+.astro
