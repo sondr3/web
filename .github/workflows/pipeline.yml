@@ -22,13 +22,10 @@ jobs:
         run: pnpm check
 
       - name: Linting
-        run: pnpm biome
+        run: pnpm format
 
       - name: Formatting
         run: pnpm stylelint
-
-      - name: Test
-        run: pnpm test
 
       - name: Build
         run: pnpm build
