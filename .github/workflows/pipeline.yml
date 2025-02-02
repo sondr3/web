@@ -38,7 +38,7 @@ jobs:
 
   e2e:
     name: e2e
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -92,7 +92,7 @@ jobs:
   prod-e2e:
     name: prod-e2e
     needs: [deploy]
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -104,9 +104,6 @@ jobs:
 
       - name: Install
         run: pnpm install --frozen-lockfile
-
-      - name: Install
-        run: pnpm exec playwright install-deps
 
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
