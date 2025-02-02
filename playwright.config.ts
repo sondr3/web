@@ -1,13 +1,13 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const HAS_BASE_URL = process.env.PLAYWRIGHT_BASE_URL !== undefined;
-const baseURL = HAS_BASE_URL ? process.env.PLAYWRIGHT_BASE_URL : "http://127.0.0.1:3000";
+const baseURL = HAS_BASE_URL ? process.env.PLAYWRIGHT_BASE_URL : "http://localhost:4321/";
 
 const webServer = HAS_BASE_URL
   ? undefined
   : {
-      command: "pnpm tsx tests/server.ts",
-      url: "http://127.0.0.1:4321",
+      command: "pnpm run preview",
+      url: "http://localhost:4321/",
       reuseExistingServer: !process.env.CI,
     };
 

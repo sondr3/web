@@ -21,7 +21,7 @@ const mapPageAlt = (
 type Page = AstroInstance & MarkdownInstance<Record<string, unknown>>;
 
 export async function GET() {
-  const url = import.meta.env.SITE;
+  const url = import.meta.env.DEV ? "http://localhost:4321" : import.meta.env.SITE;
 
   const rootPages = [
     {

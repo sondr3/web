@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "postbuild": "sass styles/sitemap.scss dist/sitemap-styles.css",
     "preview": "astro preview",
     "astro": "astro",
     "format": "prettier --write .",
