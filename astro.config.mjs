@@ -5,12 +5,13 @@ import compressor from "astro-compressor";
 export default defineConfig({
   base: "/",
   site: "https://www.eons.io",
-  trailingSlash: "ignore",
+  trailingSlash: "always",
   output: "static",
-
+  build: {
+    format: "directory",
+  },
   devToolbar: {
     enabled: false,
   },
-
   integrations: [compressor()],
 });
