@@ -8,6 +8,7 @@ const webServer = HAS_BASE_URL
   : {
       command: "pnpm run preview",
       url: "http://localhost:4321/",
+      timeout: 120 * 1000,
       reuseExistingServer: !process.env.CI,
     };
 
