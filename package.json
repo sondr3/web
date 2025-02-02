@@ -9,7 +9,7 @@
     "check": "astro check",
     "preview": "astro preview",
     "astro": "astro",
-    "serve:": "serve dist",
+    "serve": "serve dist",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
     "stylelint": "stylelint --cache ./styles/**/*",

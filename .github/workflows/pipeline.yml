@@ -38,7 +38,7 @@ jobs:
 
   e2e:
     name: e2e
-    runs-on: macos-latest
+    runs-on: macos-15
 
     steps:
       - uses: actions/checkout@v4
@@ -58,7 +58,7 @@ jobs:
         run: pnpm build
 
       - name: Run Playwright tests
-        run: pnpm exec playwright test
+        run: pnpm e2e
 
       - uses: actions/upload-artifact@v4
         if: always()
@@ -92,7 +92,7 @@ jobs:
   prod-e2e:
     name: prod-e2e
     needs: [deploy]
-    runs-on: macos-latest
+    runs-on: macos-15
 
     steps:
       - uses: actions/checkout@v4
@@ -109,7 +109,7 @@ jobs:
         run: pnpm exec playwright install --with-deps
 
       - name: Run Playwright tests
-        run: pnpm exec playwright test
+        run: pnpm e2e
         env:
           PLAYWRIGHT_BASE_URL: "https://www.eons.io"
 
