@@ -6,7 +6,7 @@ const baseURL = HAS_BASE_URL ? process.env.PLAYWRIGHT_BASE_URL : "http://localho
 const webServer = HAS_BASE_URL
   ? undefined
   : {
-      command: "pnpm run preview",
+      command: "pnpm run serve",
       url: "http://localhost:4321/",
       timeout: 120 * 1000,
       reuseExistingServer: !process.env.CI,
