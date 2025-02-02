@@ -38,7 +38,7 @@ export async function GET() {
 
   const sitemap = new SitemapStream({
     hostname: url,
-    xslUrl: `${url}/sitemap.xsl`,
+    xslUrl: `/sitemap.xsl`,
     xmlns: {
       news: false,
       xhtml: false,
