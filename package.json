@@ -19,6 +19,7 @@
   "license": "WTFPL",
   "dependencies": {
     "astro": "5.2.3",
+    "astro-compressor": "^1.0.0",
     "lightningcss": "1.29.1",
     "sass": "1.83.4",
     "sitemap": "8.0.0"

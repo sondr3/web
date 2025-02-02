@@ -11,6 +11,9 @@ importers:
       astro:
         specifier: 5.2.3
         version: 5.2.3(@types/node@22.13.0)(lightningcss@1.29.1)(rollup@4.32.1)(sass@1.83.4)(terser@5.36.0)(tsx@4.19.2)(typescript@5.6.3)
+      astro-compressor:
+        specifier: ^1.0.0
+        version: 1.0.0
       lightningcss:
         specifier: 1.29.1
         version: 1.29.1
@@ -846,6 +849,9 @@ packages:
   astral-regex@2.0.0:
     resolution: {integrity: sha512-Z7tMw1ytTXt5jqMcOP+OQteU1VuNK9Y02uuJtKQ1Sv69jXQKKg5cibLwGJow8yzZP+eAc18EmLGPal0bp36rvQ==}
     engines: {node: '>=8'}
+
+  astro-compressor@1.0.0:
+    resolution: {integrity: sha512-MNGRmjIsb73BIJivbU/HnTbPu5CEFvXp1NCev0bpsuK/cp4cCPX6C1omUPXzw2oQbtKv0phTTTtEk+h20SrF1Q==}
 
   astro@5.2.3:
     resolution: {integrity: sha512-04AceE/gVihtO3V28Ss0+tPPgLHGoulXrm1E7fUVPYyQu7y6w8+oXfYyzh1lpy+uEYiebjH7AFlJoz73anBmZA==}
@@ -2894,6 +2900,8 @@ snapshots:
   array-union@2.1.0: {}
 
   astral-regex@2.0.0: {}
+
+  astro-compressor@1.0.0: {}
 
   astro@5.2.3(@types/node@22.13.0)(lightningcss@1.29.1)(rollup@4.32.1)(sass@1.83.4)(terser@5.36.0)(tsx@4.19.2)(typescript@5.6.3):
     dependencies:
