@@ -1,5 +1,0 @@
-pnpm-lock.yaml
-.astro/
-dist/
-playwright-report/
-test-results/

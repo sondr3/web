@@ -19,7 +19,9 @@ test("404 is correct", async ({ page }) => {
   await page.goto("/does/not/exist");
 
   await expect(page).toHaveURL(/does\/not\/exist/);
-  await expect(page.getByRole("heading", { name: "Page not found" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Page not found" }),
+  ).toBeVisible();
 });
 
 test("sitemap works", async ({ page }) => {

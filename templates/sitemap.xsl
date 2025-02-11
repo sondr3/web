@@ -9,7 +9,7 @@
         <meta charset="utf-8"/>
         <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <link rel="stylesheet" href="/sitemap.css" />
+        <link rel="stylesheet" href="/{{ get_asset('sitemap.css') }}" />
       </head>
       <body>
         <main>
@@ -25,10 +25,17 @@
                   </xsl:attribute>
                   <xsl:value-of select="sitemap:loc"/>
                 </a>
-                <span class="updated">
-                  Last updated:
-                  <xsl:value-of select="substring-before(sitemap:lastmod, 'T')" />
-                </span>
+                <xsl:choose>
+                  <xsl:when test="sitemap:lastmod">
+                    <span class="updated">
+                      Last updated:
+                      <xsl:value-of select="sitemap:lastmod" />                
+                    </span>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <span class="updated">No update date available</span>
+                  </xsl:otherwise>
+                </xsl:choose>
               </li>
             </xsl:for-each>
           </ul>

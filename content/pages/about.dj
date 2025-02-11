@@ -1,8 +1,7 @@
 +++
 title = "About me"
 description = "Hello, I'm Sondre! I make things."
-lastMod = 2022-08-01
-layout = '../layouts/Page.astro'
+last_modified = 2024-08-01
 +++
 
 I am working at [Aritma](https://www.aritma.com/) as a senior software engineer

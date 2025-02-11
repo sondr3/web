@@ -2,44 +2,24 @@
   "name": "web",
   "private": true,
   "description": "My website",
-  "type": "module",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "check": "astro check",
-    "preview": "astro preview",
-    "astro": "astro",
-    "serve": "serve dist",
-    "format": "prettier --check .",
-    "format:fix": "prettier --write .",
-    "stylelint": "stylelint --cache ./styles/**/*",
-    "stylelint:fix": "stylelint --fix --cache ./styles/**/*",
+    "format": "prettier --check css",
+    "format:fix": "prettier --write css",
+    "stylelint": "stylelint --cache ./css/**/*",
+    "stylelint:fix": "stylelint --fix --cache ./css/**/*",
     "e2e": "pnpm exec playwright test"
   },
   "author": "Sondre Aasemoen <sondre@eons.io>",
   "license": "WTFPL",
-  "dependencies": {
-    "astro": "5.2.3",
-    "astro-compressor": "^1.0.0",
-    "lightningcss": "1.29.1",
-    "sass": "1.83.4",
-    "sitemap": "8.0.0"
-  },
   "devDependencies": {
     "@playwright/test": "1.50.1",
-    "@types/node": "22.13.0",
-    "prettier": "3.3.3",
-    "prettier-plugin-astro": "0.14.1",
-    "serve": "14.2.4",
-    "stylelint": "16.10.0",
-    "stylelint-config-standard-scss": "13.1.0",
-    "stylelint-prettier": "5.0.2",
-    "typescript": "5.6.3"
+    "prettier": "3.5.0",
+    "stylelint": "16.14.1",
+    "stylelint-prettier": "5.0.3"
   },
   "stylelint": {
     "extends": [
-      "stylelint-prettier/recommended",
-      "stylelint-config-standard-scss"
+      "stylelint-prettier/recommended"
     ]
   },
   "packageManager": "pnpm@9.15.4+sha512.b2dc20e2fc72b3e18848459b37359a32064663e5627a51e4c74b2c29dd8e8e0491483c3abb40789cfd578bf362fb6ba8261b05f0387d76792ed6e23ea3b1b6a0"

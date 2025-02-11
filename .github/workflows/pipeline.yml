@@ -9,31 +9,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4.0.0
-      - uses: actions/setup-node@v4
-        with:
-          node-version: latest
-          cache: "pnpm"
 
-      - name: Install
-        run: pnpm install --frozen-lockfile
-
-      - name: Type check
-        run: pnpm check
-
-      - name: Linting
-        run: pnpm format
-
-      - name: Formatting
-        run: pnpm stylelint
-
-      - name: Build
-        run: pnpm build
+      - uses: sondr3/statisk@main
 
       - uses: actions/upload-artifact@v4
         with:
           name: dist
-          path: ./dist
+          path: ./_dist
           retention-days: 1
 
   e2e:
@@ -54,8 +36,7 @@ jobs:
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
 
-      - name: Build
-        run: pnpm build
+      - uses: sondr3/statisk@main
 
       - name: Run Playwright tests
         run: pnpm e2e

@@ -8,7 +8,7 @@
     grid-template: 1fr / repeat(12, 1fr);
   }
 
-  > * a {
+  & > * a {
     text-decoration: none;
     color: var(--text);
   }
@@ -44,11 +44,11 @@
     padding-top: 0;
   }
 
-  &__links {
+  & .links {
     display: flex;
     list-style: none;
 
-    > * a:hover {
+    & > * a:hover {
       color: var(--grey);
     }
   }
@@ -100,13 +100,13 @@
     flex-direction: row;
   }
 
-  &__about {
+  & .about {
     text-align: center;
     padding-bottom: 1rem;
     color: var(--grey);
   }
 
-  &__icons {
+  & .icons {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
@@ -115,15 +115,15 @@
     @media (width >= 32em) {
       width: 20%;
     }
-  }
 
-  &__icon {
-    color: var(--grey);
-    width: 1.5rem;
-  }
+    & .icon {
+      color: var(--grey);
+      width: 1.5rem;
 
-  &__icon:hover,
-  &__icon:focus {
-    color: var(--blue);
+      &:hover,
+      &:focus {
+        color: var(--blue);
+      }
+    }
   }
 }

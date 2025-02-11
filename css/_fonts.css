@@ -4,7 +4,7 @@
   font-weight: 100 900;
   src:
     local("Piazzolla"),
-    url("/fonts/Piazzolla.woff2") format("woff2-variations");
+    url("/fonts/Piazzolla.woff2") format("woff2");
 }
 
 @font-face {
@@ -13,7 +13,7 @@
   font-weight: 100 900;
   src:
     local("PiazzollaItalic"),
-    url("/fonts/PiazzollaItalic.woff2") format("woff2-variations");
+    url("/fonts/PiazzollaItalic.woff2") format("woff2");
 }
 
 @font-face {

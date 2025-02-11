@@ -1,12 +1,14 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const HAS_BASE_URL = process.env.PLAYWRIGHT_BASE_URL !== undefined;
-const baseURL = HAS_BASE_URL ? process.env.PLAYWRIGHT_BASE_URL : "http://localhost:3000/";
+const baseURL = HAS_BASE_URL
+  ? process.env.PLAYWRIGHT_BASE_URL
+  : "http://localhost:3000/";
 
 const webServer = HAS_BASE_URL
   ? undefined
   : {
-      command: "pnpm run serve",
+      command: "statisk serve",
       url: "http://localhost:3000/",
       timeout: 120 * 1000,
       reuseExistingServer: !process.env.CI,
