@@ -12,9 +12,9 @@
   "author": "Sondre Aasemoen <sondre@eons.io>",
   "license": "WTFPL",
   "devDependencies": {
-    "@playwright/test": "1.50.1",
-    "prettier": "3.5.0",
-    "stylelint": "16.14.1",
+    "@playwright/test": "1.52.0",
+    "prettier": "3.5.3",
+    "stylelint": "16.20.0",
     "stylelint-prettier": "5.0.3"
   },
   "stylelint": {
