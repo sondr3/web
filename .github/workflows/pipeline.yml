@@ -12,7 +12,7 @@ jobs:
 
       - uses: sondr3/statisk@main
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: dist
           path: ./_dist
@@ -41,7 +41,7 @@ jobs:
       - name: Run Playwright tests
         run: pnpm e2e
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: always()
         with:
           name: playwright-report
@@ -94,7 +94,7 @@ jobs:
         env:
           PLAYWRIGHT_BASE_URL: "https://www.eons.io"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: always()
         with:
           name: playwright-report-prod
