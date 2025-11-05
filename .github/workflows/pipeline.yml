@@ -1,6 +1,11 @@
 name: pipeline
 
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -19,7 +24,6 @@ jobs:
           retention-days: 1
 
   e2e:
-    if: ${{ github.ref == 'refs/heads/main' }}
     name: e2e
     runs-on: macos-15
 
@@ -50,7 +54,6 @@ jobs:
           retention-days: 30
 
   deploy:
-    if: ${{ github.ref == 'refs/heads/main' }}
     needs: [build, e2e]
     runs-on: ubuntu-latest
     name: deploy
