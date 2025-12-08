@@ -65,7 +65,7 @@ jobs:
           path: ./dist
 
       - name: Deploy
-        uses: burnett01/rsync-deployments@5.2
+        uses: burnett01/rsync-deployments@v8
         with:
           switches: -avzrh --delete
           path: dist/
