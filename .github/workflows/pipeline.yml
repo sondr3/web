@@ -71,7 +71,7 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           printf '%s\n' "$KNOWN_HOSTS" >> ~/.ssh/known_hosts
         env:
-          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+          DEPLOY_KEY: ${{ secrets.REMOTE_KEY }}
           KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
 
       - name: Sync to server
