@@ -64,15 +64,21 @@ jobs:
           name: dist
           path: ./dist
 
-      - name: Deploy
-        uses: burnett01/rsync-deployments@v9
-        with:
-          switches: -avzrh --delete
-          path: dist/
-          remote_path: ${{ secrets.DEPLOY_PATH }}
-          remote_host: ${{ secrets.DEPLOY_HOST }}
-          remote_user: ${{ secrets.DEPLOY_USER }}
-          remote_key: ${{ secrets.DEPLOY_KEY }}
+      - name: Set up SSH
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$KNOWN_HOSTS" >> ~/.ssh/known_hosts
+        env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+          KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
+
+      - name: Sync to server
+        run: rsync -rlptcv --delete --chmod=D2755,F644 dist/ $USER@$HOST:eons.io/
+        env:
+          USER: ${{ secrets.REMOTE_USER }}
+          HOST: ${{ secrets.REMOTE_HOST }}
 
   prod-e2e:
     name: prod-e2e
