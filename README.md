@@ -2,7 +2,7 @@
 
 This is my website, held together by tears, glue and a healthy dose of `eh, good enough`.
 
-Built with my own static site generator called [statisk](https://github.com/sondr3/statisk).
+Built with Astro.
 
 # License
 
