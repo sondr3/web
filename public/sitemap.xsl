@@ -29,7 +29,7 @@
                   <xsl:when test="sitemap:lastmod">
                     <span class="updated">
                       Last updated:
-                      <xsl:value-of select="sitemap:lastmod" />                
+                      <xsl:value-of select="substring-before(sitemap:lastmod, 'T')" />
                     </span>
                   </xsl:when>
                   <xsl:otherwise>

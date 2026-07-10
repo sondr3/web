@@ -2,16 +2,12 @@
 import Layout from "./Layout.astro";
 
 interface Props {
-  frontmatter: {
-    title: string;
-    subtitle: string;
-    description: string;
-  }
+  title: string;
+  subtitle?: string;
+  description: string;
 }
 
-const {
-  frontmatter: { title, subtitle, description },
-} = Astro.props;
+const { title, subtitle, description } = Astro.props;
 ---
 
 <Layout title={title} description={description}>

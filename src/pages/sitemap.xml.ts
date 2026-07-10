@@ -1,48 +1,42 @@
-import type { AstroInstance, MarkdownInstance } from "astro";
+import { getCollection, type CollectionEntry } from "astro:content";
 import { Readable } from "node:stream";
-import { SitemapStream, streamToPromise } from "sitemap";
+import {
+  SitemapStream,
+  streamToPromise,
+  type SitemapItem as _SitemapItem,
+  EnumChangefreq,
+} from "sitemap";
 
-const mapPageAlt = (
-  {
-    frontmatter,
-    url,
-  }: AstroInstance & MarkdownInstance<Record<string, unknown>>,
+type SitemapItem = Omit<_SitemapItem, "img" | "links" | "video">;
+
+const mapPage = (
+  page: CollectionEntry<"pages">,
   baseUrl: string,
-) => {
-  if (!url) {
-    return null;
-  }
-
+): SitemapItem => {
   return {
-    url: `${baseUrl}${url}`,
-    lastmod: frontmatter?.lastMod ?? new Date(),
-    changefreq: frontmatter?.changefreq ?? "yearly",
-    priority: Number.parseInt((frontmatter?.priority ?? "0.6") as string),
+    url: `${baseUrl}/${page.data.slug ?? page.id}/`,
+    lastmod: page.data.updatedAt?.toISOString(),
+    changefreq: page.data?.changeFreq as EnumChangefreq,
+    priority: page.data.priority,
   };
 };
-
-type Page = AstroInstance & MarkdownInstance<Record<string, unknown>>;
 
 export async function GET() {
   const url = import.meta.env.DEV
     ? "http://localhost:4321"
     : import.meta.env.SITE;
 
-  const rootPages = [
+  const rootPages: Array<SitemapItem> = [
     {
       url: `${url}/`,
-      lastmod: new Date(),
-      changefreq: "yearly",
+      lastmod: new Date().toISOString(),
+      changefreq: "yearly" as EnumChangefreq,
       priority: 0.8,
     },
   ];
-  const pages = (
-    Object.values(
-      import.meta.glob("../pages/**/*.{md,mdx}", { eager: true }),
-    ) as Array<Page>
-  )
-    .map((page) => mapPageAlt(page, url))
-    .filter((page) => page !== null);
+  const pages = (await getCollection("pages", ({ data }) => !data.draft)).map(
+    (page) => mapPage(page, url),
+  );
   const allPages = [...rootPages, ...pages];
 
   const sitemap = new SitemapStream({

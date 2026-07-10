@@ -1,7 +1,8 @@
 +++
 title = "About me"
 description = "Hello, I'm Sondre! I make things."
-lastMod = 2026-07-10
+publishedAt = 2022-01-01
+updatedAt = 2026-07-10
 layout = '../layouts/Page.astro'
 +++
 
