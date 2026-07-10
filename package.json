@@ -4,11 +4,11 @@
   "description": "My website",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "rm -rf dist && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "format": "prettier --check .",
-    "format:fix": "prettier --write .",
+    "format": "prettier --check --log-level warn --cache .",
+    "format:fix": "prettier --write --log-level warn --cache .",
     "stylelint": "stylelint --cache styles/**/*",
     "stylelint:fix": "stylelint --fix --cache styles/**/*"
   },
