@@ -2,8 +2,6 @@ name: pipeline
 
 on:
   push:
-    branches:
-      - main
   pull_request:
   workflow_dispatch:
 
@@ -41,6 +39,7 @@ jobs:
         run: pnpm build
 
       - name: Set up SSH
+        if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           install -d -m 700 ~/.ssh
           printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/id_ed25519
@@ -51,6 +50,7 @@ jobs:
           KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
 
       - name: Sync to server
+        if: ${{ github.ref == 'refs/heads/main' }}
         run: rsync -rlptcv --delete --chmod=D2755,F644 dist/ $USER@$HOST:eons.io/
         env:
           USER: ${{ secrets.REMOTE_USER }}
