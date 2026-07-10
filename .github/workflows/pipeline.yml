@@ -22,7 +22,7 @@ jobs:
       - id: pnpm-cache-path
         name: pnpm cache path
         shell: bash
-        run: echo 'path=$(pnpm store path --silent)' >> $GITHUB_OUTPUT
+        run: echo "path=$(pnpm store path --silent)" >> "$GITHUB_OUTPUT"
 
       - id: pnpm-cache
         name: restore pnpm cache
