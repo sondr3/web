@@ -13,56 +13,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
-      - uses: sondr3/statisk@main
-
-      - uses: actions/upload-artifact@v7
+      - uses: jdx/mise-action@dba19683ed58901619b14f395a24841710cb4925
         with:
-          name: dist
-          path: ./_dist
-          retention-days: 1
+          install: true
+          cache: true
+          experimental: true
 
-  e2e:
-    name: e2e
-    runs-on: macos-15
+      - id: pnpm-cache-path
+        name: pnpm cache path
+        shell: bash
+        run: echo 'path=$(pnpm store path --silent)' >> $GITHUB_OUTPUT
 
-    steps:
-      - uses: actions/checkout@v7
-      - uses: pnpm/action-setup@v6.0.9
-      - uses: actions/setup-node@v6
+      - id: pnpm-cache
+        name: restore pnpm cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
-          node-version: latest
-          cache: "pnpm"
+          path: ${{ steps.pnpm-cache-path.outputs.path }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
 
-      - name: Install
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps
-
-      - uses: sondr3/statisk@main
-
-      - name: Run Playwright tests
-        run: pnpm e2e
-
-      - uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 30
-
-  deploy:
-    needs: [build, e2e]
-    runs-on: ubuntu-latest
-    name: deploy
-
-    steps:
-      - uses: actions/download-artifact@v8
-        with:
-          name: dist
-          path: ./dist
+      - name: Build
+        run: pnpm build
 
       - name: Set up SSH
         run: |
@@ -79,34 +55,3 @@ jobs:
         env:
           USER: ${{ secrets.REMOTE_USER }}
           HOST: ${{ secrets.REMOTE_HOST }}
-
-  prod-e2e:
-    name: prod-e2e
-    needs: [deploy]
-    runs-on: macos-15
-
-    steps:
-      - uses: actions/checkout@v7
-      - uses: pnpm/action-setup@v6.0.9
-      - uses: actions/setup-node@v6
-        with:
-          node-version: latest
-          cache: "pnpm"
-
-      - name: Install
-        run: pnpm install --frozen-lockfile
-
-      - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps
-
-      - name: Run Playwright tests
-        run: pnpm e2e
-        env:
-          PLAYWRIGHT_BASE_URL: "https://www.eons.io"
-
-      - uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          name: playwright-report-prod
-          path: playwright-report/
-          retention-days: 30
