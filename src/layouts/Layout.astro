@@ -1,4 +1,12 @@
-<!doctype html>
+---
+import "../../styles/styles.css";
+import Footer from "../components/Footer.astro";
+import Navbar from "../components/Navbar.astro";
+
+const { title, description } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
 <html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
@@ -19,12 +27,10 @@
       type="image/png"
     />
     <link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180" />
-
-    <link href="/{{ get_asset('styles.css') }}" rel="stylesheet" />
-
     <link href="/humans.txt" rel="author" />
     <meta content="Sondre Aasemoen" name="author" />
     <link rel="me" href="https://fosstodon.org/@sondre" />
+    <link rel="sitemap" href="/sitemap.xml" />
 
     <link
       as="font"
@@ -41,25 +47,15 @@
       type="font/woff2"
     />
 
-    <title>{{ title|safe }} => Eons :: IO ()</title>
-    <meta content="{{ description|safe }}" name="description" />
-    <link href="{{ canonical_url }}" rel="canonical" />
+    <title>{title} => Eons :: IO ()</title>
+    <meta content={description} name="description" />
+    <link href={canonicalURL} rel="canonical" />
 
     <meta content="en" property="og:locale" />
     <meta content="website" property="og:type" />
-    <meta content="{{ title|safe  }}" property="og:title" />
-    <meta content="{{ description|safe  }}" property="og:description" />
-    <meta content="{{ canonical_url }}" property="og:url" />
-    <!-- <meta property="og:image" /> -->
-    <!-- <meta content="2020-12-12" property="article:published_time" /> -->
-    <!-- <meta content="2022-01-10" property="article:modified_time" /> -->
-    <!-- <meta content="summary_large_image" name="twitter:card" /> -->
-
-    <meta content="sondr3" name="twitter:site" />
-
-    {% if is_dev %}
-    <script src="/livereload.js"></script>
-    {% endif %}
+    <meta content={title} property="og:title" />
+    <meta content={description} property="og:description" />
+    <meta content={canonicalURL} property="og:url" />
 
     <script>
       if (
@@ -72,9 +68,10 @@
     </script>
   </head>
   <body class="root">
-    {% include "_navbar.html" %} {% block content %}
-    <p>Placeholder...</p>
-    {% endblock %} {% include "_footer.html" %}
+    <Navbar />
+    <slot />
+    <Footer />
+
     <script>
       function toggle() {
         if (document.documentElement.getAttribute("data-theme") === "dark") {
