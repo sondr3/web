@@ -8,6 +8,7 @@ export default defineConfig({
   output: "static",
   build: {
     format: "directory",
+    inlineStylesheets: "never",
   },
   compressHTML: true,
   integrations: [compressor()],
