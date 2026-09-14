@@ -17,7 +17,7 @@
   "devDependencies": {
     "@astrojs/check": "0.9.9",
     "astro": "7.0.7",
-    "astro-compressor": "next",
+    "astro-compressor": "2.0.1",
     "prettier": "3.9.4",
     "prettier-plugin-astro": "0.14.1",
     "sitemap": "9.0.1",
